@@ -1,25 +1,24 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { ScanBarcode, Plus, CheckCircle2, AlertCircle } from "lucide-react";
+import type { Tables } from "@buneka/database";
+
+type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
+type Product = Tables<"products">;
 
 export default function FiyatSorgulaPage() {
   const [barcode, setBarcode] = useState("");
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [stats, setStats] = useState({ queries: 0, sales: 0, revenue: 0 });
-  const [appUser, setAppUser] = useState<any>(null);
+  const [appUser, setAppUser] = useState<AppUser | null>(null);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-    loadUserAndStats();
-  }, []);
-
-  const loadUserAndStats = async () => {
+  const loadUserAndStats = useCallback(async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -54,7 +53,12 @@ export default function FiyatSorgulaPage() {
         revenue: salesData?.reduce((acc, sale) => acc + Number(sale.total_amount), 0) || 0
       });
     }
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    void Promise.resolve().then(loadUserAndStats);
+  }, [loadUserAndStats]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();

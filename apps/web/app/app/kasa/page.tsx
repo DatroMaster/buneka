@@ -1,12 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { WalletCards, TrendingUp, Package, Activity } from "lucide-react";
+import type { Tables } from "@buneka/database";
+
+type AppUser = Pick<Tables<"app_users">, "organization_id">;
+type SaleItemWithProduct = Pick<Tables<"sale_items">, "quantity" | "sale_price"> & {
+  products: Pick<Tables<"products">, "name"> | null;
+};
+type SaleWithItems = Tables<"sales"> & {
+  sale_items: SaleItemWithProduct[] | null;
+};
 
 export default function KasaPage() {
   const [loading, setLoading] = useState(true);
-  const [sales, setSales] = useState<any[]>([]);
+  const [sales, setSales] = useState<SaleWithItems[]>([]);
   const [stats, setStats] = useState({
     totalAmount: 0,
     totalProfit: 0,
@@ -14,16 +23,15 @@ export default function KasaPage() {
     queryCount: 0
   });
   
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
-  useEffect(() => {
-    loadKasaData();
-  }, []);
-
-  const loadKasaData = async () => {
+  const loadKasaData = useCallback(async () => {
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const { data: appUser } = await supabase
       .from("app_users")
@@ -32,6 +40,7 @@ export default function KasaPage() {
       .single();
 
     if (appUser) {
+      const currentUser = appUser as AppUser;
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const todayStr = today.toISOString();
@@ -47,7 +56,7 @@ export default function KasaPage() {
             products (name)
           )
         `)
-        .eq("organization_id", appUser.organization_id)
+        .eq("organization_id", currentUser.organization_id)
         .gte("sale_time", todayStr)
         .order("sale_time", { ascending: false });
 
@@ -55,20 +64,21 @@ export default function KasaPage() {
       const { count: queryCount } = await supabase
         .from("price_queries")
         .select("*", { count: 'exact', head: true })
-        .eq("organization_id", appUser.organization_id)
+        .eq("organization_id", currentUser.organization_id)
         .gte("queried_at", todayStr);
 
       if (salesData) {
-        setSales(salesData);
+        const typedSales = salesData as SaleWithItems[];
+        setSales(typedSales);
         
         let amount = 0;
         let profit = 0;
         let items = 0;
 
-        salesData.forEach(sale => {
+        typedSales.forEach((sale) => {
           amount += Number(sale.total_amount);
           profit += Number(sale.total_profit);
-          sale.sale_items?.forEach((item: any) => {
+          sale.sale_items?.forEach((item) => {
             items += Number(item.quantity);
           });
         });
@@ -82,7 +92,11 @@ export default function KasaPage() {
       }
     }
     setLoading(false);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    void Promise.resolve().then(loadKasaData);
+  }, [loadKasaData]);
 
   const formatMoney = (amount: number) => {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(amount);
@@ -182,7 +196,7 @@ export default function KasaPage() {
                       {formatTime(sale.sale_time)}
                     </td>
                     <td className="px-6 py-4">
-                      {sale.sale_items?.map((item: any, i: number) => (
+                      {sale.sale_items?.map((item, i) => (
                         <div key={i} className="text-sm text-white">
                           {item.quantity}x {item.products?.name || 'Bilinmeyen Ürün'}
                         </div>

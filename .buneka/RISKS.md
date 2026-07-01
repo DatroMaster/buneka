@@ -2,6 +2,10 @@
 
 ## Open
 
+### Production environment needs confirmation
+
+The local production build now passes. Production still depends on Vercel having `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and on the target Supabase project having migrations and seed data applied.
+
 ### Supabase policies are not implemented yet
 
 RLS is enabled in the initial migration, but policies are intentionally not written until Supabase Auth, organization membership, and admin access rules are implemented.

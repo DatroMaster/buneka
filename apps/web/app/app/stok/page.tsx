@@ -1,22 +1,27 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Boxes, Plus, AlertTriangle, ArrowDownRight, ArrowUpRight } from "lucide-react";
+import type { Tables } from "@buneka/database";
+
+type AppUser = Pick<Tables<"app_users">, "organization_id">;
+type StockMovementWithProduct = Tables<"stock_movements"> & {
+  products: Pick<Tables<"products">, "name" | "barcode"> | null;
+};
 
 export default function StokPage() {
-  const [movements, setMovements] = useState<any[]>([]);
+  const [movements, setMovements] = useState<StockMovementWithProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
-  useEffect(() => {
-    loadMovements();
-  }, []);
-
-  const loadMovements = async () => {
+  const loadMovements = useCallback(async () => {
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const { data: appUser } = await supabase
       .from("app_users")
@@ -25,20 +30,25 @@ export default function StokPage() {
       .single();
 
     if (appUser) {
+      const currentUser = appUser as AppUser;
       const { data } = await supabase
         .from("stock_movements")
         .select(`
           *,
           products (name, barcode)
         `)
-        .eq("organization_id", appUser.organization_id)
+        .eq("organization_id", currentUser.organization_id)
         .order("created_at", { ascending: false })
         .limit(50);
       
-      if (data) setMovements(data);
+      if (data) setMovements(data as StockMovementWithProduct[]);
     }
     setLoading(false);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    void Promise.resolve().then(loadMovements);
+  }, [loadMovements]);
 
   const formatTime = (dateString: string) => {
     return new Date(dateString).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' });

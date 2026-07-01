@@ -1,6 +1,16 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@buneka/ui": ["../../packages/ui/src"],
+      "@buneka/core": ["../../packages/core/src"],
+      "@buneka/database": ["../../packages/database/src"],
+      "@buneka/barcode": ["../../packages/barcode/src"],
+      "@buneka/licensing": ["../../packages/licensing/src"],
+      "@buneka/reports": ["../../packages/reports/src"]
+    },
     "plugins": [
       {
         "name": "next"

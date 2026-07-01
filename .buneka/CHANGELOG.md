@@ -22,3 +22,14 @@
 - Added `/login`, `/app`, `/app/*`, `/admin`, and `/admin/*` route placeholders.
 - Added lucide-react icons.
 - Verified typecheck, lint, production build, and local HTTP smoke checks.
+
+## 2026-07-02 Vercel Build Fix
+
+- Codex took over after Antigravity quota was exhausted.
+- Fixed Vercel `module-not-found` errors for `@/lib/supabase/client` and `@/lib/supabase/server`.
+- Added web app `@/*` path alias in `apps/web/tsconfig.json`.
+- Typed Supabase-backed app shell and client pages to remove `any` lint failures.
+- Moved app sidebar subcomponent out of render.
+- Updated client data loaders to satisfy React 19 hook lint rules.
+- Replaced manual Google font links with `next/font/google`.
+- Verified `npm.cmd run typecheck`, `npm.cmd run lint`, and `npm.cmd run build`.

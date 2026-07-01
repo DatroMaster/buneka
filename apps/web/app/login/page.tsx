@@ -6,9 +6,9 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const params = await searchParams;
+
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F7F4ED]">
-      {/* Dynamic Background Elements */}
       <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[#4F6F52] opacity-10 blur-[100px]" />
       <div className="absolute right-[-10%] bottom-[-10%] h-[600px] w-[600px] rounded-full bg-[#C8913A] opacity-10 blur-[120px]" />
 
@@ -19,7 +19,7 @@ export default async function LoginPage({
               <span className="text-3xl font-black">B</span>
             </div>
             <h2 className="text-3xl font-extrabold tracking-tight text-[#20231F]">
-              Buneka'ya Giriş
+              Buneka&apos;ya Giriş
             </h2>
             <p className="mt-3 text-[15px] font-medium text-[#667064]">
               Küçük işletmenin hafızası

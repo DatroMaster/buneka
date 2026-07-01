@@ -11,6 +11,9 @@ import {
 } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { lookupProduct, recordSale } from "./actions";
+import type { Tables } from "@buneka/database";
+
+type Product = Tables<"products">;
 
 const currency = new Intl.NumberFormat("tr-TR", {
   style: "currency",
@@ -21,7 +24,7 @@ const currency = new Intl.NumberFormat("tr-TR", {
 export function PriceClient() {
   const [barcode, setBarcode] = useState("");
   const [selectedBarcode, setSelectedBarcode] = useState("");
-  const [product, setProduct] = useState<any | null>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [saleCompleted, setSaleCompleted] = useState(false);

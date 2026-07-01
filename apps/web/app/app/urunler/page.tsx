@@ -1,23 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { Search, Plus, Boxes, AlertTriangle } from "lucide-react";
+import { Search, Plus, AlertTriangle } from "lucide-react";
+import type { Tables } from "@buneka/database";
+
+type AppUser = Pick<Tables<"app_users">, "organization_id">;
+type Product = Tables<"products">;
 
 export default function UrunlerPage() {
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
-  const loadProducts = async () => {
+  const loadProducts = useCallback(async () => {
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const { data: appUser } = await supabase
       .from("app_users")
@@ -26,16 +29,21 @@ export default function UrunlerPage() {
       .single();
 
     if (appUser) {
+      const currentUser = appUser as AppUser;
       const { data } = await supabase
         .from("products")
         .select("*")
-        .eq("organization_id", appUser.organization_id)
+        .eq("organization_id", currentUser.organization_id)
         .order("name");
       
       if (data) setProducts(data);
     }
     setLoading(false);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    void Promise.resolve().then(loadProducts);
+  }, [loadProducts]);
 
   const formatMoney = (amount: number) => {
     return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(amount);

@@ -67,3 +67,12 @@ Connect Supabase and move from demo-only state to real application data:
 - UI/docs/handoff search found no forbidden sale-negative phrase in apps, docs, or .buneka.
 - npm.cmd audit --audit-level=moderate reports 2 moderate vulnerabilities through Next's nested PostCSS dependency.
 - psql is not installed locally, so the migration still needs to be executed in Supabase or another PostgreSQL environment.
+
+## 2026-07-02 Codex Takeover Notes
+
+- Antigravity quota was exhausted, so Codex resumed ownership.
+- Vercel build was failing because app routes imported `@/lib/supabase/*` without a web-level `@/*` path alias.
+- Added the `@/*` alias in `apps/web/tsconfig.json`.
+- Cleaned React 19 lint issues in the Supabase-backed app shell, price, cash, stock, and products routes.
+- Replaced root layout font links with `next/font/google`.
+- Local verification now passes: typecheck, lint, and production build.
