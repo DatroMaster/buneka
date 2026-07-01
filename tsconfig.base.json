@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "ignoreDeprecations": "6.0",
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@buneka/ui": ["packages/ui/src"],
+      "@buneka/core": ["packages/core/src"],
+      "@buneka/database": ["packages/database/src"],
+      "@buneka/barcode": ["packages/barcode/src"],
+      "@buneka/licensing": ["packages/licensing/src"],
+      "@buneka/reports": ["packages/reports/src"]
+    }
+  }
+}
