@@ -76,3 +76,11 @@ Connect Supabase and move from demo-only state to real application data:
 - Cleaned React 19 lint issues in the Supabase-backed app shell, price, cash, stock, and products routes.
 - Replaced root layout font links with `next/font/google`.
 - Local verification now passes: typecheck, lint, and production build.
+
+## 2026-07-02 Premium Completion Notes
+
+- Public site now follows a quieter premium product-led layout inspired by current SaaS/product reference sites.
+- Sector cards now link to real static pages with features, modules, and daily workflow.
+- `/app/urunler` now supports new product creation and bulk price update.
+- `/app/stok` now supports stock entry and stock quantity updates.
+- Visible SERENIS wording has been removed from app/site code; historical manifest and schema feature-code references are still present and should be handled by a deliberate product/schema decision if they must be removed globally.

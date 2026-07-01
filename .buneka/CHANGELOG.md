@@ -33,3 +33,14 @@
 - Updated client data loaders to satisfy React 19 hook lint rules.
 - Replaced manual Google font links with `next/font/google`.
 - Verified `npm.cmd run typecheck`, `npm.cmd run lint`, and `npm.cmd run build`.
+
+## 2026-07-02 Premium Completion Pass
+
+- Rebuilt the public site around the premium Buneka design language.
+- Removed visible SERENIS wording from app/site surfaces.
+- Added sector content data and static sector detail pages under `/sektorler/[slug]`.
+- Connected sector cards to real detail pages instead of empty anchors.
+- Added working product creation and bulk price update modals to `/app/urunler`.
+- Added working stock entry modal to `/app/stok`.
+- Cleaned app copy on price, cash, reports, and settings pages.
+- Verified typecheck, lint, production build, and local HTTP smoke checks.

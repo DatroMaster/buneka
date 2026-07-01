@@ -1,12 +1,12 @@
 # AGENT STATE
 
-Current phase: Vercel stabilization after Antigravity handoff
+Current phase: Premium site and app completion pass
 
 Current active task: None
 
-Last completed task: Fixed Vercel module resolution failure and cleaned lint/type issues in Supabase-backed app routes
+Last completed task: Reworked public site, added sector detail pages, completed product bulk update and stock entry flows
 
-Next suggested task: Deploy the fixed main branch on Vercel, then verify Supabase auth and seeded demo/customer data in production
+Next suggested task: Verify the new deployed pages in Vercel, then test Supabase write flows with a real customer account
 
 Open blockers:
 - Confirm Vercel has NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY set for production.
@@ -35,6 +35,8 @@ Tests run:
 - npm.cmd run build: passed. Next generated static public/admin/demo routes and dynamic app/login routes.
 - Invoke-WebRequest http://localhost:3000: passed, status 200.
 - Invoke-WebRequest http://localhost:3000/demo: passed, status 200.
+- Invoke-WebRequest http://localhost:3000/sektorler/market-bakkal: passed, status 200.
+- SERENIS text search in apps/web: no visible app/site matches.
 - Forbidden sale-negative phrase search across apps, docs, and .buneka: no matches.
 - npm.cmd audit --audit-level=moderate: failed due to 2 moderate PostCSS advisories under Next.
 - Migration table/RLS/seed grep sanity check: passed.
