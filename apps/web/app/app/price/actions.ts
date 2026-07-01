@@ -13,7 +13,7 @@ export async function lookupProduct(barcode: string) {
   // Get user org
   const { data: appUser } = await supabase
     .from("app_users")
-    .select("organization_id, store_id")
+    .select("id, organization_id, store_id")
     .eq("auth_user_id", user.id)
     .single();
 
