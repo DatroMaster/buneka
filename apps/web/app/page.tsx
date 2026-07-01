@@ -1,283 +1,659 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  BadgeCheck,
   Barcode,
+  Bluetooth,
   Boxes,
-  Building2,
   Calculator,
-  ChartNoAxesCombined,
   CheckCircle2,
-  CircleHelp,
-  MonitorSmartphone,
-  PackagePlus,
+  ChevronRight,
+  Eye,
+  Mail,
   ScanBarcode,
   ShieldCheck,
-  Store,
-  WalletCards,
-  Eye,
+  Smartphone,
   TrendingUp,
-  Store as StoreIcon
+  WalletCards,
+  Zap,
 } from "lucide-react";
+
+/* ───────────────────────────────────────── data ── */
+
+const questions = [
+  {
+    icon: ScanBarcode,
+    title: "Bu ürün kaç para?",
+    desc: "Barkodu okutun, fiyatı anında görün.",
+  },
+  {
+    icon: WalletCards,
+    title: "Bugün ne kadar satış yaptım?",
+    desc: "Günlük kasa toplamınız her zaman elinizin altında.",
+  },
+  {
+    icon: TrendingUp,
+    title: "En çok hangi ürün sorgulandı?",
+    desc: "Hangi ürünün fiyatı en çok soruluyor, hemen görün.",
+  },
+  {
+    icon: Boxes,
+    title: "Stokta ne kaldı?",
+    desc: "Azalan stoklar için uyarı alın, eksik kalma.",
+  },
+  {
+    icon: Calculator,
+    title: "Kasada bugün ne var?",
+    desc: "Gün sonu kasanızı tek bakışta kontrol edin.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Lisansım ne zaman bitiyor?",
+    desc: "Lisans durumunuz her zaman şeffaf ve takip edilebilir.",
+  },
+];
 
 const plans = [
   {
-    name: "FiyatGör Başlangıç",
-    price: "7.500 TL",
-    summary: "Barkodla fiyat sorgulama ve basit stok/kasa takibi.",
-    features: ["Fiyat gösterme", "Satış & Satış Yok butonu", "Günlük kasa özeti", "Kaçan satış raporu"]
+    name: "Buneka Fiyat",
+    price: "6.000 TL",
+    period: "/ yıl",
+    desc: "Fiyat sorgulama",
+    features: ["Barkod okutma", "Fiyat gösterme", "Basit rapor"],
+    highlighted: false,
   },
   {
-    name: "FiyatGör İşletme",
-    price: "18.000 TL",
-    summary: "Fiyat, kasa, stok takibi ve akıllı uyarılar.",
-    features: ["Kullanıcı yetkileri", "Minimum stok uyarısı", "Mobil patron ekranı", "Haftalık detaylı rapor"]
+    name: "Buneka Kasa",
+    price: "9.000 TL",
+    period: "/ yıl",
+    desc: "Fiyat + satış + günlük kasa",
+    features: ["Satış kaydı", "Günlük kasa", "Sorgu raporu"],
+    highlighted: true,
   },
   {
-    name: "FiyatGör Patron",
-    price: "45.000 TL",
-    summary: "Gelişmiş kâr analizi, personel takibi ve SERENIS zekâsı.",
-    features: ["Çoklu şube desteği", "Kâr analizi (Brüt/Net)", "SERENIS İşletme Notu", "Bulut yedekleme"]
-  }
+    name: "Buneka Stok",
+    price: "15.000 TL",
+    period: "/ yıl",
+    desc: "Fiyat + kasa + stok",
+    features: ["Stok takibi", "Min. stok uyarısı", "Kâr detayı"],
+    highlighted: false,
+  },
+  {
+    name: "Buneka Patron",
+    price: "24.000 TL",
+    period: "/ yıl",
+    desc: "Gelişmiş rapor + yönetim",
+    features: ["SERENIS notu", "Çoklu cihaz", "Patron paneli"],
+    highlighted: false,
+  },
 ];
 
-const faqs = [
+const devices = [
   {
-    question: "FiyatGör muhasebe programı veya yazarkasa mıdır?",
-    answer: "Hayır. FiyatGör Mini Kasa, resmi yazarkasa yerine geçmez. İşletmenin fiyat, stok, satış ve kâr takibini kolaylaştıran yardımcı yönetim ve hafıza sistemidir."
+    icon: Smartphone,
+    title: "Telefon Kamerası",
+    desc: "Demo ve hızlı başlangıç için.",
   },
   {
-    question: "Aylık ödeme var mı?",
-    answer: "Size uygun modele göre değişir. Dilerseniz tek seferlik lisans bedeliyle, dilerseniz düşük aylık abonelik modeliyle kullanabilirsiniz."
+    icon: ScanBarcode,
+    title: "USB Barkod Okuyucu",
+    desc: "Sabit kasa noktası için en pratik çözüm.",
   },
   {
-    question: "Sadece telefonla kullanabilir miyim?",
-    answer: "Evet. Başlangıçta sadece telefon kamerasıyla okutarak kullanabilirsiniz, işler büyüdükçe bir USB barkod okuyucu takarak hızlanabilirsiniz."
-  }
+    icon: Bluetooth,
+    title: "Bluetooth Barkod Okuyucu",
+    desc: "Tablet ve mobil kullanım için.",
+  },
 ];
+
+const modules = [
+  "Son kullanma tarihi",
+  "Raf etiketi",
+  "Cari müşteri",
+  "Çoklu cihaz",
+  "Çok şube",
+  "SERENIS işletme notu",
+  "Giyim beden renk",
+  "Petshop tekrar alım",
+  "Kırtasiye sezonu",
+  "Hırdavat birim takibi",
+];
+
+/* ───────────────────────────────────────── page ── */
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#F7F4ED] text-[#2c3f2d] selection:bg-[#4F6F52] selection:text-white font-sans overflow-x-hidden">
-      {/* Background Orbs */}
-      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[#b65a3c]/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#4F6F52]/10 rounded-full blur-[120px] pointer-events-none" />
+    <main
+      className="min-h-screen text-[#20231F] selection:bg-[#4F6F52] selection:text-white font-sans overflow-x-hidden"
+      style={{
+        background: `
+          radial-gradient(circle at 20% 10%, rgba(200,145,58,0.14), transparent 28%),
+          radial-gradient(circle at 80% 20%, rgba(79,111,82,0.18), transparent 32%),
+          linear-gradient(180deg, #F7F4ED 0%, #EFE8DC 100%)
+        `,
+      }}
+    >
+      {/* ════════════════════════════════════ 1. HEADER ═══ */}
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-[#F7F4ED]/80 border-b border-[#E4DED2]">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#4F6F52] text-white shadow-md group-hover:scale-105 transition-transform">
+              <Barcode size={18} strokeWidth={2.5} />
+            </div>
+            <span className="text-xl font-bold tracking-tight text-[#20231F]">
+              Buneka
+            </span>
+          </Link>
 
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-12 backdrop-blur-xl bg-[#F7F4ED]/70 border-b border-[#4F6F52]/10 transition-all duration-300">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#4F6F52] to-[#3a523c] text-white shadow-lg shadow-[#4F6F52]/20 group-hover:scale-105 transition-transform">
-            <Barcode size={22} strokeWidth={2.5} />
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#667064]">
+            <a
+              href="#sorular"
+              className="hover:text-[#4F6F52] transition-colors"
+            >
+              Ana Fikir
+            </a>
+            <a
+              href="#paketler"
+              className="hover:text-[#4F6F52] transition-colors"
+            >
+              Paketler
+            </a>
+            <a href="#demo" className="hover:text-[#4F6F52] transition-colors">
+              Demo
+            </a>
+            <a href="#sss" className="hover:text-[#4F6F52] transition-colors">
+              S.S.S
+            </a>
+          </nav>
+
+          {/* Right actions */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-[#4F6F52] hover:bg-[#4F6F52]/5 transition-colors"
+            >
+              Giriş Yap
+            </Link>
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#C8913A] shadow-md shadow-[#C8913A]/25 hover:bg-[#b5802f] hover:shadow-lg transition-all"
+            >
+              Demo Paneli Aç
+            </Link>
           </div>
-          <span className="text-xl font-bold tracking-tight text-[#1a261b]">FiyatGör</span>
-        </Link>
-        <nav className="hidden md:flex items-center gap-8 font-medium text-sm text-[#4F6F52]/80">
-          <a href="#nedir" className="hover:text-[#b65a3c] transition-colors">Ana Fikir</a>
-          <a href="#farkimiz" className="hover:text-[#b65a3c] transition-colors">Farkımız</a>
-          <a href="#paketler" className="hover:text-[#b65a3c] transition-colors">Paketler</a>
-          <a href="#sss" className="hover:text-[#b65a3c] transition-colors">S.S.S</a>
-        </nav>
-        <div className="flex items-center gap-3">
-          <Link href="/login" className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-[#4F6F52] hover:bg-[#4F6F52]/5 transition-colors">
-            <ShieldCheck size={18} />
-            Giriş Yap
-          </Link>
-          <Link href="/login" className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white bg-gradient-to-r from-[#b65a3c] to-[#9a4b31] shadow-lg shadow-[#b65a3c]/30 hover:shadow-[#b65a3c]/50 hover:scale-105 transition-all">
-            <ScanBarcode size={18} />
-            Sisteme Başla
-          </Link>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 flex flex-col items-center text-center z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#4F6F52]/10 text-[#4F6F52] font-semibold text-sm mb-8 animate-fade-in-up">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4F6F52] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#4F6F52]"></span>
-          </span>
-          Küçük İşletmeler İçin Yeni Nesil İşletme Hafızası
-        </div>
-        
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-[#1a261b] max-w-4xl leading-tight mb-6 animate-fade-in-up" style={{animationDelay: '100ms'}}>
-          Dükkanın hafızası cebinizde, <br className="hidden md:block"/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4F6F52] to-[#b65a3c]">kasanız gözünüzün önünde.</span>
-        </h1>
-        
-        <p className="text-lg md:text-xl text-[#4F6F52]/80 max-w-2xl mb-10 font-medium animate-fade-in-up" style={{animationDelay: '200ms'}}>
-          Barkodu okutun, fiyatı görün. Satış olursa kasanıza işlesin. Ama en önemlisi: <strong className="text-[#b65a3c]">Müşterinin fiyatını sorup almadığı ürünleri görün.</strong>
-        </p>
+      {/* ════════════════════════════════════ 2. HERO ═══ */}
+      <section className="relative pt-32 md:pt-44 pb-20 md:pb-32 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left — copy */}
+          <div className="order-2 lg:order-1">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-[#20231F] leading-[1.1] mb-6">
+              Barkodu okut,
+              <br />
+              fiyatı gör,
+              <br />
+              <span className="text-[#4F6F52]">satışını bil.</span>
+            </h1>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 animate-fade-in-up" style={{animationDelay: '300ms'}}>
-          <Link href="/login" className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg text-white bg-[#4F6F52] shadow-xl shadow-[#4F6F52]/30 hover:bg-[#3a523c] hover:scale-105 transition-all">
-            Hemen Ücretsiz Başla
-            <ArrowRight size={20} />
-          </Link>
-          <a href="#nedir" className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg text-[#4F6F52] bg-white border border-[#4F6F52]/20 hover:bg-[#4F6F52]/5 transition-all">
-            Sistemi Keşfet
-          </a>
-        </div>
-      </section>
+            <p className="text-lg text-[#667064] leading-relaxed max-w-xl mb-6">
+              Buneka, küçük işletmeler için yıllık lisanslı fiyat sorgulama,
+              kasa ve stok takip sistemidir. Telefonla denenir, barkod
+              okuyucuyla hızlanır, gereksiz karmaşa çıkarmaz.
+            </p>
 
-      {/* 4 Core Questions Section */}
-      <section id="nedir" className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#1a261b] mb-4">Küçük esnaf için 4 altın soru</h2>
-          <p className="text-[#4F6F52]/80 text-lg max-w-2xl mx-auto">Sistemsiz çalışan küçük işletmeye çok basit ama kusursuz bir işletme hafızası kazandırıyoruz.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { icon: ScanBarcode, title: "Bu ürünün fiyatı ne?", desc: "Barkodu okutun, alış-satış fiyatını ve kârınızı anında görün." },
-            { icon: WalletCards, title: "Bugün ne kadar sattım?", desc: "Satış tuşuna basın, cironuz ve günlük kârınız arka planda biriksin." },
-            { icon: TrendingUp, title: "En çok ne satıldı?", desc: "Hangi ürünün dükkanı ayakta tuttuğunu günlük raporlarla görün." },
-            { icon: Eye, title: "Ne soruldu ama alınmadı?", desc: "İşte asıl zeka! Fiyatı sorulup vazgeçilen ürünleri tespit edin." }
-          ].map((item, idx) => (
-            <div key={idx} className="group relative p-8 rounded-3xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl shadow-[#4F6F52]/5 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#4F6F52]/10 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/80 to-white/20 rounded-3xl -z-10" />
-              <div className="h-14 w-14 rounded-2xl bg-[#4F6F52]/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#4F6F52] transition-all duration-300">
-                <item.icon size={28} className="text-[#4F6F52] group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-xl font-bold text-[#1a261b] mb-3">{item.title}</h3>
-              <p className="text-[#4F6F52]/70 font-medium leading-relaxed">{item.desc}</p>
+            {/* Micro trust */}
+            <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-[#4F6F52] mb-8">
+              <span className="flex items-center gap-1.5">
+                <Zap size={14} className="text-[#C8913A]" />
+                Kurulumsuz başlar.
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Smartphone size={14} className="text-[#C8913A]" />
+                Telefonda çalışır.
+              </span>
+              <span className="flex items-center gap-1.5">
+                <ScanBarcode size={14} className="text-[#C8913A]" />
+                Barkod cihazıyla hızlanır.
+              </span>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* The Big Differentiator */}
-      <section id="farkimiz" className="py-24 px-6 md:px-12 bg-[#4F6F52] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#b65a3c]/30 rounded-full blur-[100px]"></div>
-        
-        <div className="max-w-5xl mx-auto relative z-10 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 leading-tight">
-            Esnafın en büyük kaybı satmadığı üründe değil,<br/>
-            <span className="text-[#e8b29f]">neyi neden satamadığını bilmemesindedir.</span>
-          </h2>
-          <p className="text-[#e2e8e3] text-xl max-w-3xl mx-auto leading-relaxed mb-12">
-            Klasik kasa sistemleri sadece sattığınızı gösterir. FiyatGör Mini Kasa ise; müşteri raftan ürünü getirip fiyat sorduğunda ve almaktan vazgeçtiğinde bunu "İlgi" olarak kaydeder. 
-            <br/><br/><strong>"İçecek B çok soruluyor ama az satılıyor. Fiyat yüksek olabilir!"</strong> diyen bir asistana sahip olun.
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto text-left">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <div className="text-white/60 text-sm font-semibold mb-1">Okutma</div>
-              <div className="text-3xl font-bold text-white">80 Kez</div>
-              <div className="text-[#e8b29f] text-sm mt-2">Çikolata A ürünü soruldu</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <div className="text-white/60 text-sm font-semibold mb-1">Gerçekleşen Satış</div>
-              <div className="text-3xl font-bold text-white">64 Adet</div>
-              <div className="text-[#e8b29f] text-sm mt-2">Satışa döndü</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-[#b65a3c] shadow-[0_0_30px_rgba(182,90,60,0.3)] transform scale-105">
-              <div className="text-white/80 text-sm font-semibold mb-1">Satışa Dönmeme Oranı</div>
-              <div className="text-3xl font-bold text-[#e8b29f]">%20 Fire</div>
-              <div className="text-white/70 text-sm mt-2">Gizli fırsatı yakalayın</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audiences */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#1a261b] mb-4">Kimler İçin Tasarlandı?</h2>
-          <p className="text-[#4F6F52]/80 text-lg max-w-2xl mx-auto">Karmaşık zincir market yazılımlarına binlerce lira ödemek istemeyen, hızlı ve pratik esnaf için.</p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {[
-            { label: "Bakkal & Büfe", icon: StoreIcon, desc: "Hızlı okut, kasayı gör." },
-            { label: "Kırtasiye", icon: PackagePlus, desc: "Sezonluk ürün ve paket takibi." },
-            { label: "Petshop", icon: BadgeCheck, desc: "Mama stok ve skt takibi." },
-            { label: "Kozmetik", icon: Building2, desc: "Denendi ama alınmadı raporu." }
-          ].map((item, idx) => (
-            <div key={idx} className="bg-white/50 backdrop-blur-sm border border-[#4F6F52]/10 rounded-3xl p-6 text-center hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="mx-auto h-12 w-12 rounded-full bg-[#b65a3c]/10 text-[#b65a3c] flex items-center justify-center mb-4">
-                <item.icon size={24} />
-              </div>
-              <h3 className="text-lg font-bold text-[#1a261b] mb-2">{item.label}</h3>
-              <p className="text-sm text-[#4F6F52]/70 font-medium">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Pricing Packages */}
-      <section id="paketler" className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#1a261b] mb-4">İşiniz Büyüdükçe Ölçeklenen Paketler</h2>
-          <p className="text-[#4F6F52]/80 text-lg max-w-2xl mx-auto">Tek seferlik kurulum veya aylık cüzi aboneliklerle. İlk müşterilere özel erken erişim indirimleriyle.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-          {plans.map((plan, idx) => (
-            <div key={plan.name} className={`relative flex flex-col p-8 rounded-3xl backdrop-blur-xl border transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${idx === 1 ? 'bg-gradient-to-b from-white to-[#F7F4ED] border-[#b65a3c] shadow-[0_0_40px_rgba(182,90,60,0.15)] md:-mt-4 md:mb-4' : 'bg-white/60 border-white/40 shadow-xl shadow-[#4F6F52]/5'}`}>
-              {idx === 1 && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#b65a3c] text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
-                  En Çok Tercih Edilen
-                </div>
-              )}
-              <h3 className="text-2xl font-bold text-[#1a261b] mb-2">{plan.name}</h3>
-              <p className="text-[#4F6F52]/70 font-medium mb-6 h-12">{plan.summary}</p>
-              
-              <div className="mb-8">
-                <span className="text-4xl font-extrabold text-[#1a261b]">{plan.price}</span>
-                <span className="text-[#4F6F52]/60 font-medium text-sm ml-2">/ tek seferlik</span>
-              </div>
-
-              <div className="flex-1 space-y-4 mb-8">
-                {plan.features.map(feature => (
-                  <div key={feature} className="flex items-center gap-3">
-                    <div className="h-5 w-5 rounded-full bg-[#4F6F52]/10 flex items-center justify-center flex-shrink-0">
-                      <CheckCircle2 size={12} className="text-[#4F6F52]" />
-                    </div>
-                    <span className="font-semibold text-[#2c3f2d] text-sm">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Link href="/login" className={`w-full py-4 rounded-xl font-bold text-center transition-all ${idx === 1 ? 'bg-[#b65a3c] text-white hover:bg-[#9a4b31] shadow-lg shadow-[#b65a3c]/30' : 'bg-[#4F6F52]/10 text-[#4F6F52] hover:bg-[#4F6F52] hover:text-white'}`}>
-                Hemen Başla
+            {/* CTA buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/demo"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white bg-[#C8913A] shadow-lg shadow-[#C8913A]/25 hover:bg-[#b5802f] hover:shadow-xl hover:-translate-y-0.5 transition-all"
+              >
+                Demo Paneli Aç
+                <ArrowRight size={18} />
               </Link>
+              <a
+                href="#paketler"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-[#4F6F52] bg-white border border-[#4F6F52]/20 hover:bg-[#F7F4ED] hover:-translate-y-0.5 transition-all"
+              >
+                Paketleri İncele
+              </a>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
 
-      {/* FAQ Section */}
-      <section id="sss" className="py-24 px-6 md:px-12 max-w-4xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-[#1a261b] mb-4">Sıkça Sorulan Sorular</h2>
-        </div>
+          {/* Right — phone mockup (desktop only) */}
+          <div className="order-1 lg:order-2 hidden lg:flex justify-center relative">
+            {/* Phone frame */}
+            <div className="relative w-[280px] rounded-[2.5rem] border-2 border-[#E4DED2] bg-white shadow-2xl shadow-[#20231F]/10 overflow-hidden">
+              {/* Notch */}
+              <div className="flex justify-center pt-3 pb-2">
+                <div className="w-24 h-5 bg-[#20231F] rounded-full" />
+              </div>
 
-        <div className="space-y-6">
-          {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-white/60 backdrop-blur-xl border border-white/40 rounded-3xl p-8 shadow-lg shadow-[#4F6F52]/5">
-              <h3 className="text-xl font-bold text-[#1a261b] mb-3 flex items-start gap-4">
-                <CircleHelp className="text-[#b65a3c] flex-shrink-0 mt-1" size={24} />
-                {faq.question}
-              </h3>
-              <p className="text-[#4F6F52]/80 font-medium pl-10 leading-relaxed">
-                {faq.answer}
+              {/* Screen content */}
+              <div className="px-4 pb-6 space-y-4">
+                <h3 className="text-center text-lg font-bold text-[#20231F]">
+                  Bu ne kadar?
+                </h3>
+
+                {/* Fake barcode input */}
+                <div className="flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-[#F7F4ED] px-3 py-2.5 text-sm text-[#667064]">
+                  <ScanBarcode size={16} className="text-[#4F6F52]" />
+                  <span>Barkod okutun...</span>
+                </div>
+
+                {/* Product card */}
+                <div className="rounded-xl border border-[#E4DED2] bg-[#F7F4ED] p-4">
+                  <p className="font-bold text-[#20231F] text-sm mb-1">
+                    Su 500ml
+                  </p>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl font-extrabold text-[#4F6F52]">
+                      ₺12,00
+                    </span>
+                    <span className="text-xs font-medium text-[#667064]">
+                      Stok: 48
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="space-y-2">
+                  <div className="w-full py-2.5 rounded-xl bg-[#3F7D53] text-white text-sm font-bold text-center">
+                    Satış Yapıldı
+                  </div>
+                  <div className="w-full py-2.5 rounded-xl bg-white border border-[#E4DED2] text-[#20231F] text-sm font-bold text-center">
+                    Ana Ekrana Dön
+                  </div>
+                </div>
+              </div>
+
+              {/* Home indicator */}
+              <div className="flex justify-center pb-2">
+                <div className="w-32 h-1 bg-[#20231F]/20 rounded-full" />
+              </div>
+            </div>
+
+            {/* Floating stat cards */}
+            <div className="absolute -left-12 top-12 rounded-2xl bg-white border border-[#E4DED2] shadow-lg px-4 py-3 text-center">
+              <p className="text-xs font-medium text-[#667064]">Günlük kasa</p>
+              <p className="text-lg font-extrabold text-[#4F6F52]">₺8.420</p>
+            </div>
+
+            <div className="absolute -right-8 top-28 rounded-2xl bg-white border border-[#E4DED2] shadow-lg px-4 py-3 text-center">
+              <p className="text-xs font-medium text-[#667064]">
+                Fiyat sorgusu
               </p>
+              <p className="text-lg font-extrabold text-[#C8913A]">126</p>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="py-12 border-t border-[#4F6F52]/10 text-center relative z-10">
-        <div className="flex justify-center mb-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#4F6F52] text-white">
-            <Barcode size={24} strokeWidth={2.5} />
+            <div className="absolute -left-6 bottom-32 rounded-2xl bg-white border border-[#E4DED2] shadow-lg px-4 py-3 text-center">
+              <p className="text-xs font-medium text-[#667064]">Satış</p>
+              <p className="text-lg font-extrabold text-[#4F6F52]">42</p>
+            </div>
+
+            <div className="absolute -right-14 bottom-16 rounded-2xl bg-white border border-[#E4DED2] shadow-lg px-4 py-3 text-center">
+              <p className="text-xs font-medium text-[#667064]">
+                Stok uyarısı
+              </p>
+              <p className="text-lg font-extrabold text-[#B65A3C]">5 ürün</p>
+            </div>
           </div>
         </div>
-        <p className="text-[#4F6F52]/60 font-medium mb-2">© 2026 FiyatGör Mini Kasa. Tüm hakları saklıdır.</p>
-        <p className="text-[#4F6F52]/40 text-sm">Resmi mali belge düzenleyici değildir, operasyonel zeka sistemidir.</p>
+      </section>
+
+      {/* ════════════════════════ 3. DÜKKAN SAHİBİNİN SORULARI ═══ */}
+      <section
+        id="sorular"
+        className="py-24 bg-[#EFE8DC]/50"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4 max-w-2xl mx-auto leading-snug">
+              Dükkan sahibinin kafasındaki soruları Buneka cevaplar.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {questions.map((q, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl border border-[#E4DED2] p-6 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="h-12 w-12 rounded-full bg-[#4F6F52]/10 flex items-center justify-center mb-5">
+                  <q.icon size={22} className="text-[#4F6F52]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#20231F] mb-2">
+                  {q.title}
+                </h3>
+                <p className="text-sm text-[#667064] leading-relaxed">
+                  {q.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 4. ÜÇ ADIMDA KULLANIM ═══ */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4">
+              Üç adımda çalışır.
+            </h2>
+          </div>
+
+          {/* Steps */}
+          <div className="relative max-w-4xl mx-auto">
+            {/* Connecting line — desktop horizontal */}
+            <div className="hidden md:block absolute top-16 left-[16.67%] right-[16.67%] h-0.5 bg-[#E4DED2]" />
+            {/* Connecting line — mobile vertical */}
+            <div className="md:hidden absolute top-0 bottom-0 left-8 w-0.5 bg-[#E4DED2]" />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative">
+              {[
+                {
+                  num: "1",
+                  icon: ScanBarcode,
+                  title: "Barkodu okut",
+                  desc: "Telefon kamerasıyla veya barkod okuyucuyla ürünü taratın.",
+                },
+                {
+                  num: "2",
+                  icon: Eye,
+                  title: "Fiyatı gör",
+                  desc: "Ürünün fiyatı ve stok bilgisi anında ekranda belirir.",
+                },
+                {
+                  num: "3",
+                  icon: CheckCircle2,
+                  title: "Satış olursa Satış Yapıldı de",
+                  desc: "Satış gerçekleşirse tek tuşla kaydedin.",
+                },
+              ].map((step, i) => (
+                <div
+                  key={i}
+                  className="flex md:flex-col items-start md:items-center gap-6 md:gap-0 pl-16 md:pl-0 relative"
+                >
+                  {/* Number circle */}
+                  <div className="absolute left-2 md:static flex-shrink-0 h-14 w-14 rounded-full bg-[#4F6F52] text-white flex items-center justify-center text-xl font-extrabold shadow-lg shadow-[#4F6F52]/20 z-10">
+                    {step.num}
+                  </div>
+
+                  <div className="md:mt-6 md:text-center">
+                    <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-[#4F6F52]/10 mb-3">
+                      <step.icon size={20} className="text-[#4F6F52]" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[#20231F] mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-[#667064] leading-relaxed max-w-xs">
+                      {step.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Small note */}
+          <p className="text-center text-sm text-[#667064] mt-12 max-w-md mx-auto">
+            Satış yapılmayacaksa sadece{" "}
+            <span className="font-semibold text-[#20231F]">
+              Ana Ekrana Dön
+            </span>
+            .
+          </p>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 5. PAKETLER ═══ */}
+      <section id="paketler" className="py-24 bg-[#EFE8DC]/50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4 max-w-2xl mx-auto leading-snug">
+              İhtiyacın kadar kullan.
+              <br className="hidden sm:block" /> İşin büyüdükçe modül aç.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            {plans.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative flex flex-col rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                  plan.highlighted
+                    ? "bg-white border-[#C8913A] shadow-xl shadow-[#C8913A]/10 scale-[1.03] z-10"
+                    : "bg-white border-[#E4DED2] shadow-sm"
+                }`}
+              >
+                {plan.highlighted && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#C8913A] px-4 py-1 text-xs font-bold text-white shadow-md">
+                    En çok tercih edilen
+                  </div>
+                )}
+
+                <h3 className="text-xl font-bold text-[#20231F] mb-1 mt-1">
+                  {plan.name}
+                </h3>
+                <p className="text-sm text-[#667064] mb-5">{plan.desc}</p>
+
+                <div className="mb-6">
+                  <span className="text-3xl font-extrabold text-[#20231F]">
+                    {plan.price}
+                  </span>
+                  <span className="text-sm font-medium text-[#667064] ml-1">
+                    {plan.period}
+                  </span>
+                </div>
+
+                <ul className="flex-1 space-y-3 mb-6">
+                  {plan.features.map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-center gap-2.5 text-sm text-[#20231F]"
+                    >
+                      <CheckCircle2
+                        size={16}
+                        className="text-[#3F7D53] flex-shrink-0"
+                      />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="#demo"
+                  className={`block w-full py-3 rounded-xl text-center text-sm font-bold transition-all ${
+                    plan.highlighted
+                      ? "bg-[#C8913A] text-white hover:bg-[#b5802f] shadow-md"
+                      : "bg-[#4F6F52]/10 text-[#4F6F52] hover:bg-[#4F6F52] hover:text-white"
+                  }`}
+                >
+                  Detaylı Bilgi
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 6. DEMO PANEL ═══ */}
+      <section id="demo" className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4">
+              Telefondan hemen deneyin.
+            </h2>
+            <p className="text-lg text-[#667064] leading-relaxed mb-10 max-w-xl mx-auto">
+              Demo paneli açın, örnek ürünleri yükleyin, barkodu okutun ve
+              Buneka&apos;nın nasıl çalıştığını görün.
+            </p>
+
+            {/* Demo preview card */}
+            <div className="mx-auto max-w-sm rounded-3xl border border-[#E4DED2] bg-white shadow-xl overflow-hidden mb-10">
+              <div className="bg-[#4F6F52] px-6 py-4 text-white text-left">
+                <p className="text-xs font-medium opacity-70">Buneka Demo</p>
+                <p className="text-lg font-bold">Demo Paneli</p>
+              </div>
+              <div className="p-5 space-y-3">
+                <div className="flex items-center gap-3 rounded-xl border border-[#E4DED2] bg-[#F7F4ED] p-3">
+                  <ScanBarcode size={18} className="text-[#4F6F52]" />
+                  <span className="text-sm text-[#667064]">
+                    Barkod okutun veya arayın...
+                  </span>
+                </div>
+                <div className="rounded-xl bg-[#F7F4ED] p-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-bold text-[#20231F]">
+                      Kalem Mavi
+                    </span>
+                    <span className="text-sm font-extrabold text-[#4F6F52]">
+                      ₺18,50
+                    </span>
+                  </div>
+                  <span className="text-xs text-[#667064]">Stok: 120</span>
+                </div>
+                <div className="flex gap-2">
+                  <div className="flex-1 py-2 rounded-lg bg-[#3F7D53] text-white text-xs font-bold text-center">
+                    Satış Yapıldı
+                  </div>
+                  <div className="flex-1 py-2 rounded-lg border border-[#E4DED2] text-[#20231F] text-xs font-bold text-center">
+                    Ana Ekrana Dön
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              href="/demo"
+              className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-2xl text-lg font-bold text-white bg-[#C8913A] shadow-lg shadow-[#C8913A]/25 hover:bg-[#b5802f] hover:shadow-xl hover:-translate-y-0.5 transition-all"
+            >
+              Demo Paneli Aç
+              <ArrowRight size={20} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 7. CİHAZLAR ═══ */}
+      <section className="py-24 bg-[#EFE8DC]/50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4">
+              Telefonla başla, barkod okuyucuyla hızlan.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {devices.map((d, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl border border-[#E4DED2] p-6 text-center shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="mx-auto h-14 w-14 rounded-full bg-[#4F6F52]/10 flex items-center justify-center mb-5">
+                  <d.icon size={24} className="text-[#4F6F52]" />
+                </div>
+                <h3 className="text-lg font-bold text-[#20231F] mb-2">
+                  {d.title}
+                </h3>
+                <p className="text-sm text-[#667064] leading-relaxed">
+                  {d.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 8. EK MODÜLLER ═══ */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4">
+              İş büyüdükçe Buneka da büyür.
+            </h2>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+            {modules.map((m) => (
+              <span
+                key={m}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-[#E4DED2] bg-white text-sm font-medium text-[#20231F] shadow-sm hover:border-[#4F6F52]/30 hover:shadow-md transition-all duration-200"
+              >
+                <ChevronRight size={14} className="text-[#4F6F52]" />
+                {m}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 9. KAPANIŞ CTA ═══ */}
+      <section className="py-24 bg-[#EFE8DC]/50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#20231F] mb-4 leading-snug">
+              Dükkanınızın hafızasını bugün açın.
+            </h2>
+            <p className="text-lg text-[#667064] leading-relaxed mb-10 max-w-xl mx-auto">
+              Büyük sistem kurmadan, küçük işletmenin en kritik sorularını
+              cevaplayan sade bir yardımcıyla başlayın.
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <Link
+                href="/demo"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-white bg-[#C8913A] shadow-lg shadow-[#C8913A]/25 hover:bg-[#b5802f] hover:shadow-xl hover:-translate-y-0.5 transition-all"
+              >
+                Demo Paneli Aç
+                <ArrowRight size={18} />
+              </Link>
+              <a
+                href="mailto:info@buneka.com"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-base font-bold text-[#4F6F52] bg-white border border-[#4F6F52]/20 hover:bg-[#F7F4ED] hover:-translate-y-0.5 transition-all"
+              >
+                <Mail size={18} />
+                İletişime Geç
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════ 10. FOOTER ═══ */}
+      <footer className="py-12 border-t border-[#E4DED2]">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#4F6F52] text-white">
+              <Barcode size={20} strokeWidth={2.5} />
+            </div>
+          </div>
+          <p className="text-sm font-medium text-[#667064] mb-2">
+            © 2025 Buneka. Tüm hakları saklıdır.
+          </p>
+          <p className="text-xs text-[#667064]/60">
+            Buneka resmi yazarkasa veya mali belge düzenleyici değildir.
+          </p>
+        </div>
       </footer>
     </main>
   );

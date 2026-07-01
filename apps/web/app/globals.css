@@ -1,51 +1,184 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* ── Theme tokens ─────────────────────────────────────────────────── */
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --color-brand: #4F6F52;
-  --color-brand-dark: #3F5941;
-  --color-brand-light: #F7F4ED;
-  --color-accent: #C8913A;
+  /* Fonts */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-display: 'Manrope', ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+
+  /* Brand colors */
+  --color-bg: #F7F4ED;
+  --color-bg-secondary: #EFE8DC;
+  --color-card: #FFFFFF;
+  --color-text: #20231F;
+  --color-muted: #667064;
+  --color-green: #4F6F52;
+  --color-green-deep: #2F4A35;
+  --color-amber: #C8913A;
   --color-border: #E4DED2;
-  --color-text-main: #20231F;
-  --color-text-muted: #667064;
+
+  /* Animation */
+  --animate-fade-in-up: fade-in-up 0.7s ease-out both;
 }
 
-@layer base {
-  :root {
-    --background: #f7f4ed;
-    --surface: #ffffff;
-    --border: #e4ded2;
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
   }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
+/* ── Base layer ───────────────────────────────────────────────────── */
+@layer base {
   body {
-    background-color: var(--background);
-    color: var(--text-main);
+    background-color: var(--color-bg);
+    color: var(--color-text);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-muted);
+  }
 }
 
-/* Glassmorphism utilities */
+/* ── Utilities layer ──────────────────────────────────────────────── */
 @layer utilities {
+  /* Glass panels (sidebar / modals) */
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(32,35,31,0.06)];
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-border);
   }
-  
+
+  /* Glass cards */
   .glass-card {
-    @apply bg-white/80 backdrop-blur-lg border border-white/50 shadow-sm transition-all duration-300 hover:shadow-md hover:bg-white/90;
+    background: rgba(255, 255, 255, 0.80);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
+                0 4px 12px rgba(0, 0, 0, 0.03);
   }
 
+  /* Premium input */
   .premium-input {
-    @apply w-full rounded-xl border border-[#E4DED2] bg-white/60 px-5 py-4 text-[#20231F] shadow-sm backdrop-blur-md outline-none transition-all placeholder:text-[#667064]/60 focus:border-[#4F6F52] focus:bg-white focus:ring-4 focus:ring-[#4F6F52]/10;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--color-card);
+    border: 1.5px solid var(--color-border);
+    border-radius: 0.75rem;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .premium-input:focus {
+    outline: none;
+    border-color: var(--color-green);
+    box-shadow: 0 0 0 3px rgba(79, 111, 82, 0.12);
+  }
+  .premium-input::placeholder {
+    color: var(--color-muted);
   }
 
+  /* Primary button – Buneka green */
   .premium-button-primary {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-[#4F6F52] px-6 py-4 font-bold text-white shadow-[0_4px_14px_0_rgba(79,111,82,0.39)] transition-all duration-300 hover:translate-y-[-2px] hover:bg-[#3F5941] hover:shadow-[0_6px_20px_rgba(79,111,82,0.23)] active:translate-y-[1px];
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-green);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease,
+                box-shadow 0.2s ease;
+  }
+  .premium-button-primary:hover {
+    background: var(--color-green-deep);
+    box-shadow: 0 4px 14px rgba(79, 111, 82, 0.25);
+    transform: translateY(-1px);
+  }
+  .premium-button-primary:active {
+    transform: translateY(0);
   }
 
+  /* Secondary button – white */
   .premium-button-secondary {
-    @apply flex items-center justify-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-6 py-4 font-bold text-[#20231F] shadow-sm transition-all duration-300 hover:bg-[#F7F4ED] active:bg-[#E4DED2];
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-card);
+    color: var(--color-text);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease,
+                transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .premium-button-secondary:hover {
+    background: var(--color-bg-secondary);
+    border-color: var(--color-green);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+  .premium-button-secondary:active {
+    transform: translateY(0);
+  }
+
+  /* Amber button */
+  .premium-button-amber {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-amber);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease,
+                box-shadow 0.2s ease;
+  }
+  .premium-button-amber:hover {
+    background: #b07e30;
+    box-shadow: 0 4px 14px rgba(200, 145, 58, 0.3);
+    transform: translateY(-1px);
+  }
+  .premium-button-amber:active {
+    transform: translateY(0);
   }
 }
