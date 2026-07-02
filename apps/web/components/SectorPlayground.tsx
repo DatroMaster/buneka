@@ -76,7 +76,7 @@ export function SectorPlayground() {
               exit={{ opacity: 0 }}
               className="flex h-full items-center text-[11px] text-[color:var(--home-muted)]"
             >
-              Kutucukları sürükleyin veya üzerine gelin — tıklayınca sektör sayfasına gidersiniz.
+              Bir sektörün üzerine gelin, tıklayınca sayfasına gidersiniz.
             </motion.p>
           )}
         </AnimatePresence>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ChevronDown, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, ChevronDown, PhoneOff, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
@@ -196,6 +196,10 @@ export default function HomeClient() {
             Sadece satışları değil,{" "}
             <span className="text-[color:var(--home-glow)]">kaçan satışları</span> da görün.
           </h1>
+          <p className="glow-border mt-4 flex items-center gap-2.5 rounded-lg bg-[color:var(--home-glow)]/10 px-4 py-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
+            <PhoneOff size={18} className="shrink-0 text-[color:var(--home-glow)]" />
+            Sen dükkanda yokken fiyat için seni aramasınlar.
+          </p>
           <p className="mt-3 hidden text-sm leading-relaxed text-[color:var(--home-muted)] sm:block md:mt-4 md:text-base">
             Dükkanın hafızası artık cebinizde. Barkodu okut, fiyatı gör, satışını bil — kasa ve
             stok da aynı ekranda seni bekliyor.
