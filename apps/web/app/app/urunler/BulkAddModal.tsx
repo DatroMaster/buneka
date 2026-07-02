@@ -1,18 +1,21 @@
 "use client";
 
 import {
+  Camera,
   Download,
   FileSpreadsheet,
   Loader2,
   PackagePlus,
   Plus,
   ReceiptText,
+  Sparkles,
   Trash2,
   Upload,
   X,
 } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { scanInvoiceAction } from "./invoice-actions";
 
 type BulkRow = {
   barcode: string;
@@ -45,6 +48,45 @@ const emptyRow = (): BulkRow => ({
 
 const TEMPLATE_FILENAME = "buneka-urun-sablonu.xlsx";
 
+// Read a photo, downscale it, and return base64 JPEG. Downscaling keeps the
+// upload small (cheaper/faster scan, works on low-end phones) and the image
+// is only ever held transiently in memory here — never stored anywhere.
+async function fileToDownscaledBase64(file: File, maxEdge = 1600): Promise<{ base64: string; mediaType: string }> {
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("read"));
+    reader.readAsDataURL(file);
+  });
+  const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("decode"));
+    image.src = dataUrl;
+  });
+  const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
+  const width = Math.round(img.width * scale);
+  const height = Math.round(img.height * scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("canvas");
+  ctx.drawImage(img, 0, 0, width, height);
+  const base64 = canvas.toDataURL("image/jpeg", 0.85).split(",")[1] ?? "";
+  return { base64, mediaType: "image/jpeg" };
+}
+
+function parseTrDate(value: string): string | null {
+  const match = value.match(/(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})/);
+  if (!match) return null;
+  const day = Number(match[1]);
+  const month = Number(match[2]);
+  const year = Number(match[3].length === 2 ? `20${match[3]}` : match[3]);
+  const date = new Date(year, month - 1, day, 12, 0, 0);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
 export function BulkAddModal({
   open,
   onClose,
@@ -58,11 +100,16 @@ export function BulkAddModal({
   storeId: string | null;
   onImported: (message: string) => void;
 }) {
-  const [mode, setMode] = useState<"grid" | "excel">("grid");
+  const [mode, setMode] = useState<"photo" | "grid" | "excel">("grid");
   const [rows, setRows] = useState<BulkRow[]>(() => Array.from({ length: 6 }, emptyRow));
+  const [supplier, setSupplier] = useState("");
+  const [invoiceDate, setInvoiceDate] = useState("");
   const [saving, setSaving] = useState(false);
+  const [scanning, setScanning] = useState(false);
   const [message, setMessage] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const photoCaptureRef = useRef<HTMLInputElement>(null);
+  const photoUploadRef = useRef<HTMLInputElement>(null);
   const supabase = useMemo(() => createClient(), []);
 
   if (!open) return null;
@@ -72,7 +119,6 @@ export function BulkAddModal({
   function updateCell(rowIndex: number, key: keyof BulkRow, value: string) {
     setRows((current) => {
       const next = current.map((row, index) => (index === rowIndex ? { ...row, [key]: value } : row));
-      // Keep a trailing empty row so the grid always grows as you type.
       if (rowIndex === next.length - 1 && value.trim()) next.push(emptyRow());
       return next;
     });
@@ -87,7 +133,7 @@ export function BulkAddModal({
 
   function handlePaste(rowIndex: number, colIndex: number, event: React.ClipboardEvent<HTMLInputElement>) {
     const text = event.clipboardData.getData("text");
-    if (!/[\t\n]/.test(text)) return; // single value — let the normal paste happen
+    if (!/[\t\n]/.test(text)) return;
     event.preventDefault();
     const lines = text.replace(/\r/g, "").split("\n");
     while (lines.length && lines[lines.length - 1] === "") lines.pop();
@@ -159,6 +205,85 @@ export function BulkAddModal({
     }
   }
 
+  async function handlePhoto(file: File) {
+    setMessage("");
+    setScanning(true);
+    try {
+      const { base64, mediaType } = await fileToDownscaledBase64(file);
+      const result = await scanInvoiceAction(base64, mediaType);
+      // The image (base64) goes out of scope here — it is never stored on the
+      // server or in component state after the scan completes.
+
+      if (!result.ok) {
+        setMessage(
+          result.error === "no-key"
+            ? "Fatura tarama için önce yöneticinizin bir yapay zekâ anahtarı (ANTHROPIC_API_KEY) tanımlaması gerekiyor. Şimdilik ürünleri elle veya Excel ile ekleyebilirsiniz."
+            : `Fatura okunamadı: ${result.message ?? "lütfen daha net bir fotoğrafla tekrar deneyin"}.`
+        );
+        setScanning(false);
+        return;
+      }
+
+      if (result.items.length === 0) {
+        setMessage("Faturada ürün kalemi okunamadı. Fotoğrafın net ve tam olduğundan emin olup tekrar deneyin.");
+        setScanning(false);
+        return;
+      }
+
+      if (result.supplier) setSupplier(result.supplier);
+      if (result.invoiceDate) setInvoiceDate(result.invoiceDate);
+      setRows([
+        ...result.items.map((item) => ({
+          barcode: item.barcode,
+          name: item.name,
+          category: "",
+          purchase_price: item.unitPrice ? String(item.unitPrice) : "",
+          sale_price: "",
+          stock_quantity: item.quantity ? String(item.quantity) : "",
+        })),
+        emptyRow(),
+      ]);
+      setMode("grid");
+      setMessage(
+        `Fatura okundu: ${result.items.length} kalem geldi. Fotoğraf işlendi ve silindi. Satış fiyatlarını girip kaydedin.`
+      );
+    } catch {
+      setMessage("Fotoğraf işlenemedi. Lütfen tekrar deneyin.");
+    }
+    setScanning(false);
+  }
+
+  async function recordInvoiceMovements(inserted: { id: string; barcode: string }[]) {
+    if (!supplier.trim() && !invoiceDate.trim()) return;
+    const byBarcode = new Map(validRows.map((row) => [row.barcode.trim(), row]));
+    const createdAt = parseTrDate(invoiceDate);
+    const note = ["Fatura", supplier.trim(), invoiceDate.trim()].filter(Boolean).join(" · ");
+
+    const movements = inserted
+      .map(({ id, barcode }) => {
+        const row = byBarcode.get(barcode);
+        const quantity = Number(row?.stock_quantity) || 0;
+        if (quantity <= 0) return null;
+        return {
+          organization_id: organizationId,
+          store_id: storeId,
+          product_id: id,
+          movement_type: "purchase",
+          quantity,
+          unit_price: row?.purchase_price?.trim() ? Number(row.purchase_price) : null,
+          note,
+          ...(createdAt ? { created_at: createdAt } : {}),
+        };
+      })
+      .filter((movement): movement is NonNullable<typeof movement> => movement !== null);
+
+    if (movements.length > 0) {
+      // Best-effort — the products are already saved; a movement failure
+      // shouldn't undo the import.
+      await supabase.from("stock_movements").insert(movements);
+    }
+  }
+
   async function saveAll() {
     if (validRows.length === 0) return;
     setSaving(true);
@@ -176,10 +301,14 @@ export function BulkAddModal({
       min_stock: 0,
     }));
 
-    const { error } = await supabase.from("products").insert(payloads);
+    const { data: insertedBatch, error } = await supabase
+      .from("products")
+      .insert(payloads)
+      .select("id, barcode");
 
-    if (!error) {
-      onImported(`${payloads.length} ürün eklendi.`);
+    if (!error && insertedBatch) {
+      await recordInvoiceMovements(insertedBatch as { id: string; barcode: string }[]);
+      onImported(`${insertedBatch.length} ürün eklendi.`);
       resetAndClose();
       setSaving(false);
       return;
@@ -187,21 +316,26 @@ export function BulkAddModal({
 
     // Batch failed (often a barcode that already exists) — retry row by row so
     // the good rows still go in and we can report exactly what was skipped.
-    let added = 0;
+    const inserted: { id: string; barcode: string }[] = [];
     const skipped: string[] = [];
     for (const payload of payloads) {
-      const { error: rowError } = await supabase.from("products").insert(payload);
-      if (rowError) skipped.push(payload.barcode);
-      else added += 1;
+      const { data: row, error: rowError } = await supabase
+        .from("products")
+        .insert(payload)
+        .select("id, barcode")
+        .single();
+      if (rowError || !row) skipped.push(payload.barcode);
+      else inserted.push(row as { id: string; barcode: string });
     }
 
-    if (added === 0) {
-      setMessage(`Hiçbir ürün eklenemedi. İlk hata: ${error.message}`);
+    if (inserted.length === 0) {
+      setMessage(`Hiçbir ürün eklenemedi. İlk hata: ${error?.message ?? "bilinmiyor"}`);
     } else {
+      await recordInvoiceMovements(inserted);
       onImported(
         skipped.length
-          ? `${added} ürün eklendi. ${skipped.length} satır atlandı (zaten kayıtlı olabilir): ${skipped.slice(0, 5).join(", ")}${skipped.length > 5 ? "…" : ""}`
-          : `${added} ürün eklendi.`
+          ? `${inserted.length} ürün eklendi. ${skipped.length} satır atlandı (zaten kayıtlı olabilir): ${skipped.slice(0, 5).join(", ")}${skipped.length > 5 ? "…" : ""}`
+          : `${inserted.length} ürün eklendi.`
       );
       resetAndClose();
     }
@@ -211,10 +345,26 @@ export function BulkAddModal({
 
   function resetAndClose() {
     setRows(Array.from({ length: 6 }, emptyRow));
+    setSupplier("");
+    setInvoiceDate("");
     setMessage("");
     setMode("grid");
     onClose();
   }
+
+  const modeButton = (value: "photo" | "grid" | "excel", icon: React.ReactNode, label: string) => (
+    <button
+      type="button"
+      onClick={() => setMode(value)}
+      className={`flex items-center justify-center gap-1.5 rounded-xl border px-3 py-2.5 text-xs font-bold transition-all active:scale-[0.98] sm:text-sm ${
+        mode === value
+          ? "border-cyan-400 bg-cyan-50 text-slate-800 dark:bg-cyan-500/10 dark:text-cyan-200"
+          : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+      }`}
+    >
+      {icon} {label}
+    </button>
+  );
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
@@ -223,7 +373,7 @@ export function BulkAddModal({
           <div>
             <h2 className="font-display text-2xl font-black">Toplu Ürün Ekle</h2>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Faturadaki ürünleri hızlıca girin veya Excel dosyanızı yükleyin.
+              Faturanın fotoğrafını çekin, satır satır girin veya Excel dosyanızı yükleyin.
             </p>
           </div>
           <button
@@ -236,39 +386,104 @@ export function BulkAddModal({
           </button>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 p-4 sm:max-w-md">
-          <button
-            type="button"
-            onClick={() => setMode("grid")}
-            className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold transition-all active:scale-[0.98] ${
-              mode === "grid"
-                ? "border-cyan-400 bg-cyan-50 text-slate-800 dark:bg-cyan-500/10 dark:text-cyan-200"
-                : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-            }`}
-          >
-            <ReceiptText size={16} /> Faturadan / Hızlı Giriş
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("excel")}
-            className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold transition-all active:scale-[0.98] ${
-              mode === "excel"
-                ? "border-cyan-400 bg-cyan-50 text-slate-800 dark:bg-cyan-500/10 dark:text-cyan-200"
-                : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
-            }`}
-          >
-            <FileSpreadsheet size={16} /> Excel ile
-          </button>
+        <div className="grid grid-cols-3 gap-2 p-4">
+          {modeButton("photo", <Camera size={15} />, "Fatura Fotoğrafı")}
+          {modeButton("grid", <ReceiptText size={15} />, "Elle Giriş")}
+          {modeButton("excel", <FileSpreadsheet size={15} />, "Excel ile")}
+        </div>
+
+        <div className="grid grid-cols-1 gap-2 px-4 sm:grid-cols-2">
+          <label className="grid gap-1 text-xs font-bold text-slate-600 dark:text-slate-400">
+            Tedarikçi (opsiyonel)
+            <input
+              value={supplier}
+              onChange={(event) => setSupplier(event.target.value)}
+              placeholder="Örn. Yıldız Toptan Gıda"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-950 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
+            />
+          </label>
+          <label className="grid gap-1 text-xs font-bold text-slate-600 dark:text-slate-400">
+            Fatura tarihi (opsiyonel)
+            <input
+              value={invoiceDate}
+              onChange={(event) => setInvoiceDate(event.target.value)}
+              placeholder="GG.AA.YYYY"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-950 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
+            />
+          </label>
         </div>
 
         {message && (
-          <div className="mx-4 mb-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
+          <div className="mx-4 mt-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
             {message}
           </div>
         )}
 
+        {mode === "photo" && (
+          <div className="px-4 pb-4 pt-2">
+            <div className="rounded-xl border border-dashed border-cyan-300 bg-cyan-50/50 p-5 text-center dark:border-cyan-500/30 dark:bg-cyan-500/5">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-300">
+                <Sparkles size={22} />
+              </div>
+              <p className="font-display text-base font-bold">Faturayı okut, ürünler otomatik gelsin</p>
+              <p className="mx-auto mt-1 max-w-md text-xs text-slate-500 dark:text-slate-400">
+                Tedarikçi alış faturasının fotoğrafını çekin; tedarikçi, tarih ve tüm ürünler tabloya
+                gelir. Kaydetmeden önce elle düzeltebilirsiniz. Fotoğraf işlendikten sonra silinir,
+                hiçbir yere kaydedilmez.
+              </p>
+
+              <input
+                ref={photoCaptureRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void handlePhoto(file);
+                  event.target.value = "";
+                }}
+              />
+              <input
+                ref={photoUploadRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) void handlePhoto(file);
+                  event.target.value = "";
+                }}
+              />
+
+              {scanning ? (
+                <div className="mt-4 flex items-center justify-center gap-2 text-sm font-bold text-cyan-600 dark:text-cyan-300">
+                  <Loader2 size={18} className="animate-spin" /> Fatura okunuyor…
+                </div>
+              ) : (
+                <div className="mt-4 flex flex-col justify-center gap-2 sm:flex-row">
+                  <button
+                    type="button"
+                    onClick={() => photoCaptureRef.current?.click()}
+                    className="premium-button-primary text-sm"
+                  >
+                    <Camera size={16} /> Fatura Fotoğrafı Çek
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => photoUploadRef.current?.click()}
+                    className="premium-button-secondary text-sm"
+                  >
+                    <Upload size={16} /> Galeriden Seç
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {mode === "excel" && (
-          <div className="border-b border-slate-100 px-4 pb-4 dark:border-slate-800">
+          <div className="border-b border-slate-100 px-4 pb-4 pt-2 dark:border-slate-800">
             <div className="grid gap-3 rounded-xl bg-slate-50 p-4 dark:bg-slate-800/50 sm:grid-cols-2">
               <div>
                 <p className="mb-1 flex items-center gap-1.5 text-sm font-black text-slate-800 dark:text-slate-200">
