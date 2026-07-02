@@ -1,4 +1,5 @@
 import { ShieldCheck } from "lucide-react";
+import Link from "next/link";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -20,10 +21,10 @@ export default async function LoginPage({
       <div className="relative z-10 w-full max-w-md">
         <div className="glass-card glow-border flex flex-col space-y-8 rounded-2xl p-10">
           <div className="text-center">
-            <div className="mx-auto mb-5 flex items-center justify-center gap-2.5">
+            <Link href="/" className="mx-auto mb-5 flex w-fit items-center justify-center gap-2.5">
               <BunekaMark size={36} />
               <BunekaWordmark className="text-lg text-slate-950 dark:text-slate-50" />
-            </div>
+            </Link>
             <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
               <ShieldCheck size={12} /> Güvenli giriş
             </p>

@@ -4,6 +4,8 @@ import type { Tables } from "@buneka/database";
 import {
   AlertTriangle,
   ArrowDownRight,
+  ArrowUp,
+  ArrowUpDown,
   ArrowUpRight,
   Boxes,
   Package,
@@ -36,7 +38,31 @@ export default function StokPage() {
   const [quantity, setQuantity] = useState("");
   const [unitPrice, setUnitPrice] = useState("");
   const [note, setNote] = useState("");
+  const [sortKey, setSortKey] = useState<"date" | "product" | "quantity">("date");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const supabase = useMemo(() => createClient(), []);
+
+  function toggleSort(key: "date" | "product" | "quantity") {
+    if (sortKey === key) {
+      setSortDir((current) => (current === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir(key === "product" ? "asc" : "desc");
+    }
+  }
+
+  const sortedMovements = useMemo(() => {
+    const factor = sortDir === "asc" ? 1 : -1;
+    return [...movements].sort((a, b) => {
+      if (sortKey === "product") {
+        return factor * (a.products?.name || "").localeCompare(b.products?.name || "", "tr");
+      }
+      if (sortKey === "quantity") {
+        return factor * (Number(a.quantity) - Number(b.quantity));
+      }
+      return factor * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    });
+  }, [movements, sortKey, sortDir]);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -191,10 +217,10 @@ export default function StokPage() {
           <table className="w-full text-left">
             <thead className="bg-slate-50 text-sm text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
               <tr>
-                <th className="px-6 py-4 font-medium">Tarih</th>
-                <th className="px-6 py-4 font-medium">Ürün</th>
+                <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
+                <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
                 <th className="px-6 py-4 font-medium">İşlem Tipi</th>
-                <th className="px-6 py-4 font-medium">Miktar</th>
+                <SortableHeader label="Miktar" align="left" active={sortKey === "quantity"} dir={sortDir} onClick={() => toggleSort("quantity")} />
                 <th className="px-6 py-4 font-medium">Not</th>
               </tr>
             </thead>
@@ -205,14 +231,14 @@ export default function StokPage() {
                     <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
-              ) : movements.length === 0 ? (
+              ) : sortedMovements.length === 0 ? (
                 <tr>
                   <td colSpan={5}>
                     <EmptyState icon={Boxes} message="Hareket bulunamadı." />
                   </td>
                 </tr>
               ) : (
-                movements.map((movement) => {
+                sortedMovements.map((movement) => {
                   const movementType = getMovementLabel(movement.movement_type);
                   const Icon = movementType.icon;
                   return (
@@ -296,6 +322,39 @@ export default function StokPage() {
         </div>
       )}
     </div>
+  );
+}
+
+function SortableHeader({
+  label,
+  active,
+  dir,
+  onClick,
+  align = "left",
+}: {
+  label: string;
+  active: boolean;
+  dir: "asc" | "desc";
+  onClick: () => void;
+  align?: "left" | "right";
+}) {
+  return (
+    <th className="px-6 py-4 font-medium">
+      <button
+        type="button"
+        onClick={onClick}
+        className={`flex items-center gap-1 transition-colors hover:text-cyan-600 dark:hover:text-cyan-300 ${
+          align === "right" ? "ml-auto flex-row-reverse" : ""
+        } ${active ? "text-cyan-600 dark:text-cyan-300" : ""}`}
+      >
+        {label}
+        {active ? (
+          <ArrowUp size={13} className={`transition-transform ${dir === "desc" ? "rotate-180" : ""}`} />
+        ) : (
+          <ArrowUpDown size={13} className="text-slate-300 dark:text-slate-600" />
+        )}
+      </button>
+    </th>
   );
 }
 

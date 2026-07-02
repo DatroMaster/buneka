@@ -5,7 +5,7 @@ import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
-import { getSector, sectors } from "@/lib/content/sectors";
+import { getModuleDetail, getSector, getWorkflowDetail, sectors } from "@/lib/content/sectors";
 import { plans } from "@/lib/content/plans";
 
 type SectorPageProps = {
@@ -109,13 +109,20 @@ export default async function SectorPage({ params }: SectorPageProps) {
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
               <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
             </p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {sector.workflow.map((step, index) => (
-                <div key={step} className="glow-border flex items-center gap-2 rounded-lg p-2.5">
+                <div key={step} className="glow-border flex items-start gap-2 rounded-lg p-2.5">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-[11px] font-black text-white">
                     {index + 1}
                   </span>
-                  <span className="text-[11px] font-semibold leading-tight text-[color:var(--home-ink)]">{step}</span>
+                  <span>
+                    <span className="block text-[11px] font-semibold leading-tight text-[color:var(--home-ink)]">
+                      {step}
+                    </span>
+                    <span className="mt-0.5 block text-[10px] leading-snug text-[color:var(--home-muted)]">
+                      {getWorkflowDetail(step)}
+                    </span>
+                  </span>
                 </div>
               ))}
             </div>
@@ -123,14 +130,12 @@ export default async function SectorPage({ params }: SectorPageProps) {
 
           <div className="shrink-0 p-4 sm:p-5">
             <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="max-h-[104px] space-y-1.5 overflow-y-auto pr-1">
               {sector.modules.map((module) => (
-                <span
-                  key={module}
-                  className="glow-border rounded-full px-3 py-1.5 text-[11px] font-bold text-[color:var(--home-ink)]"
-                >
-                  {module}
-                </span>
+                <div key={module} className="glow-border rounded-lg px-3 py-1.5">
+                  <p className="text-[11px] font-bold text-[color:var(--home-ink)]">{module}</p>
+                  <p className="text-[10px] leading-snug text-[color:var(--home-muted)]">{getModuleDetail(module)}</p>
+                </div>
               ))}
             </div>
           </div>

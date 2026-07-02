@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight, MessageCircle, Package } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { whatsappLink } from "@/lib/contact";
 import { modules } from "@/lib/content/modules";
 
 export const metadata = {
@@ -56,16 +57,39 @@ export default function EkModullerPage() {
             {modules.map((module, index) => (
               <article
                 key={module.label}
-                className={`rounded-xl bg-[color:var(--color-card)] p-6 ${CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
+                className={`flex flex-col rounded-xl bg-[color:var(--color-card)] p-6 ${CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
               >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
                   <module.icon size={24} />
                 </div>
                 <h2 className="font-display text-lg font-bold">{module.label}</h2>
-                <p className="mt-2 text-sm leading-6 text-[color:var(--color-muted)]">{module.description}</p>
+                <p className="mt-2 flex-1 text-sm leading-6 text-[color:var(--color-muted)]">{module.description}</p>
                 <p className="mt-4 text-sm font-black text-cyan-600 dark:text-cyan-300">{module.price}</p>
+                <a
+                  href={whatsappLink(`Merhaba, "${module.label}" modülünü lisansıma eklemek istiyorum.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="premium-button-secondary mt-4 w-full text-sm"
+                >
+                  <MessageCircle size={16} className="text-emerald-500" /> Bu Modülü Talep Et
+                </a>
               </article>
             ))}
+          </div>
+
+          <div className="glow-border mt-8 flex flex-col items-center justify-between gap-4 rounded-xl bg-[color:var(--color-card)] p-6 sm:flex-row">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
+                <Package size={20} />
+              </div>
+              <div>
+                <p className="font-display text-lg font-bold">Modüller, bir lisans paketinin üzerine eklenir.</p>
+                <p className="text-sm text-[color:var(--color-muted)]">Önce size uygun paketi seçin, sonra ihtiyaç duydukça modül ekleyin.</p>
+              </div>
+            </div>
+            <Link href="/paketler" className="premium-button-primary shrink-0 text-sm">
+              Paketleri İncele <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>

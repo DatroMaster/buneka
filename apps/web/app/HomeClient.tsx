@@ -1,13 +1,13 @@
 "use client";
 
-import { ArrowRight, ChevronDown, MessageCircle, PhoneOff, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, ChevronDown, Phone, PhoneOff, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { CONTACT_PHONE_DISPLAY, whatsappLink } from "@/lib/contact";
+import { callLink } from "@/lib/contact";
 import { modules } from "@/lib/content/modules";
 import { plans } from "@/lib/content/plans";
 
@@ -52,7 +52,7 @@ const CAPILLARY_COLORS = [
 
 export default function HomeClient() {
   const now = useLiveClock();
-  const [openSection, setOpenSection] = useState<SectionId | null>(null);
+  const [openSection, setOpenSection] = useState<SectionId | null>("sektorler");
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
@@ -187,7 +187,14 @@ export default function HomeClient() {
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)] sm:text-base" />
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-5">
+        <div className="flex items-center gap-2.5 sm:gap-5">
+          <Link
+            href="/demo"
+            className="cta-primary-animated cta-hero-pulse group relative inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-3.5 py-2 text-xs font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.04] active:scale-95 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            Hemen Başlat
+            <ArrowRight size={14} className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
+          </Link>
           <div className="text-right font-mono leading-tight text-[color:var(--home-glow)]">
             <div className="text-xs tracking-wider sm:text-sm">{time}</div>
             <div className="hidden text-[10px] text-[color:var(--home-muted)] sm:block">{date}</div>
@@ -214,13 +221,6 @@ export default function HomeClient() {
             stok da aynı ekranda seni bekliyor.
           </p>
           <div className="mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
-            <Link
-              href="/demo"
-              className="cta-primary-animated glow-border group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-6 py-3 text-sm font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 sm:text-base"
-            >
-              Hemen Başlat
-              <ArrowRight size={18} className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
-            </Link>
             <Link
               href="/login"
               className="group relative inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--home-muted)] transition-colors duration-500 ease-out hover:text-[color:var(--home-ink)] sm:text-sm"
@@ -272,12 +272,10 @@ export default function HomeClient() {
           hafızasıdır.
         </span>
         <a
-          href={whatsappLink("Merhaba, Buneka hakkında bilgi almak istiyorum.")}
-          target="_blank"
-          rel="noopener noreferrer"
+          href={callLink()}
           className="flex items-center gap-1.5 font-bold text-[color:var(--home-glow)] hover:underline"
         >
-          <MessageCircle size={12} /> {CONTACT_PHONE_DISPLAY}
+          <Phone size={12} /> Hemen Arayın
         </a>
         <span>BUNEKA © 2026 · Ankara, TR</span>
       </footer>

@@ -402,6 +402,29 @@
     }
   }
 
+  /* Header hero CTA — adds an outward-radiating ripple on top of the breathing glow,
+     a subtle "look at me" cue that draws the eye without feeling gimmicky */
+  .cta-hero-pulse::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    border: 1.5px solid var(--home-glow);
+    opacity: 0;
+    pointer-events: none;
+    animation: hero-ripple 2.6s ease-out infinite;
+  }
+  .cta-hero-pulse:hover::after {
+    animation-play-state: paused;
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-hero-pulse::after {
+      animation: none;
+      display: none;
+    }
+  }
+
   /* Secondary "Giriş yapın" link — soft underline reveal + gentle drifting arrow,
      deliberately slower/quieter than the primary CTA since it's a low-pressure action */
   .cta-login-underline {

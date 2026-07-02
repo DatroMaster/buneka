@@ -7,9 +7,13 @@ import {
   CheckCircle2,
   Crown,
   MessageCircle,
+  Minus,
+  Plus,
   RotateCcw,
   ScanLine,
   Search,
+  ShoppingCart,
+  Trash2,
   WalletCards,
 } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
@@ -27,9 +31,9 @@ type DemoProduct = {
   stock: number;
 };
 
-type DemoSale = {
-  barcode: string;
-  amount: number;
+type CartLine = {
+  product: DemoProduct;
+  quantity: number;
 };
 
 const products: DemoProduct[] = [
@@ -52,14 +56,16 @@ export default function DemoPage() {
   const [barcode, setBarcode] = useState("");
   const [selectedBarcode, setSelectedBarcode] = useState("");
   const [queries, setQueries] = useState<string[]>([]);
-  const [sales, setSales] = useState<DemoSale[]>([]);
+  const [completedTotal, setCompletedTotal] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+  const [cart, setCart] = useState<CartLine[]>([]);
 
   const selectedProduct = useMemo(
     () => products.find((product) => product.barcode === selectedBarcode),
     [selectedBarcode]
   );
 
-  const totalAmount = sales.reduce((sum, sale) => sum + sale.amount, 0);
+  const cartTotal = cart.reduce((sum, line) => sum + line.product.price * line.quantity, 0);
 
   function lookup(nextBarcode: string) {
     const cleanBarcode = nextBarcode.trim();
@@ -81,8 +87,42 @@ export default function DemoPage() {
 
   function recordSale() {
     if (!selectedProduct) return;
-    setSales((current) => [...current, { barcode: selectedProduct.barcode, amount: selectedProduct.price }]);
+    setCompletedTotal((current) => current + selectedProduct.price);
+    setCompletedCount((current) => current + 1);
     resetResult();
+  }
+
+  function addToCart() {
+    if (!selectedProduct) return;
+    setCart((current) => {
+      const existing = current.find((line) => line.product.barcode === selectedProduct.barcode);
+      if (existing) {
+        return current.map((line) =>
+          line.product.barcode === selectedProduct.barcode ? { ...line, quantity: line.quantity + 1 } : line
+        );
+      }
+      return [...current, { product: selectedProduct, quantity: 1 }];
+    });
+    resetResult();
+  }
+
+  function updateCartQty(barcodeValue: string, delta: number) {
+    setCart((current) =>
+      current
+        .map((line) => (line.product.barcode === barcodeValue ? { ...line, quantity: line.quantity + delta } : line))
+        .filter((line) => line.quantity > 0)
+    );
+  }
+
+  function removeFromCart(barcodeValue: string) {
+    setCart((current) => current.filter((line) => line.product.barcode !== barcodeValue));
+  }
+
+  function completeCartSale() {
+    if (cart.length === 0) return;
+    setCompletedTotal((current) => current + cartTotal);
+    setCompletedCount((current) => current + cart.reduce((sum, line) => sum + line.quantity, 0));
+    setCart([]);
   }
 
   return (
@@ -95,15 +135,20 @@ export default function DemoPage() {
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden items-center gap-1.5 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:flex">
-            <ScanLine size={12} /> Canlı demo
-          </span>
+          <a
+            href={whatsappLink("Merhaba, Buneka için canlı demo talep ediyorum.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="premium-button-secondary text-xs sm:text-sm"
+          >
+            <MessageCircle size={14} className="text-emerald-500" /> Demo Talep Et
+          </a>
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
       </header>
 
       <div className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[1fr_380px]">
-        <section className="glow-border flex min-h-0 flex-col justify-center gap-4 overflow-y-auto rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-7">
+        <section className="glow-border flex min-h-0 flex-col gap-3 overflow-y-auto rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-7">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color:var(--home-glow)]/15 text-[color:var(--home-glow)]">
               <ScanLine size={22} />
@@ -111,7 +156,7 @@ export default function DemoPage() {
             <div>
               <h1 className="font-display text-xl font-bold leading-tight sm:text-2xl">Bu ne kadar?</h1>
               <p className="text-xs text-[color:var(--home-muted)] sm:text-sm">
-                Örnek barkod okutun, fiyat sorgulamayı canlı deneyin.
+                Gerçek ekranın birebir aynısı — müşterileriniz nasıl bir deneyim yaşayacağını burada görün.
               </p>
             </div>
           </div>
@@ -144,57 +189,116 @@ export default function DemoPage() {
           </div>
 
           {!selectedBarcode ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[color:var(--home-border)] py-10 text-center">
-              <ScanLine size={30} className="mb-2 text-[color:var(--home-border)]" />
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-[color:var(--home-border)] py-8 text-center">
+              <ScanLine size={28} className="mb-2 text-[color:var(--home-border)]" />
               <p className="text-xs text-[color:var(--home-muted)] sm:text-sm">Barkod bekleniyor.</p>
             </div>
           ) : selectedProduct ? (
-            <div className="glow-border glow-border-selected rounded-xl p-5">
+            <div className="glow-border glow-border-selected rounded-xl p-4">
               <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
                 {selectedProduct.category}
               </p>
               <h2 className="mt-1 text-lg font-bold sm:text-xl">{selectedProduct.name}</h2>
-              <div className="mt-2 text-3xl font-black tracking-tight text-[color:var(--home-glow)] sm:text-4xl">
+              <div className="mt-1.5 text-2xl font-black tracking-tight text-[color:var(--home-glow)] sm:text-3xl">
                 {currency.format(selectedProduct.price)}
               </div>
-              <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-semibold text-[color:var(--home-muted)]">
+              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-semibold text-[color:var(--home-muted)]">
                 <span>Stokta kalan: {selectedProduct.stock}</span>
                 <span>Barkod: {selectedProduct.barcode}</span>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <button className="action-sale px-5 py-2.5 text-sm" type="button" onClick={recordSale}>
-                  <CheckCircle2 size={16} /> Satış Yapıldı
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                <button className="action-sale px-3 py-2.5 text-xs sm:text-sm" type="button" onClick={recordSale}>
+                  <CheckCircle2 size={15} /> Satış Yap
                 </button>
-                <button className="premium-button-secondary" type="button" onClick={resetResult}>
-                  <RotateCcw size={16} /> Tamam
+                <button
+                  onClick={addToCart}
+                  className="glow-border flex items-center justify-center gap-1.5 rounded-xl bg-cyan-50 px-3 py-2.5 text-xs font-black text-cyan-700 transition-transform active:scale-95 dark:bg-cyan-500/10 dark:text-cyan-300 sm:text-sm"
+                  type="button"
+                >
+                  <ShoppingCart size={15} /> Sepete Ekle
+                </button>
+                <button className="premium-button-secondary px-3 py-2.5 text-xs sm:text-sm" type="button" onClick={resetResult}>
+                  <RotateCcw size={15} /> Tamam
                 </button>
               </div>
             </div>
           ) : (
-            <div className="glow-border rounded-xl p-5">
+            <div className="glow-border rounded-xl p-4">
               <p className="text-[10px] font-black uppercase tracking-wide text-amber-500">Ürün kayıtlı değil</p>
               <h2 className="mt-1 text-lg font-bold sm:text-xl">Gerçekte böyle olsaydı</h2>
               <p className="mt-1 text-xs text-[color:var(--home-muted)] sm:text-sm">
                 Buneka&apos;da barkod {selectedBarcode} anında ürün ekleme ekranına yönlendirir.
               </p>
-              <button className="premium-button-secondary mt-4" type="button" onClick={resetResult}>
+              <button className="premium-button-secondary mt-3" type="button" onClick={resetResult}>
                 <RotateCcw size={16} /> Tamam
               </button>
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-2 border-t border-[color:var(--home-border)] pt-4">
+          {cart.length > 0 && (
+            <div className="glow-border rounded-xl p-4">
+              <div className="mb-2 flex items-center gap-2">
+                <ShoppingCart size={16} className="text-[color:var(--home-glow)]" />
+                <p className="font-display text-sm font-bold">Sepet</p>
+                <span className="rounded-full bg-[color:var(--home-glow)]/15 px-2 py-0.5 text-[10px] font-black text-[color:var(--home-glow)]">
+                  {cart.reduce((sum, line) => sum + line.quantity, 0)}
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                {cart.map((line) => (
+                  <div key={line.product.barcode} className="flex items-center justify-between gap-2 rounded-lg bg-[color:var(--home-glow)]/5 px-2.5 py-1.5">
+                    <span className="truncate text-xs font-semibold">{line.product.name}</span>
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => updateCartQty(line.product.barcode, -1)}
+                        className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--home-surface)] text-[color:var(--home-ink)]"
+                      >
+                        <Minus size={10} />
+                      </button>
+                      <span className="w-4 text-center text-xs font-black">{line.quantity}</span>
+                      <button
+                        type="button"
+                        onClick={() => updateCartQty(line.product.barcode, 1)}
+                        className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--home-surface)] text-[color:var(--home-ink)]"
+                      >
+                        <Plus size={10} />
+                      </button>
+                      <span className="w-14 text-right text-xs font-black text-[color:var(--home-glow)]">
+                        {currency.format(line.product.price * line.quantity)}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => removeFromCart(line.product.barcode)}
+                        className="text-[color:var(--home-muted)] hover:text-rose-400"
+                        aria-label="Sepetten çıkar"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 flex items-center justify-between border-t border-[color:var(--home-border)] pt-2.5">
+                <span className="text-xs font-bold text-[color:var(--home-muted)]">Toplam</span>
+                <span className="text-lg font-black">{currency.format(cartTotal)}</span>
+              </div>
+              <button onClick={completeCartSale} className="action-sale mt-2 w-full py-2.5 text-sm" type="button">
+                <CheckCircle2 size={16} /> Satışı Tamamla
+              </button>
+            </div>
+          )}
+
+          <div className="mt-auto grid grid-cols-2 gap-2 border-t border-[color:var(--home-border)] pt-3">
             <div className="glow-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-black text-[color:var(--home-glow)]">{queries.length}</p>
               <p className="text-[10px] font-semibold text-[color:var(--home-muted)]">Sorgu</p>
             </div>
             <div className="glow-border rounded-lg p-2.5 text-center">
-              <p className="text-lg font-black text-[color:var(--home-glow)]">{sales.length}</p>
-              <p className="text-[10px] font-semibold text-[color:var(--home-muted)]">Satış</p>
-            </div>
-            <div className="glow-border rounded-lg p-2.5 text-center">
-              <p className="truncate text-lg font-black text-[color:var(--home-glow)]">{currency.format(totalAmount)}</p>
-              <p className="text-[10px] font-semibold text-[color:var(--home-muted)]">Kasa</p>
+              <p className="truncate text-lg font-black text-[color:var(--home-glow)]">{currency.format(completedTotal)}</p>
+              <p className="text-[10px] font-semibold text-[color:var(--home-muted)]">
+                Kasa ({completedCount} satış)
+              </p>
             </div>
           </div>
         </section>

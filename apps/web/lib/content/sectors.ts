@@ -163,3 +163,52 @@ export const sectors: Sector[] = [
 export function getSector(slug: string) {
   return sectors.find((sector) => sector.slug === slug);
 }
+
+const WORKFLOW_DETAILS: Record<string, string> = {
+  "Barkodu okut": "Kamerayla veya barkod okuyucuyla ürünü saniyeler içinde tanır.",
+  "Fiyatı göster": "Satış fiyatı büyük puntoyla ekrana gelir, müşteri de görebilir.",
+  "Satış Yapıldı ile kasaya işle": "Tek dokunuşla satış kaydedilir, günlük kasaya otomatik yansır.",
+  "Stok uyarısını takip et": "Stok azaldığında sistem sizi otomatik uyarır.",
+  "Ürünleri kategoriye ayır": "Ürünleri kategoriye göre gruplayın, aramayı hızlandırın.",
+  "Satışı kaydet": "Satışı tek tıkla kaydedin, kasa ve stok otomatik güncellenir.",
+  "Eksilen ürünleri izle": "Azalan stok kalemlerini anlık olarak görün.",
+  "Ürünü okut": "Barkodu okutun, ürün bilgisi anında ekrana gelsin.",
+  "Tekrar alım fırsatını not et": "Müşterinin tekrar alacağı ürünü not edip hatırlatma oluşturun.",
+  "Markayı/kategoriyi tanımla": "Ürünü marka veya kategoriye göre tanımlayın.",
+  "Azalan ürünleri gör": "Stoğu azalan ürünleri tek ekranda görün.",
+  "Varyantı kaydet": "Beden/renk gibi varyant bilgisini ürüne ekleyin.",
+  "Kalan stoğu izle": "Kalan stok miktarını anlık takip edin.",
+  "Birim bilgisini gir": "Metre, kilo gibi birim bilgisini ürüne ekleyin.",
+  "Stok hareketini takip et": "Giriş/çıkış hareketlerini geçmişten inceleyin.",
+  "Ürünü ekle": "Yeni ürünü barkoduyla saniyeler içinde ekleyin.",
+  "Satış Yapıldı ile kaydet": "Satışı tek dokunuşla kaydedin, kasa otomatik güncellensin.",
+  "Gün sonunda kasayı gör": "Gün sonunda toplam kasa tutarını tek ekranda görün.",
+  "Günlük fiyatı gir/güncelle": "Günlük değişen fiyatları toplu güncelleyin.",
+  "Kasayı gör": "Günlük kasa tutarını anlık olarak görün.",
+};
+
+const MODULE_DETAILS: Record<string, string> = {
+  "Son kullanma tarihi takibi": "Ürünlerin son kullanma tarihine göre uyarı alın, israfı azaltın.",
+  "Raf etiketi": "Barkod ve fiyat bilgili raf etiketleri hazırlayın.",
+  "Toplu ürün aktarımı": "Ürün listenizi tek seferde içe aktarın.",
+  "Kırtasiye sezon modülü": "Okul/sezon dönemlerine özel hızlı ürün ve fiyat yönetimi.",
+  "Excel toplu ürün aktarımı": "Excel dosyanızdan ürünleri tek seferde yükleyin.",
+  "Petshop tekrar alım uyarısı": "Müşterinin tekrar alacağı ürünler için hatırlatma oluşturun.",
+  "Bulut yedekleme": "Tüm verileriniz düzenli olarak buluta yedeklenir.",
+  "Kozmetik son kullanma ve marka raporu": "Marka ve son kullanma tarihine göre özel rapor alın.",
+  "Toplu fiyat güncelleme": "Kategoriye göre fiyatları tek seferde güncelleyin.",
+  "Giyim beden ve renk varyantı": "Beden/renk varyantlarını tek üründe yönetin.",
+  "Çoklu cihaz": "Aynı işletmeyi birden fazla cihazdan eş zamanlı yönetin.",
+  "Hırdavat metre, kilo ve birim takibi": "Metre, kilo gibi birimli ürünlerde esnek ölçü desteği.",
+  "Cari müşteri ve veresiye defteri": "Müşteri borç/ödeme takibini dijital deftere taşıyın.",
+  "Kozmetik marka raporu": "Marka bazlı satış ve stok raporunu görün.",
+  "Metre, kilo ve birim takibi": "Metre, kilo gibi birimli ürünlerde esnek ölçü desteği.",
+};
+
+export function getWorkflowDetail(step: string) {
+  return WORKFLOW_DETAILS[step] || "Buneka bu adımı sizin için otomatikleştirir.";
+}
+
+export function getModuleDetail(moduleName: string) {
+  return MODULE_DETAILS[moduleName] || "Lisansınıza yıllık ek ücretle eklenebilen bir modül.";
+}

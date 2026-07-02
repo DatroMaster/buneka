@@ -6,6 +6,7 @@ import {
   BarChart3,
   Boxes,
   HandCoins,
+  Home,
   LogOut,
   Menu,
   Package,
@@ -144,6 +145,14 @@ export default function AppShell({
 
         <div className="flex items-center gap-2 md:gap-3">
           <CurrencyTicker rates={rates} />
+          <Link
+            href="/"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"
+            aria-label="Site ana sayfası"
+            title="Site ana sayfası"
+          >
+            <Home size={16} />
+          </Link>
           <ThemeToggle className="border-white/15 text-slate-300 hover:border-cyan-300/50 hover:text-white" />
           <button
             onClick={() => setIsMenuOpen(true)}

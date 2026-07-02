@@ -1,7 +1,7 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { ArrowLeft, KeyRound, LayoutDashboard, LineChart, Menu, Puzzle, Users, X } from "lucide-react";
+import { ArrowLeft, Home, KeyRound, LayoutDashboard, LineChart, Menu, Puzzle, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -48,6 +48,14 @@ export default function AdminShell({
             className="hidden items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white sm:flex"
           >
             <ArrowLeft size={14} /> Uygulamaya dön
+          </Link>
+          <Link
+            href="/"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"
+            aria-label="Site ana sayfası"
+            title="Site ana sayfası"
+          >
+            <Home size={16} />
           </Link>
           <ThemeToggle className="border-white/15 text-slate-300 hover:border-cyan-300/50 hover:text-white" />
           <button
