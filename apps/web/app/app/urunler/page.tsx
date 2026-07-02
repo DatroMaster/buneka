@@ -1,11 +1,13 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { AlertTriangle, PackagePlus, Percent, Plus, Search, X } from "lucide-react";
+import { AlertTriangle, Loader2, Pencil, PackagePlus, Percent, Plus, Search, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { convertUsdToTry } from "@/lib/currency/tcmb";
 import { PageHeader } from "../_components/PageHeader";
 import { EmptyState } from "../_components/EmptyState";
+import { fetchUsdRateAction } from "./currency-actions";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Tables<"products">;
@@ -14,6 +16,7 @@ type ProductForm = {
   barcode: string;
   name: string;
   category: string;
+  purchase_currency: "TRY" | "USD";
   purchase_price: string;
   sale_price: string;
   stock_quantity: string;
@@ -24,6 +27,7 @@ const emptyProductForm: ProductForm = {
   barcode: "",
   name: "",
   category: "",
+  purchase_currency: "TRY",
   purchase_price: "",
   sale_price: "",
   stock_quantity: "0",
@@ -36,12 +40,17 @@ export default function UrunlerPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [message, setMessage] = useState("");
-  const [showNewProduct, setShowNewProduct] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [showBulkUpdate, setShowBulkUpdate] = useState(false);
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
+  const [newCategory, setNewCategory] = useState(false);
+  const [usdRate, setUsdRate] = useState<number | null>(null);
   const [bulkMode, setBulkMode] = useState<"percent" | "amount">("percent");
   const [bulkValue, setBulkValue] = useState("");
+  const [bulkCategory, setBulkCategory] = useState("");
   const supabase = useMemo(() => createClient(), []);
 
   const loadProducts = useCallback(async () => {
@@ -83,39 +92,118 @@ export default function UrunlerPage() {
     void Promise.resolve().then(loadProducts);
   }, [loadProducts]);
 
+  const categories = useMemo(
+    () =>
+      Array.from(new Set(products.map((product) => product.category).filter((value): value is string => !!value))).sort(
+        (a, b) => a.localeCompare(b, "tr")
+      ),
+    [products]
+  );
+
   const filteredProducts = products.filter((product) => {
     const query = search.toLowerCase();
-    return product.name.toLowerCase().includes(query) || product.barcode.includes(search);
+    const matchesSearch = product.name.toLowerCase().includes(query) || product.barcode.includes(search);
+    const matchesCategory = !categoryFilter || product.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  const bulkTargets = products.filter((product) => {
+    const query = search.toLowerCase();
+    const matchesSearch = product.name.toLowerCase().includes(query) || product.barcode.includes(search);
+    const matchesCategory = !bulkCategory || product.category === bulkCategory;
+    return matchesSearch && matchesCategory;
   });
 
   const formatMoney = (amount: number) =>
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
-  async function createProduct(event: FormEvent<HTMLFormElement>) {
+  function openNewProduct() {
+    setEditingProductId(null);
+    setProductForm(emptyProductForm);
+    setNewCategory(categories.length === 0);
+    setUsdRate(null);
+    setShowProductModal(true);
+  }
+
+  function openEditProduct(product: Product) {
+    setEditingProductId(product.id);
+    setProductForm({
+      barcode: product.barcode,
+      name: product.name,
+      category: product.category || "",
+      purchase_currency: (product.purchase_currency as "TRY" | "USD") || "TRY",
+      purchase_price:
+        product.purchase_currency === "USD" && product.purchase_price_original != null
+          ? String(product.purchase_price_original)
+          : product.purchase_price != null
+            ? String(product.purchase_price)
+            : "",
+      sale_price: String(product.sale_price),
+      stock_quantity: String(product.stock_quantity),
+      min_stock: String(product.min_stock),
+    });
+    setNewCategory(!!product.category && !categories.includes(product.category));
+    setUsdRate(null);
+    setShowProductModal(true);
+  }
+
+  async function handleCurrencyChange(currency: "TRY" | "USD") {
+    setProductForm((current) => ({ ...current, purchase_currency: currency }));
+    if (currency === "USD" && usdRate === null) {
+      const rates = await fetchUsdRateAction();
+      setUsdRate(rates?.usdToTry ?? null);
+    }
+  }
+
+  async function saveProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!appUser) return;
 
     setSaving(true);
     setMessage("");
 
-    const { error } = await supabase.from("products").insert({
-      organization_id: appUser.organization_id,
-      store_id: appUser.store_id,
+    const enteredPurchasePrice = productForm.purchase_price ? Number(productForm.purchase_price) : null;
+    let purchasePriceTry = enteredPurchasePrice;
+    let purchasePriceOriginal: number | null = null;
+
+    if (productForm.purchase_currency === "USD" && enteredPurchasePrice) {
+      const rate = usdRate ?? (await fetchUsdRateAction())?.usdToTry ?? null;
+      if (!rate) {
+        setMessage("Güncel dolar kuru alınamadı, lütfen tekrar deneyin.");
+        setSaving(false);
+        return;
+      }
+      purchasePriceOriginal = enteredPurchasePrice;
+      purchasePriceTry = convertUsdToTry(enteredPurchasePrice, rate);
+    }
+
+    const payload = {
       barcode: productForm.barcode.trim(),
       name: productForm.name.trim(),
       category: productForm.category.trim() || null,
-      purchase_price: productForm.purchase_price ? Number(productForm.purchase_price) : null,
+      purchase_currency: productForm.purchase_currency,
+      purchase_price: purchasePriceTry,
+      purchase_price_original: purchasePriceOriginal,
       sale_price: Number(productForm.sale_price),
       stock_quantity: Number(productForm.stock_quantity || 0),
       min_stock: Number(productForm.min_stock || 0),
-    });
+    };
+
+    const { error } = editingProductId
+      ? await supabase.from("products").update(payload).eq("id", editingProductId)
+      : await supabase.from("products").insert({
+          ...payload,
+          organization_id: appUser.organization_id,
+          store_id: appUser.store_id,
+        });
 
     if (error) {
-      setMessage(`Ürün eklenemedi: ${error.message}`);
+      setMessage(`Ürün kaydedilemedi: ${error.message}`);
     } else {
-      setMessage("Ürün eklendi.");
+      setMessage(editingProductId ? "Ürün güncellendi." : "Ürün eklendi.");
       setProductForm(emptyProductForm);
-      setShowNewProduct(false);
+      setEditingProductId(null);
+      setShowProductModal(false);
       await loadProducts();
     }
 
@@ -125,12 +213,12 @@ export default function UrunlerPage() {
   async function applyBulkUpdate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const value = Number(bulkValue);
-    if (!Number.isFinite(value) || filteredProducts.length === 0) return;
+    if (!Number.isFinite(value) || bulkTargets.length === 0) return;
 
     setSaving(true);
     setMessage("");
 
-    const updates = filteredProducts.map((product) => {
+    const updates = bulkTargets.map((product) => {
       const nextPrice =
         bulkMode === "percent"
           ? product.sale_price * (1 + value / 100)
@@ -148,8 +236,9 @@ export default function UrunlerPage() {
     if (failed?.error) {
       setMessage(`Toplu güncelleme tamamlanamadı: ${failed.error.message}`);
     } else {
-      setMessage(`${filteredProducts.length} ürünün satış fiyatı güncellendi.`);
+      setMessage(`${bulkTargets.length} ürünün satış fiyatı güncellendi.`);
       setBulkValue("");
+      setBulkCategory("");
       setShowBulkUpdate(false);
       await loadProducts();
     }
@@ -167,7 +256,7 @@ export default function UrunlerPage() {
             <button className="premium-button-secondary" type="button" onClick={() => setShowBulkUpdate(true)}>
               <Percent size={18} /> Toplu Fiyat Güncelle
             </button>
-            <button className="premium-button-primary" type="button" onClick={() => setShowNewProduct(true)}>
+            <button className="premium-button-primary" type="button" onClick={openNewProduct}>
               <Plus size={18} /> Yeni Ürün
             </button>
           </>
@@ -181,8 +270,8 @@ export default function UrunlerPage() {
       )}
 
       <div className="data-card flex h-[calc(100vh-220px)] flex-col overflow-hidden">
-        <div className="border-b border-slate-100 p-4 dark:border-slate-800">
-          <div className="relative">
+        <div className="flex flex-col gap-3 border-b border-slate-100 p-4 dark:border-slate-800 sm:flex-row">
+          <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" size={20} />
             <input
               type="text"
@@ -192,6 +281,20 @@ export default function UrunlerPage() {
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
             />
           </div>
+          {categories.length > 0 && (
+            <select
+              value={categoryFilter}
+              onChange={(event) => setCategoryFilter(event.target.value)}
+              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
+            >
+              <option value="">Tüm kategoriler</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         <div className="flex-1 overflow-auto">
@@ -203,24 +306,29 @@ export default function UrunlerPage() {
                 <th className="px-6 py-3 text-right font-medium">Alış Fiyatı</th>
                 <th className="px-6 py-3 text-right font-medium">Satış Fiyatı</th>
                 <th className="px-6 py-3 text-right font-medium">Stok</th>
+                <th className="px-6 py-3 text-right font-medium" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center">
+                  <td colSpan={6} className="p-8 text-center">
                     <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={6}>
                     <EmptyState icon={Search} message="Ürün bulunamadı." />
                   </td>
                 </tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60">
+                  <tr
+                    key={product.id}
+                    className="group cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                    onClick={() => openEditProduct(product)}
+                  >
                     <td className="px-6 py-4">
                       <div className="font-medium text-slate-950 dark:text-slate-50">{product.name}</div>
                       <div className="font-mono text-xs text-slate-500 dark:text-slate-400">{product.barcode}</div>
@@ -232,6 +340,11 @@ export default function UrunlerPage() {
                     </td>
                     <td className="px-6 py-4 text-right text-sm text-slate-500 dark:text-slate-400">
                       {product.purchase_price ? formatMoney(Number(product.purchase_price)) : "-"}
+                      {product.purchase_currency === "USD" && product.purchase_price_original != null && (
+                        <div className="text-[11px] text-slate-400 dark:text-slate-500">
+                          (${Number(product.purchase_price_original).toFixed(2)})
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-right font-bold text-slate-950 dark:text-slate-50">
                       {formatMoney(Number(product.sale_price))}
@@ -252,6 +365,9 @@ export default function UrunlerPage() {
                         </span>
                       </div>
                     </td>
+                    <td className="px-6 py-4 text-right">
+                      <Pencil size={16} className="inline text-slate-300 group-hover:text-cyan-500 dark:text-slate-600" />
+                    </td>
                   </tr>
                 ))
               )}
@@ -260,21 +376,93 @@ export default function UrunlerPage() {
         </div>
       </div>
 
-      {showNewProduct && (
-        <Modal title="Yeni Ürün" onClose={() => setShowNewProduct(false)}>
-          <form className="grid gap-4" onSubmit={createProduct}>
+      {showProductModal && (
+        <Modal
+          title={editingProductId ? "Ürünü Düzenle" : "Yeni Ürün"}
+          onClose={() => setShowProductModal(false)}
+        >
+          <form className="grid gap-4" onSubmit={saveProduct}>
             <FormInput label="Barkod" value={productForm.barcode} onChange={(value) => setProductForm({ ...productForm, barcode: value })} required />
             <FormInput label="Ürün adı" value={productForm.name} onChange={(value) => setProductForm({ ...productForm, name: value })} required />
-            <FormInput label="Kategori" value={productForm.category} onChange={(value) => setProductForm({ ...productForm, category: value })} />
+
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-slate-800 dark:text-slate-300">Kategori</span>
+                {categories.length > 0 && (
+                  <button
+                    type="button"
+                    className="text-xs font-bold text-cyan-600 dark:text-cyan-300"
+                    onClick={() => setNewCategory((current) => !current)}
+                  >
+                    {newCategory ? "Listeden seç" : "+ Yeni kategori"}
+                  </button>
+                )}
+              </div>
+              {newCategory || categories.length === 0 ? (
+                <input
+                  className="premium-input"
+                  type="text"
+                  value={productForm.category}
+                  onChange={(event) => setProductForm({ ...productForm, category: event.target.value })}
+                  placeholder="Kategori adı yazın"
+                />
+              ) : (
+                <select
+                  className="premium-input"
+                  value={productForm.category}
+                  onChange={(event) => setProductForm({ ...productForm, category: event.target.value })}
+                >
+                  <option value="">Kategorisiz</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            <div className="grid gap-2">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-300">Alış fiyatı para birimi</span>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "TRY" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+                  onClick={() => handleCurrencyChange("TRY")}
+                >
+                  TL
+                </button>
+                <button
+                  type="button"
+                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "USD" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+                  onClick={() => handleCurrencyChange("USD")}
+                >
+                  USD ($)
+                </button>
+              </div>
+              {productForm.purchase_currency === "USD" && (
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {usdRate
+                    ? `Güncel kur: 1$ = ${usdRate.toFixed(2)} TL (TCMB). Girilen tutar TL'ye çevrilip yukarı yuvarlanır.`
+                    : "Güncel dolar kuru TCMB'den alınıyor..."}
+                </p>
+              )}
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
-              <FormInput label="Alış fiyatı" type="number" value={productForm.purchase_price} onChange={(value) => setProductForm({ ...productForm, purchase_price: value })} />
-              <FormInput label="Satış fiyatı" type="number" value={productForm.sale_price} onChange={(value) => setProductForm({ ...productForm, sale_price: value })} required />
+              <FormInput
+                label={productForm.purchase_currency === "USD" ? "Alış fiyatı ($)" : "Alış fiyatı (TL)"}
+                type="number"
+                value={productForm.purchase_price}
+                onChange={(value) => setProductForm({ ...productForm, purchase_price: value })}
+              />
+              <FormInput label="Satış fiyatı (TL)" type="number" value={productForm.sale_price} onChange={(value) => setProductForm({ ...productForm, sale_price: value })} required />
               <FormInput label="Stok" type="number" value={productForm.stock_quantity} onChange={(value) => setProductForm({ ...productForm, stock_quantity: value })} />
               <FormInput label="Minimum stok" type="number" value={productForm.min_stock} onChange={(value) => setProductForm({ ...productForm, min_stock: value })} />
             </div>
             <button className="premium-button-primary mt-2" type="submit" disabled={saving}>
-              <PackagePlus size={18} />
-              Ürünü Kaydet
+              {saving ? <Loader2 size={18} className="animate-spin" /> : <PackagePlus size={18} />}
+              {editingProductId ? "Değişiklikleri Kaydet" : "Ürünü Kaydet"}
             </button>
           </form>
         </Modal>
@@ -283,8 +471,25 @@ export default function UrunlerPage() {
       {showBulkUpdate && (
         <Modal title="Toplu Fiyat Güncelle" onClose={() => setShowBulkUpdate(false)}>
           <form className="grid gap-4" onSubmit={applyBulkUpdate}>
+            {categories.length > 0 && (
+              <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
+                Kategori (opsiyonel)
+                <select
+                  className="premium-input"
+                  value={bulkCategory}
+                  onChange={(event) => setBulkCategory(event.target.value)}
+                >
+                  <option value="">Tüm kategoriler</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <p className="text-sm leading-6 text-slate-600 dark:text-slate-400">
-              Bu işlem mevcut arama filtresindeki {filteredProducts.length} ürünün satış fiyatını günceller.
+              Bu işlem mevcut arama/kategori filtresindeki {bulkTargets.length} ürünün satış fiyatını günceller.
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -309,7 +514,7 @@ export default function UrunlerPage() {
               onChange={setBulkValue}
               required
             />
-            <button className="premium-button-primary" type="submit" disabled={saving || filteredProducts.length === 0}>
+            <button className="premium-button-primary" type="submit" disabled={saving || bulkTargets.length === 0}>
               Güncellemeyi Uygula
             </button>
           </form>
@@ -330,7 +535,7 @@ function Modal({
 }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
         <div className="mb-5 flex items-center justify-between gap-4">
           <h2 className="font-display text-2xl font-black">{title}</h2>
           <button

@@ -178,12 +178,17 @@ export default function FiyatSorgulaPage() {
               type="text"
               value={barcode}
               onChange={(event) => setBarcode(event.target.value)}
-              className="premium-input h-16 pl-12 text-lg font-medium tracking-wider"
+              className="premium-input h-16 pl-14 text-lg font-medium tracking-wider"
               placeholder="Barkod okutun..."
               autoComplete="off"
               disabled={loading}
             />
-            <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={22} />
+            <ScanBarcode className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={22} />
+            {!barcode && (
+              <div className="scan-beam-track">
+                <div className="scan-beam" />
+              </div>
+            )}
             <button type="submit" className="hidden">Ara</button>
           </div>
         </form>
@@ -223,7 +228,7 @@ export default function FiyatSorgulaPage() {
                   <CheckCircle2 size={30} /> Satış Yap
                 </button>
                 <button onClick={handleCancel} className="action-no-sale min-h-20 w-full px-6 py-5 text-2xl" type="button">
-                  Satış Yok
+                  Tamam
                 </button>
               </div>
             </div>

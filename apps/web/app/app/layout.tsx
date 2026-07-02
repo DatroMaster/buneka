@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrencyRates } from "@/lib/currency/tcmb";
 import AppShell from "./AppShell";
 
 export const dynamic = "force-dynamic";
@@ -31,8 +32,10 @@ export default async function AppLayout({
     redirect("/login?error=Kullanıcı profili bulunamadı");
   }
 
+  const rates = await getCurrencyRates();
+
   return (
-    <AppShell user={appUser}>
+    <AppShell user={appUser} rates={rates}>
       {children}
     </AppShell>
   );

@@ -13,6 +13,9 @@ export type PublicTable =
   | "stock_movements"
   | "campaigns"
   | "organization_campaigns"
+  | "organization_settings"
+  | "customers"
+  | "credit_transactions"
   | "devices"
   | "audit_logs";
 

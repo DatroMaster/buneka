@@ -97,7 +97,7 @@ export function PriceClient() {
         <form className="mb-8 flex flex-col gap-4 md:flex-row" onSubmit={onSubmit}>
           <div className="relative flex-1">
             <input
-              className="premium-input h-16 pl-12 text-lg font-medium tracking-wider"
+              className="premium-input h-16 pl-14 text-lg font-medium tracking-wider"
               inputMode="numeric"
               value={barcode}
               onChange={(event) => setBarcode(event.target.value)}
@@ -105,7 +105,12 @@ export function PriceClient() {
               aria-label="Barkod"
               autoFocus
             />
-            <ScanLine className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={24} />
+            <ScanLine className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={24} />
+            {!barcode && (
+              <div className="scan-beam-track">
+                <div className="scan-beam" />
+              </div>
+            )}
           </div>
           <button className="premium-button-primary h-16 px-10 text-lg" type="submit" disabled={loading || !barcode}>
             {loading ? <Loader2 className="animate-spin" size={24} /> : <Search size={24} />}
@@ -165,7 +170,7 @@ export function PriceClient() {
                 </button>
                 <button className="action-no-sale min-h-16 px-8 text-xl" type="button" onClick={resetResult}>
                   <RotateCcw size={24} />
-                  <span>Satış Yok</span>
+                  <span>Tamam</span>
                 </button>
               </div>
             </div>
@@ -183,7 +188,7 @@ export function PriceClient() {
                 </Link>
                 <button className="premium-button-secondary" type="button" onClick={resetResult}>
                   <RotateCcw size={20} />
-                  <span>Satış Yok</span>
+                  <span>Tamam</span>
                 </button>
               </div>
             </div>

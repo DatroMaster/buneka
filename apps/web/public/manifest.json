@@ -1,0 +1,26 @@
+{
+  "name": "Buneka | Barkodu okut, fiyatı gör, satışını bil",
+  "short_name": "Buneka",
+  "description": "Küçük işletmeler için barkodla fiyat sorgulama, satış kaydı, kasa, stok ve veresiye takip sistemi.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#07111F",
+  "theme_color": "#07111F",
+  "lang": "tr",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

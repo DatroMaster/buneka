@@ -29,11 +29,11 @@ export function BunekaMark({
       <path
         d="M16 2 L28 13 L16 30 L4 13 Z"
         stroke={`url(#${GRADIENT_ID})`}
-        strokeWidth={1.6}
+        strokeWidth={2.2}
         strokeLinejoin="round"
       />
-      <path d="M4 13 L28 13" stroke={`url(#${GRADIENT_ID})`} strokeWidth={1.1} opacity={0.65} />
-      <path d="M16 2 L16 30" stroke={`url(#${GRADIENT_ID})`} strokeWidth={1.1} opacity={0.45} />
+      <path d="M4 13 L28 13" stroke={`url(#${GRADIENT_ID})`} strokeWidth={1.5} opacity={0.75} />
+      <path d="M16 2 L16 30" stroke={`url(#${GRADIENT_ID})`} strokeWidth={1.5} opacity={0.55} />
     </svg>
   );
 }

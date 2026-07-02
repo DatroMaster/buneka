@@ -17,6 +17,15 @@ export const metadata: Metadata = {
   title: "Buneka | Barkodu okut, fiyatı gör, satışını bil",
   description:
     "Buneka, küçük işletmeler için yıllık lisanslı barkodla fiyat sorgulama, satış kaydı, kasa ve stok takip sistemidir.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+};
+
+export const viewport = {
+  themeColor: "#07111F",
 };
 
 export default function RootLayout({

@@ -334,17 +334,71 @@
     }
   }
 
+  /* Thin, bright hairline border — no blurred glow/bleed behind the panel */
   .glow-border {
     border: 1px solid var(--home-border);
-    box-shadow: 0 0 15px rgba(0, 242, 254, 0.08);
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease, transform 0.15s ease;
   }
   .glow-border:hover {
     border-color: var(--home-glow);
-    box-shadow: 0 0 28px rgba(0, 242, 254, 0.28);
   }
   .glow-border:active {
     transform: scale(0.98);
+  }
+
+  .glow-border-selected {
+    border-color: var(--home-glow) !important;
+    background: var(--home-surface-soft);
+  }
+
+  /* Faint geometric grid — replaces heavy sparkle/bloom with crisp, elite lines */
+  .home-grid-pattern {
+    background-image:
+      linear-gradient(var(--home-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--home-border) 1px, transparent 1px);
+    background-size: 56px 56px;
+    opacity: 0.5;
+  }
+
+  /* Subtle "barcode scanning" light sweep, shown inside an empty barcode input */
+  .scan-beam-track {
+    position: absolute;
+    inset: 2px;
+    overflow: hidden;
+    border-radius: 0.9rem;
+    pointer-events: none;
+  }
+  .scan-beam {
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 2px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    animation: scan-beam-move 2.4s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scan-beam {
+      animation: none;
+      display: none;
+    }
+  }
+}
+
+@keyframes scan-beam-move {
+  0% {
+    top: 6%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    top: 88%;
+    opacity: 0;
   }
 }
 

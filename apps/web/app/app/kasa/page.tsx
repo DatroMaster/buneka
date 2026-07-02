@@ -98,8 +98,12 @@ export default function KasaPage() {
   const formatMoney = (amount: number) =>
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
-  const formatTime = (dateString: string) =>
-    new Date(dateString).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.toLocaleDateString("tr-TR", { day: "2-digit", month: "2-digit" });
+    const time = date.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" });
+    return { day, time };
+  };
 
   if (loading) {
     return (
@@ -132,16 +136,21 @@ export default function KasaPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-slate-50 text-sm text-slate-600 dark:bg-slate-800/60 dark:text-slate-400">
-                  <th className="px-6 py-3 font-medium">Saat</th>
+                  <th className="px-6 py-3 font-medium">Tarih / Saat</th>
                   <th className="px-6 py-3 font-medium">Ürünler</th>
                   <th className="px-6 py-3 font-medium">Ödeme</th>
                   <th className="px-6 py-3 text-right font-medium">Tutar</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {sales.map((sale) => (
+                {sales.map((sale) => {
+                  const { day, time } = formatDateTime(sale.sale_time);
+                  return (
                   <tr key={sale.id} className="transition-colors hover:bg-cyan-50/50 dark:hover:bg-cyan-500/10">
-                    <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">{formatTime(sale.sale_time)}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">
+                      {time}
+                      <div className="text-xs font-normal text-slate-400 dark:text-slate-500">{day}</div>
+                    </td>
                     <td className="px-6 py-4">
                       {sale.sale_items?.map((item, index) => (
                         <div key={`${sale.id}-${index}`} className="text-sm font-medium text-slate-800 dark:text-slate-200">
@@ -156,7 +165,8 @@ export default function KasaPage() {
                       {formatMoney(Number(sale.total_amount))}
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
