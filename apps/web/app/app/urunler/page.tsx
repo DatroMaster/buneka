@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   Boxes,
   HandCoins,
+  Layers,
   Loader2,
   Pencil,
   PackagePlus,
@@ -22,6 +23,7 @@ import { PageHeader } from "../_components/PageHeader";
 import { EmptyState } from "../_components/EmptyState";
 import { QuickLinks } from "../_components/QuickLinks";
 import { fetchUsdRateAction } from "./currency-actions";
+import { BulkAddModal } from "./BulkAddModal";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Tables<"products">;
@@ -59,6 +61,7 @@ export default function UrunlerPage() {
   const [showProductModal, setShowProductModal] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [showBulkUpdate, setShowBulkUpdate] = useState(false);
+  const [showBulkAdd, setShowBulkAdd] = useState(false);
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [newCategory, setNewCategory] = useState(false);
   const [usdRate, setUsdRate] = useState<number | null>(null);
@@ -295,6 +298,9 @@ export default function UrunlerPage() {
             <button className="premium-button-secondary" type="button" onClick={() => setShowBulkUpdate(true)}>
               <Percent size={18} /> Toplu Fiyat Güncelle
             </button>
+            <button className="premium-button-secondary" type="button" onClick={() => setShowBulkAdd(true)}>
+              <Layers size={18} /> Toplu Ekle
+            </button>
             <button className="premium-button-primary" type="button" onClick={openNewProduct}>
               <Plus size={18} /> Yeni Ürün
             </button>
@@ -513,6 +519,19 @@ export default function UrunlerPage() {
             </button>
           </form>
         </Modal>
+      )}
+
+      {showBulkAdd && appUser && (
+        <BulkAddModal
+          open={showBulkAdd}
+          onClose={() => setShowBulkAdd(false)}
+          organizationId={appUser.organization_id}
+          storeId={appUser.store_id}
+          onImported={(msg) => {
+            setMessage(msg);
+            void loadProducts();
+          }}
+        />
       )}
 
       {showBulkUpdate && (
