@@ -87,7 +87,7 @@ export function PriceClient() {
             <ScanLine size={32} aria-hidden="true" />
           </div>
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-slate-950">Bu ne kadar?</h1>
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-slate-950">Bu ne kadar?</h1>
             <p className="mt-1 font-medium text-slate-600">
               Ürün fiyatını sorgulayın. Barkodu okutun veya yazın.
             </p>

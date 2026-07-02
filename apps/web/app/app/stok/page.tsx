@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { PageHeader } from "../_components/PageHeader";
+import { EmptyState } from "../_components/EmptyState";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Pick<Tables<"products">, "id" | "name" | "barcode" | "stock_quantity">;
@@ -143,13 +145,13 @@ export default function StokPage() {
   const getMovementLabel = (type: string) => {
     switch (type) {
       case "sale":
-        return { label: "Satış çıkışı", color: "text-orange-600", icon: ArrowDownRight };
+        return { label: "Satış çıkışı", color: "text-amber-600", icon: ArrowDownRight };
       case "purchase":
-        return { label: "Stok girişi", color: "text-[#3F7D53]", icon: ArrowUpRight };
+        return { label: "Stok girişi", color: "text-emerald-600", icon: ArrowUpRight };
       case "adjustment":
-        return { label: "Düzeltme", color: "text-orange-500", icon: AlertTriangle };
+        return { label: "Düzeltme", color: "text-amber-500", icon: AlertTriangle };
       case "return":
-        return { label: "İade girişi", color: "text-[#3F7D53]", icon: ArrowUpRight };
+        return { label: "İade girişi", color: "text-emerald-600", icon: ArrowUpRight };
       default:
         return { label: type, color: "text-slate-950", icon: Boxes };
     }
@@ -157,19 +159,15 @@ export default function StokPage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="mb-2 text-3xl font-bold text-slate-950">Stok Hareketleri</h1>
-          <p className="text-slate-500">Tüm depo giriş ve çıkışlarını takip edin.</p>
-        </div>
-        <button
-          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2 text-white shadow-lg shadow-cyan-500/20 transition-colors hover:brightness-105"
-          type="button"
-          onClick={() => setShowEntry(true)}
-        >
-          <Plus size={18} /> Yeni Stok Girişi
-        </button>
-      </div>
+      <PageHeader
+        title="Stok Hareketleri"
+        subtitle="Tüm depo giriş ve çıkışlarını takip edin."
+        action={
+          <button className="premium-button-primary" type="button" onClick={() => setShowEntry(true)}>
+            <Plus size={18} /> Yeni Stok Girişi
+          </button>
+        }
+      />
 
       {message && (
         <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950">
@@ -177,7 +175,7 @@ export default function StokPage() {
         </div>
       )}
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+      <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead className="bg-slate-50 text-sm text-slate-500">
@@ -189,7 +187,7 @@ export default function StokPage() {
                 <th className="px-6 py-4 font-medium">Not</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
@@ -198,8 +196,8 @@ export default function StokPage() {
                 </tr>
               ) : movements.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500">
-                    Hareket bulunamadı.
+                  <td colSpan={5}>
+                    <EmptyState icon={Boxes} message="Hareket bulunamadı." />
                   </td>
                 </tr>
               ) : (
@@ -238,9 +236,9 @@ export default function StokPage() {
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
           <div className="w-full max-w-lg rounded-2xl bg-[#F6F8FB] p-6 text-slate-950 shadow-2xl">
             <div className="mb-5 flex items-center justify-between gap-4">
-              <h2 className="text-2xl font-black">Yeni Stok Girişi</h2>
+              <h2 className="font-display text-2xl font-black">Yeni Stok Girişi</h2>
               <button
-                className="rounded-full bg-white p-2"
+                className="rounded-full bg-white p-2 transition-transform active:scale-90"
                 type="button"
                 onClick={() => setShowEntry(false)}
                 aria-label="Kapat"

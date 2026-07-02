@@ -1,10 +1,11 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { AlertCircle, CheckCircle2, Plus, ScanBarcode } from "lucide-react";
+import { AlertCircle, Activity, CheckCircle2, Plus, ScanBarcode, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { StatCard } from "./_components/StatCard";
 
 type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
 type Product = Tables<"products">;
@@ -159,114 +160,87 @@ export default function FiyatSorgulaPage() {
 
   return (
     <div className="mx-auto flex h-full max-w-4xl flex-col">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">Bu ne kadar?</h1>
-        <p className="text-slate-600">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
-      </div>
-
-      <form onSubmit={handleSearch} className="mb-8">
-        <div className="relative">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-            <ScanBarcode size={24} className="text-cyan-500" />
+      <div className="glass-card flex flex-1 flex-col p-6 md:p-10">
+        <div className="mb-8 flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/30">
+            <ScanBarcode size={26} />
           </div>
-          <input
-            ref={inputRef}
-            type="text"
-            value={barcode}
-            onChange={(event) => setBarcode(event.target.value)}
-            className="w-full rounded-2xl border-2 border-slate-200 bg-white py-6 pl-12 pr-4 text-2xl font-black text-slate-950 shadow-sm placeholder-slate-400 transition-all focus:border-cyan-400 focus:outline-none focus:ring-4 focus:ring-cyan-400/20"
-            placeholder="Barkod okutun..."
-            autoComplete="off"
-            disabled={loading}
-          />
-          <button type="submit" className="hidden">Ara</button>
+          <div>
+            <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-950 md:text-3xl">Bu ne kadar?</h1>
+            <p className="font-medium text-slate-500">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
+          </div>
         </div>
-      </form>
 
-      <div className="flex min-h-[300px] flex-1 flex-col items-center justify-center">
-        {loading ? (
-          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-500" />
-        ) : error ? (
-          <div className="w-full max-w-md rounded-2xl border border-orange-200 bg-white p-8 text-center shadow-sm">
-            <AlertCircle size={48} className="mx-auto mb-4 text-orange-500" />
-            <h3 className="mb-2 text-xl font-bold text-slate-950">{error}</h3>
-            <Link
-              href="/app/urunler"
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 py-3 font-bold text-white shadow-sm transition-all hover:scale-[1.01] active:scale-95"
-            >
-              <Plus size={20} /> Yeni Ürün Ekle
-            </Link>
+        <form onSubmit={handleSearch} className="mb-8">
+          <div className="relative">
+            <input
+              ref={inputRef}
+              type="text"
+              value={barcode}
+              onChange={(event) => setBarcode(event.target.value)}
+              className="premium-input h-16 pl-12 text-lg font-medium tracking-wider"
+              placeholder="Barkod okutun..."
+              autoComplete="off"
+              disabled={loading}
+            />
+            <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50" size={22} />
+            <button type="submit" className="hidden">Ara</button>
           </div>
-        ) : product ? (
-          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
-            <div className="mb-6 text-center">
+        </form>
+
+        <div className="flex min-h-[280px] flex-1 flex-col items-center justify-center">
+          {loading ? (
+            <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-500" />
+          ) : error ? (
+            <div className="w-full max-w-md rounded-2xl bg-orange-50 p-8 text-center ring-1 ring-orange-200">
+              <AlertCircle size={44} className="mx-auto mb-4 text-orange-600" />
+              <h3 className="mb-6 text-xl font-bold text-orange-600">{error}</h3>
+              <Link href="/app/urunler" className="premium-button-amber shadow-none">
+                <Plus size={20} /> Yeni Ürün Ekle
+              </Link>
+            </div>
+          ) : product ? (
+            <div className="w-full max-w-2xl rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 md:p-10">
               <span className="mb-4 inline-block rounded-full bg-cyan-50 px-4 py-2 text-xs font-black uppercase text-cyan-700">
                 {product.category || "Kategorisiz"}
               </span>
               <h2 className="mb-3 text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">{product.name}</h2>
-              <p className="font-mono text-sm font-bold text-slate-500">{product.barcode}</p>
-            </div>
+              <p className="mb-6 font-mono text-sm font-bold text-slate-400">{product.barcode}</p>
 
-            <div className="mb-8 flex justify-center">
-              <span className="text-7xl font-black tracking-tight text-cyan-600 md:text-8xl">
+              <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl">
                 {formatMoney(product.sale_price)}
-              </span>
-            </div>
+              </div>
 
-            <div className="mb-8 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
-              <span className="font-bold text-slate-500">Stok Durumu</span>
-              <span className={`text-lg font-black ${product.stock_quantity <= product.min_stock ? "text-orange-600" : "text-slate-950"}`}>
-                {product.stock_quantity} Adet
-              </span>
-            </div>
+              <div className="mb-8 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
+                <span className="font-bold text-slate-500">Stok Durumu:</span>
+                <span className={`text-lg font-black ${product.stock_quantity <= product.min_stock ? "text-orange-600" : "text-slate-950"}`}>
+                  {product.stock_quantity} Adet
+                </span>
+              </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <button
-                onClick={handleSale}
-                className="action-sale min-h-20 w-full px-6 py-5 text-2xl"
-                type="button"
-              >
-                <CheckCircle2 size={30} /> Satış Yap
-              </button>
-              <button
-                onClick={handleCancel}
-                className="action-no-sale min-h-20 w-full px-6 py-5 text-2xl"
-                type="button"
-              >
-                Satış Yok
-              </button>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <button onClick={handleSale} className="action-sale min-h-20 w-full px-6 py-5 text-2xl" type="button">
+                  <CheckCircle2 size={30} /> Satış Yap
+                </button>
+                <button onClick={handleCancel} className="action-no-sale min-h-20 w-full px-6 py-5 text-2xl" type="button">
+                  Satış Yok
+                </button>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center text-center text-slate-500">
-            <ScanBarcode size={64} className="mb-4 opacity-20" />
-            <p className="text-lg">Sorgulama yapmak için barkod okutun.</p>
-          </div>
-        )}
+          ) : (
+            <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center">
+              <ScanBarcode size={48} className="mb-4 text-slate-300" />
+              <p className="text-lg font-semibold text-slate-600">Sorgulama yapmak için barkod okutun.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 gap-4 border-t border-slate-200 pt-6 sm:grid-cols-3">
+          <StatCard icon={CheckCircle2} label="Bugün Satış" value={String(stats.sales)} tone="primary" />
+          <StatCard icon={TrendingUp} label="Bugün Kasa" value={formatMoney(stats.revenue)} tone="green" />
+          <StatCard icon={Activity} label="Bugün Sorgu" value={String(stats.queries)} tone="amber" />
+        </div>
       </div>
-
-      <div className="mt-8 grid grid-cols-1 gap-4 border-t border-slate-200 pt-6 sm:grid-cols-3">
-        <SummaryCard label="Bugün Satış" value={String(stats.sales)} />
-        <SummaryCard label="Bugün Kasa" value={formatMoney(stats.revenue)} highlight="text-emerald-600" />
-        <SummaryCard label="Bugün Sorgu" value={String(stats.queries)} highlight="text-orange-500" />
-      </div>
-    </div>
-  );
-}
-
-function SummaryCard({
-  label,
-  value,
-  highlight = "text-slate-950",
-}: {
-  label: string;
-  value: string;
-  highlight?: string;
-}) {
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <p className="mb-1 text-sm font-bold text-slate-500">{label}</p>
-      <p className={`text-xl font-bold ${highlight}`}>{value}</p>
     </div>
   );
 }

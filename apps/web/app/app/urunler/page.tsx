@@ -4,6 +4,8 @@ import type { Tables } from "@buneka/database";
 import { AlertTriangle, PackagePlus, Percent, Plus, Search, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { PageHeader } from "../_components/PageHeader";
+import { EmptyState } from "../_components/EmptyState";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Tables<"products">;
@@ -157,28 +159,20 @@ export default function UrunlerPage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-        <div>
-          <h1 className="mb-2 text-3xl font-bold text-slate-950">Ürünler</h1>
-          <p className="text-slate-500">Barkod, fiyat, kategori ve stok bilgilerini yönetin.</p>
-        </div>
-        <div className="flex w-full gap-2 md:w-auto">
-          <button
-            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-950 transition-colors hover:bg-cyan-50"
-            type="button"
-            onClick={() => setShowBulkUpdate(true)}
-          >
-            <Percent size={18} /> Toplu Fiyat Güncelle
-          </button>
-          <button
-            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2 text-white shadow-lg shadow-cyan-500/20 transition-colors hover:brightness-105"
-            type="button"
-            onClick={() => setShowNewProduct(true)}
-          >
-            <Plus size={18} /> Yeni Ürün
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Ürünler"
+        subtitle="Barkod, fiyat, kategori ve stok bilgilerini yönetin."
+        action={
+          <>
+            <button className="premium-button-secondary" type="button" onClick={() => setShowBulkUpdate(true)}>
+              <Percent size={18} /> Toplu Fiyat Güncelle
+            </button>
+            <button className="premium-button-primary" type="button" onClick={() => setShowNewProduct(true)}>
+              <Plus size={18} /> Yeni Ürün
+            </button>
+          </>
+        }
+      />
 
       {message && (
         <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950">
@@ -186,8 +180,8 @@ export default function UrunlerPage() {
         </div>
       )}
 
-      <div className="flex h-[calc(100vh-220px)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
-        <div className="border-b border-slate-200 p-4">
+      <div className="data-card flex h-[calc(100vh-220px)] flex-col overflow-hidden">
+        <div className="border-b border-slate-100 p-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
             <input
@@ -211,7 +205,7 @@ export default function UrunlerPage() {
                 <th className="px-6 py-3 text-right font-medium">Stok</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-slate-100">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
@@ -220,8 +214,8 @@ export default function UrunlerPage() {
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-slate-500">
-                    Ürün bulunamadı.
+                  <td colSpan={5}>
+                    <EmptyState icon={Search} message="Ürün bulunamadı." />
                   </td>
                 </tr>
               ) : (
@@ -245,12 +239,12 @@ export default function UrunlerPage() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {Number(product.stock_quantity) <= Number(product.min_stock) && (
-                          <AlertTriangle size={14} className="text-orange-600" />
+                          <AlertTriangle size={14} className="text-amber-600" />
                         )}
                         <span
                           className={`font-bold ${
                             Number(product.stock_quantity) <= Number(product.min_stock)
-                              ? "text-orange-600"
+                              ? "text-amber-600"
                               : "text-slate-950"
                           }`}
                         >
@@ -294,14 +288,14 @@ export default function UrunlerPage() {
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button
-                className={`rounded-xl border px-4 py-3 font-bold ${bulkMode === "percent" ? "border-cyan-400 bg-cyan-50 text-slate-800" : "border-slate-200 bg-white"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm" : "border-slate-200 bg-white"}`}
                 type="button"
                 onClick={() => setBulkMode("percent")}
               >
                 Yüzde
               </button>
               <button
-                className={`rounded-xl border px-4 py-3 font-bold ${bulkMode === "amount" ? "border-cyan-400 bg-cyan-50 text-slate-800" : "border-slate-200 bg-white"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm" : "border-slate-200 bg-white"}`}
                 type="button"
                 onClick={() => setBulkMode("amount")}
               >
@@ -338,8 +332,13 @@ function Modal({
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
       <div className="w-full max-w-lg rounded-2xl bg-[#F6F8FB] p-6 text-slate-950 shadow-2xl">
         <div className="mb-5 flex items-center justify-between gap-4">
-          <h2 className="text-2xl font-black">{title}</h2>
-          <button className="rounded-full bg-white p-2" type="button" onClick={onClose} aria-label="Kapat">
+          <h2 className="font-display text-2xl font-black">{title}</h2>
+          <button
+            className="rounded-full bg-white p-2 transition-transform active:scale-90"
+            type="button"
+            onClick={onClose}
+            aria-label="Kapat"
+          >
             <X size={20} />
           </button>
         </div>

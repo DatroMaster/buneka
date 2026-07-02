@@ -4,6 +4,9 @@ import type { Tables } from "@buneka/database";
 import { Activity, Package, TrendingUp, WalletCards } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { PageHeader } from "../_components/PageHeader";
+import { StatCard } from "../_components/StatCard";
+import { EmptyState } from "../_components/EmptyState";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id">;
 type SaleItemWithProduct = Pick<Tables<"sale_items">, "quantity" | "sale_price"> & {
@@ -108,25 +111,22 @@ export default function KasaPage() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">Günlük Kasa</h1>
-        <p className="text-slate-600">Bugünkü satışlarınız ve kasa durumunuz.</p>
-      </div>
+      <PageHeader title="Günlük Kasa" subtitle="Bugünkü satışlarınız ve kasa durumunuz." />
 
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard icon={WalletCards} label="Toplam Kasa" value={formatMoney(stats.totalAmount)} />
-        <StatCard icon={TrendingUp} label="Tahmini Kâr" value={formatMoney(stats.totalProfit)} tone="text-emerald-600" />
-        <StatCard icon={Package} label="Satılan Ürün" value={`${stats.itemCount} Adet`} tone="text-orange-500" />
-        <StatCard icon={Activity} label="Toplam Sorgu" value={`${stats.queryCount} Kez`} tone="text-cyan-600" />
+        <StatCard icon={WalletCards} label="Toplam Kasa" value={formatMoney(stats.totalAmount)} tone="primary" />
+        <StatCard icon={TrendingUp} label="Tahmini Kâr" value={formatMoney(stats.totalProfit)} tone="green" />
+        <StatCard icon={Package} label="Satılan Ürün" value={`${stats.itemCount} Adet`} tone="amber" />
+        <StatCard icon={Activity} label="Toplam Sorgu" value={`${stats.queryCount} Kez`} tone="primary" />
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 px-6 py-4">
-          <h2 className="text-lg font-black text-slate-950">Son Satışlar</h2>
+      <div className="data-card overflow-hidden">
+        <div className="border-b border-slate-100 px-6 py-4">
+          <h2 className="font-display text-lg font-black text-slate-950">Son Satışlar</h2>
         </div>
 
         {sales.length === 0 ? (
-          <div className="p-8 text-center text-slate-600">Henüz satış yapılmadı.</div>
+          <EmptyState icon={WalletCards} message="Henüz satış yapılmadı." />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left">
@@ -138,7 +138,7 @@ export default function KasaPage() {
                   <th className="px-6 py-3 text-right font-medium">Tutar</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200">
+              <tbody className="divide-y divide-slate-100">
                 {sales.map((sale) => (
                   <tr key={sale.id} className="transition-colors hover:bg-cyan-50/50">
                     <td className="px-6 py-4 text-sm font-medium text-slate-800">{formatTime(sale.sale_time)}</td>
@@ -161,32 +161,6 @@ export default function KasaPage() {
             </table>
           </div>
         )}
-      </div>
-    </div>
-  );
-}
-
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  tone = "text-cyan-600",
-}: {
-  icon: typeof WalletCards;
-  label: string;
-  value: string;
-  tone?: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="flex items-center gap-4">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 ring-1 ring-cyan-100 ${tone}`}>
-          <Icon size={24} />
-        </div>
-        <div>
-          <p className="text-sm font-bold text-slate-500">{label}</p>
-          <p className={`text-2xl font-black ${tone}`}>{value}</p>
-        </div>
       </div>
     </div>
   );
