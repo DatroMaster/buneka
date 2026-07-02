@@ -164,7 +164,7 @@ export default function HomeClient() {
   ];
 
   return (
-    <div className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden">
+    <div className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         {STARS.map((star, index) => (
@@ -210,8 +210,8 @@ export default function HomeClient() {
         </div>
       </header>
 
-      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border flex min-h-0 flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-7 md:p-9">
+      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        <section className="glow-border flex flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:p-7">
           <p className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
             <ShieldCheck size={12} /> Kurulumsuz başlar
           </p>
@@ -227,10 +227,10 @@ export default function HomeClient() {
             Buneka barkoddan fiyatı bulur, kasa hareketini kaydeder ve stok durumunu aynı akışta
             gösterir.
           </p>
-          <div className="mt-5 sm:mt-7">
+          <div className="mt-4 sm:mt-5">
             <BunekaExplainerCard />
           </div>
-          <div className="mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
+          <div className="mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center">
             <Link
               href="/login"
               className="group relative inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--home-muted)] transition-colors duration-500 ease-out hover:text-[color:var(--home-ink)] sm:text-sm"

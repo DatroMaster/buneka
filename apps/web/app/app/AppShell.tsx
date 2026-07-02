@@ -116,16 +116,16 @@ function DesktopSidebar({
   user: AppUserWithRelations;
 }) {
   return (
-    <aside className="group/sidebar sidebar-supabase hidden h-full w-[4.25rem] shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 ease-out hover:w-72 md:flex">
-      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-4">
-        <BunekaMark size={28} className="shrink-0" />
+    <aside className="group/sidebar sidebar-supabase hidden h-full w-16 shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 ease-out hover:w-60 md:flex">
+      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-3">
+        <BunekaMark size={26} className="shrink-0" />
         <div className="min-w-0 opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
           <BunekaWordmark className="text-sm text-white" />
           <p className="truncate text-[11px] font-medium text-slate-400">{user.organizations?.name || "İşletme"}</p>
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-2.5 py-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -134,13 +134,13 @@ function DesktopSidebar({
               key={item.name}
               href={item.href}
               title={item.name}
-              className={`group/item flex h-10 items-center gap-3 rounded-md px-2.5 text-sm transition-all ${
+              className={`group/item flex h-10 items-center justify-center gap-3 rounded-md px-2.5 text-sm transition-all group-hover/sidebar:justify-start ${
                 isActive
                   ? "border border-emerald-400/25 bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                  : "text-slate-400 hover:bg-white/[0.06] hover:text-slate-100"
+                  : "text-slate-300 hover:bg-white/[0.06] hover:text-slate-100"
               }`}
             >
-              <Icon size={18} className={isActive ? "text-emerald-300" : "text-slate-400 group-hover/item:text-emerald-300"} />
+              <Icon size={19} strokeWidth={2.25} className={isActive ? "text-emerald-300" : "text-slate-200 group-hover/item:text-emerald-300"} />
               <span className="whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
                 {item.name}
               </span>
@@ -149,8 +149,8 @@ function DesktopSidebar({
         })}
       </nav>
 
-      <div className="border-t border-white/10 p-3">
-        <div className="mb-2 flex h-10 items-center gap-3 rounded-md px-2.5">
+      <div className="border-t border-white/10 p-2.5">
+        <div className="mb-2 flex h-10 items-center justify-center gap-3 rounded-md px-2.5 group-hover/sidebar:justify-start">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-400/10 text-sm font-black text-emerald-200">
             {user.name?.charAt(0) || "U"}
           </div>
@@ -161,7 +161,7 @@ function DesktopSidebar({
         </div>
         <button
           onClick={onLogout}
-          className="flex h-10 w-full items-center gap-3 rounded-md px-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-rose-500/10 hover:text-rose-300"
+          className="flex h-10 w-full items-center justify-center gap-3 rounded-md px-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-rose-500/10 hover:text-rose-300 group-hover/sidebar:justify-start"
           type="button"
           title="Çıkış Yap"
         >

@@ -480,13 +480,18 @@ export default function VeresiyePage() {
                         {formatMoney(balance)}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        {balance > 0 && (
+                        {balance > 0 ? (
                           <button
                             type="button"
                             onClick={(event) => openPaymentQuick(customer, event)}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-2 text-xs font-black text-white shadow-sm shadow-emerald-500/20 transition-all hover:scale-[1.02] hover:bg-emerald-400 active:scale-95"
                           >
-                            <CheckCircle2 size={13} /> Ödeme Tamamla</button>
+                            <CheckCircle2 size={13} /> Ödeme Tamamla
+                          </button>
+                        ) : (
+                          <span className="inline-flex rounded-lg bg-slate-100 px-3 py-2 text-xs font-bold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                            Borç yok
+                          </span>
                         )}
                       </td>
                     </tr>

@@ -1,7 +1,8 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { Building2, KeyRound, Loader2, Plus, Search, UserCog, X } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import { Building2, KeyRound, Loader2, Plus, Search, ShieldCheck, UserCheck, UserCog, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "@/app/app/_components/PageHeader";
@@ -61,6 +62,10 @@ export default function AdminCustomersPage() {
     return licenses.find((license) => license.organization_id === orgId && license.status === "active");
   }
 
+  const activeCustomerCount = organizations.filter((org) => org.status === "active").length;
+  const activeLicenseCount = organizations.filter((org) => licenseFor(org.id)).length;
+  const loginAccountCount = users.filter((user) => user.auth_user_id).length;
+
   async function handleCreate(formData: FormData) {
     setSaving(true);
     setMessage("");
@@ -111,13 +116,19 @@ export default function AdminCustomersPage() {
     <div className="mx-auto max-w-6xl">
       <PageHeader
         title="Müşteriler"
-        subtitle="İşletme, sahip ve lisans durumunu buradan yönetin."
+        subtitle="Müşteri ekleyin, giriş hesabı açın, lisans ve özet durumunu buradan yönetin."
         action={
           <button className="premium-button-primary" type="button" onClick={() => setShowNew(true)}>
-            <Plus size={18} /> Yeni İşletme
+            <Plus size={18} /> Yeni Müşteri
           </button>
         }
       />
+
+      <div className="mb-5 grid gap-3 md:grid-cols-3">
+        <AdminStatCard icon={Building2} label="Toplam müşteri" value={organizations.length} hint="Kayıtlı işletme" />
+        <AdminStatCard icon={ShieldCheck} label="Aktif / lisanslı" value={`${activeCustomerCount} / ${activeLicenseCount}`} hint="Durum ve lisans özeti" />
+        <AdminStatCard icon={UserCheck} label="Giriş hesabı" value={loginAccountCount} hint="Sisteme girebilen müşteri" />
+      </div>
 
       {message && (
         <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
@@ -223,7 +234,7 @@ export default function AdminCustomersPage() {
       </div>
 
       {showNew && (
-        <Modal title="Yeni İşletme" onClose={() => setShowNew(false)}>
+        <Modal title="Yeni Müşteri / İşletme" onClose={() => setShowNew(false)}>
           <form className="grid gap-4" action={handleCreate}>
             <Field name="name" label="İşletme adı" required />
             <Field name="sector" label="Sektör" />
@@ -235,7 +246,7 @@ export default function AdminCustomersPage() {
             </div>
             <button className="premium-button-primary mt-2" type="submit" disabled={saving}>
               {saving ? <Loader2 size={18} className="animate-spin" /> : <Building2 size={18} />}
-              İşletmeyi Kaydet
+              Müşteriyi Kaydet
             </button>
           </form>
         </Modal>
@@ -295,6 +306,21 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
           </button>
         </div>
         {children}
+      </div>
+    </div>
+  );
+}
+
+function AdminStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; label: string; value: string | number; hint: string }) {
+  return (
+    <div className="data-card flex items-center gap-4 p-4">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:bg-cyan-400/10 dark:text-cyan-300">
+        <Icon size={21} />
+      </div>
+      <div>
+        <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="mt-1 font-display text-2xl font-black text-slate-950 dark:text-slate-50">{value}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{hint}</p>
       </div>
     </div>
   );

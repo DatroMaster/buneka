@@ -424,10 +424,11 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--home-glow) 62%, transparent);
     background:
-      linear-gradient(135deg, #FDE68A 0%, #F59E0B 36%, #F8FAFC 54%, #22C55E 100%);
-    color: #07111F;
-    box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.45), 0 12px 34px rgba(245, 158, 11, 0.26);
+      linear-gradient(135deg, color-mix(in srgb, var(--home-glow) 18%, var(--home-surface)), color-mix(in srgb, #10B981 18%, var(--home-surface)));
+    color: var(--home-ink);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--home-glow) 18%, transparent), 0 12px 34px color-mix(in srgb, var(--home-glow) 18%, transparent);
   }
 
   .cta-call-spark::before {
@@ -436,7 +437,7 @@
     inset: -60%;
     z-index: -1;
     background:
-      conic-gradient(from 0deg, transparent 0 18%, rgba(253, 230, 138, 0.8) 22%, transparent 27% 58%, rgba(226, 232, 240, 0.75) 62%, transparent 67% 100%);
+      conic-gradient(from 0deg, transparent 0 18%, color-mix(in srgb, var(--home-glow) 88%, transparent) 22%, transparent 27% 58%, rgba(16, 185, 129, 0.72) 62%, transparent 67% 100%);
     animation: call-spark-orbit 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
 
@@ -446,12 +447,12 @@
     inset: 2px;
     z-index: -1;
     border-radius: inherit;
-    background: linear-gradient(135deg, #FEF3C7, #F59E0B 48%, #ECFEFF);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--home-glow) 10%, var(--home-surface)), color-mix(in srgb, #10B981 12%, var(--home-surface)));
   }
 
   .cta-call-spark:hover {
     transform: translateY(-1px) scale(1.02);
-    box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.62), 0 18px 42px rgba(245, 158, 11, 0.32);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--home-glow) 35%, transparent), 0 18px 42px color-mix(in srgb, var(--home-glow) 24%, transparent);
   }
 
   .cta-call-spark:active {
@@ -485,20 +486,23 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--home-glow) 40%, var(--home-border));
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--home-surface) 90%, transparent), color-mix(in srgb, var(--home-glow) 10%, var(--home-surface))),
-      radial-gradient(circle at 18% 0%, rgba(253, 230, 138, 0.22), transparent 34%);
+    border: 1px solid color-mix(in srgb, var(--home-glow) 55%, var(--home-border));
+    background: linear-gradient(135deg, color-mix(in srgb, var(--home-surface) 94%, transparent), color-mix(in srgb, var(--home-glow) 8%, var(--home-surface)));
     box-shadow: 0 18px 46px color-mix(in srgb, var(--home-glow) 15%, transparent);
   }
 
   .package-spark-card::before {
     content: "";
     position: absolute;
-    inset: -45%;
+    inset: 0;
     z-index: -1;
-    background: conic-gradient(from 20deg, transparent 0 16%, rgba(253, 230, 138, 0.72) 20%, transparent 25% 58%, rgba(226, 232, 240, 0.68) 63%, transparent 68%);
-    animation: call-spark-orbit 3.1s ease-out infinite;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, var(--home-glow), #10B981, var(--home-glow), transparent);
+    background-size: 260% 100%;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: matrix-border-flow 2.4s linear infinite;
   }
   .cta-hero-pulse:hover::after {
     animation-play-state: paused;
@@ -696,6 +700,20 @@
   50% {
     transform: scale(1.02) rotate(2deg);
     opacity: 0.9;
+  }
+}
+
+@keyframes matrix-border-flow {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 260% 50%;
+    opacity: 0.55;
   }
 }
 

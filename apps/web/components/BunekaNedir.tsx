@@ -270,30 +270,34 @@ function SceneResult({ onCta }: { onCta: () => void }) {
 
 export function BunekaExplainerCard() {
   return (
-    <div className="bn-square-video glow-border relative mx-auto grid aspect-square w-full max-w-[560px] place-items-center overflow-hidden rounded-2xl bg-[color:var(--home-surface)]/80 p-5 backdrop-blur-xl sm:p-7">
+    <div className="bn-square-video glow-border relative mx-auto grid aspect-[16/9] w-full max-w-[620px] place-items-center overflow-hidden rounded-2xl bg-[color:var(--home-surface)]/80 p-3 backdrop-blur-xl sm:p-4">
       <div aria-hidden className="bn-square-grid absolute inset-0" />
-      <div aria-hidden className="bn-square-orbit absolute inset-[8%] rounded-[2rem]" />
-      <div className="relative z-10 grid h-full w-full place-items-center rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/70 p-5 text-center">
-        <div className="bn-pop flex flex-col items-center gap-4">
-          <SceneTag tone="result" label="Buneka sistemi" />
-          <div className="relative flex h-24 w-24 items-center justify-center">
-            <span className="bn-ring absolute inset-0 rounded-full border-2 border-[color:var(--home-glow)]/40" />
-            <BunekaMark size={58} />
+      <div aria-hidden className="bn-square-orbit absolute inset-[7%] rounded-[1.5rem]" />
+      <div className="relative z-10 grid h-full w-full place-items-center rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/70 p-4 text-center">
+        <div className="bn-pop flex h-full w-full flex-col justify-center gap-3 text-left">
+          <div className="flex items-center justify-center gap-4 sm:justify-start">
+            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center sm:h-24 sm:w-24">
+              <span className="bn-ring absolute inset-0 rounded-full border-2 border-[color:var(--home-glow)]/40" />
+              <BunekaMark size={54} />
+            </div>
+            <div className="min-w-0">
+              <SceneTag tone="result" label="Buneka sistemi" />
+              <h2 className="font-display mt-3 text-2xl font-black leading-tight text-[color:var(--home-ink)] sm:text-3xl">
+                Bu Ne Kadar?
+              </h2>
+            </div>
           </div>
-          <h2 className="font-display text-2xl font-black leading-tight text-[color:var(--home-ink)] sm:text-4xl">
-            Bu Ne Kadar?
-          </h2>
-          <div className="grid w-full max-w-sm gap-2 text-left">
+          <div className="grid w-full gap-2 sm:grid-cols-3">
             {[
               ['1', 'Barkodu okut'],
               ['2', 'Fiyatı gör'],
               ['3', 'Satış hareketlerini takip et'],
             ].map(([step, label]) => (
-              <div key={step} className="flex items-center gap-3 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] px-3 py-2.5">
+              <div key={step} className="flex items-center gap-2 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] px-3 py-2.5">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--home-glow)] text-xs font-black text-slate-950">
                   {step}
                 </span>
-                <span className="text-sm font-bold text-[color:var(--home-ink)] sm:text-base">{label}</span>
+                <span className="text-xs font-bold leading-snug text-[color:var(--home-ink)] sm:text-sm">{label}</span>
               </div>
             ))}
           </div>

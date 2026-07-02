@@ -42,7 +42,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
   const recommendedPlan = plans[1];
 
   return (
-    <main className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden text-[color:var(--home-ink)]">
+    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
@@ -62,8 +62,8 @@ export default async function SectorPage({ params }: SectorPageProps) {
         </div>
       </header>
 
-      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border flex min-h-0 flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-7 md:p-9">
+      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+        <section className="glow-border flex flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:p-7">
           <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
             <sector.icon size={12} />
             {sector.title}
@@ -94,10 +94,25 @@ export default async function SectorPage({ params }: SectorPageProps) {
               <MessageCircle size={16} className="text-emerald-400" /> WhatsApp&apos;tan Satın Al
             </a>
           </div>
+
+          <div className="mt-6">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
+              Paket önerisi
+            </p>
+            <div className="package-spark-card flex items-center justify-between gap-4 rounded-xl p-4">
+              <div>
+                <p className="font-display text-sm font-bold text-[color:var(--home-ink)]">{recommendedPlan.name}</p>
+                <p className="text-xs text-[color:var(--home-muted)]">{recommendedPlan.price} /yıl</p>
+              </div>
+              <Link href="/paketler" className="shrink-0 rounded-lg bg-[color:var(--home-glow)] px-3 py-2 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95">
+                Tüm paketler →
+              </Link>
+            </div>
+          </div>
         </section>
 
-        <section className="glow-border grid min-h-0 grid-rows-[1fr_1fr_auto] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
-          <div className="min-h-0 overflow-y-auto border-b border-[color:var(--home-border)] p-4 sm:p-5">
+        <section className="glow-border grid min-h-0 grid-rows-2 overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="border-b border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
               <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
             </p>
@@ -120,7 +135,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </div>
           </div>
 
-          <div className="min-h-0 overflow-y-auto border-b border-[color:var(--home-border)] p-4 sm:p-5">
+          <div className="border-b border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
             <div className="grid grid-cols-1 gap-2 pr-1 sm:grid-cols-2">
               {sector.modules.map((module) => (
@@ -132,20 +147,6 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </div>
           </div>
 
-          <div className="shrink-0 p-4 sm:p-5">
-            <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
-              Paket önerisi
-            </p>
-            <div className="package-spark-card flex items-center justify-between rounded-xl p-4">
-              <div>
-                <p className="font-display text-sm font-bold text-[color:var(--home-ink)]">{recommendedPlan.name}</p>
-                <p className="text-xs text-[color:var(--home-muted)]">{recommendedPlan.price} /yıl</p>
-              </div>
-              <Link href="/paketler" className="rounded-lg bg-[color:var(--home-glow)] px-3 py-2 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95">
-                Tüm paketler →
-              </Link>
-            </div>
-          </div>
         </section>
       </main>
 
