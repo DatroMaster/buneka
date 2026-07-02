@@ -9,6 +9,7 @@ import {
   Route,
 } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { getSector, sectors } from "@/lib/content/sectors";
 import { plans } from "@/lib/content/plans";
@@ -47,11 +48,9 @@ export default async function SectorPage({ params }: SectorPageProps) {
     <main className="min-h-screen bg-[var(--color-bg)] text-[color:var(--color-text)]">
       <header className="border-b border-[color:var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-          <Link href="/" className="flex items-center gap-2 font-black">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600">
-              <BunekaMark size={19} glow={false} />
-            </span>
-            Buneka
+          <Link href="/" className="flex items-center gap-2.5">
+            <BunekaMark size={22} />
+            <BunekaWordmark className="text-sm text-[color:var(--color-text)]" />
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/demo" className="premium-button-primary text-sm">

@@ -1,4 +1,6 @@
+import { ShieldCheck } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { login } from "./actions";
 
@@ -11,18 +13,21 @@ export default async function LoginPage({
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--color-bg)]">
-      <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-cyan-400 opacity-10 blur-[100px]" />
-      <div className="absolute right-[-10%] bottom-[-10%] h-[600px] w-[600px] rounded-full bg-amber-400 opacity-10 blur-[120px]" />
+      <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <ThemeToggle className="absolute right-6 top-6 z-20 border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" />
 
       <div className="relative z-10 w-full max-w-md">
-        <div className="glass-card flex flex-col space-y-8 rounded-3xl p-10">
+        <div className="glass-card glow-border flex flex-col space-y-8 rounded-2xl p-10">
           <div className="text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/30">
-              <BunekaMark size={30} glow={false} />
+            <div className="mx-auto mb-5 flex items-center justify-center gap-2.5">
+              <BunekaMark size={36} />
+              <BunekaWordmark className="text-lg text-slate-950 dark:text-slate-50" />
             </div>
-            <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-950 dark:text-slate-50">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-cyan-600 dark:text-cyan-300">
+              <ShieldCheck size={12} /> Güvenli giriş
+            </p>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50">
               Buneka&apos;ya Giriş
             </h2>
             <p className="mt-3 text-[15px] font-medium text-slate-500 dark:text-slate-400">

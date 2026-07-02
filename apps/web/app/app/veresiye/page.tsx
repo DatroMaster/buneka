@@ -1,7 +1,7 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { HandCoins, Loader2, Minus, Plus, Search, UserPlus, X } from "lucide-react";
+import { HandCoins, Loader2, Minus, Plus, ScanLine, Search, UserPlus, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
@@ -14,6 +14,16 @@ type Transaction = Tables<"credit_transactions"> & { app_users: Pick<Tables<"app
 const formatMoney = (amount: number) =>
   new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
+const emptyNewRecord = {
+  customerId: "",
+  newCustomerName: "",
+  phone: "",
+  item: "",
+  barcode: "",
+  amount: "",
+  type: "debt" as "debt" | "payment",
+};
+
 export default function VeresiyePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -21,13 +31,16 @@ export default function VeresiyePage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
-  const [showNewCustomer, setShowNewCustomer] = useState(false);
-  const [newCustomer, setNewCustomer] = useState({ name: "", phone: "", notes: "" });
+  const [showNewRecord, setShowNewRecord] = useState(false);
+  const [useNewCustomer, setUseNewCustomer] = useState(true);
+  const [newRecord, setNewRecord] = useState(emptyNewRecord);
+  const [lookingUpBarcode, setLookingUpBarcode] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [txType, setTxType] = useState<"debt" | "payment">("debt");
   const [txAmount, setTxAmount] = useState("");
   const [txNote, setTxNote] = useState("");
+  const [detailMessage, setDetailMessage] = useState("");
   const supabase = useMemo(() => createClient(), []);
 
   const loadCustomers = useCallback(async () => {
@@ -87,38 +100,122 @@ export default function VeresiyePage() {
   const selectedCustomer = customers.find((customer) => customer.id === selectedCustomerId) || null;
   const totalDebt = customers.reduce((sum, customer) => sum + Math.max(0, Number(customer.credit_balance)), 0);
 
+  function openNewRecord() {
+    setNewRecord(emptyNewRecord);
+    setUseNewCustomer(customers.length === 0);
+    setMessage("");
+    setShowNewRecord(true);
+  }
+
   function openCustomer(customer: Customer) {
     setSelectedCustomerId(customer.id);
     setTxAmount("");
     setTxNote("");
     setTxType("debt");
+    setDetailMessage("");
     void loadTransactions(customer.id);
   }
 
-  async function createCustomer(event: FormEvent<HTMLFormElement>) {
+  async function lookupBarcode(barcode: string, onFound: (name: string, price: number) => void) {
+    if (!appUser || !barcode.trim()) return;
+    setLookingUpBarcode(true);
+    const { data } = await supabase
+      .from("products")
+      .select("name, sale_price")
+      .eq("organization_id", appUser.organization_id)
+      .eq("barcode", barcode.trim())
+      .maybeSingle();
+    setLookingUpBarcode(false);
+
+    if (data) {
+      onFound(data.name, Number(data.sale_price));
+    }
+  }
+
+  const newRecordCustomerBalance = useNewCustomer
+    ? 0
+    : Number(customers.find((c) => c.id === newRecord.customerId)?.credit_balance || 0);
+  const newRecordAmount = Number(newRecord.amount) || 0;
+  const newRecordProjectedBalance =
+    newRecord.type === "debt" ? newRecordCustomerBalance + newRecordAmount : newRecordCustomerBalance - newRecordAmount;
+
+  async function createRecord(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!appUser || !newCustomer.name.trim()) return;
+    if (!appUser) return;
+
+    const amount = Number(newRecord.amount);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setMessage("Geçerli bir tutar girin.");
+      return;
+    }
+    if (useNewCustomer && !newRecord.newCustomerName.trim()) {
+      setMessage("Müşteri adı gerekli.");
+      return;
+    }
+    if (!useNewCustomer && !newRecord.customerId) {
+      setMessage("Bir müşteri seçin.");
+      return;
+    }
 
     setSaving(true);
     setMessage("");
 
-    const { error } = await supabase.from("customers").insert({
-      organization_id: appUser.organization_id,
-      store_id: appUser.store_id,
-      name: newCustomer.name.trim(),
-      phone: newCustomer.phone.trim() || null,
-      notes: newCustomer.notes.trim() || null,
-    });
+    let customerId = newRecord.customerId;
+    let currentBalance = newRecordCustomerBalance;
 
-    if (error) {
-      setMessage(`Müşteri eklenemedi: ${error.message}`);
-    } else {
-      setMessage("Müşteri eklendi.");
-      setNewCustomer({ name: "", phone: "", notes: "" });
-      setShowNewCustomer(false);
-      await loadCustomers();
+    if (useNewCustomer) {
+      const { data: customer, error: customerError } = await supabase
+        .from("customers")
+        .insert({
+          organization_id: appUser.organization_id,
+          store_id: appUser.store_id,
+          name: newRecord.newCustomerName.trim(),
+          phone: newRecord.phone.trim() || null,
+        })
+        .select()
+        .single();
+
+      if (customerError || !customer) {
+        setMessage(`Müşteri oluşturulamadı: ${customerError?.message}`);
+        setSaving(false);
+        return;
+      }
+      customerId = customer.id;
+      currentBalance = 0;
     }
 
+    const { error: txError } = await supabase.from("credit_transactions").insert({
+      customer_id: customerId,
+      organization_id: appUser.organization_id,
+      user_id: appUser.id,
+      type: newRecord.type,
+      amount,
+      note: newRecord.item.trim() || null,
+    });
+
+    if (txError) {
+      setMessage(`Kayıt eklenemedi: ${txError.message}`);
+      setSaving(false);
+      return;
+    }
+
+    const nextBalance = newRecord.type === "debt" ? currentBalance + amount : currentBalance - amount;
+
+    const { error: balanceError } = await supabase
+      .from("customers")
+      .update({ credit_balance: nextBalance })
+      .eq("id", customerId);
+
+    if (balanceError) {
+      setMessage(`Bakiye güncellenemedi: ${balanceError.message}`);
+      setSaving(false);
+      return;
+    }
+
+    setMessage("Kayıt eklendi.");
+    setNewRecord(emptyNewRecord);
+    setShowNewRecord(false);
+    await loadCustomers();
     setSaving(false);
   }
 
@@ -127,10 +224,13 @@ export default function VeresiyePage() {
     if (!appUser || !selectedCustomer) return;
 
     const amount = Number(txAmount);
-    if (!Number.isFinite(amount) || amount <= 0) return;
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setDetailMessage("Geçerli bir tutar girin.");
+      return;
+    }
 
     setSaving(true);
-    setMessage("");
+    setDetailMessage("");
 
     const { error: txError } = await supabase.from("credit_transactions").insert({
       customer_id: selectedCustomer.id,
@@ -142,7 +242,7 @@ export default function VeresiyePage() {
     });
 
     if (txError) {
-      setMessage(`İşlem kaydedilemedi: ${txError.message}`);
+      setDetailMessage(`İşlem kaydedilemedi: ${txError.message}`);
       setSaving(false);
       return;
     }
@@ -158,9 +258,9 @@ export default function VeresiyePage() {
       .eq("id", selectedCustomer.id);
 
     if (balanceError) {
-      setMessage(`Bakiye güncellenemedi: ${balanceError.message}`);
+      setDetailMessage(`Bakiye güncellenemedi: ${balanceError.message}`);
     } else {
-      setMessage(txType === "debt" ? "Borç eklendi." : "Ödeme kaydedildi.");
+      setDetailMessage(txType === "debt" ? "Borç eklendi." : "Ödeme kaydedildi.");
       setTxAmount("");
       setTxNote("");
       await loadCustomers();
@@ -176,8 +276,8 @@ export default function VeresiyePage() {
         title="Veresiye"
         subtitle="Müşteri borç/ödeme takibi — tüm çalışanlar aynı kaydı görür."
         action={
-          <button className="premium-button-primary" type="button" onClick={() => setShowNewCustomer(true)}>
-            <UserPlus size={18} /> Yeni Müşteri
+          <button className="premium-button-primary" type="button" onClick={openNewRecord}>
+            <UserPlus size={18} /> Yeni Kayıt Ekle
           </button>
         }
       />
@@ -203,7 +303,7 @@ export default function VeresiyePage() {
         </div>
       </div>
 
-      {message && (
+      {message && !showNewRecord && (
         <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
           {message}
         </div>
@@ -271,15 +371,116 @@ export default function VeresiyePage() {
         </div>
       </div>
 
-      {showNewCustomer && (
-        <Modal title="Yeni Müşteri" onClose={() => setShowNewCustomer(false)}>
-          <form className="grid gap-4" onSubmit={createCustomer}>
-            <Field label="Ad Soyad" value={newCustomer.name} onChange={(v) => setNewCustomer({ ...newCustomer, name: v })} required />
-            <Field label="Telefon" value={newCustomer.phone} onChange={(v) => setNewCustomer({ ...newCustomer, phone: v })} />
-            <Field label="Not" value={newCustomer.notes} onChange={(v) => setNewCustomer({ ...newCustomer, notes: v })} />
+      {showNewRecord && (
+        <Modal title="Yeni Kayıt Ekle" onClose={() => setShowNewRecord(false)}>
+          <form className="grid gap-4" onSubmit={createRecord}>
+            {message && (
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
+                {message}
+              </div>
+            )}
+
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-300">Müşteri</span>
+              {customers.length > 0 && (
+                <button
+                  type="button"
+                  className="text-xs font-bold text-cyan-600 dark:text-cyan-300"
+                  onClick={() => setUseNewCustomer((current) => !current)}
+                >
+                  {useNewCustomer ? "Listeden seç" : "+ Yeni müşteri"}
+                </button>
+              )}
+            </div>
+
+            {useNewCustomer || customers.length === 0 ? (
+              <div className="grid grid-cols-2 gap-3">
+                <Field
+                  label="Ad Soyad"
+                  value={newRecord.newCustomerName}
+                  onChange={(v) => setNewRecord({ ...newRecord, newCustomerName: v })}
+                  required
+                />
+                <Field label="Telefon" value={newRecord.phone} onChange={(v) => setNewRecord({ ...newRecord, phone: v })} />
+              </div>
+            ) : (
+              <select
+                className="premium-input"
+                value={newRecord.customerId}
+                onChange={(event) => setNewRecord({ ...newRecord, customerId: event.target.value })}
+                required
+              >
+                <option value="">Müşteri seçin</option>
+                {customers.map((customer) => (
+                  <option key={customer.id} value={customer.id}>
+                    {customer.name} — {formatMoney(Number(customer.credit_balance))}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <div className="grid gap-2">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-300">Ürün / Mal (opsiyonel barkod ile bul)</span>
+              <div className="flex gap-2">
+                <input
+                  className="premium-input"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Barkod okutun..."
+                  value={newRecord.barcode}
+                  onChange={(event) => setNewRecord({ ...newRecord, barcode: event.target.value })}
+                />
+                <button
+                  type="button"
+                  className="premium-button-secondary shrink-0 px-4"
+                  disabled={lookingUpBarcode}
+                  onClick={() =>
+                    lookupBarcode(newRecord.barcode, (name, price) =>
+                      setNewRecord((current) => ({ ...current, item: name, amount: String(price) }))
+                    )
+                  }
+                >
+                  {lookingUpBarcode ? <Loader2 size={16} className="animate-spin" /> : <ScanLine size={16} />}
+                </button>
+              </div>
+              <Field
+                label="Ürün / Mal adı"
+                value={newRecord.item}
+                onChange={(v) => setNewRecord({ ...newRecord, item: v })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setNewRecord({ ...newRecord, type: "debt" })}
+                className={`flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${newRecord.type === "debt" ? "border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+              >
+                <Plus size={16} /> Borç
+              </button>
+              <button
+                type="button"
+                onClick={() => setNewRecord({ ...newRecord, type: "payment" })}
+                className={`flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${newRecord.type === "payment" ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+              >
+                <Minus size={16} /> Ödeme
+              </button>
+            </div>
+
+            <Field label="Tutar (TL)" value={newRecord.amount} onChange={(v) => setNewRecord({ ...newRecord, amount: v })} required />
+
+            <div className="rounded-xl bg-slate-50 px-4 py-3 text-center dark:bg-slate-800/60">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Bu kayıttan sonra kalan alacak</p>
+              <p
+                className={`text-xl font-black ${newRecordProjectedBalance > 0 ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}`}
+              >
+                {formatMoney(newRecordProjectedBalance)}
+              </p>
+            </div>
+
             <button className="premium-button-primary mt-2" type="submit" disabled={saving}>
-              {saving ? <Loader2 size={18} className="animate-spin" /> : <UserPlus size={18} />}
-              Müşteriyi Kaydet
+              {saving ? <Loader2 size={18} className="animate-spin" /> : <HandCoins size={18} />}
+              Kaydet
             </button>
           </form>
         </Modal>
@@ -300,6 +501,12 @@ export default function VeresiyePage() {
             </p>
           </div>
 
+          {detailMessage && (
+            <div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
+              {detailMessage}
+            </div>
+          )}
+
           <form className="grid gap-3" onSubmit={recordTransaction}>
             <div className="grid grid-cols-2 gap-3">
               <button
@@ -317,8 +524,18 @@ export default function VeresiyePage() {
                 <Minus size={16} /> Ödeme Al
               </button>
             </div>
+            <Field label="Ürün / Mal (opsiyonel)" value={txNote} onChange={setTxNote} />
             <Field label="Tutar (TL)" value={txAmount} onChange={setTxAmount} required />
-            <Field label="Not (opsiyonel)" value={txNote} onChange={setTxNote} />
+            <div className="rounded-xl bg-slate-50 px-4 py-3 text-center dark:bg-slate-800/60">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Bu kayıttan sonra kalan alacak</p>
+              <p className="text-lg font-black text-slate-800 dark:text-slate-200">
+                {formatMoney(
+                  txType === "debt"
+                    ? Number(selectedCustomer.credit_balance) + (Number(txAmount) || 0)
+                    : Number(selectedCustomer.credit_balance) - (Number(txAmount) || 0)
+                )}
+              </p>
+            </div>
             <button className="premium-button-primary" type="submit" disabled={saving}>
               {saving ? <Loader2 size={18} className="animate-spin" /> : <HandCoins size={18} />}
               Kaydet

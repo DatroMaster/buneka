@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navItems = [
@@ -29,9 +30,12 @@ export default function AdminShell({
     <div className="flex h-screen flex-col overflow-hidden">
       <header className="sidebar-surface z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 md:px-6">
         <Link href="/admin" className="flex flex-col gap-1">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <BunekaMark size={22} />
-            <span className="font-display text-lg font-bold tracking-tight text-white">Buneka Admin</span>
+            <span className="flex items-baseline gap-1.5">
+              <BunekaWordmark className="text-sm text-white" />
+              <span className="text-xs font-semibold text-slate-400">Admin</span>
+            </span>
           </span>
           <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-amber-400 via-cyan-400 to-transparent" />
           <span className="text-[11px] text-slate-400">{user.name} · {user.role}</span>

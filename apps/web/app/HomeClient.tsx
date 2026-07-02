@@ -4,10 +4,11 @@ import { ArrowRight, ChevronDown, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { modules } from "@/lib/content/modules";
 import { plans } from "@/lib/content/plans";
-import { sectors } from "@/lib/content/sectors";
 
 const STARS = [
   { top: 10, left: 15, size: 2, delay: 0 },
@@ -43,7 +44,6 @@ type SectionId = "sektorler" | "moduller" | "paketler";
 export default function HomeClient() {
   const now = useLiveClock();
   const [openSection, setOpenSection] = useState<SectionId | null>(null);
-  const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
@@ -54,7 +54,6 @@ export default function HomeClient() {
     ? now.toLocaleDateString("tr-TR", { weekday: "long", day: "2-digit", month: "long" })
     : "";
 
-  const activeSector = sectors.find((sector) => sector.slug === selectedSector);
   const activeModule = modules.find((module) => module.label === selectedModule);
   const activePlan = plans.find((plan) => plan.name === selectedPlan);
 
@@ -63,41 +62,7 @@ export default function HomeClient() {
       id: "sektorler",
       label: "Sektörler",
       icon: Store,
-      content: (
-        <div className="flex flex-col gap-3">
-          <div className="grid grid-cols-2 gap-2">
-            {sectors.map((sector) => (
-              <button
-                key={sector.slug}
-                type="button"
-                onClick={() => setSelectedSector(selectedSector === sector.slug ? null : sector.slug)}
-                className={`glow-border flex items-center gap-2 rounded-lg px-3 py-2 text-left text-xs text-[color:var(--home-ink)] sm:text-sm ${selectedSector === sector.slug ? "glow-border-selected" : ""}`}
-              >
-                <sector.icon size={14} className="shrink-0 text-[color:var(--home-glow)]" />
-                <span className="truncate">{sector.title}</span>
-              </button>
-            ))}
-          </div>
-          {activeSector && (
-            <div className="glow-border glow-border-selected rounded-lg p-3.5">
-              <p className="font-display text-sm font-semibold text-[color:var(--home-ink)]">{activeSector.headline}</p>
-              <ul className="mt-2 space-y-1">
-                {activeSector.features.slice(0, 3).map((feature) => (
-                  <li key={feature} className="text-xs text-[color:var(--home-muted)]">
-                    · {feature}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href={`/sektorler/${activeSector.slug}`}
-                className="mt-3 inline-flex items-center gap-1 text-xs font-bold text-[color:var(--home-glow)]"
-              >
-                Detaylı sayfa <ArrowRight size={12} />
-              </Link>
-            </div>
-          )}
-        </div>
-      ),
+      content: <SectorPlayground />,
     },
     {
       id: "moduller",
@@ -208,11 +173,9 @@ export default function HomeClient() {
       </div>
 
       <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-3">
           <BunekaMark size={32} />
-          <span className="font-display text-base font-bold tracking-[0.2em] text-[color:var(--home-ink)] sm:text-lg">
-            BUNEKA
-          </span>
+          <BunekaWordmark className="text-sm text-[color:var(--home-ink)] sm:text-base" />
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-5">

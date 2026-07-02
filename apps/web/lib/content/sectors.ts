@@ -1,9 +1,13 @@
 import {
+  Apple,
   BookOpen,
   Dog,
+  Gamepad2,
+  Home,
   LucideIcon,
   Scissors,
   Shirt,
+  Smartphone,
   Sparkles,
   Store,
   Wrench,
@@ -105,6 +109,54 @@ export const sectors: Sector[] = [
     features: ["Hızlı ürün ekleme", "Günlük satış özeti", "Stokta kalan", "Basit kategori takibi"],
     modules: ["Raf etiketi", "Kozmetik marka raporu", "Çoklu cihaz"],
     workflow: ["Ürünü ekle", "Fiyatı göster", "Satış Yapıldı ile kaydet", "Gün sonunda kasayı gör"],
+  },
+  {
+    slug: "elektronik-aksesuar",
+    icon: Smartphone,
+    title: "Elektronik & Aksesuar",
+    short: "Model, garanti ve hızlı fiyat kıyaslama.",
+    headline: "Model karmaşasında fiyatı saniyede göster.",
+    description:
+      "Elektronik ve aksesuar satışında model çeşitliliği fazladır. Buneka barkodla anında fiyat ve stok bilgisi sunar.",
+    features: ["Model bazlı fiyat sorgusu", "Stok azalma uyarısı", "Kâr marjı görünümü", "Hızlı satış kaydı"],
+    modules: ["Excel toplu ürün aktarımı", "Çoklu cihaz", "Bulut yedekleme"],
+    workflow: ["Barkodu okut", "Fiyatı göster", "Satışı kaydet", "Stok uyarısını takip et"],
+  },
+  {
+    slug: "zuccaciye-ev-esyasi",
+    icon: Home,
+    title: "Züccaciye & Ev Eşyası",
+    short: "Set/parça ürünlerde fiyat ve stok düzeni.",
+    headline: "Set ve parça ürünlerde karışıklığı bitir.",
+    description:
+      "Züccaciye ve ev eşyasında set/parça ayrımı takip edilmesi gereken bir detaydır. Buneka her ürünü kendi barkoduyla düzenli tutar.",
+    features: ["Set/parça ayrımı", "Fiyat sorgusu hafızası", "Stok azalma uyarısı", "Kategori görünümü"],
+    modules: ["Raf etiketi", "Toplu ürün aktarımı", "Cari müşteri ve veresiye defteri"],
+    workflow: ["Ürünü kategoriye ayır", "Fiyatı göster", "Satışı kaydet", "Kalan stoğu izle"],
+  },
+  {
+    slug: "oyuncak",
+    icon: Gamepad2,
+    title: "Oyuncak",
+    short: "Sezon, yaş grubu ve kampanya takibi.",
+    headline: "Sezonluk yoğunlukta hız kazan.",
+    description:
+      "Oyuncakçılarda bayram/sezon dönemlerinde satış yoğunluğu artar. Buneka hızlı fiyat sorgusu ve kasa akışıyla yoğunluğu yönetilebilir kılar.",
+    features: ["Yaş grubu/kategori notu", "Hızlı fiyat sorgusu", "Günlük kasa özeti", "Kampanya görünümü"],
+    modules: ["Raf etiketi", "Excel toplu ürün aktarımı", "Çoklu cihaz"],
+    workflow: ["Ürünü okut", "Fiyatı göster", "Satış Yapıldı ile kaydet", "Gün sonunda kasayı gör"],
+  },
+  {
+    slug: "sarkuteri-manav",
+    icon: Apple,
+    title: "Şarküteri & Manav",
+    short: "Kilo bazlı ürün ve günlük fiyat güncelleme.",
+    headline: "Günlük değişen fiyatları anında yansıt.",
+    description:
+      "Şarküteri ve manavda fiyatlar sık değişir. Buneka toplu fiyat güncelleme ile günlük fiyat değişimini hızla yansıtır.",
+    features: ["Kilo bazlı fiyat notu", "Toplu fiyat güncelleme", "Günlük kasa özeti", "Tedarikçi görünümü"],
+    modules: ["Cari müşteri ve veresiye defteri", "Bulut yedekleme", "Metre, kilo ve birim takibi"],
+    workflow: ["Günlük fiyatı gir/güncelle", "Barkodla fiyatı göster", "Satışı kaydet", "Kasayı gör"],
   },
 ];
 

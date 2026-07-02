@@ -11,7 +11,10 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="108" fill="url(#bg)" />
-  <path d="M256 96 L400 224 L256 448 L112 224 Z" stroke="url(#mark)" stroke-width="26" stroke-linejoin="round" fill="none" />
-  <path d="M112 224 L400 224" stroke="url(#mark)" stroke-width="18" opacity="0.75" />
-  <path d="M256 96 L256 448" stroke="url(#mark)" stroke-width="18" opacity="0.55" />
+  <polygon points="256,72 440,256 256,440 72,256" stroke="url(#mark)" stroke-width="14" stroke-linejoin="miter" fill="none" />
+  <polygon points="256,144 368,256 256,368 144,256" stroke="url(#mark)" stroke-width="11" stroke-linejoin="miter" fill="none" />
+  <line x1="256" y1="72" x2="256" y2="440" stroke="url(#mark)" stroke-width="14" />
+  <line x1="72" y1="256" x2="440" y2="256" stroke="url(#mark)" stroke-width="14" />
+  <line x1="88" y1="88" x2="312" y2="312" stroke="url(#mark)" stroke-width="7" stroke-dasharray="16 16" opacity="0.6" />
+  <line x1="312" y1="88" x2="88" y2="312" stroke="url(#mark)" stroke-width="7" stroke-dasharray="16 16" opacity="0.6" />
 </svg>

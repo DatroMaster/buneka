@@ -18,6 +18,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { CurrencyTicker } from "@/components/CurrencyTicker";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { CurrencyRates } from "@/lib/currency/tcmb";
@@ -128,9 +129,9 @@ export default function AppShell({
     <div className="flex h-screen flex-col overflow-hidden selection:bg-cyan-400 selection:text-slate-950">
       <header className="sidebar-surface z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 md:px-6">
         <Link href="/app" className="group flex flex-col gap-1">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2.5">
             <BunekaMark size={24} className="transition-transform group-hover:scale-105" />
-            <span className="font-display text-lg font-bold tracking-tight text-white">Buneka</span>
+            <BunekaWordmark className="text-sm text-white" />
           </span>
           <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-transparent" />
           <span className="flex items-center gap-1.5 text-[11px] leading-none text-slate-400">
