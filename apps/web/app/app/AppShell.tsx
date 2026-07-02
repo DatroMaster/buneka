@@ -53,10 +53,10 @@ function SidebarContent({
   onLogout,
 }: SidebarContentProps) {
   return (
-    <div className="flex h-full flex-col bg-[#0F1A12] text-[#E8EDE9]">
+    <div className="flex h-full flex-col bg-[#07111F] text-white">
       <div className="flex h-20 shrink-0 items-center px-6">
         <Link href="/app" className="flex items-center gap-2 group">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#4F6F52] text-white">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-sm shadow-cyan-500/30">
             <Barcode size={18} strokeWidth={2.5} />
           </div>
           <span className="text-xl font-bold tracking-tight text-white">Buneka</span>
@@ -75,30 +75,30 @@ function SidebarContent({
               onClick={onClose}
               className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
                 isActive
-                  ? "bg-[#4F6F52] text-white"
-                  : "text-[#8A9B8E] hover:bg-[#1A2B1E] hover:text-white"
+                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-sm shadow-cyan-500/30"
+                  : "text-slate-300 hover:bg-white/10 hover:text-white"
               }`}
             >
-              <Icon size={20} className={isActive ? "text-white" : "text-[#8A9B8E]"} />
+              <Icon size={20} className={isActive ? "text-white" : "text-cyan-200"} />
               <span className="font-medium">{item.name}</span>
             </Link>
           );
         })}
       </nav>
 
-      <div className="border-t border-[#2F4A35] p-4">
+      <div className="border-t border-white/10 p-4">
         <div className="flex items-center gap-3 mb-4 px-2">
-          <div className="h-10 w-10 rounded-full bg-[#1A2B1E] flex items-center justify-center text-[#E8EDE9] font-bold border border-[#2F4A35]">
+          <div className="h-10 w-10 rounded-full bg-cyan-400/15 flex items-center justify-center text-cyan-100 font-bold border border-cyan-300/20">
             {user.name?.charAt(0) || "U"}
           </div>
           <div className="flex flex-col">
             <span className="text-sm font-bold text-white">{user.name}</span>
-            <span className="text-xs text-[#8A9B8E]">{user.organizations?.name}</span>
+            <span className="text-xs text-slate-400">{user.organizations?.name}</span>
           </div>
         </div>
         <button
           onClick={onLogout}
-          className="flex w-full items-center gap-3 px-3 py-3 rounded-xl text-[#B65A3C] hover:bg-[#B65A3C]/10 transition-colors"
+          className="flex w-full items-center gap-3 px-3 py-3 rounded-xl text-amber-300 hover:bg-amber-300/10 transition-colors"
         >
           <LogOut size={20} />
           <span className="font-medium">Çıkış Yap</span>
@@ -129,7 +129,7 @@ export default function AppShell({
   };
 
   return (
-    <div className="flex h-screen bg-[#0F1A12] overflow-hidden selection:bg-[#4F6F52] selection:text-white">
+    <div className="flex h-screen bg-[#07111F] overflow-hidden selection:bg-cyan-400 selection:text-slate-950">
       <div className="hidden md:flex md:w-64 md:flex-col shrink-0">
         <SidebarContent
           user={user}
@@ -139,9 +139,9 @@ export default function AppShell({
         />
       </div>
 
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0F1A12] flex items-center justify-between px-4 z-50 border-b border-[#2F4A35]">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#07111F] flex items-center justify-between px-4 z-50 border-b border-white/10">
         <Link href="/app" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#4F6F52] text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white">
             <Barcode size={18} strokeWidth={2.5} />
           </div>
           <span className="text-xl font-bold text-white">Buneka</span>
@@ -157,7 +157,7 @@ export default function AppShell({
       </div>
 
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-[#0F1A12] pt-16">
+        <div className="md:hidden fixed inset-0 z-40 bg-[#07111F] pt-16">
           <SidebarContent
             user={user}
             pathname={pathname}
@@ -167,8 +167,8 @@ export default function AppShell({
         </div>
       )}
 
-      <div className="flex-1 flex flex-col min-w-0 md:rounded-tl-[2.5rem] bg-[#1A2B1E] border-l border-t border-[#2F4A35] overflow-hidden mt-16 md:mt-0 shadow-[-10px_-10px_30px_rgba(0,0,0,0.5)]">
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 text-[#E8EDE9]">
+      <div className="flex-1 flex flex-col min-w-0 md:rounded-tl-[2rem] bg-[#F6F8FB] border-l border-t border-white/10 overflow-hidden mt-16 md:mt-0 shadow-[-10px_-10px_30px_rgba(0,0,0,0.22)]">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 text-slate-900">
           {children}
         </main>
       </div>

@@ -29,18 +29,18 @@ export default function RaporlarPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-white">Raporlar</h1>
-        <p className="text-[#8A9B8E]">
+        <h1 className="mb-2 text-3xl font-bold text-slate-950">Raporlar</h1>
+        <p className="text-slate-500">
           Fiyat sorgusu, satış ve stok hareketlerini sade özetlerle görün.
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {reports.map((report) => (
-          <article key={report.title} className="rounded-3xl border border-[#2F4A35] bg-[#243328] p-7">
-            <report.icon size={32} className="mb-5 text-[#C8913A]" />
-            <h2 className="mb-3 text-xl font-bold text-white">{report.title}</h2>
-            <p className="leading-7 text-[#8A9B8E]">{report.text}</p>
+          <article key={report.title} className="rounded-2xl border border-slate-200 bg-white p-7">
+            <report.icon size={32} className="mb-5 text-orange-500" />
+            <h2 className="mb-3 text-xl font-bold text-slate-950">{report.title}</h2>
+            <p className="leading-7 text-slate-500">{report.text}</p>
           </article>
         ))}
       </div>

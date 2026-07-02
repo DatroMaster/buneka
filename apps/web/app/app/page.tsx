@@ -158,23 +158,23 @@ export default function FiyatSorgulaPage() {
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
   return (
-    <div className="mx-auto flex h-full max-w-3xl flex-col">
+    <div className="mx-auto flex h-full max-w-4xl flex-col">
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-white">Bu ne kadar?</h1>
-        <p className="text-[#8A9B8E]">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
+        <h1 className="mb-2 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">Bu ne kadar?</h1>
+        <p className="text-slate-600">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
       </div>
 
       <form onSubmit={handleSearch} className="mb-8">
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-            <ScanBarcode size={24} className="text-[#8A9B8E]" />
+            <ScanBarcode size={24} className="text-cyan-500" />
           </div>
           <input
             ref={inputRef}
             type="text"
             value={barcode}
             onChange={(event) => setBarcode(event.target.value)}
-            className="w-full rounded-2xl border-2 border-[#2F4A35] bg-[#243328] py-6 pl-12 pr-4 text-2xl font-bold text-white placeholder-[#8A9B8E]/50 transition-all focus:border-[#4F6F52] focus:outline-none focus:ring-4 focus:ring-[#4F6F52]/20"
+            className="w-full rounded-2xl border-2 border-slate-200 bg-white py-6 pl-12 pr-4 text-2xl font-black text-slate-950 shadow-sm placeholder-slate-400 transition-all focus:border-cyan-400 focus:outline-none focus:ring-4 focus:ring-cyan-400/20"
             placeholder="Barkod okutun..."
             autoComplete="off"
             disabled={loading}
@@ -185,70 +185,70 @@ export default function FiyatSorgulaPage() {
 
       <div className="flex min-h-[300px] flex-1 flex-col items-center justify-center">
         {loading ? (
-          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-[#4F6F52]" />
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-500" />
         ) : error ? (
-          <div className="w-full max-w-md rounded-3xl border border-[#B65A3C]/30 bg-[#243328] p-8 text-center">
-            <AlertCircle size={48} className="mx-auto mb-4 text-[#B65A3C]" />
-            <h3 className="mb-2 text-xl font-bold text-white">{error}</h3>
+          <div className="w-full max-w-md rounded-2xl border border-orange-200 bg-white p-8 text-center shadow-sm">
+            <AlertCircle size={48} className="mx-auto mb-4 text-orange-500" />
+            <h3 className="mb-2 text-xl font-bold text-slate-950">{error}</h3>
             <Link
               href="/app/urunler"
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#4F6F52] py-3 font-semibold text-white transition-colors hover:bg-[#3F5941]"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 py-3 font-bold text-white shadow-sm transition-all hover:scale-[1.01] active:scale-95"
             >
               <Plus size={20} /> Yeni Ürün Ekle
             </Link>
           </div>
         ) : product ? (
-          <div className="w-full max-w-md rounded-3xl border border-[#2F4A35] bg-[#243328] p-8 shadow-2xl">
+          <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-10">
             <div className="mb-6 text-center">
-              <span className="mb-3 inline-block rounded-full bg-[#4F6F52]/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#8A9B8E]">
+              <span className="mb-4 inline-block rounded-full bg-cyan-50 px-4 py-2 text-xs font-black uppercase text-cyan-700">
                 {product.category || "Kategorisiz"}
               </span>
-              <h2 className="mb-2 text-2xl font-bold leading-tight text-white">{product.name}</h2>
-              <p className="font-mono text-sm text-[#8A9B8E]">{product.barcode}</p>
+              <h2 className="mb-3 text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">{product.name}</h2>
+              <p className="font-mono text-sm font-bold text-slate-500">{product.barcode}</p>
             </div>
 
             <div className="mb-8 flex justify-center">
-              <span className="text-6xl font-extrabold tracking-tighter text-[#C8913A]">
+              <span className="text-7xl font-black tracking-tight text-cyan-600 md:text-8xl">
                 {formatMoney(product.sale_price)}
               </span>
             </div>
 
-            <div className="mb-8 flex items-center justify-between rounded-xl bg-[#1A2B1E] px-4 py-3">
-              <span className="font-medium text-[#8A9B8E]">Stok Durumu</span>
-              <span className={`text-lg font-bold ${product.stock_quantity <= product.min_stock ? "text-[#B65A3C]" : "text-white"}`}>
+            <div className="mb-8 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
+              <span className="font-bold text-slate-500">Stok Durumu</span>
+              <span className={`text-lg font-black ${product.stock_quantity <= product.min_stock ? "text-orange-600" : "text-slate-950"}`}>
                 {product.stock_quantity} Adet
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
               <button
                 onClick={handleSale}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#3F7D53] py-4 text-lg font-bold text-white shadow-lg shadow-[#3F7D53]/20 transition-all hover:scale-[1.02] hover:bg-[#2F5E3E]"
+                className="action-sale min-h-20 w-full px-6 py-5 text-2xl"
                 type="button"
               >
-                <CheckCircle2 size={24} /> Satış Yapıldı
+                <CheckCircle2 size={30} /> Satış Yap
               </button>
               <button
                 onClick={handleCancel}
-                className="w-full rounded-xl bg-[#2F4A35] py-4 text-lg font-bold text-[#E8EDE9] transition-colors hover:bg-[#3A5A42]"
+                className="action-no-sale min-h-20 w-full px-6 py-5 text-2xl"
                 type="button"
               >
-                Ana Ekrana Dön
+                Satış Yok
               </button>
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center text-center text-[#8A9B8E]">
+          <div className="flex flex-col items-center text-center text-slate-500">
             <ScanBarcode size={64} className="mb-4 opacity-20" />
             <p className="text-lg">Sorgulama yapmak için barkod okutun.</p>
           </div>
         )}
       </div>
 
-      <div className="mt-8 grid grid-cols-3 gap-4 border-t border-[#2F4A35] pt-6">
+      <div className="mt-8 grid grid-cols-1 gap-4 border-t border-slate-200 pt-6 sm:grid-cols-3">
         <SummaryCard label="Bugün Satış" value={String(stats.sales)} />
-        <SummaryCard label="Bugün Kasa" value={formatMoney(stats.revenue)} highlight="text-[#4F6F52]" />
-        <SummaryCard label="Bugün Sorgu" value={String(stats.queries)} highlight="text-[#C8913A]" />
+        <SummaryCard label="Bugün Kasa" value={formatMoney(stats.revenue)} highlight="text-emerald-600" />
+        <SummaryCard label="Bugün Sorgu" value={String(stats.queries)} highlight="text-orange-500" />
       </div>
     </div>
   );
@@ -257,15 +257,15 @@ export default function FiyatSorgulaPage() {
 function SummaryCard({
   label,
   value,
-  highlight = "text-white",
+  highlight = "text-slate-950",
 }: {
   label: string;
   value: string;
   highlight?: string;
 }) {
   return (
-    <div className="rounded-xl border border-[#2F4A35] bg-[#243328] p-4">
-      <p className="mb-1 text-sm text-[#8A9B8E]">{label}</p>
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <p className="mb-1 text-sm font-bold text-slate-500">{label}</p>
       <p className={`text-xl font-bold ${highlight}`}>{value}</p>
     </div>
   );

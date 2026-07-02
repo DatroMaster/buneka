@@ -159,19 +159,19 @@ export default function UrunlerPage() {
     <div className="mx-auto max-w-6xl">
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h1 className="mb-2 text-3xl font-bold text-white">Ürünler</h1>
-          <p className="text-[#8A9B8E]">Barkod, fiyat, kategori ve stok bilgilerini yönetin.</p>
+          <h1 className="mb-2 text-3xl font-bold text-slate-950">Ürünler</h1>
+          <p className="text-slate-500">Barkod, fiyat, kategori ve stok bilgilerini yönetin.</p>
         </div>
         <div className="flex w-full gap-2 md:w-auto">
           <button
-            className="flex items-center justify-center gap-2 rounded-xl border border-[#2F4A35] bg-[#243328] px-4 py-2 text-white transition-colors hover:bg-[#2F4A35]"
+            className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-slate-950 transition-colors hover:bg-cyan-50"
             type="button"
             onClick={() => setShowBulkUpdate(true)}
           >
             <Percent size={18} /> Toplu Fiyat Güncelle
           </button>
           <button
-            className="flex items-center justify-center gap-2 rounded-xl bg-[#4F6F52] px-4 py-2 text-white shadow-lg shadow-[#4F6F52]/20 transition-colors hover:bg-[#3F5941]"
+            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2 text-white shadow-lg shadow-cyan-500/20 transition-colors hover:brightness-105"
             type="button"
             onClick={() => setShowNewProduct(true)}
           >
@@ -181,29 +181,29 @@ export default function UrunlerPage() {
       </div>
 
       {message && (
-        <div className="mb-4 rounded-2xl border border-[#2F4A35] bg-[#243328] px-5 py-4 text-sm font-bold text-[#E8EDE9]">
+        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950">
           {message}
         </div>
       )}
 
-      <div className="flex h-[calc(100vh-220px)] flex-col overflow-hidden rounded-2xl border border-[#2F4A35] bg-[#243328]">
-        <div className="border-b border-[#2F4A35] p-4">
+      <div className="flex h-[calc(100vh-220px)] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <div className="border-b border-slate-200 p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8A9B8E]" size={20} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
             <input
               type="text"
               placeholder="Ürün adı veya barkod ile ara..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-xl border border-[#2F4A35] bg-[#1A2B1E] py-2 pl-10 pr-4 text-white placeholder-[#8A9B8E] focus:border-[#4F6F52] focus:outline-none"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none"
             />
           </div>
         </div>
 
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left">
-            <thead className="sticky top-0 z-10 bg-[#1A2B1E]">
-              <tr className="text-sm text-[#8A9B8E]">
+            <thead className="sticky top-0 z-10 bg-slate-50">
+              <tr className="text-sm text-slate-500">
                 <th className="px-6 py-3 font-medium">Barkod / Ürün Adı</th>
                 <th className="px-6 py-3 font-medium">Kategori</th>
                 <th className="px-6 py-3 text-right font-medium">Alış Fiyatı</th>
@@ -211,47 +211,47 @@ export default function UrunlerPage() {
                 <th className="px-6 py-3 text-right font-medium">Stok</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2F4A35]">
+            <tbody className="divide-y divide-slate-200">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
-                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[#4F6F52]" />
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-[#8A9B8E]">
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
                     Ürün bulunamadı.
                   </td>
                 </tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="transition-colors hover:bg-[#1A2B1E]">
+                  <tr key={product.id} className="transition-colors hover:bg-slate-50">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-white">{product.name}</div>
-                      <div className="font-mono text-xs text-[#8A9B8E]">{product.barcode}</div>
+                      <div className="font-medium text-slate-950">{product.name}</div>
+                      <div className="font-mono text-xs text-slate-500">{product.barcode}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-block rounded-lg bg-[#1A2B1E] px-2 py-1 text-xs text-[#8A9B8E]">
+                      <span className="inline-block rounded-lg bg-slate-50 px-2 py-1 text-xs text-slate-500">
                         {product.category || "-"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-[#8A9B8E]">
+                    <td className="px-6 py-4 text-right text-sm text-slate-500">
                       {product.purchase_price ? formatMoney(Number(product.purchase_price)) : "-"}
                     </td>
-                    <td className="px-6 py-4 text-right font-bold text-white">
+                    <td className="px-6 py-4 text-right font-bold text-slate-950">
                       {formatMoney(Number(product.sale_price))}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {Number(product.stock_quantity) <= Number(product.min_stock) && (
-                          <AlertTriangle size={14} className="text-[#B65A3C]" />
+                          <AlertTriangle size={14} className="text-orange-600" />
                         )}
                         <span
                           className={`font-bold ${
                             Number(product.stock_quantity) <= Number(product.min_stock)
-                              ? "text-[#B65A3C]"
-                              : "text-white"
+                              ? "text-orange-600"
+                              : "text-slate-950"
                           }`}
                         >
                           {product.stock_quantity}
@@ -289,19 +289,19 @@ export default function UrunlerPage() {
       {showBulkUpdate && (
         <Modal title="Toplu Fiyat Güncelle" onClose={() => setShowBulkUpdate(false)}>
           <form className="grid gap-4" onSubmit={applyBulkUpdate}>
-            <p className="text-sm leading-6 text-[#667064]">
+            <p className="text-sm leading-6 text-slate-600">
               Bu işlem mevcut arama filtresindeki {filteredProducts.length} ürünün satış fiyatını günceller.
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button
-                className={`rounded-xl border px-4 py-3 font-bold ${bulkMode === "percent" ? "border-[#4F6F52] bg-[#EDF4ED] text-[#2F4A35]" : "border-[#E4DED2] bg-white"}`}
+                className={`rounded-xl border px-4 py-3 font-bold ${bulkMode === "percent" ? "border-cyan-400 bg-cyan-50 text-slate-800" : "border-slate-200 bg-white"}`}
                 type="button"
                 onClick={() => setBulkMode("percent")}
               >
                 Yüzde
               </button>
               <button
-                className={`rounded-xl border px-4 py-3 font-bold ${bulkMode === "amount" ? "border-[#4F6F52] bg-[#EDF4ED] text-[#2F4A35]" : "border-[#E4DED2] bg-white"}`}
+                className={`rounded-xl border px-4 py-3 font-bold ${bulkMode === "amount" ? "border-cyan-400 bg-cyan-50 text-slate-800" : "border-slate-200 bg-white"}`}
                 type="button"
                 onClick={() => setBulkMode("amount")}
               >
@@ -336,7 +336,7 @@ function Modal({
 }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-      <div className="w-full max-w-lg rounded-3xl bg-[#F7F4ED] p-6 text-[#20231F] shadow-2xl">
+      <div className="w-full max-w-lg rounded-2xl bg-[#F6F8FB] p-6 text-slate-950 shadow-2xl">
         <div className="mb-5 flex items-center justify-between gap-4">
           <h2 className="text-2xl font-black">{title}</h2>
           <button className="rounded-full bg-white p-2" type="button" onClick={onClose} aria-label="Kapat">
@@ -363,7 +363,7 @@ function FormInput({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-[#2F4A35]">
+    <label className="grid gap-2 text-sm font-bold text-slate-800">
       {label}
       <input
         className="premium-input"

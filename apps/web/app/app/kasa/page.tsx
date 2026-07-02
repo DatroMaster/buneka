@@ -101,7 +101,7 @@ export default function KasaPage() {
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-[#4F6F52]" />
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-500" />
       </div>
     );
   }
@@ -109,50 +109,50 @@ export default function KasaPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold text-white">Günlük Kasa</h1>
-        <p className="text-[#8A9B8E]">Bugünkü satışlarınız ve kasa durumunuz.</p>
+        <h1 className="mb-2 text-3xl font-black tracking-tight text-slate-950 md:text-4xl">Günlük Kasa</h1>
+        <p className="text-slate-600">Bugünkü satışlarınız ve kasa durumunuz.</p>
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={WalletCards} label="Toplam Kasa" value={formatMoney(stats.totalAmount)} />
-        <StatCard icon={TrendingUp} label="Tahmini Kâr" value={formatMoney(stats.totalProfit)} tone="text-[#3F7D53]" />
-        <StatCard icon={Package} label="Satılan Ürün" value={`${stats.itemCount} Adet`} tone="text-[#C8913A]" />
-        <StatCard icon={Activity} label="Toplam Sorgu" value={`${stats.queryCount} Kez`} tone="text-[#B65A3C]" />
+        <StatCard icon={TrendingUp} label="Tahmini Kâr" value={formatMoney(stats.totalProfit)} tone="text-emerald-600" />
+        <StatCard icon={Package} label="Satılan Ürün" value={`${stats.itemCount} Adet`} tone="text-orange-500" />
+        <StatCard icon={Activity} label="Toplam Sorgu" value={`${stats.queryCount} Kez`} tone="text-cyan-600" />
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-[#2F4A35] bg-[#243328]">
-        <div className="border-b border-[#2F4A35] px-6 py-4">
-          <h2 className="text-lg font-bold text-white">Son Satışlar</h2>
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200 px-6 py-4">
+          <h2 className="text-lg font-black text-slate-950">Son Satışlar</h2>
         </div>
 
         {sales.length === 0 ? (
-          <div className="p-8 text-center text-[#8A9B8E]">Henüz satış yapılmadı.</div>
+          <div className="p-8 text-center text-slate-600">Henüz satış yapılmadı.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-[#1A2B1E] text-sm text-[#8A9B8E]">
+                <tr className="bg-slate-50 text-sm text-slate-600">
                   <th className="px-6 py-3 font-medium">Saat</th>
                   <th className="px-6 py-3 font-medium">Ürünler</th>
                   <th className="px-6 py-3 font-medium">Ödeme</th>
                   <th className="px-6 py-3 text-right font-medium">Tutar</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#2F4A35]">
+              <tbody className="divide-y divide-slate-200">
                 {sales.map((sale) => (
-                  <tr key={sale.id} className="transition-colors hover:bg-[#1A2B1E]">
-                    <td className="px-6 py-4 text-sm text-white">{formatTime(sale.sale_time)}</td>
+                  <tr key={sale.id} className="transition-colors hover:bg-cyan-50/50">
+                    <td className="px-6 py-4 text-sm font-medium text-slate-800">{formatTime(sale.sale_time)}</td>
                     <td className="px-6 py-4">
                       {sale.sale_items?.map((item, index) => (
-                        <div key={`${sale.id}-${index}`} className="text-sm text-white">
+                        <div key={`${sale.id}-${index}`} className="text-sm font-medium text-slate-800">
                           {item.quantity}x {item.products?.name || "Bilinmeyen Ürün"}
                         </div>
                       ))}
                     </td>
-                    <td className="px-6 py-4 text-sm text-[#8A9B8E]">
+                    <td className="px-6 py-4 text-sm text-slate-600">
                       {sale.payment_type === "cash" ? "Nakit" : sale.payment_type}
                     </td>
-                    <td className="px-6 py-4 text-right font-bold text-[#4F6F52]">
+                    <td className="px-6 py-4 text-right font-bold text-emerald-600">
                       {formatMoney(Number(sale.total_amount))}
                     </td>
                   </tr>
@@ -170,7 +170,7 @@ function StatCard({
   icon: Icon,
   label,
   value,
-  tone = "text-[#4F6F52]",
+  tone = "text-cyan-600",
 }: {
   icon: typeof WalletCards;
   label: string;
@@ -178,14 +178,14 @@ function StatCard({
   tone?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-[#2F4A35] bg-[#243328] p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex items-center gap-4">
-        <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-[#1A2B1E] ${tone}`}>
+        <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 ring-1 ring-cyan-100 ${tone}`}>
           <Icon size={24} />
         </div>
         <div>
-          <p className="text-sm font-medium text-[#8A9B8E]">{label}</p>
-          <p className={`text-2xl font-bold ${tone}`}>{value}</p>
+          <p className="text-sm font-bold text-slate-500">{label}</p>
+          <p className={`text-2xl font-black ${tone}`}>{value}</p>
         </div>
       </div>
     </div>

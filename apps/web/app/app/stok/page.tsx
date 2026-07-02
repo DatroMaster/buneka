@@ -143,15 +143,15 @@ export default function StokPage() {
   const getMovementLabel = (type: string) => {
     switch (type) {
       case "sale":
-        return { label: "Satış çıkışı", color: "text-[#B65A3C]", icon: ArrowDownRight };
+        return { label: "Satış çıkışı", color: "text-orange-600", icon: ArrowDownRight };
       case "purchase":
         return { label: "Stok girişi", color: "text-[#3F7D53]", icon: ArrowUpRight };
       case "adjustment":
-        return { label: "Düzeltme", color: "text-[#C8913A]", icon: AlertTriangle };
+        return { label: "Düzeltme", color: "text-orange-500", icon: AlertTriangle };
       case "return":
         return { label: "İade girişi", color: "text-[#3F7D53]", icon: ArrowUpRight };
       default:
-        return { label: type, color: "text-white", icon: Boxes };
+        return { label: type, color: "text-slate-950", icon: Boxes };
     }
   };
 
@@ -159,11 +159,11 @@ export default function StokPage() {
     <div className="mx-auto max-w-6xl">
       <div className="mb-8 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h1 className="mb-2 text-3xl font-bold text-white">Stok Hareketleri</h1>
-          <p className="text-[#8A9B8E]">Tüm depo giriş ve çıkışlarını takip edin.</p>
+          <h1 className="mb-2 text-3xl font-bold text-slate-950">Stok Hareketleri</h1>
+          <p className="text-slate-500">Tüm depo giriş ve çıkışlarını takip edin.</p>
         </div>
         <button
-          className="flex items-center justify-center gap-2 rounded-xl bg-[#4F6F52] px-4 py-2 text-white shadow-lg shadow-[#4F6F52]/20 transition-colors hover:bg-[#3F5941]"
+          className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2 text-white shadow-lg shadow-cyan-500/20 transition-colors hover:brightness-105"
           type="button"
           onClick={() => setShowEntry(true)}
         >
@@ -172,15 +172,15 @@ export default function StokPage() {
       </div>
 
       {message && (
-        <div className="mb-4 rounded-2xl border border-[#2F4A35] bg-[#243328] px-5 py-4 text-sm font-bold text-[#E8EDE9]">
+        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950">
           {message}
         </div>
       )}
 
-      <div className="overflow-hidden rounded-2xl border border-[#2F4A35] bg-[#243328]">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-[#1A2B1E] text-sm text-[#8A9B8E]">
+            <thead className="bg-slate-50 text-sm text-slate-500">
               <tr>
                 <th className="px-6 py-4 font-medium">Tarih</th>
                 <th className="px-6 py-4 font-medium">Ürün</th>
@@ -189,16 +189,16 @@ export default function StokPage() {
                 <th className="px-6 py-4 font-medium">Not</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2F4A35]">
+            <tbody className="divide-y divide-slate-200">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
-                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[#4F6F52]" />
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
               ) : movements.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-[#8A9B8E]">
+                  <td colSpan={5} className="p-8 text-center text-slate-500">
                     Hareket bulunamadı.
                   </td>
                 </tr>
@@ -207,13 +207,13 @@ export default function StokPage() {
                   const movementType = getMovementLabel(movement.movement_type);
                   const Icon = movementType.icon;
                   return (
-                    <tr key={movement.id} className="transition-colors hover:bg-[#1A2B1E]">
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-[#8A9B8E]">
+                    <tr key={movement.id} className="transition-colors hover:bg-slate-50">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
                         {formatTime(movement.created_at)}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium text-white">{movement.products?.name}</div>
-                        <div className="font-mono text-xs text-[#8A9B8E]">{movement.products?.barcode}</div>
+                        <div className="font-medium text-slate-950">{movement.products?.name}</div>
+                        <div className="font-mono text-xs text-slate-500">{movement.products?.barcode}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${movementType.color}`}>
@@ -221,10 +221,10 @@ export default function StokPage() {
                           {movementType.label}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-lg font-bold text-white">
+                      <td className="px-6 py-4 text-lg font-bold text-slate-950">
                         {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#8A9B8E]">{movement.note || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500">{movement.note || "-"}</td>
                     </tr>
                   );
                 })
@@ -236,7 +236,7 @@ export default function StokPage() {
 
       {showEntry && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-3xl bg-[#F7F4ED] p-6 text-[#20231F] shadow-2xl">
+          <div className="w-full max-w-lg rounded-2xl bg-[#F6F8FB] p-6 text-slate-950 shadow-2xl">
             <div className="mb-5 flex items-center justify-between gap-4">
               <h2 className="text-2xl font-black">Yeni Stok Girişi</h2>
               <button
@@ -250,7 +250,7 @@ export default function StokPage() {
             </div>
 
             <form className="grid gap-4" onSubmit={createStockEntry}>
-              <label className="grid gap-2 text-sm font-bold text-[#2F4A35]">
+              <label className="grid gap-2 text-sm font-bold text-slate-800">
                 Ürün
                 <select
                   className="premium-input"
@@ -270,7 +270,7 @@ export default function StokPage() {
                 <FormInput label="Miktar" value={quantity} onChange={setQuantity} required />
                 <FormInput label="Birim fiyat" value={unitPrice} onChange={setUnitPrice} />
               </div>
-              <label className="grid gap-2 text-sm font-bold text-[#2F4A35]">
+              <label className="grid gap-2 text-sm font-bold text-slate-800">
                 Not
                 <textarea
                   className="premium-input min-h-24 resize-none"
@@ -302,7 +302,7 @@ function FormInput({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-[#2F4A35]">
+    <label className="grid gap-2 text-sm font-bold text-slate-800">
       {label}
       <input
         className="premium-input"
