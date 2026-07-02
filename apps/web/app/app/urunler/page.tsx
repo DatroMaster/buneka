@@ -203,18 +203,43 @@ export default function UrunlerPage() {
       min_stock: Number(productForm.min_stock || 0),
     };
 
-    const { error } = editingProductId
-      ? await supabase.from("products").update(payload).eq("id", editingProductId)
-      : await supabase.from("products").insert({
-          ...payload,
-          organization_id: appUser.organization_id,
-          store_id: appUser.store_id,
-        });
+    const legacyPayload = {
+      barcode: payload.barcode,
+      name: payload.name,
+      category: payload.category,
+      purchase_price: payload.purchase_price,
+      sale_price: payload.sale_price,
+      stock_quantity: payload.stock_quantity,
+      min_stock: payload.min_stock,
+    };
+
+    const save = (body: typeof payload | typeof legacyPayload) =>
+      editingProductId
+        ? supabase.from("products").update(body).eq("id", editingProductId)
+        : supabase.from("products").insert({
+            ...body,
+            organization_id: appUser.organization_id,
+            store_id: appUser.store_id,
+          });
+
+    let { error } = await save(payload);
+    let usedLegacyFallback = false;
+
+    if (error && /purchase_currency|purchase_price_original/.test(error.message) && /schema cache/i.test(error.message)) {
+      usedLegacyFallback = true;
+      ({ error } = await save(legacyPayload));
+    }
 
     if (error) {
       setMessage(`Ürün kaydedilemedi: ${error.message}`);
     } else {
-      setMessage(editingProductId ? "Ürün güncellendi." : "Ürün eklendi.");
+      setMessage(
+        usedLegacyFallback
+          ? "Ürün kaydedildi. Not: döviz bilgisi henüz kaydedilemedi, veritabanı güncellemesi bekleniyor — fiyat TL olarak kaydedildi."
+          : editingProductId
+            ? "Ürün güncellendi."
+            : "Ürün eklendi."
+      );
       setProductForm(emptyProductForm);
       setEditingProductId(null);
       setShowProductModal(false);

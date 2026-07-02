@@ -23,10 +23,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { QuickLinks } from "./_components/QuickLinks";
 import { StatCard } from "./_components/StatCard";
+import { useCart } from "./CartContext";
 
 type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
 type Product = Tables<"products">;
-type CartItem = { product: Product; quantity: number };
 
 export default function FiyatSorgulaPage() {
   const [barcode, setBarcode] = useState("");
@@ -35,7 +35,7 @@ export default function FiyatSorgulaPage() {
   const [error, setError] = useState("");
   const [stats, setStats] = useState({ queries: 0, sales: 0, revenue: 0 });
   const [appUser, setAppUser] = useState<AppUser | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { cart, addToCart: addProductToCart, updateCartQuantity, removeFromCart, clearCart } = useCart();
   const [checkingOut, setCheckingOut] = useState(false);
   const [cartMessage, setCartMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -178,32 +178,10 @@ export default function FiyatSorgulaPage() {
 
   function addToCart() {
     if (!product) return;
-    setCart((current) => {
-      const existing = current.find((item) => item.product.id === product.id);
-      if (existing) {
-        return current.map((item) =>
-          item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-      return [...current, { product, quantity: 1 }];
-    });
+    addProductToCart(product);
     setProduct(null);
     setBarcode("");
     inputRef.current?.focus();
-  }
-
-  function updateCartQuantity(productId: string, delta: number) {
-    setCart((current) =>
-      current
-        .map((item) =>
-          item.product.id === productId ? { ...item, quantity: item.quantity + delta } : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  }
-
-  function removeFromCart(productId: string) {
-    setCart((current) => current.filter((item) => item.product.id !== productId));
   }
 
   const cartTotal = cart.reduce((sum, item) => sum + item.product.sale_price * item.quantity, 0);
@@ -270,13 +248,13 @@ export default function FiyatSorgulaPage() {
       }))
     );
 
-    setCart([]);
+    clearCart();
     setCheckingOut(false);
     await loadUserAndStats();
   }
 
   function cancelCart() {
-    setCart([]);
+    clearCart();
     setCartMessage("");
   }
 

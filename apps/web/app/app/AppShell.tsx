@@ -23,6 +23,7 @@ import { CurrencyTicker } from "@/components/CurrencyTicker";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { CurrencyRates } from "@/lib/currency/tcmb";
 import { createClient } from "@/lib/supabase/client";
+import { CartProvider } from "./CartContext";
 
 type AppUserWithRelations = Tables<"app_users"> & {
   organizations?: { name: string | null } | null;
@@ -184,7 +185,7 @@ export default function AppShell({
       )}
 
       <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-8">
-        {children}
+        <CartProvider>{children}</CartProvider>
       </main>
     </div>
   );

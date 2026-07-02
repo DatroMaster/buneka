@@ -30,6 +30,13 @@ type Transaction = Tables<"credit_transactions"> & { app_users: Pick<Tables<"app
 const formatMoney = (amount: number) =>
   new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
+function friendlyDbError(message?: string) {
+  if (message && /schema cache/i.test(message)) {
+    return "Veresiye özelliği için veritabanı kurulumu henüz tamamlanmadı. Lütfen yöneticinizle iletişime geçin.";
+  }
+  return message || "Bilinmeyen bir hata oluştu.";
+}
+
 const emptyNewRecord = {
   customerId: "",
   newCustomerName: "",
@@ -233,7 +240,7 @@ export default function VeresiyePage() {
         .single();
 
       if (customerError || !customer) {
-        setMessage(`Müşteri oluşturulamadı: ${customerError?.message}`);
+        setMessage(`Müşteri oluşturulamadı: ${friendlyDbError(customerError?.message)}`);
         setSaving(false);
         return;
       }
@@ -251,7 +258,7 @@ export default function VeresiyePage() {
     });
 
     if (txError) {
-      setMessage(`Kayıt eklenemedi: ${txError.message}`);
+      setMessage(`Kayıt eklenemedi: ${friendlyDbError(txError.message)}`);
       setSaving(false);
       return;
     }
@@ -264,7 +271,7 @@ export default function VeresiyePage() {
       .eq("id", customerId);
 
     if (balanceError) {
-      setMessage(`Bakiye güncellenemedi: ${balanceError.message}`);
+      setMessage(`Bakiye güncellenemedi: ${friendlyDbError(balanceError.message)}`);
       setSaving(false);
       return;
     }
@@ -299,7 +306,7 @@ export default function VeresiyePage() {
     });
 
     if (txError) {
-      setDetailMessage(`İşlem kaydedilemedi: ${txError.message}`);
+      setDetailMessage(`İşlem kaydedilemedi: ${friendlyDbError(txError.message)}`);
       setSaving(false);
       return;
     }
@@ -315,7 +322,7 @@ export default function VeresiyePage() {
       .eq("id", selectedCustomer.id);
 
     if (balanceError) {
-      setDetailMessage(`Bakiye güncellenemedi: ${balanceError.message}`);
+      setDetailMessage(`Bakiye güncellenemedi: ${friendlyDbError(balanceError.message)}`);
     } else {
       setDetailMessage(txType === "debt" ? "Borç eklendi." : "Ödeme kaydedildi.");
       setTxAmount("");

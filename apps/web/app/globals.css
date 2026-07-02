@@ -389,6 +389,39 @@
     border-color: rgba(251, 113, 133, 0.9);
   }
 
+  /* Primary CTA — slow, calm "breathing" glow that invites the tap without being frantic */
+  .cta-primary-animated {
+    animation: cta-breathe 3.2s ease-in-out infinite;
+  }
+  .cta-primary-animated:hover {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-primary-animated {
+      animation: none;
+    }
+  }
+
+  /* Secondary "Giriş yapın" link — soft underline reveal + gentle drifting arrow,
+     deliberately slower/quieter than the primary CTA since it's a low-pressure action */
+  .cta-login-underline {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .group:hover .cta-login-underline {
+    transform: scaleX(1);
+  }
+  .cta-login-arrow {
+    display: inline-block;
+    animation: soft-drift 3.6s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cta-login-arrow {
+      animation: none;
+    }
+  }
+
   /* Faint geometric grid — replaces heavy sparkle/bloom with crisp, elite lines */
   .home-grid-pattern {
     background-image:
@@ -437,6 +470,26 @@
   100% {
     top: 88%;
     opacity: 0;
+  }
+}
+
+@keyframes cta-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--home-glow) 45%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 26px 5px color-mix(in srgb, var(--home-glow) 35%, transparent);
+  }
+}
+
+@keyframes soft-drift {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(4px);
+    opacity: 1;
   }
 }
 

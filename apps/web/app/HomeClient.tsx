@@ -216,16 +216,20 @@ export default function HomeClient() {
           <div className="mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
             <Link
               href="/demo"
-              className="glow-border group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-6 py-3 text-sm font-bold text-slate-950 transition-transform hover:scale-[1.02] active:scale-95 sm:text-base"
+              className="cta-primary-animated glow-border group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-6 py-3 text-sm font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95 sm:text-base"
             >
               Hemen Başlat
-              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={18} className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
             </Link>
             <Link
               href="/login"
-              className="text-xs font-semibold text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)] sm:text-sm"
+              className="group relative inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--home-muted)] transition-colors duration-500 ease-out hover:text-[color:var(--home-ink)] sm:text-sm"
             >
-              Zaten müşterimisiniz? Giriş yapın →
+              <span className="relative">
+                Zaten müşterimisiniz? Giriş yapın
+                <span className="cta-login-underline absolute -bottom-0.5 left-0 h-px w-full bg-[color:var(--home-glow)]" />
+              </span>
+              <ArrowRight size={14} className="cta-login-arrow" />
             </Link>
           </div>
         </section>
