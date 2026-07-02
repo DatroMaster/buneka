@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, CheckCircle2, MessageCircle, Route } from "lucide-react";
+import { ArrowLeft, CheckCircle2, MessageCircle, Route } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -58,9 +58,6 @@ export default async function SectorPage({ params }: SectorPageProps) {
             <ArrowLeft size={14} /> Sektörler
           </Link>
           <BunekaNedirButton />
-          <Link href="/demo" className="premium-button-primary text-xs sm:text-sm">
-            Demo Paneli Aç
-          </Link>
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
       </header>
@@ -88,13 +85,6 @@ export default async function SectorPage({ params }: SectorPageProps) {
           </ul>
 
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link
-              href="/demo"
-              className="glow-border group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-6 py-3 text-sm font-bold text-slate-950 transition-transform hover:scale-[1.02] active:scale-95"
-            >
-              Demo Paneli Aç
-              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-            </Link>
             <a
               href={whatsappLink(`Merhaba, ${sector.title} sektörü için Buneka lisansı almak istiyorum.`)}
               target="_blank"
@@ -106,8 +96,8 @@ export default async function SectorPage({ params }: SectorPageProps) {
           </div>
         </section>
 
-        <section className="glow-border flex min-h-0 flex-col divide-y divide-[color:var(--home-border)] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
-          <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
+        <section className="glow-border grid min-h-0 grid-rows-[1fr_1fr_auto] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="min-h-0 overflow-y-auto border-b border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
               <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
             </p>
@@ -130,11 +120,11 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </div>
           </div>
 
-          <div className="shrink-0 p-4 sm:p-5">
+          <div className="min-h-0 overflow-y-auto border-b border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
-            <div className="max-h-[104px] space-y-1.5 overflow-y-auto pr-1">
+            <div className="grid grid-cols-1 gap-2 pr-1 sm:grid-cols-2">
               {sector.modules.map((module) => (
-                <div key={module} className="glow-border rounded-lg px-3 py-1.5">
+                <div key={module} className="glow-border rounded-lg px-3 py-2.5">
                   <p className="text-[11px] font-bold text-[color:var(--home-ink)]">{module}</p>
                   <p className="text-[10px] leading-snug text-[color:var(--home-muted)]">{getModuleDetail(module)}</p>
                 </div>
@@ -146,12 +136,12 @@ export default async function SectorPage({ params }: SectorPageProps) {
             <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
               Paket önerisi
             </p>
-            <div className="glow-border flex items-center justify-between rounded-lg p-3">
+            <div className="package-spark-card flex items-center justify-between rounded-xl p-4">
               <div>
                 <p className="font-display text-sm font-bold text-[color:var(--home-ink)]">{recommendedPlan.name}</p>
                 <p className="text-xs text-[color:var(--home-muted)]">{recommendedPlan.price} /yıl</p>
               </div>
-              <Link href="/paketler" className="text-xs font-bold text-[color:var(--home-glow)]">
+              <Link href="/paketler" className="rounded-lg bg-[color:var(--home-glow)] px-3 py-2 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95">
                 Tüm paketler →
               </Link>
             </div>

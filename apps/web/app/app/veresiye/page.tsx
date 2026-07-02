@@ -30,6 +30,9 @@ type Transaction = Tables<"credit_transactions"> & { app_users: Pick<Tables<"app
 const formatMoney = (amount: number) =>
   new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
+const formatDate = (dateString: string) =>
+  new Date(dateString).toLocaleDateString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric" });
+
 function friendlyDbError(message?: string) {
   if (message && /schema cache/i.test(message)) {
     return "Veresiye özelliği için veritabanı kurulumu henüz tamamlanmadı. Lütfen yöneticinizle iletişime geçin.";
@@ -44,7 +47,7 @@ const emptyNewRecord = {
   item: "",
   barcode: "",
   amount: "",
-  type: "debt" as "debt" | "payment",
+  date: new Date().toISOString().slice(0, 10),
 };
 
 export default function VeresiyePage() {
@@ -64,6 +67,7 @@ export default function VeresiyePage() {
   const [txType, setTxType] = useState<"debt" | "payment">("debt");
   const [txAmount, setTxAmount] = useState("");
   const [txNote, setTxNote] = useState("");
+  const [txDate, setTxDate] = useState(new Date().toISOString().slice(0, 10));
   const [detailMessage, setDetailMessage] = useState("");
   const supabase = useMemo(() => createClient(), []);
 
@@ -165,6 +169,7 @@ export default function VeresiyePage() {
     setSelectedCustomerId(customer.id);
     setTxAmount("");
     setTxNote("");
+    setTxDate(new Date().toISOString().slice(0, 10));
     setTxType("debt");
     setDetailMessage("");
     void loadTransactions(customer.id);
@@ -176,6 +181,7 @@ export default function VeresiyePage() {
     setTxType("payment");
     setTxAmount(String(Number(customer.credit_balance)));
     setTxNote("");
+    setTxDate(new Date().toISOString().slice(0, 10));
     setDetailMessage("");
     void loadTransactions(customer.id);
   }
@@ -200,8 +206,7 @@ export default function VeresiyePage() {
     ? 0
     : Number(customers.find((c) => c.id === newRecord.customerId)?.credit_balance || 0);
   const newRecordAmount = Number(newRecord.amount) || 0;
-  const newRecordProjectedBalance =
-    newRecord.type === "debt" ? newRecordCustomerBalance + newRecordAmount : newRecordCustomerBalance - newRecordAmount;
+  const newRecordProjectedBalance = newRecordCustomerBalance + newRecordAmount;
 
   async function createRecord(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -252,8 +257,9 @@ export default function VeresiyePage() {
       customer_id: customerId,
       organization_id: appUser.organization_id,
       user_id: appUser.id,
-      type: newRecord.type,
+      type: "debt",
       amount,
+      created_at: `${newRecord.date || new Date().toISOString().slice(0, 10)}T12:00:00.000Z`,
       note: newRecord.item.trim() || null,
     });
 
@@ -263,7 +269,7 @@ export default function VeresiyePage() {
       return;
     }
 
-    const nextBalance = newRecord.type === "debt" ? currentBalance + amount : currentBalance - amount;
+    const nextBalance = currentBalance + amount;
 
     const { error: balanceError } = await supabase
       .from("customers")
@@ -302,6 +308,7 @@ export default function VeresiyePage() {
       user_id: appUser.id,
       type: txType,
       amount,
+      created_at: `${txDate || new Date().toISOString().slice(0, 10)}T12:00:00.000Z`,
       note: txNote.trim() || null,
     });
 
@@ -314,7 +321,7 @@ export default function VeresiyePage() {
     const nextBalance =
       txType === "debt"
         ? Number(selectedCustomer.credit_balance) + amount
-        : Number(selectedCustomer.credit_balance) - amount;
+        : Math.max(0, Number(selectedCustomer.credit_balance) - amount);
 
     const { error: balanceError } = await supabase
       .from("customers")
@@ -426,6 +433,7 @@ export default function VeresiyePage() {
               <tr>
                 <th className="px-6 py-3 font-medium">Müşteri</th>
                 <th className="px-6 py-3 font-medium">Telefon</th>
+                <th className="px-6 py-3 font-medium">İlk Borç Tarihi</th>
                 <th className="px-6 py-3 font-medium">Süre</th>
                 <th className="px-6 py-3 text-right font-medium">Bakiye</th>
                 <th className="px-6 py-3 text-right font-medium" />
@@ -434,13 +442,13 @@ export default function VeresiyePage() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center">
+                  <td colSpan={6} className="p-8 text-center">
                     <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
               ) : filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={6}>
                     <EmptyState icon={HandCoins} message="Müşteri bulunamadı." />
                   </td>
                 </tr>
@@ -456,6 +464,9 @@ export default function VeresiyePage() {
                     >
                       <td className="px-6 py-4 font-medium text-slate-950 dark:text-slate-50">{customer.name}</td>
                       <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{customer.phone || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                        {oldestDebtDates[customer.id] ? formatDate(oldestDebtDates[customer.id]) : "-"}
+                      </td>
                       <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                         {days !== null ? `${days} gündür` : "-"}
                       </td>
@@ -475,8 +486,7 @@ export default function VeresiyePage() {
                             onClick={(event) => openPaymentQuick(customer, event)}
                             className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20"
                           >
-                            <CheckCircle2 size={13} /> Ödeme Alındı
-                          </button>
+                            <CheckCircle2 size={13} /> Ödeme Tamamla</button>
                         )}
                       </td>
                     </tr>
@@ -567,24 +577,14 @@ export default function VeresiyePage() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setNewRecord({ ...newRecord, type: "debt" })}
-                className={`flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${newRecord.type === "debt" ? "border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
-              >
-                <Plus size={16} /> Borç
-              </button>
-              <button
-                type="button"
-                onClick={() => setNewRecord({ ...newRecord, type: "payment" })}
-                className={`flex items-center justify-center gap-1.5 rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${newRecord.type === "payment" ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
-              >
-                <Minus size={16} /> Ödeme
-              </button>
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-300">
+              Bu kayıt veresiye verildi olarak açılır. Ödeme almak için listeden müşteride Ödeme Tamamla butonunu kullanın.
             </div>
 
-            <Field label="Tutar (TL)" value={newRecord.amount} onChange={(v) => setNewRecord({ ...newRecord, amount: v })} required />
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Kayıt tarihi" type="date" value={newRecord.date} onChange={(v) => setNewRecord({ ...newRecord, date: v })} required />
+              <Field label="Tutar (TL)" value={newRecord.amount} onChange={(v) => setNewRecord({ ...newRecord, amount: v })} required />
+            </div>
 
             <div className="rounded-xl bg-slate-50 px-4 py-3 text-center dark:bg-slate-800/60">
               <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Bu kayıttan sonra kalan alacak</p>
@@ -641,15 +641,18 @@ export default function VeresiyePage() {
                 <Minus size={16} /> Ödeme Al
               </button>
             </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="İşlem tarihi" type="date" value={txDate} onChange={setTxDate} required />
+              <Field label="Tutar (TL)" value={txAmount} onChange={setTxAmount} required />
+            </div>
             <Field label="Ürün / Mal (opsiyonel)" value={txNote} onChange={setTxNote} />
-            <Field label="Tutar (TL)" value={txAmount} onChange={setTxAmount} required />
             <div className="rounded-xl bg-slate-50 px-4 py-3 text-center dark:bg-slate-800/60">
               <p className="text-xs font-bold text-slate-500 dark:text-slate-400">Bu kayıttan sonra kalan alacak</p>
               <p className="text-lg font-black text-slate-800 dark:text-slate-200">
                 {formatMoney(
                   txType === "debt"
                     ? Number(selectedCustomer.credit_balance) + (Number(txAmount) || 0)
-                    : Number(selectedCustomer.credit_balance) - (Number(txAmount) || 0)
+                    : Math.max(0, Number(selectedCustomer.credit_balance) - (Number(txAmount) || 0))
                 )}
               </p>
             </div>
@@ -710,18 +713,20 @@ function Field({
   value,
   onChange,
   required = false,
+  type = "text",
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   required?: boolean;
+  type?: string;
 }) {
   return (
     <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
       {label}
       <input
         className="premium-input"
-        type="text"
+        type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         required={required}

@@ -79,9 +79,6 @@ export default function PaketlerPage() {
             <ShieldCheck size={12} /> Yıllık lisans · Şeffaf fiyat
           </span>
           <BunekaNedirButton />
-          <Link href="/demo" className="premium-button-primary text-xs sm:text-sm">
-            Demo Paneli Aç
-          </Link>
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
       </header>

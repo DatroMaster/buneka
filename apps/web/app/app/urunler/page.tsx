@@ -131,6 +131,9 @@ export default function UrunlerPage() {
     return matchesSearch && matchesCategory;
   });
 
+  const lowStockCount = products.filter((product) => Number(product.stock_quantity) <= Number(product.min_stock)).length;
+  const pricedCount = products.filter((product) => Number(product.sale_price) > 0).length;
+
   const formatMoney = (amount: number) =>
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
@@ -315,6 +318,35 @@ export default function UrunlerPage() {
           { href: "/app/veresiye", label: "Veresiye", icon: HandCoins },
         ]}
       />
+
+      <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
+        <div className="data-card border-cyan-200/70 p-4 dark:border-cyan-500/20">
+          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-cyan-600 dark:text-cyan-300">
+            <PackagePlus size={15} /> Katalog Merkezi
+          </div>
+          <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+            Ürünler sayfası barkod, isim, kategori, alış ve satış fiyatı gibi raf bilgisini yönetmek içindir.
+          </p>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-icon bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-300">
+            <Layers size={22} />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Kayıtlı Ürün</p>
+            <p className="text-2xl font-black text-cyan-600 dark:text-cyan-300">{products.length}</p>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-icon bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300">
+            <AlertTriangle size={22} />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Fiyatlı / Kritik</p>
+            <p className="text-2xl font-black text-slate-950 dark:text-slate-50">{pricedCount} / {lowStockCount}</p>
+          </div>
+        </div>
+      </div>
 
       {message && (
         <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">

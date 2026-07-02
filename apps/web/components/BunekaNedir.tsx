@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ArrowRight,
   Boxes,
   CheckCircle2,
   PhoneCall,
@@ -12,7 +11,6 @@ import {
   WalletCards,
   X,
 } from "lucide-react";
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { callLink } from "@/lib/contact";
@@ -87,7 +85,7 @@ export function BunekaNedirButton({
 
       {open && (
         <div
-          className="fixed inset-0 z-[100] grid place-items-center bg-black/80 p-4"
+          className="fixed inset-0 z-[999] grid place-items-center bg-black/80 p-4"
           onClick={close}
         >
           <div
@@ -197,10 +195,10 @@ function SceneProblem() {
       </div>
       <SceneTag tone="problem" label="Sorun" />
       <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
-        Sen dükkanda yokken <span className="text-amber-400">&quot;bu kaça?&quot;</span> sorusu havada kalıyor.
+        Sen dükkanda yokken <span className="text-amber-400">&quot;Bu Ne Kadar?&quot;</span> sorusu beklemez.
       </h3>
       <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
-        Fiyatı bilen tek kişi sensin. Sen yokken çalışanın telefonla arıyor, müşteri bekliyor — satış kaçıyor.
+        Fiyat bilgisi tek kişiye bağlı kalmaz. Çalışan barkodu okutur, cevabı hemen görür.
       </p>
     </>
   );
@@ -225,7 +223,7 @@ function SceneSolution() {
       </div>
       <SceneTag tone="solution" label="Çözüm" />
       <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
-        Barkodu okut, fiyatı gör, <span className="text-[color:var(--home-glow)]">satışını bil.</span>
+        Barkodu okut. Fiyatı gör. <span className="text-[color:var(--home-glow)]">Satış hareketlerini takip et.</span>
       </h3>
       <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-bold text-[color:var(--home-muted)]">
         <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--home-border)] px-2.5 py-1">
@@ -254,24 +252,53 @@ function SceneResult({ onCta }: { onCta: () => void }) {
         Dükkanının hafızası artık <span className="text-[color:var(--home-glow)]">cebinde.</span>
       </h3>
       <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
-        Kurulum yok, karmaşa yok. Barkodu okut, gerisini Buneka hatırlasın.
+        Kurulum yok, karmaşa yok. Fiyat, kasa, stok ve hareket hafızası aynı yerde toplansın.
       </p>
       <div className="mt-1 flex flex-col gap-2 sm:flex-row">
-        <Link
-          href="/demo"
-          onClick={onCta}
-          className="cta-primary-animated group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-95"
-        >
-          Hemen Başlat
-          <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-        </Link>
         <a
           href={callLink()}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-[color:var(--home-border)] px-5 py-2.5 text-sm font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)]"
+          onClick={onCta}
+          className="cta-call-spark inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-black"
         >
-          <PhoneCall size={15} className="text-emerald-400" /> Hemen Arayın
+          <PhoneCall size={15} /> Hemen Arayın
         </a>
       </div>
     </>
+  );
+}
+
+
+export function BunekaExplainerCard() {
+  return (
+    <div className="bn-square-video glow-border relative mx-auto grid aspect-square w-full max-w-[560px] place-items-center overflow-hidden rounded-2xl bg-[color:var(--home-surface)]/80 p-5 backdrop-blur-xl sm:p-7">
+      <div aria-hidden className="bn-square-grid absolute inset-0" />
+      <div aria-hidden className="bn-square-orbit absolute inset-[8%] rounded-[2rem]" />
+      <div className="relative z-10 grid h-full w-full place-items-center rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/70 p-5 text-center">
+        <div className="bn-pop flex flex-col items-center gap-4">
+          <SceneTag tone="result" label="Buneka sistemi" />
+          <div className="relative flex h-24 w-24 items-center justify-center">
+            <span className="bn-ring absolute inset-0 rounded-full border-2 border-[color:var(--home-glow)]/40" />
+            <BunekaMark size={58} />
+          </div>
+          <h2 className="font-display text-2xl font-black leading-tight text-[color:var(--home-ink)] sm:text-4xl">
+            Bu Ne Kadar?
+          </h2>
+          <div className="grid w-full max-w-sm gap-2 text-left">
+            {[
+              ['1', 'Barkodu okut'],
+              ['2', 'Fiyatı gör'],
+              ['3', 'Satış hareketlerini takip et'],
+            ].map(([step, label]) => (
+              <div key={step} className="flex items-center gap-3 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] px-3 py-2.5">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--home-glow)] text-xs font-black text-slate-950">
+                  {step}
+                </span>
+                <span className="text-sm font-bold text-[color:var(--home-ink)] sm:text-base">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

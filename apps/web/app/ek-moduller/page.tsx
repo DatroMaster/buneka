@@ -31,9 +31,6 @@ export default function EkModullerPage() {
           </Link>
           <div className="flex items-center gap-3">
             <BunekaNedirButton />
-            <Link href="/demo" className="premium-button-primary text-sm">
-              Demo Paneli Aç
-            </Link>
             <ThemeToggle className="border-[color:var(--color-border)] text-[color:var(--color-muted)] hover:border-cyan-400" />
           </div>
         </div>

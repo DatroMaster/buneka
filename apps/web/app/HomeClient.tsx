@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRight, ChevronDown, Phone, PhoneOff, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, ChevronDown, LogIn, PhoneCall, PhoneOff, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
-import { BunekaNedirButton } from "@/components/BunekaNedir";
+import { BunekaExplainerCard } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -189,13 +189,18 @@ export default function HomeClient() {
         </Link>
 
         <div className="flex items-center gap-2.5 sm:gap-4">
-          <BunekaNedirButton />
           <Link
-            href="/demo"
-            className="cta-primary-animated cta-hero-pulse group relative inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-3.5 py-2 text-xs font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.04] active:scale-95 sm:px-5 sm:py-2.5 sm:text-sm"
+            href="/login"
+            className="hidden items-center gap-1.5 rounded-lg border border-[color:var(--home-border)] px-3.5 py-2 text-xs font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)] sm:inline-flex"
           >
-            Hemen Başlat
-            <ArrowRight size={14} className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
+            <LogIn size={14} /> Sisteme Giriş Yap
+          </Link>
+          <Link
+            href={callLink()}
+            className="cta-call-spark group inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-black transition-transform duration-300 ease-out sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            <PhoneCall size={14} />
+            Hemen Arayın
           </Link>
           <div className="text-right font-mono leading-tight text-[color:var(--home-glow)]">
             <div className="text-xs tracking-wider sm:text-sm">{time}</div>
@@ -211,17 +216,20 @@ export default function HomeClient() {
             <ShieldCheck size={12} /> Kurulumsuz başlar
           </p>
           <h1 className="font-display text-2xl font-bold leading-[1.15] tracking-tight text-[color:var(--home-ink)] sm:text-3xl md:text-4xl lg:text-[2.75rem]">
-            Sadece satışları değil,{" "}
-            <span className="text-[color:var(--home-glow)]">kaçan satışları</span> da görün.
+            Dükkanın fiyat, kasa ve stok hafızası{" "}
+            <span className="text-[color:var(--home-glow)]">tek ekranda</span> toplansın.
           </h1>
           <p className="glow-border mt-4 flex items-center gap-2.5 rounded-lg bg-[color:var(--home-glow)]/10 px-4 py-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
             <PhoneOff size={18} className="shrink-0 text-[color:var(--home-glow)]" />
             Sen dükkanda yokken fiyat için seni aramasınlar.
           </p>
           <p className="mt-3 hidden text-sm leading-relaxed text-[color:var(--home-muted)] sm:block md:mt-4 md:text-base">
-            Dükkanın hafızası artık cebinizde. Barkodu okut, fiyatı gör, satışını bil — kasa ve
-            stok da aynı ekranda seni bekliyor.
+            Buneka barkoddan fiyatı bulur, kasa hareketini kaydeder ve stok durumunu aynı akışta
+            gösterir.
           </p>
+          <div className="mt-5 sm:mt-7">
+            <BunekaExplainerCard />
+          </div>
           <div className="mt-5 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center">
             <Link
               href="/login"
@@ -273,12 +281,6 @@ export default function HomeClient() {
           Buneka resmi yazarkasa veya mali belge sistemi değildir; küçük işletme operasyon
           hafızasıdır.
         </span>
-        <a
-          href={callLink()}
-          className="flex items-center gap-1.5 font-bold text-[color:var(--home-glow)] hover:underline"
-        >
-          <Phone size={12} /> Hemen Arayın
-        </a>
         <span>BUNEKA © 2026 · Ankara, TR</span>
       </footer>
     </div>

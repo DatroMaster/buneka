@@ -302,8 +302,13 @@
   }
 
   /* Sidebar surface — deep navy with a soft turquoise glow, not flat black */
-  .sidebar-surface {
+  .sidebar-surface,
+  .sidebar-supabase {
     background: radial-gradient(120% 140% at 0% 0%, #0B2438 0%, #07111F 55%, #050A13 100%);
+  }
+
+  .sidebar-supabase {
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.04);
   }
 
   /* Dark-mode surface overrides for hand-written classes that hardcode
@@ -413,6 +418,87 @@
     opacity: 0;
     pointer-events: none;
     animation: hero-ripple 2.6s ease-out infinite;
+  }
+
+  .cta-call-spark {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, #FDE68A 0%, #F59E0B 36%, #F8FAFC 54%, #22C55E 100%);
+    color: #07111F;
+    box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.45), 0 12px 34px rgba(245, 158, 11, 0.26);
+  }
+
+  .cta-call-spark::before {
+    content: "";
+    position: absolute;
+    inset: -60%;
+    z-index: -1;
+    background:
+      conic-gradient(from 0deg, transparent 0 18%, rgba(253, 230, 138, 0.8) 22%, transparent 27% 58%, rgba(226, 232, 240, 0.75) 62%, transparent 67% 100%);
+    animation: call-spark-orbit 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  .cta-call-spark::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #FEF3C7, #F59E0B 48%, #ECFEFF);
+  }
+
+  .cta-call-spark:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 0 0 1px rgba(253, 230, 138, 0.62), 0 18px 42px rgba(245, 158, 11, 0.32);
+  }
+
+  .cta-call-spark:active {
+    transform: scale(0.96);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-call-spark::before {
+      animation: none;
+    }
+  }
+
+  .bn-square-video {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 80px color-mix(in srgb, var(--home-glow) 14%, transparent);
+  }
+
+  .bn-square-grid {
+    background-image:
+      linear-gradient(var(--home-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--home-border) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: 0.38;
+  }
+
+  .bn-square-orbit {
+    border: 1px solid color-mix(in srgb, var(--home-glow) 48%, transparent);
+    animation: square-orbit-pulse 4.2s ease-in-out infinite;
+  }
+
+  .package-spark-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--home-glow) 40%, var(--home-border));
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--home-surface) 90%, transparent), color-mix(in srgb, var(--home-glow) 10%, var(--home-surface))),
+      radial-gradient(circle at 18% 0%, rgba(253, 230, 138, 0.22), transparent 34%);
+    box-shadow: 0 18px 46px color-mix(in srgb, var(--home-glow) 15%, transparent);
+  }
+
+  .package-spark-card::before {
+    content: "";
+    position: absolute;
+    inset: -45%;
+    z-index: -1;
+    background: conic-gradient(from 20deg, transparent 0 16%, rgba(253, 230, 138, 0.72) 20%, transparent 25% 58%, rgba(226, 232, 240, 0.68) 63%, transparent 68%);
+    animation: call-spark-orbit 3.1s ease-out infinite;
   }
   .cta-hero-pulse:hover::after {
     animation-play-state: paused;
@@ -581,6 +667,35 @@
   }
   50% {
     box-shadow: 0 0 26px 5px color-mix(in srgb, var(--home-glow) 35%, transparent);
+  }
+}
+
+@keyframes call-spark-orbit {
+  0% {
+    transform: rotate(0deg) scale(0.92);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  44% {
+    transform: rotate(210deg) scale(1.02);
+    opacity: 0.9;
+  }
+  68%, 100% {
+    transform: rotate(360deg) scale(1.08);
+    opacity: 0;
+  }
+}
+
+@keyframes square-orbit-pulse {
+  0%, 100% {
+    transform: scale(0.96) rotate(0deg);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.02) rotate(2deg);
+    opacity: 0.9;
   }
 }
 

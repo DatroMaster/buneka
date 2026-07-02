@@ -106,6 +106,75 @@ function DrawerNav({
   );
 }
 
+function DesktopSidebar({
+  pathname,
+  onLogout,
+  user,
+}: {
+  pathname: string;
+  onLogout: () => void;
+  user: AppUserWithRelations;
+}) {
+  return (
+    <aside className="group/sidebar sidebar-supabase hidden h-full w-[4.25rem] shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 ease-out hover:w-72 md:flex">
+      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-4">
+        <BunekaMark size={28} className="shrink-0" />
+        <div className="min-w-0 opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
+          <BunekaWordmark className="text-sm text-white" />
+          <p className="truncate text-[11px] font-medium text-slate-400">{user.organizations?.name || "İşletme"}</p>
+        </div>
+      </div>
+
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              title={item.name}
+              className={`group/item flex h-10 items-center gap-3 rounded-md px-2.5 text-sm transition-all ${
+                isActive
+                  ? "border border-emerald-400/25 bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                  : "text-slate-400 hover:bg-white/[0.06] hover:text-slate-100"
+              }`}
+            >
+              <Icon size={18} className={isActive ? "text-emerald-300" : "text-slate-400 group-hover/item:text-emerald-300"} />
+              <span className="whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
+                {item.name}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="border-t border-white/10 p-3">
+        <div className="mb-2 flex h-10 items-center gap-3 rounded-md px-2.5">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-400/10 text-sm font-black text-emerald-200">
+            {user.name?.charAt(0) || "U"}
+          </div>
+          <div className="min-w-0 opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
+            <p className="truncate text-sm font-bold text-white">{user.name}</p>
+            <p className="truncate text-xs text-slate-500">{user.stores?.name || "Ana mağaza"}</p>
+          </div>
+        </div>
+        <button
+          onClick={onLogout}
+          className="flex h-10 w-full items-center gap-3 rounded-md px-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-rose-500/10 hover:text-rose-300"
+          type="button"
+          title="Çıkış Yap"
+        >
+          <LogOut size={18} className="shrink-0" />
+          <span className="whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
+            Çıkış Yap
+          </span>
+        </button>
+      </div>
+    </aside>
+  );
+}
+
 export default function AppShell({
   children,
   user,
@@ -129,47 +198,12 @@ export default function AppShell({
   };
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden selection:bg-cyan-400 selection:text-slate-950">
-      <header className="sidebar-surface z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 md:px-6">
-        <Link href="/app" className="group flex flex-col gap-1">
-          <span className="flex items-center gap-2.5">
-            <BunekaMark size={24} className="transition-transform group-hover:scale-105" />
-            <BunekaWordmark className="text-sm text-white" />
-          </span>
-          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-transparent" />
-          <span className="flex items-center gap-1.5 text-[11px] leading-none text-slate-400">
-            <span className="font-semibold text-slate-200">{user.organizations?.name || "İşletme"}</span>
-            <span className="text-slate-600">·</span>
-            <span>{user.name}</span>
-          </span>
-        </Link>
-
-        <div className="flex items-center gap-2 md:gap-3">
-          <CurrencyTicker rates={rates} />
-          <BunekaNedirButton variant="compact" className="border-white/15 text-cyan-300 hover:border-cyan-300/50" />
-          <Link
-            href="/"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"
-            aria-label="Site ana sayfası"
-            title="Site ana sayfası"
-          >
-            <Home size={16} />
-          </Link>
-          <ThemeToggle className="border-white/15 text-slate-300 hover:border-cyan-300/50 hover:text-white" />
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"
-            type="button"
-            aria-label="Menüyü aç"
-          >
-            <Menu size={18} />
-          </button>
-        </div>
-      </header>
+    <div className="flex h-screen overflow-hidden bg-[#050A0F] selection:bg-emerald-400 selection:text-slate-950">
+      <DesktopSidebar pathname={pathname} onLogout={handleLogout} user={user} />
 
       {isMenuOpen && (
         <div className="fixed inset-0 z-50 flex">
-          <div className="sidebar-surface h-full w-full max-w-xs overflow-y-auto shadow-2xl">
+          <div className="sidebar-supabase h-full w-full max-w-xs overflow-y-auto shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-white/10 px-4">
               <span className="flex items-center gap-2">
                 <BunekaMark size={20} glow={false} />
@@ -195,9 +229,46 @@ export default function AppShell({
         </div>
       )}
 
-      <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-8">
-        <CartProvider>{children}</CartProvider>
-      </main>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sidebar-supabase z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 md:bg-[#050A0F]/95 md:px-6">
+          <Link href="/app" className="flex items-center gap-2 md:hidden">
+            <BunekaMark size={24} />
+            <BunekaWordmark className="text-sm text-white" />
+          </Link>
+          <div className="hidden min-w-0 md:block">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300/80">Buneka Console</p>
+            <p className="truncate text-sm font-medium text-slate-300">
+              {user.organizations?.name || "İşletme"} · {user.name}
+            </p>
+          </div>
+
+          <div className="ml-auto flex items-center gap-2 md:gap-3">
+            <CurrencyTicker rates={rates} />
+            <BunekaNedirButton variant="compact" className="border-white/15 text-emerald-300 hover:border-emerald-300/50" />
+            <Link
+              href="/"
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-slate-300 transition-all hover:border-emerald-300/40 hover:bg-white/[0.04] hover:text-white active:scale-90"
+              aria-label="Site ana sayfası"
+              title="Site ana sayfası"
+            >
+              <Home size={16} />
+            </Link>
+            <ThemeToggle className="border-white/10 text-slate-300 hover:border-emerald-300/40 hover:text-white" />
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-slate-300 transition-all hover:border-emerald-300/40 hover:bg-white/[0.04] hover:text-white active:scale-90 md:hidden"
+              type="button"
+              aria-label="Menüyü aç"
+            >
+              <Menu size={18} />
+            </button>
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-8">
+          <CartProvider>{children}</CartProvider>
+        </main>
+      </div>
     </div>
   );
 }
