@@ -8,20 +8,20 @@ export default async function LoginPage({
   const params = await searchParams;
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F7F4ED]">
-      <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[#4F6F52] opacity-10 blur-[100px]" />
-      <div className="absolute right-[-10%] bottom-[-10%] h-[600px] w-[600px] rounded-full bg-[#C8913A] opacity-10 blur-[120px]" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--color-bg)]">
+      <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-cyan-400 opacity-10 blur-[100px]" />
+      <div className="absolute right-[-10%] bottom-[-10%] h-[600px] w-[600px] rounded-full bg-amber-400 opacity-10 blur-[120px]" />
 
       <div className="relative z-10 w-full max-w-md">
         <div className="glass-card flex flex-col space-y-8 rounded-3xl p-10">
           <div className="text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#4F6F52] text-white shadow-[0_8px_24px_rgba(79,111,82,0.4)]">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/30">
               <span className="text-3xl font-black">B</span>
             </div>
-            <h2 className="text-3xl font-extrabold tracking-tight text-[#20231F]">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-950">
               Buneka&apos;ya Giriş
             </h2>
-            <p className="mt-3 text-[15px] font-medium text-[#667064]">
+            <p className="mt-3 text-[15px] font-medium text-slate-500">
               Küçük işletmenin hafızası
             </p>
           </div>
@@ -59,7 +59,7 @@ export default async function LoginPage({
             </div>
 
             {params?.error && (
-              <div className="rounded-xl bg-[#b65a3c]/10 p-3 text-center text-sm font-semibold text-[#b65a3c] backdrop-blur-md">
+              <div className="rounded-xl bg-amber-500/10 p-3 text-center text-sm font-semibold text-amber-700 backdrop-blur-md">
                 {params.error}
               </div>
             )}
