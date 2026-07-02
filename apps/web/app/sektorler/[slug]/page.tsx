@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  ArrowRight,
-  BadgeCheck,
-  CheckCircle2,
-  Layers3,
-  Route,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, MessageCircle, Route } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { whatsappLink } from "@/lib/contact";
 import { getSector, sectors } from "@/lib/content/sectors";
 import { plans } from "@/lib/content/plans";
 
@@ -44,130 +38,126 @@ export default async function SectorPage({ params }: SectorPageProps) {
     notFound();
   }
 
+  const recommendedPlan = plans[1];
+
   return (
-    <main className="min-h-screen bg-[var(--color-bg)] text-[color:var(--color-text)]">
-      <header className="border-b border-[color:var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BunekaMark size={22} />
-            <BunekaWordmark className="text-sm text-[color:var(--color-text)]" />
+    <main className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden text-[color:var(--home-ink)]">
+      <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
+
+      <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+        <Link href="/" className="flex items-center gap-2.5">
+          <BunekaMark size={26} />
+          <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
+        </Link>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/#sektorler"
+            className="hidden items-center gap-1.5 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)] sm:flex"
+          >
+            <ArrowLeft size={14} /> Sektörler
           </Link>
-          <div className="flex items-center gap-3">
-            <Link href="/demo" className="premium-button-primary text-sm">
-              Demo Paneli Aç
-            </Link>
-            <ThemeToggle className="border-[color:var(--color-border)] text-[color:var(--color-muted)] hover:border-cyan-400" />
-          </div>
+          <Link href="/demo" className="premium-button-primary text-xs sm:text-sm">
+            Demo Paneli Aç
+          </Link>
+          <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
       </header>
 
-      <section className="border-b border-[color:var(--color-border)] px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 lg:grid-cols-[1.35fr_0.65fr]">
-          <div>
-            <Link
-              href="/#sektorler"
-              className="mb-8 inline-flex items-center gap-2 text-sm font-black text-[color:var(--color-muted)] hover:text-[color:var(--color-text)]"
-            >
-              <ArrowLeft size={16} />
-              Sektörlere dön
-            </Link>
-            <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-card)] px-4 py-2 text-sm font-black text-cyan-600 dark:text-cyan-300">
-              <sector.icon size={18} />
-              {sector.title}
-            </div>
-            <h1 className="font-display max-w-4xl text-5xl font-black leading-[1] tracking-tight md:text-7xl">
-              {sector.headline}
-            </h1>
-            <p className="mt-8 max-w-3xl text-lg font-medium leading-8 text-[color:var(--color-muted)] md:text-xl">
-              {sector.description}
-            </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link href="/demo" className="premium-button-primary min-h-14 px-7 text-base">
-                Demo Paneli Aç
-                <ArrowRight size={18} />
-              </Link>
-              <a href="#paket" className="premium-button-secondary min-h-14 px-7 text-base">
-                Paketi Gör
-              </a>
-            </div>
+      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
+        <section className="glow-border flex min-h-0 flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-7 md:p-9">
+          <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
+            <sector.icon size={12} />
+            {sector.title}
           </div>
+          <h1 className="font-display text-2xl font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
+            {sector.headline}
+          </h1>
+          <p className="mt-3 hidden text-sm leading-relaxed text-[color:var(--home-muted)] sm:block md:text-base">
+            {sector.description}
+          </p>
 
-          <aside className="data-card p-7">
-            <BadgeCheck className="mb-6 text-amber-500" size={30} />
-            <h2 className="font-display text-2xl font-black">Bu sektörde öne çıkanlar</h2>
-            <ul className="mt-6 space-y-4">
-              {sector.features.map((feature) => (
-                <li key={feature} className="flex gap-3 text-sm font-bold leading-6">
-                  <CheckCircle2 className="mt-0.5 shrink-0 text-emerald-500" size={18} />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </aside>
-        </div>
-      </section>
+          <ul className="mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+            {sector.features.map((feature) => (
+              <li key={feature} className="flex items-start gap-2 text-xs text-[color:var(--home-ink)] sm:text-sm">
+                <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-emerald-400" />
+                <span className="leading-snug">{feature}</span>
+              </li>
+            ))}
+          </ul>
 
-      <section className="px-5 py-20 md:px-8">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2">
-          <article className="data-card p-8">
-            <Route className="mb-6 text-cyan-500" size={30} />
-            <h2 className="font-display text-3xl font-black">Günlük akış</h2>
-            <div className="mt-8 grid gap-4">
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              href="/demo"
+              className="glow-border group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-6 py-3 text-sm font-bold text-slate-950 transition-transform hover:scale-[1.02] active:scale-95"
+            >
+              Demo Paneli Aç
+              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a
+              href={whatsappLink(`Merhaba, ${sector.title} sektörü için Buneka lisansı almak istiyorum.`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glow-border inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-[color:var(--home-ink)]"
+            >
+              <MessageCircle size={16} className="text-emerald-400" /> WhatsApp&apos;tan Satın Al
+            </a>
+          </div>
+        </section>
+
+        <section className="glow-border flex min-h-0 flex-col divide-y divide-[color:var(--home-border)] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
+            <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
+              <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
+            </p>
+            <div className="grid grid-cols-2 gap-2">
               {sector.workflow.map((step, index) => (
-                <div
-                  key={step}
-                  className="flex items-center gap-4 rounded-2xl bg-[color:var(--color-bg-secondary)] p-4"
-                >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-sm font-black text-white">
+                <div key={step} className="glow-border flex items-center gap-2 rounded-lg p-2.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-[11px] font-black text-white">
                     {index + 1}
                   </span>
-                  <span className="font-bold">{step}</span>
+                  <span className="text-[11px] font-semibold leading-tight text-[color:var(--home-ink)]">{step}</span>
                 </div>
               ))}
             </div>
-          </article>
+          </div>
 
-          <article className="data-card p-8">
-            <Layers3 className="mb-6 text-amber-500" size={30} />
-            <h2 className="font-display text-3xl font-black">Önerilen modüller</h2>
-            <div className="mt-8 flex flex-wrap gap-3">
+          <div className="shrink-0 p-4 sm:p-5">
+            <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
+            <div className="flex flex-wrap gap-1.5">
               {sector.modules.map((module) => (
                 <span
                   key={module}
-                  className="rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-secondary)] px-5 py-3 text-sm font-black text-cyan-700 dark:text-cyan-300"
+                  className="glow-border rounded-full px-3 py-1.5 text-[11px] font-bold text-[color:var(--home-ink)]"
                 >
                   {module}
                 </span>
               ))}
             </div>
-          </article>
-        </div>
-      </section>
+          </div>
 
-      <section
-        id="paket"
-        className="border-t border-[color:var(--color-border)] bg-[color:var(--color-card)] px-5 py-20 md:px-8"
-      >
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-10 max-w-3xl">
-            <p className="mb-3 text-sm font-black uppercase tracking-wide text-amber-500">Paket önerisi</p>
-            <h2 className="font-display text-4xl font-black tracking-tight">
-              {sector.title} için genelde Buneka Kasa veya Stok ile başlanır.
-            </h2>
+          <div className="shrink-0 p-4 sm:p-5">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
+              Paket önerisi
+            </p>
+            <div className="glow-border flex items-center justify-between rounded-lg p-3">
+              <div>
+                <p className="font-display text-sm font-bold text-[color:var(--home-ink)]">{recommendedPlan.name}</p>
+                <p className="text-xs text-[color:var(--home-muted)]">{recommendedPlan.price} /yıl</p>
+              </div>
+              <Link href="/paketler" className="text-xs font-bold text-[color:var(--home-glow)]">
+                Tüm paketler →
+              </Link>
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-4">
-            {plans.map((plan) => (
-              <article key={plan.name} className="data-card p-6">
-                <h3 className="font-display text-xl font-black">{plan.name}</h3>
-                <p className="mt-3 min-h-16 text-sm leading-6 text-[color:var(--color-muted)]">
-                  {plan.summary}
-                </p>
-                <p className="mt-5 text-3xl font-black text-cyan-600 dark:text-cyan-300">{plan.price}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
+
+      <footer className="relative z-10 flex shrink-0 items-center justify-between px-4 py-2.5 text-[10px] text-[color:var(--home-muted)] sm:px-6 sm:text-xs">
+        <Link href="/#sektorler" className="flex items-center gap-1.5 font-bold hover:text-[color:var(--home-ink)]">
+          <ArrowLeft size={12} /> Sektörlere dön
+        </Link>
+        <span>BUNEKA © 2026 · Ankara, TR</span>
+      </footer>
     </main>
   );
 }

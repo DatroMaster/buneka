@@ -6,13 +6,17 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   Boxes,
+  Package,
   Plus,
+  ScanBarcode,
+  WalletCards,
   X,
 } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
 import { EmptyState } from "../_components/EmptyState";
+import { QuickLinks } from "../_components/QuickLinks";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Pick<Tables<"products">, "id" | "name" | "barcode" | "stock_quantity">;
@@ -167,6 +171,13 @@ export default function StokPage() {
             <Plus size={18} /> Yeni Stok Girişi
           </button>
         }
+      />
+      <QuickLinks
+        links={[
+          { href: "/app", label: "Fiyat Sorgula", icon: ScanBarcode },
+          { href: "/app/urunler", label: "Ürünler", icon: Package },
+          { href: "/app/kasa", label: "Günlük Kasa", icon: WalletCards },
+        ]}
       />
 
       {message && (

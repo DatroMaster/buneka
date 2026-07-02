@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Boxes, Check, Crown, Minus, ScanLine, WalletCards } from "lucide-react";
+import { ArrowLeft, Boxes, Check, Crown, MessageCircle, Minus, ScanLine, WalletCards } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { CONTACT_PHONE_DISPLAY, whatsappLink } from "@/lib/contact";
 import { plans } from "@/lib/content/plans";
 
 export const metadata = {
@@ -22,6 +23,13 @@ const PLAN_ICONS: Record<string, typeof ScanLine> = {
   CASH: WalletCards,
   STOCK: Boxes,
   PATRON: Crown,
+};
+
+const PLAN_BORDER_COLORS: Record<string, string> = {
+  PRICE: "glow-border-turquoise",
+  CASH: "glow-border-amber",
+  STOCK: "glow-border-green",
+  PATRON: "glow-border-violet",
 };
 
 const FEATURES: { code: string; label: string }[] = [
@@ -108,7 +116,7 @@ export default function PaketlerPage() {
               const code = PLAN_CODES[plan.name];
               const Icon = PLAN_ICONS[code];
               return (
-                <div key={plan.name} className="glow-border relative flex flex-col rounded-xl bg-[color:var(--color-card)] p-6">
+                <div key={plan.name} className={`relative flex flex-col rounded-xl bg-[color:var(--color-card)] p-6 ${PLAN_BORDER_COLORS[code]}`}>
                   {plan.badge && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-lg shadow-cyan-500/30">
                       {plan.badge}
@@ -121,9 +129,14 @@ export default function PaketlerPage() {
                   <p className="mt-3 text-3xl font-black text-cyan-600 dark:text-cyan-300">{plan.price}</p>
                   <p className="mt-1 text-xs text-[color:var(--color-muted)]">/yıl</p>
                   <p className="mt-3 flex-1 text-sm leading-6 text-[color:var(--color-muted)]">{plan.summary}</p>
-                  <Link href="/login" className="premium-button-secondary mt-5 w-full text-sm">
-                    Bu paketi seç <ArrowRight size={16} />
-                  </Link>
+                  <a
+                    href={whatsappLink(`Merhaba, ${plan.name} paketini satın almak istiyorum.`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="premium-button-secondary mt-5 w-full text-sm"
+                  >
+                    <MessageCircle size={16} className="text-emerald-500" /> Satın Al
+                  </a>
                 </div>
               );
             })}
@@ -173,6 +186,21 @@ export default function PaketlerPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="glow-border mt-8 flex flex-col items-center justify-between gap-4 rounded-xl bg-[color:var(--color-card)] p-6 sm:flex-row">
+            <div>
+              <p className="font-display text-lg font-bold">Hangi paketin size uygun olduğundan emin değil misiniz?</p>
+              <p className="text-sm text-[color:var(--color-muted)]">WhatsApp&apos;tan yazın, birlikte karar verelim.</p>
+            </div>
+            <a
+              href={whatsappLink("Merhaba, Buneka paketleri hakkında bilgi almak istiyorum.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="premium-button-primary shrink-0 text-sm"
+            >
+              <MessageCircle size={18} /> {CONTACT_PHONE_DISPLAY}
+            </a>
           </div>
         </div>
       </section>

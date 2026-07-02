@@ -351,6 +351,44 @@
     background: var(--home-surface-soft);
   }
 
+  /* Colorful capillary-thin border variants — used to bring life to module/plan
+     cards without any blurred bleed, still just a crisp 1px hairline */
+  .glow-border-amber {
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .glow-border-amber:hover {
+    border-color: rgba(245, 158, 11, 0.9);
+  }
+  .glow-border-turquoise {
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .glow-border-turquoise:hover {
+    border-color: rgba(6, 182, 212, 0.9);
+  }
+  .glow-border-green {
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .glow-border-green:hover {
+    border-color: rgba(16, 185, 129, 0.9);
+  }
+  .glow-border-violet {
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .glow-border-violet:hover {
+    border-color: rgba(167, 139, 250, 0.9);
+  }
+  .glow-border-rose {
+    border: 1px solid rgba(251, 113, 133, 0.35);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .glow-border-rose:hover {
+    border-color: rgba(251, 113, 133, 0.9);
+  }
+
   /* Faint geometric grid — replaces heavy sparkle/bloom with crisp, elite lines */
   .home-grid-pattern {
     background-image:

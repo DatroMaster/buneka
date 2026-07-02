@@ -1,12 +1,13 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { Activity, Package, TrendingUp, WalletCards } from "lucide-react";
+import { Activity, BarChart3, Boxes, HandCoins, Package, ScanBarcode, TrendingUp, WalletCards } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
 import { StatCard } from "../_components/StatCard";
 import { EmptyState } from "../_components/EmptyState";
+import { QuickLinks } from "../_components/QuickLinks";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id">;
 type SaleItemWithProduct = Pick<Tables<"sale_items">, "quantity" | "sale_price"> & {
@@ -116,6 +117,15 @@ export default function KasaPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <PageHeader title="Günlük Kasa" subtitle="Bugünkü satışlarınız ve kasa durumunuz." />
+      <QuickLinks
+        links={[
+          { href: "/app", label: "Fiyat Sorgula", icon: ScanBarcode },
+          { href: "/app/urunler", label: "Ürünler", icon: Package },
+          { href: "/app/stok", label: "Stok Takibi", icon: Boxes },
+          { href: "/app/veresiye", label: "Veresiye", icon: HandCoins },
+          { href: "/app/raporlar", label: "Raporlar", icon: BarChart3 },
+        ]}
+      />
 
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={WalletCards} label="Toplam Kasa" value={formatMoney(stats.totalAmount)} tone="primary" />

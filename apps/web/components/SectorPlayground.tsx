@@ -26,12 +26,18 @@ export function SectorPlayground() {
   const router = useRouter();
 
   return (
-    <div className="flex h-64 flex-col gap-2">
+    <div className="flex h-full min-h-0 flex-col gap-2">
       <div
         ref={containerRef}
-        className="relative flex-1 overflow-hidden rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5"
+        className="relative min-h-0 flex-1 overflow-hidden rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5"
       >
-        <div className="flex h-full flex-wrap content-start gap-2">
+        <div
+          className="grid h-full gap-2"
+          style={{
+            gridTemplateColumns: "repeat(auto-fill, minmax(84px, 1fr))",
+            gridAutoRows: "1fr",
+          }}
+        >
           {sectors.map((sector, index) => (
             <motion.div
               key={sector.slug}
@@ -39,15 +45,15 @@ export function SectorPlayground() {
               dragConstraints={containerRef}
               dragElastic={0.18}
               dragMomentum
-              whileHover={{ scale: 1.08, zIndex: 20 }}
+              whileHover={{ scale: 1.06, zIndex: 20 }}
               whileTap={{ scale: 0.95, cursor: "grabbing" }}
               onHoverStart={() => setHovered(sector.slug)}
               onHoverEnd={() => setHovered((current) => (current === sector.slug ? null : current))}
               onClick={() => router.push(`/sektorler/${sector.slug}`)}
-              className={`flex h-[58px] w-[86px] shrink-0 cursor-grab flex-col items-center justify-center gap-1 rounded-lg bg-gradient-to-br text-white shadow-lg ${COLORS[index % COLORS.length]}`}
+              className={`flex h-full w-full cursor-grab flex-col items-center justify-center gap-1 rounded-lg bg-gradient-to-br text-white shadow-lg ${COLORS[index % COLORS.length]}`}
             >
-              <sector.icon size={16} />
-              <span className="px-1 text-center text-[9px] font-bold leading-tight">{sector.title}</span>
+              <sector.icon size={18} />
+              <span className="px-1 text-center text-[10px] font-bold leading-tight">{sector.title}</span>
             </motion.div>
           ))}
         </div>

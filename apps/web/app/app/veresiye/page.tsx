@@ -1,11 +1,27 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { HandCoins, Loader2, Minus, Plus, ScanLine, Search, UserPlus, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Boxes,
+  CheckCircle2,
+  HandCoins,
+  Loader2,
+  Minus,
+  Package,
+  Plus,
+  ScanBarcode,
+  ScanLine,
+  Search,
+  UserPlus,
+  WalletCards,
+  X,
+} from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
 import { EmptyState } from "../_components/EmptyState";
+import { QuickLinks } from "../_components/QuickLinks";
 
 type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
 type Customer = Tables<"customers">;
@@ -29,6 +45,7 @@ export default function VeresiyePage() {
   const [saving, setSaving] = useState(false);
   const [appUser, setAppUser] = useState<AppUser | null>(null);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [oldestDebtDates, setOldestDebtDates] = useState<Record<string, string>>({});
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
   const [showNewRecord, setShowNewRecord] = useState(false);
@@ -63,13 +80,29 @@ export default function VeresiyePage() {
       const currentUser = foundUser as AppUser;
       setAppUser(currentUser);
 
-      const { data } = await supabase
-        .from("customers")
-        .select("*")
-        .eq("organization_id", currentUser.organization_id)
-        .order("credit_balance", { ascending: false });
+      const [{ data }, { data: debtRows }] = await Promise.all([
+        supabase
+          .from("customers")
+          .select("*")
+          .eq("organization_id", currentUser.organization_id)
+          .order("credit_balance", { ascending: false }),
+        supabase
+          .from("credit_transactions")
+          .select("customer_id, created_at")
+          .eq("organization_id", currentUser.organization_id)
+          .eq("type", "debt")
+          .order("created_at", { ascending: true }),
+      ]);
 
       if (data) setCustomers(data);
+
+      if (debtRows) {
+        const map: Record<string, string> = {};
+        for (const row of debtRows) {
+          if (!map[row.customer_id]) map[row.customer_id] = row.created_at;
+        }
+        setOldestDebtDates(map);
+      }
     }
 
     setLoading(false);
@@ -100,6 +133,20 @@ export default function VeresiyePage() {
   const selectedCustomer = customers.find((customer) => customer.id === selectedCustomerId) || null;
   const totalDebt = customers.reduce((sum, customer) => sum + Math.max(0, Number(customer.credit_balance)), 0);
 
+  function daysSince(dateStr?: string) {
+    if (!dateStr) return null;
+    const diffMs = new Date().getTime() - new Date(dateStr).getTime();
+    return Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+  }
+
+  const oldestDebts = customers
+    .filter((customer) => Number(customer.credit_balance) > 0 && oldestDebtDates[customer.id])
+    .sort(
+      (a, b) =>
+        new Date(oldestDebtDates[a.id]).getTime() - new Date(oldestDebtDates[b.id]).getTime()
+    )
+    .slice(0, 5);
+
   function openNewRecord() {
     setNewRecord(emptyNewRecord);
     setUseNewCustomer(customers.length === 0);
@@ -112,6 +159,16 @@ export default function VeresiyePage() {
     setTxAmount("");
     setTxNote("");
     setTxType("debt");
+    setDetailMessage("");
+    void loadTransactions(customer.id);
+  }
+
+  function openPaymentQuick(customer: Customer, event: React.MouseEvent) {
+    event.stopPropagation();
+    setSelectedCustomerId(customer.id);
+    setTxType("payment");
+    setTxAmount(String(Number(customer.credit_balance)));
+    setTxNote("");
     setDetailMessage("");
     void loadTransactions(customer.id);
   }
@@ -281,8 +338,16 @@ export default function VeresiyePage() {
           </button>
         }
       />
+      <QuickLinks
+        links={[
+          { href: "/app", label: "Fiyat Sorgula", icon: ScanBarcode },
+          { href: "/app/kasa", label: "Günlük Kasa", icon: WalletCards },
+          { href: "/app/urunler", label: "Ürünler", icon: Package },
+          { href: "/app/stok", label: "Stok Takibi", icon: Boxes },
+        ]}
+      />
 
-      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="stat-card">
           <div className="stat-card-icon bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300">
             <HandCoins size={22} />
@@ -300,6 +365,31 @@ export default function VeresiyePage() {
             <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Kayıtlı Müşteri</p>
             <p className="text-2xl font-black text-cyan-600 dark:text-cyan-300">{customers.length}</p>
           </div>
+        </div>
+
+        <div className="data-card p-4 lg:row-span-1">
+          <div className="mb-2 flex items-center gap-1.5 text-xs font-black uppercase text-amber-600 dark:text-amber-400">
+            <AlertTriangle size={14} /> En Eski Borçlar
+          </div>
+          {oldestDebts.length === 0 ? (
+            <p className="text-xs text-slate-400 dark:text-slate-500">Açık borç yok.</p>
+          ) : (
+            <div className="space-y-1.5">
+              {oldestDebts.map((customer) => (
+                <button
+                  key={customer.id}
+                  type="button"
+                  onClick={() => openCustomer(customer)}
+                  className="flex w-full items-center justify-between gap-2 rounded-lg px-1.5 py-1 text-left text-xs transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                >
+                  <span className="truncate font-bold text-slate-700 dark:text-slate-300">{customer.name}</span>
+                  <span className="shrink-0 text-amber-600 dark:text-amber-400">
+                    {daysSince(oldestDebtDates[customer.id])} gündür
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -329,42 +419,62 @@ export default function VeresiyePage() {
               <tr>
                 <th className="px-6 py-3 font-medium">Müşteri</th>
                 <th className="px-6 py-3 font-medium">Telefon</th>
+                <th className="px-6 py-3 font-medium">Süre</th>
                 <th className="px-6 py-3 text-right font-medium">Bakiye</th>
+                <th className="px-6 py-3 text-right font-medium" />
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
-                  <td colSpan={3} className="p-8 text-center">
+                  <td colSpan={5} className="p-8 text-center">
                     <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
               ) : filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={3}>
+                  <td colSpan={5}>
                     <EmptyState icon={HandCoins} message="Müşteri bulunamadı." />
                   </td>
                 </tr>
               ) : (
-                filteredCustomers.map((customer) => (
-                  <tr
-                    key={customer.id}
-                    className="cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
-                    onClick={() => openCustomer(customer)}
-                  >
-                    <td className="px-6 py-4 font-medium text-slate-950 dark:text-slate-50">{customer.name}</td>
-                    <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{customer.phone || "-"}</td>
-                    <td
-                      className={`px-6 py-4 text-right font-bold ${
-                        Number(customer.credit_balance) > 0
-                          ? "text-amber-600 dark:text-amber-400"
-                          : "text-emerald-600 dark:text-emerald-400"
-                      }`}
+                filteredCustomers.map((customer) => {
+                  const balance = Number(customer.credit_balance);
+                  const days = balance > 0 ? daysSince(oldestDebtDates[customer.id]) : null;
+                  return (
+                    <tr
+                      key={customer.id}
+                      className="cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                      onClick={() => openCustomer(customer)}
                     >
-                      {formatMoney(Number(customer.credit_balance))}
-                    </td>
-                  </tr>
-                ))
+                      <td className="px-6 py-4 font-medium text-slate-950 dark:text-slate-50">{customer.name}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{customer.phone || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                        {days !== null ? `${days} gündür` : "-"}
+                      </td>
+                      <td
+                        className={`px-6 py-4 text-right font-bold ${
+                          balance > 0
+                            ? "text-amber-600 dark:text-amber-400"
+                            : "text-emerald-600 dark:text-emerald-400"
+                        }`}
+                      >
+                        {formatMoney(balance)}
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        {balance > 0 && (
+                          <button
+                            type="button"
+                            onClick={(event) => openPaymentQuick(customer, event)}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 transition-colors hover:bg-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:hover:bg-emerald-500/20"
+                          >
+                            <CheckCircle2 size={13} /> Ödeme Alındı
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

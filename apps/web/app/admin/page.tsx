@@ -15,11 +15,11 @@ const activeRoutes = [
   { href: "/admin/customers", title: "Müşteriler", text: "İşletme, sahip ve lisans durumu.", icon: Users, tone: "cyan" },
   { href: "/admin/licenses", title: "Lisanslar", text: "Paket ata, yenile, süresini yönet.", icon: KeyRound, tone: "emerald" },
   { href: "/admin/modules", title: "Modüller", text: "Müşteri bazlı ek modül erişimi.", icon: Puzzle, tone: "amber" },
+  { href: "/admin/analytics", title: "Analitik", text: "En çok satış/sorgu yapan işletmeler, lisans özeti.", icon: LineChart, tone: "cyan" },
 ] as const;
 
 const upcomingRoutes = [
   { href: "/admin/campaigns", title: "Kampanyalar", text: "Paket ve müşteri hedefli kampanyalar — sonraki faz.", icon: BadgePercent },
-  { href: "/admin/analytics", title: "Analitik", text: "Kullanım ve paket dağılımı — sonraki faz.", icon: LineChart },
   { href: "/admin/devices", title: "Cihazlar", text: "Barkod okuyucu ve donanım kataloğu — sonraki faz.", icon: MonitorSmartphone },
   { href: "/admin/resellers", title: "Bayiler", text: "Kanal ve komisyon takibi — sonraki faz.", icon: Store },
   { href: "/admin/audit", title: "İşlem kayıtları", text: "Kritik admin hareketleri — sonraki faz.", icon: ClipboardList },

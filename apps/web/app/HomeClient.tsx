@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowRight, ChevronDown, PhoneOff, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, ChevronDown, MessageCircle, PhoneOff, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { CONTACT_PHONE_DISPLAY, whatsappLink } from "@/lib/contact";
 import { modules } from "@/lib/content/modules";
 import { plans } from "@/lib/content/plans";
 
@@ -41,6 +42,14 @@ function useLiveClock() {
 
 type SectionId = "sektorler" | "moduller" | "paketler";
 
+const CAPILLARY_COLORS = [
+  "glow-border-turquoise",
+  "glow-border-amber",
+  "glow-border-green",
+  "glow-border-violet",
+  "glow-border-rose",
+];
+
 export default function HomeClient() {
   const now = useLiveClock();
   const [openSection, setOpenSection] = useState<SectionId | null>(null);
@@ -71,12 +80,12 @@ export default function HomeClient() {
       content: (
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-2">
-            {modules.map((module) => (
+            {modules.map((module, index) => (
               <button
                 key={module.label}
                 type="button"
                 onClick={() => setSelectedModule(selectedModule === module.label ? null : module.label)}
-                className={`glow-border flex items-center gap-2 rounded-lg px-3 py-2 text-left text-xs text-[color:var(--home-ink)] sm:text-sm ${selectedModule === module.label ? "glow-border-selected" : ""}`}
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-left text-xs text-[color:var(--home-ink)] sm:text-sm ${selectedModule === module.label ? "glow-border glow-border-selected" : CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
               >
                 <module.icon size={14} className="shrink-0 text-[color:var(--home-glow)]" />
                 <span className="truncate">{module.label}</span>
@@ -106,12 +115,12 @@ export default function HomeClient() {
       content: (
         <div className="flex flex-col gap-3">
           <div className="grid grid-cols-2 gap-2">
-            {plans.map((plan) => (
+            {plans.map((plan, index) => (
               <button
                 key={plan.name}
                 type="button"
                 onClick={() => setSelectedPlan(selectedPlan === plan.name ? null : plan.name)}
-                className={`glow-border rounded-lg px-3 py-2.5 text-left ${selectedPlan === plan.name ? "glow-border-selected" : ""}`}
+                className={`rounded-lg px-3 py-2.5 text-left ${selectedPlan === plan.name ? "glow-border glow-border-selected" : CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-display text-xs font-bold text-[color:var(--home-ink)] sm:text-sm">
@@ -258,6 +267,14 @@ export default function HomeClient() {
           Buneka resmi yazarkasa veya mali belge sistemi değildir; küçük işletme operasyon
           hafızasıdır.
         </span>
+        <a
+          href={whatsappLink("Merhaba, Buneka hakkında bilgi almak istiyorum.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 font-bold text-[color:var(--home-glow)] hover:underline"
+        >
+          <MessageCircle size={12} /> {CONTACT_PHONE_DISPLAY}
+        </a>
         <span>BUNEKA © 2026 · Ankara, TR</span>
       </footer>
     </div>

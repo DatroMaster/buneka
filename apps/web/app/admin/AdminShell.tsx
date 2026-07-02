@@ -1,7 +1,7 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { ArrowLeft, KeyRound, LayoutDashboard, Menu, Puzzle, Users, X } from "lucide-react";
+import { ArrowLeft, KeyRound, LayoutDashboard, LineChart, Menu, Puzzle, Users, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -14,6 +14,7 @@ const navItems = [
   { name: "Müşteriler", href: "/admin/customers", icon: Users },
   { name: "Lisanslar", href: "/admin/licenses", icon: KeyRound },
   { name: "Modüller", href: "/admin/modules", icon: Puzzle },
+  { name: "Analitik", href: "/admin/analytics", icon: LineChart },
 ];
 
 export default function AdminShell({

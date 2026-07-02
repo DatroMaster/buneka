@@ -1,12 +1,26 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { AlertTriangle, Loader2, Pencil, PackagePlus, Percent, Plus, Search, X } from "lucide-react";
+import {
+  AlertTriangle,
+  Boxes,
+  HandCoins,
+  Loader2,
+  Pencil,
+  PackagePlus,
+  Percent,
+  Plus,
+  ScanBarcode,
+  Search,
+  WalletCards,
+  X,
+} from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { convertUsdToTry } from "@/lib/currency/tcmb";
 import { PageHeader } from "../_components/PageHeader";
 import { EmptyState } from "../_components/EmptyState";
+import { QuickLinks } from "../_components/QuickLinks";
 import { fetchUsdRateAction } from "./currency-actions";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
@@ -261,6 +275,14 @@ export default function UrunlerPage() {
             </button>
           </>
         }
+      />
+      <QuickLinks
+        links={[
+          { href: "/app", label: "Fiyat Sorgula", icon: ScanBarcode },
+          { href: "/app/stok", label: "Stok Takibi", icon: Boxes },
+          { href: "/app/kasa", label: "Günlük Kasa", icon: WalletCards },
+          { href: "/app/veresiye", label: "Veresiye", icon: HandCoins },
+        ]}
       />
 
       {message && (

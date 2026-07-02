@@ -15,6 +15,7 @@ import {
 import { FormEvent, useMemo, useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { whatsappLink } from "@/lib/contact";
 
 type DemoProduct = {
   barcode: string;
@@ -319,10 +320,15 @@ export default function DemoPage() {
           </div>
 
           {/* CTA */}
-          <Link href="/login" className="premium-button-amber mt-5 flex w-full">
+          <a
+            href={whatsappLink("Merhaba, Buneka lisansı talep etmek istiyorum.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="premium-button-amber mt-5 flex w-full"
+          >
             <CircleDollarSign size={18} aria-hidden="true" />
-            Lisans Talebi
-          </Link>
+            Lisans Talebi (WhatsApp)
+          </a>
         </aside>
       </div>
     </main>

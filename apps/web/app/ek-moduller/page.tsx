@@ -10,6 +10,14 @@ export const metadata = {
   description: "Buneka lisansınıza ekleyebileceğiniz tüm ek modüller ve yıllık ücretleri.",
 };
 
+const CAPILLARY_COLORS = [
+  "glow-border-turquoise",
+  "glow-border-amber",
+  "glow-border-green",
+  "glow-border-violet",
+  "glow-border-rose",
+];
+
 export default function EkModullerPage() {
   return (
     <main className="min-h-screen bg-[var(--color-bg)] text-[color:var(--color-text)]">
@@ -45,8 +53,11 @@ export default function EkModullerPage() {
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {modules.map((module) => (
-              <article key={module.label} className="data-card p-6">
+            {modules.map((module, index) => (
+              <article
+                key={module.label}
+                className={`rounded-xl bg-[color:var(--color-card)] p-6 ${CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
+              >
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
                   <module.icon size={24} />
                 </div>

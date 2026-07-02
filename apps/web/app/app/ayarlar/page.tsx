@@ -1,10 +1,20 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { FileSpreadsheet, Loader2, MonitorSmartphone, Save, ShieldCheck, Store } from "lucide-react";
+import {
+  FileSpreadsheet,
+  HandCoins,
+  Loader2,
+  MonitorSmartphone,
+  Package,
+  Save,
+  ShieldCheck,
+  Store,
+} from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
+import { QuickLinks } from "../_components/QuickLinks";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id">;
 type Organization = Tables<"organizations">;
@@ -200,6 +210,12 @@ export default function AyarlarPage() {
   return (
     <div className="mx-auto max-w-4xl">
       <PageHeader title="Ayarlar" subtitle="İşletme ve sistem ayarlarınız." />
+      <QuickLinks
+        links={[
+          { href: "/app/urunler", label: "Ürünler", icon: Package },
+          { href: "/app/veresiye", label: "Veresiye", icon: HandCoins },
+        ]}
+      />
 
       {message && (
         <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
