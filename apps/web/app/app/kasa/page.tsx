@@ -121,8 +121,8 @@ export default function KasaPage() {
       </div>
 
       <div className="data-card overflow-hidden">
-        <div className="border-b border-slate-100 px-6 py-4">
-          <h2 className="font-display text-lg font-black text-slate-950">Son Satışlar</h2>
+        <div className="border-b border-slate-100 px-6 py-4 dark:border-slate-800">
+          <h2 className="font-display text-lg font-black text-slate-950 dark:text-slate-50">Son Satışlar</h2>
         </div>
 
         {sales.length === 0 ? (
@@ -131,28 +131,28 @@ export default function KasaPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-slate-50 text-sm text-slate-600">
+                <tr className="bg-slate-50 text-sm text-slate-600 dark:bg-slate-800/60 dark:text-slate-400">
                   <th className="px-6 py-3 font-medium">Saat</th>
                   <th className="px-6 py-3 font-medium">Ürünler</th>
                   <th className="px-6 py-3 font-medium">Ödeme</th>
                   <th className="px-6 py-3 text-right font-medium">Tutar</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {sales.map((sale) => (
-                  <tr key={sale.id} className="transition-colors hover:bg-cyan-50/50">
-                    <td className="px-6 py-4 text-sm font-medium text-slate-800">{formatTime(sale.sale_time)}</td>
+                  <tr key={sale.id} className="transition-colors hover:bg-cyan-50/50 dark:hover:bg-cyan-500/10">
+                    <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">{formatTime(sale.sale_time)}</td>
                     <td className="px-6 py-4">
                       {sale.sale_items?.map((item, index) => (
-                        <div key={`${sale.id}-${index}`} className="text-sm font-medium text-slate-800">
+                        <div key={`${sale.id}-${index}`} className="text-sm font-medium text-slate-800 dark:text-slate-200">
                           {item.quantity}x {item.products?.name || "Bilinmeyen Ürün"}
                         </div>
                       ))}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
                       {sale.payment_type === "cash" ? "Nakit" : sale.payment_type}
                     </td>
-                    <td className="px-6 py-4 text-right font-bold text-emerald-600">
+                    <td className="px-6 py-4 text-right font-bold text-emerald-600 dark:text-emerald-400">
                       {formatMoney(Number(sale.total_amount))}
                     </td>
                   </tr>

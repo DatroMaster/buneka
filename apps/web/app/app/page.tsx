@@ -166,8 +166,8 @@ export default function FiyatSorgulaPage() {
             <ScanBarcode size={26} />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-950 md:text-3xl">Bu ne kadar?</h1>
-            <p className="font-medium text-slate-500">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
+            <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-950 md:text-3xl dark:text-slate-50">Bu ne kadar?</h1>
+            <p className="font-medium text-slate-500 dark:text-slate-400">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
           </div>
         </div>
 
@@ -183,7 +183,7 @@ export default function FiyatSorgulaPage() {
               autoComplete="off"
               disabled={loading}
             />
-            <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50" size={22} />
+            <ScanBarcode className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={22} />
             <button type="submit" className="hidden">Ara</button>
           </div>
         </form>
@@ -192,28 +192,28 @@ export default function FiyatSorgulaPage() {
           {loading ? (
             <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-500" />
           ) : error ? (
-            <div className="w-full max-w-md rounded-2xl bg-orange-50 p-8 text-center ring-1 ring-orange-200">
-              <AlertCircle size={44} className="mx-auto mb-4 text-orange-600" />
-              <h3 className="mb-6 text-xl font-bold text-orange-600">{error}</h3>
+            <div className="w-full max-w-md rounded-2xl bg-orange-50 p-8 text-center ring-1 ring-orange-200 dark:bg-orange-500/10 dark:ring-orange-500/20">
+              <AlertCircle size={44} className="mx-auto mb-4 text-orange-600 dark:text-orange-400" />
+              <h3 className="mb-6 text-xl font-bold text-orange-600 dark:text-orange-400">{error}</h3>
               <Link href="/app/urunler" className="premium-button-amber shadow-none">
                 <Plus size={20} /> Yeni Ürün Ekle
               </Link>
             </div>
           ) : product ? (
-            <div className="w-full max-w-2xl rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 md:p-10">
-              <span className="mb-4 inline-block rounded-full bg-cyan-50 px-4 py-2 text-xs font-black uppercase text-cyan-700">
+            <div className="w-full max-w-2xl rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 md:p-10">
+              <span className="mb-4 inline-block rounded-full bg-cyan-50 px-4 py-2 text-xs font-black uppercase text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300">
                 {product.category || "Kategorisiz"}
               </span>
-              <h2 className="mb-3 text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl">{product.name}</h2>
-              <p className="mb-6 font-mono text-sm font-bold text-slate-400">{product.barcode}</p>
+              <h2 className="mb-3 text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl dark:text-slate-50">{product.name}</h2>
+              <p className="mb-6 font-mono text-sm font-bold text-slate-400 dark:text-slate-500">{product.barcode}</p>
 
-              <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl">
+              <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl dark:text-cyan-300">
                 {formatMoney(product.sale_price)}
               </div>
 
-              <div className="mb-8 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
-                <span className="font-bold text-slate-500">Stok Durumu:</span>
-                <span className={`text-lg font-black ${product.stock_quantity <= product.min_stock ? "text-orange-600" : "text-slate-950"}`}>
+              <div className="mb-8 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200 dark:bg-slate-800/60 dark:ring-slate-700">
+                <span className="font-bold text-slate-500 dark:text-slate-400">Stok Durumu:</span>
+                <span className={`text-lg font-black ${product.stock_quantity <= product.min_stock ? "text-orange-600 dark:text-orange-400" : "text-slate-950 dark:text-slate-50"}`}>
                   {product.stock_quantity} Adet
                 </span>
               </div>
@@ -228,14 +228,14 @@ export default function FiyatSorgulaPage() {
               </div>
             </div>
           ) : (
-            <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center">
-              <ScanBarcode size={48} className="mb-4 text-slate-300" />
-              <p className="text-lg font-semibold text-slate-600">Sorgulama yapmak için barkod okutun.</p>
+            <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center dark:border-slate-700 dark:bg-slate-900/40">
+              <ScanBarcode size={48} className="mb-4 text-slate-300 dark:text-slate-600" />
+              <p className="text-lg font-semibold text-slate-600 dark:text-slate-400">Sorgulama yapmak için barkod okutun.</p>
             </div>
           )}
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-4 border-t border-slate-200 pt-6 sm:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-4 border-t border-slate-200 pt-6 dark:border-slate-800 sm:grid-cols-3">
           <StatCard icon={CheckCircle2} label="Bugün Satış" value={String(stats.sales)} tone="primary" />
           <StatCard icon={TrendingUp} label="Bugün Kasa" value={formatMoney(stats.revenue)} tone="green" />
           <StatCard icon={Activity} label="Bugün Sorgu" value={String(stats.queries)} tone="amber" />

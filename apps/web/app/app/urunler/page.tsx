@@ -175,29 +175,29 @@ export default function UrunlerPage() {
       />
 
       {message && (
-        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950">
+        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
           {message}
         </div>
       )}
 
       <div className="data-card flex h-[calc(100vh-220px)] flex-col overflow-hidden">
-        <div className="border-b border-slate-100 p-4">
+        <div className="border-b border-slate-100 p-4 dark:border-slate-800">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={20} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400" size={20} />
             <input
               type="text"
               placeholder="Ürün adı veya barkod ile ara..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
             />
           </div>
         </div>
 
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left">
-            <thead className="sticky top-0 z-10 bg-slate-50">
-              <tr className="text-sm text-slate-500">
+            <thead className="sticky top-0 z-10 bg-slate-50 dark:bg-slate-900">
+              <tr className="text-sm text-slate-500 dark:text-slate-400">
                 <th className="px-6 py-3 font-medium">Barkod / Ürün Adı</th>
                 <th className="px-6 py-3 font-medium">Kategori</th>
                 <th className="px-6 py-3 text-right font-medium">Alış Fiyatı</th>
@@ -205,7 +205,7 @@ export default function UrunlerPage() {
                 <th className="px-6 py-3 text-right font-medium">Stok</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
@@ -220,32 +220,32 @@ export default function UrunlerPage() {
                 </tr>
               ) : (
                 filteredProducts.map((product) => (
-                  <tr key={product.id} className="transition-colors hover:bg-slate-50">
+                  <tr key={product.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-950">{product.name}</div>
-                      <div className="font-mono text-xs text-slate-500">{product.barcode}</div>
+                      <div className="font-medium text-slate-950 dark:text-slate-50">{product.name}</div>
+                      <div className="font-mono text-xs text-slate-500 dark:text-slate-400">{product.barcode}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-block rounded-lg bg-slate-50 px-2 py-1 text-xs text-slate-500">
+                      <span className="inline-block rounded-lg bg-slate-50 px-2 py-1 text-xs text-slate-500 dark:bg-slate-800 dark:text-slate-400">
                         {product.category || "-"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-slate-500">
+                    <td className="px-6 py-4 text-right text-sm text-slate-500 dark:text-slate-400">
                       {product.purchase_price ? formatMoney(Number(product.purchase_price)) : "-"}
                     </td>
-                    <td className="px-6 py-4 text-right font-bold text-slate-950">
+                    <td className="px-6 py-4 text-right font-bold text-slate-950 dark:text-slate-50">
                       {formatMoney(Number(product.sale_price))}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {Number(product.stock_quantity) <= Number(product.min_stock) && (
-                          <AlertTriangle size={14} className="text-amber-600" />
+                          <AlertTriangle size={14} className="text-amber-600 dark:text-amber-400" />
                         )}
                         <span
                           className={`font-bold ${
                             Number(product.stock_quantity) <= Number(product.min_stock)
-                              ? "text-amber-600"
-                              : "text-slate-950"
+                              ? "text-amber-600 dark:text-amber-400"
+                              : "text-slate-950 dark:text-slate-50"
                           }`}
                         >
                           {product.stock_quantity}
@@ -283,19 +283,19 @@ export default function UrunlerPage() {
       {showBulkUpdate && (
         <Modal title="Toplu Fiyat Güncelle" onClose={() => setShowBulkUpdate(false)}>
           <form className="grid gap-4" onSubmit={applyBulkUpdate}>
-            <p className="text-sm leading-6 text-slate-600">
+            <p className="text-sm leading-6 text-slate-600 dark:text-slate-400">
               Bu işlem mevcut arama filtresindeki {filteredProducts.length} ürünün satış fiyatını günceller.
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button
-                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm" : "border-slate-200 bg-white"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
                 type="button"
                 onClick={() => setBulkMode("percent")}
               >
                 Yüzde
               </button>
               <button
-                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm" : "border-slate-200 bg-white"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
                 type="button"
                 onClick={() => setBulkMode("amount")}
               >
@@ -330,11 +330,11 @@ function Modal({
 }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-[#F6F8FB] p-6 text-slate-950 shadow-2xl">
+      <div className="w-full max-w-lg rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
         <div className="mb-5 flex items-center justify-between gap-4">
           <h2 className="font-display text-2xl font-black">{title}</h2>
           <button
-            className="rounded-full bg-white p-2 transition-transform active:scale-90"
+            className="rounded-full bg-white p-2 text-slate-950 transition-transform active:scale-90 dark:bg-slate-800 dark:text-slate-50"
             type="button"
             onClick={onClose}
             aria-label="Kapat"
@@ -362,7 +362,7 @@ function FormInput({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-slate-800">
+    <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
       {label}
       <input
         className="premium-input"

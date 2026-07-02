@@ -87,8 +87,8 @@ export function PriceClient() {
             <ScanLine size={32} aria-hidden="true" />
           </div>
           <div>
-            <h1 className="font-display text-3xl font-extrabold tracking-tight text-slate-950">Bu ne kadar?</h1>
-            <p className="mt-1 font-medium text-slate-600">
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-slate-950 dark:text-slate-50">Bu ne kadar?</h1>
+            <p className="mt-1 font-medium text-slate-600 dark:text-slate-400">
               Ürün fiyatını sorgulayın. Barkodu okutun veya yazın.
             </p>
           </div>
@@ -105,7 +105,7 @@ export function PriceClient() {
               aria-label="Barkod"
               autoFocus
             />
-            <ScanLine className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50" size={24} />
+            <ScanLine className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={24} />
           </div>
           <button className="premium-button-primary h-16 px-10 text-lg" type="submit" disabled={loading || !barcode}>
             {loading ? <Loader2 className="animate-spin" size={24} /> : <Search size={24} />}
@@ -130,31 +130,31 @@ export function PriceClient() {
         </div>
 
         {message && (
-          <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-emerald-600">
+          <div className="mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-emerald-600 dark:border-slate-800 dark:bg-slate-900 dark:text-emerald-400">
             {message}
           </div>
         )}
 
         <div className="relative min-h-[300px]">
           {!selectedBarcode ? (
-            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center">
-              <ScanLine size={48} className="mb-4 text-slate-300" />
-              <p className="text-lg font-semibold text-slate-600">Barkod bekleniyor...</p>
+            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center dark:border-slate-700 dark:bg-slate-900/40">
+              <ScanLine size={48} className="mb-4 text-slate-300 dark:text-slate-600" />
+              <p className="text-lg font-semibold text-slate-600 dark:text-slate-400">Barkod bekleniyor...</p>
             </div>
           ) : product ? (
-            <div className="rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 md:p-10">
-              <p className="mb-4 inline-flex rounded-full bg-cyan-50 px-4 py-2 text-sm font-black uppercase text-cyan-700">
+            <div className="rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 md:p-10">
+              <p className="mb-4 inline-flex rounded-full bg-cyan-50 px-4 py-2 text-sm font-black uppercase text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300">
                 {product.category || "Kategorisiz"}
               </p>
-              <h2 className="mb-6 text-4xl font-black tracking-tight text-slate-950 md:text-6xl">{product.name}</h2>
-              <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl">
+              <h2 className="mb-6 text-4xl font-black tracking-tight text-slate-950 md:text-6xl dark:text-slate-50">{product.name}</h2>
+              <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl dark:text-cyan-300">
                 {currency.format(product.sale_price)}
               </div>
               <div className="mb-10 flex flex-wrap justify-center gap-3">
-                <span className="rounded-xl bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600 ring-1 ring-slate-200">
+                <span className="rounded-xl bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:ring-slate-700">
                   Stok: {product.stock_quantity}
                 </span>
-                <span className="rounded-xl bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600 ring-1 ring-slate-200">
+                <span className="rounded-xl bg-slate-50 px-4 py-2 text-sm font-bold text-slate-600 ring-1 ring-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:ring-slate-700">
                   Barkod: {product.barcode}
                 </span>
               </div>
@@ -170,11 +170,11 @@ export function PriceClient() {
               </div>
             </div>
           ) : notFound ? (
-            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl bg-orange-50 p-10 text-center ring-1 ring-orange-200">
-              <Search size={36} className="mb-4 text-orange-600" />
-              <h2 className="mb-2 text-2xl font-bold text-orange-600">Ürün bulunamadı</h2>
-              <p className="mb-8 text-slate-600">
-                <strong className="text-slate-950">{selectedBarcode}</strong> barkod numaralı ürün sistemde kayıtlı değil.
+            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl bg-orange-50 p-10 text-center ring-1 ring-orange-200 dark:bg-orange-500/10 dark:ring-orange-500/20">
+              <Search size={36} className="mb-4 text-orange-600 dark:text-orange-400" />
+              <h2 className="mb-2 text-2xl font-bold text-orange-600 dark:text-orange-400">Ürün bulunamadı</h2>
+              <p className="mb-8 text-slate-600 dark:text-slate-400">
+                <strong className="text-slate-950 dark:text-slate-50">{selectedBarcode}</strong> barkod numaralı ürün sistemde kayıtlı değil.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <Link className="premium-button-amber shadow-none" href="/app/urunler">

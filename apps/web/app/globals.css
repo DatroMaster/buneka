@@ -1,5 +1,42 @@
 @import 'tailwindcss';
 
+/* Enable class-based dark mode (next-themes toggles `.dark` on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Home (public landing) tokens — flip between :root and .dark ──── */
+:root {
+  --home-bg-1: #F4F7FC;
+  --home-bg-2: #E7ECF5;
+  --home-surface: #FFFFFF;
+  --home-surface-soft: rgba(10, 25, 49, 0.04);
+  --home-ink: #0A1931;
+  --home-muted: #4B5768;
+  --home-glow: #0891B2;
+  --home-border: rgba(10, 25, 49, 0.12);
+  --home-star-opacity: 0;
+}
+
+.dark {
+  --home-bg-1: #0A1931;
+  --home-bg-2: #030B1E;
+  --home-surface: #020617;
+  --home-surface-soft: rgba(0, 242, 254, 0.05);
+  --home-ink: #E2E8F0;
+  --home-muted: #94A3B8;
+  --home-glow: #00F2FE;
+  --home-border: rgba(0, 242, 254, 0.18);
+  --home-star-opacity: 0.4;
+
+  /* App-wide token overrides so shared utility classes (.glass-card,
+     .premium-*, .data-card, .stat-card, body bg) flip to dark surfaces */
+  --color-bg: #0B1220;
+  --color-bg-secondary: #0E1B2A;
+  --color-card: #0F172A;
+  --color-text: #E2E8F0;
+  --color-muted: #94A3B8;
+  --color-border: #1E293B;
+}
+
 /* ── Theme tokens ─────────────────────────────────────────────────── */
 @theme {
   /* Fonts */
@@ -267,5 +304,57 @@
   /* Sidebar surface — deep navy with a soft turquoise glow, not flat black */
   .sidebar-surface {
     background: radial-gradient(120% 140% at 0% 0%, #0B2438 0%, #07111F 55%, #050A13 100%);
+  }
+
+  /* Dark-mode surface overrides for hand-written classes that hardcode
+     a light rgba() rather than referencing a --color-* token */
+  .dark .glass-panel {
+    background: rgba(2, 6, 23, 0.55);
+  }
+  .dark .glass-card {
+    background: rgba(2, 6, 23, 0.72);
+  }
+
+  /* ── Home (public landing) — sparkle field + glow utilities ───────── */
+  .home-viewport {
+    background: radial-gradient(circle at 50% 0%, var(--home-bg-1) 0%, var(--home-bg-2) 100%);
+  }
+
+  .home-star {
+    position: absolute;
+    border-radius: 9999px;
+    background: var(--home-glow);
+    opacity: var(--home-star-opacity);
+    animation: home-twinkle 4s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-star {
+      animation: none;
+    }
+  }
+
+  .glow-border {
+    border: 1px solid var(--home-border);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.08);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .glow-border:hover {
+    border-color: var(--home-glow);
+    box-shadow: 0 0 28px rgba(0, 242, 254, 0.28);
+  }
+  .glow-border:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes home-twinkle {
+  0%, 100% {
+    opacity: calc(var(--home-star-opacity) * 0.4);
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: var(--home-star-opacity);
+    transform: scale(1.15);
   }
 }

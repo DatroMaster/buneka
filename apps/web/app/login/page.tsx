@@ -1,3 +1,5 @@
+import { BunekaMark } from "@/components/BunekaMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { login } from "./actions";
 
 export default async function LoginPage({
@@ -12,16 +14,18 @@ export default async function LoginPage({
       <div className="absolute top-[-10%] left-[-10%] h-[500px] w-[500px] rounded-full bg-cyan-400 opacity-10 blur-[100px]" />
       <div className="absolute right-[-10%] bottom-[-10%] h-[600px] w-[600px] rounded-full bg-amber-400 opacity-10 blur-[120px]" />
 
+      <ThemeToggle className="absolute right-6 top-6 z-20 border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" />
+
       <div className="relative z-10 w-full max-w-md">
         <div className="glass-card flex flex-col space-y-8 rounded-3xl p-10">
           <div className="text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/30">
-              <span className="text-3xl font-black">B</span>
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/30">
+              <BunekaMark size={30} glow={false} />
             </div>
-            <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-950">
+            <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-950 dark:text-slate-50">
               Buneka&apos;ya Giriş
             </h2>
-            <p className="mt-3 text-[15px] font-medium text-slate-500">
+            <p className="mt-3 text-[15px] font-medium text-slate-500 dark:text-slate-400">
               Küçük işletmenin hafızası
             </p>
           </div>
@@ -59,7 +63,7 @@ export default async function LoginPage({
             </div>
 
             {params?.error && (
-              <div className="rounded-xl bg-amber-500/10 p-3 text-center text-sm font-semibold text-amber-700 backdrop-blur-md">
+              <div className="rounded-xl bg-amber-500/10 p-3 text-center text-sm font-semibold text-amber-700 backdrop-blur-md dark:text-amber-400">
                 {params.error}
               </div>
             )}

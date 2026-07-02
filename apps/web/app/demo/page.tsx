@@ -3,7 +3,6 @@
 import Link from "next/link";
 import {
   ArrowLeft,
-  Barcode,
   Camera,
   CheckCircle2,
   CircleDollarSign,
@@ -14,6 +13,8 @@ import {
   ShoppingBasket,
 } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
+import { BunekaMark } from "@/components/BunekaMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type DemoProduct = {
   barcode: string;
@@ -129,44 +130,38 @@ export default function DemoPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F7F4ED]">
+    <main className="min-h-screen bg-[var(--color-bg)]">
       {/* ── Top Bar ── */}
-      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-[#E4DED2] bg-white/80 px-4 py-3 backdrop-blur-md sm:px-6">
+      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-[color:var(--color-border)] bg-[color:var(--color-card)]/80 px-4 py-3 backdrop-blur-md sm:px-6">
         <Link
-          className="inline-flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-4 py-2 text-sm font-semibold text-[#20231F] transition-colors hover:bg-[#F7F4ED]"
+          className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] px-4 py-2 text-sm font-semibold text-[color:var(--color-text)] transition-colors hover:bg-[color:var(--color-bg-secondary)]"
           href="/"
         >
           <ArrowLeft size={18} aria-hidden="true" />
           Buneka
         </Link>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E4DED2] bg-[#F7F4ED] px-3 py-1 text-xs font-medium text-[#667064]">
-          <Barcode size={14} aria-hidden="true" />
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-bg-secondary)] px-3 py-1 text-xs font-medium text-[color:var(--color-muted)]">
+          <BunekaMark size={14} glow={false} />
           Demo verisi ayrı tutulur
         </span>
+        <ThemeToggle className="border-[color:var(--color-border)] text-[color:var(--color-muted)] hover:border-cyan-400" />
       </div>
 
       {/* ── Main Shell ── */}
       <div className="mx-auto grid max-w-6xl gap-6 p-4 sm:p-6 lg:grid-cols-[1fr_340px]">
         {/* ── Left: Scanner Panel ── */}
-        <section
-          className="rounded-2xl border border-[#E4DED2] bg-white p-6 shadow-sm"
-          aria-labelledby="demo-title"
-        >
+        <section className="data-card p-6" aria-labelledby="demo-title">
           {/* Title */}
           <div className="flex items-start gap-4">
-            <ScanLine
-              size={44}
-              className="shrink-0 text-[#4F6F52]"
-              aria-hidden="true"
-            />
+            <ScanLine size={44} className="shrink-0 text-cyan-500" aria-hidden="true" />
             <div>
               <h1
                 id="demo-title"
-                className="text-2xl font-bold tracking-tight text-[#20231F]"
+                className="font-display text-2xl font-bold tracking-tight text-[color:var(--color-text)]"
               >
                 Bu ne kadar?
               </h1>
-              <p className="mt-1 text-sm text-[#667064]">
+              <p className="mt-1 text-sm text-[color:var(--color-muted)]">
                 Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.
               </p>
             </div>
@@ -175,30 +170,24 @@ export default function DemoPage() {
           {/* Barcode Form */}
           <form className="mt-6 flex gap-2" onSubmit={onSubmit}>
             <input
-              className="min-w-0 flex-1 rounded-xl border border-[#E4DED2] bg-white px-4 py-3 text-sm text-[#20231F] placeholder:text-[#667064]/60 outline-none transition-shadow focus:ring-2 focus:ring-[#4F6F52]/30 focus:border-[#4F6F52]"
+              className="premium-input min-w-0 flex-1"
               inputMode="numeric"
               value={barcode}
               onChange={(event) => setBarcode(event.target.value)}
               placeholder="8690000000011"
               aria-label="Barkod"
             />
-            <button
-              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#4F6F52] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3d5740] active:bg-[#334a36]"
-              type="submit"
-            >
+            <button className="premium-button-primary shrink-0" type="submit">
               <Search size={18} aria-hidden="true" />
               Sorgula
             </button>
           </form>
 
           {/* Quick Product Buttons */}
-          <div
-            className="mt-4 flex flex-wrap gap-2"
-            aria-label="Örnek barkodlar"
-          >
+          <div className="mt-4 flex flex-wrap gap-2" aria-label="Örnek barkodlar">
             {products.map((product) => (
               <button
-                className="rounded-lg border border-[#E4DED2] bg-[#F7F4ED] px-3 py-1.5 text-xs font-medium text-[#20231F] transition-colors hover:border-[#4F6F52] hover:bg-[#4F6F52]/5"
+                className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-bg-secondary)] px-3 py-1.5 text-xs font-medium text-[color:var(--color-text)] transition-colors hover:border-cyan-400"
                 key={product.barcode}
                 type="button"
                 onClick={() => lookup(product.barcode)}
@@ -210,22 +199,12 @@ export default function DemoPage() {
 
           {/* Camera + Manual Add */}
           <div className="mt-4 flex flex-wrap gap-2">
-            <button
-              className="inline-flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-4 py-2.5 text-sm font-medium text-[#20231F] transition-colors hover:bg-[#F7F4ED]"
-              type="button"
-            >
-              <Camera size={18} className="text-[#667064]" aria-hidden="true" />
+            <button className="premium-button-secondary" type="button">
+              <Camera size={18} aria-hidden="true" />
               Kamera ile Okut
             </button>
-            <button
-              className="inline-flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-4 py-2.5 text-sm font-medium text-[#20231F] transition-colors hover:bg-[#F7F4ED]"
-              type="button"
-            >
-              <PackagePlus
-                size={18}
-                className="text-[#667064]"
-                aria-hidden="true"
-              />
+            <button className="premium-button-secondary" type="button">
+              <PackagePlus size={18} aria-hidden="true" />
               Ürün Ekle
             </button>
           </div>
@@ -234,59 +213,44 @@ export default function DemoPage() {
           <div className="mt-6">
             {!selectedBarcode ? (
               /* Empty State */
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#E4DED2] py-16 text-center">
-                <ScanLine
-                  size={36}
-                  className="mb-3 text-[#E4DED2]"
-                  aria-hidden="true"
-                />
-                <p className="text-sm text-[#667064]">Barkod bekleniyor.</p>
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[color:var(--color-border)] py-16 text-center">
+                <ScanLine size={36} className="mb-3 text-[color:var(--color-border)]" aria-hidden="true" />
+                <p className="text-sm text-[color:var(--color-muted)]">Barkod bekleniyor.</p>
               </div>
             ) : selectedProduct ? (
               /* Product Found */
-              <div className="rounded-2xl border border-[#E4DED2] bg-[#F7F4ED] p-5">
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#C8913A]">
+              <div className="rounded-2xl bg-[color:var(--color-bg-secondary)] p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-amber-500">
                   {selectedProduct.category}
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[#20231F]">
+                <h2 className="mt-1 text-xl font-bold text-[color:var(--color-text)]">
                   {selectedProduct.name}
                 </h2>
-                <div className="mt-3 text-4xl font-extrabold tracking-tight text-[#4F6F52]">
+                <div className="mt-3 text-4xl font-extrabold tracking-tight text-cyan-600 dark:text-cyan-300">
                   {currency.format(selectedProduct.price)}
                 </div>
 
                 {/* Tags */}
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-[#667064] ring-1 ring-[#E4DED2]">
+                  <span className="inline-flex items-center rounded-full bg-[color:var(--color-card)] px-3 py-1 text-xs font-medium text-[color:var(--color-muted)] ring-1 ring-[color:var(--color-border)]">
                     Stokta kalan: {selectedProduct.stock}
                   </span>
-                  <span className="inline-flex items-center rounded-full bg-white px-3 py-1 text-xs font-medium text-[#667064] ring-1 ring-[#E4DED2]">
+                  <span className="inline-flex items-center rounded-full bg-[color:var(--color-card)] px-3 py-1 text-xs font-medium text-[color:var(--color-muted)] ring-1 ring-[color:var(--color-border)]">
                     Barkod: {selectedProduct.barcode}
                   </span>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="mt-5 flex flex-wrap gap-2">
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#4F6F52] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3d5740] active:bg-[#334a36]"
-                    type="button"
-                    onClick={recordSale}
-                  >
+                  <button className="action-sale px-5 py-3 text-sm" type="button" onClick={recordSale}>
                     <CheckCircle2 size={18} aria-hidden="true" />
                     Satış Yapıldı
                   </button>
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-5 py-3 text-sm font-semibold text-[#20231F] transition-colors hover:bg-[#F7F4ED]"
-                    type="button"
-                    onClick={resetResult}
-                  >
+                  <button className="premium-button-secondary" type="button" onClick={resetResult}>
                     <RotateCcw size={18} aria-hidden="true" />
                     Ana Ekrana Dön
                   </button>
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-5 py-3 text-sm font-semibold text-[#20231F] transition-colors hover:bg-[#F7F4ED]"
-                    type="button"
-                  >
+                  <button className="premium-button-secondary" type="button">
                     <ShoppingBasket size={18} aria-hidden="true" />
                     Detayları Göster
                   </button>
@@ -294,30 +258,21 @@ export default function DemoPage() {
               </div>
             ) : (
               /* Product Not Found */
-              <div className="rounded-2xl border border-[#E4DED2] bg-[#F7F4ED] p-5">
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#B65A3C]">
+              <div className="rounded-2xl bg-[color:var(--color-bg-secondary)] p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">
                   Ürün kayıtlı değil
                 </p>
-                <h2 className="mt-1 text-xl font-bold text-[#20231F]">
+                <h2 className="mt-1 text-xl font-bold text-[color:var(--color-text)]">
                   Hızlı ürün ekleme
                 </h2>
-                <p className="mt-1 text-sm text-[#667064]">
-                  Barkod: {selectedBarcode}
-                </p>
+                <p className="mt-1 text-sm text-[color:var(--color-muted)]">Barkod: {selectedBarcode}</p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#4F6F52] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#3d5740] active:bg-[#334a36]"
-                    type="button"
-                  >
+                  <button className="premium-button-primary" type="button">
                     <PackagePlus size={18} aria-hidden="true" />
                     Ürün Ekle
                   </button>
-                  <button
-                    className="inline-flex items-center gap-2 rounded-xl border border-[#E4DED2] bg-white px-5 py-3 text-sm font-semibold text-[#20231F] transition-colors hover:bg-[#F7F4ED]"
-                    type="button"
-                    onClick={resetResult}
-                  >
+                  <button className="premium-button-secondary" type="button" onClick={resetResult}>
                     <RotateCcw size={18} aria-hidden="true" />
                     Ana Ekrana Dön
                   </button>
@@ -328,11 +283,8 @@ export default function DemoPage() {
         </section>
 
         {/* ── Right: Report Panel ── */}
-        <aside
-          className="rounded-2xl border border-[#E4DED2] bg-white p-6 shadow-sm lg:self-start"
-          aria-label="Demo günlük rapor"
-        >
-          <h2 className="text-lg font-bold text-[#20231F]">
+        <aside className="data-card p-6 lg:self-start" aria-label="Demo günlük rapor">
+          <h2 className="font-display text-lg font-bold text-[color:var(--color-text)]">
             Günlük demo raporu
           </h2>
 
@@ -346,12 +298,10 @@ export default function DemoPage() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="flex items-center justify-between rounded-xl bg-[#F7F4ED] px-4 py-3"
+                className="flex items-center justify-between rounded-xl bg-[color:var(--color-bg-secondary)] px-4 py-3"
               >
-                <span className="text-sm text-[#667064]">{item.label}</span>
-                <span className="text-sm font-semibold text-[#20231F]">
-                  {item.value}
-                </span>
+                <span className="text-sm text-[color:var(--color-muted)]">{item.label}</span>
+                <span className="text-sm font-semibold text-[color:var(--color-text)]">{item.value}</span>
               </div>
             ))}
           </div>
@@ -361,7 +311,7 @@ export default function DemoPage() {
             {["Buneka Kasa", "Buneka Stok", "Buneka Patron"].map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-[#4F6F52]/10 px-3 py-1 text-xs font-medium text-[#4F6F52]"
+                className="rounded-full bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-700 dark:text-cyan-300"
               >
                 {tag}
               </span>
@@ -369,10 +319,7 @@ export default function DemoPage() {
           </div>
 
           {/* CTA */}
-          <Link
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-[#C8913A] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#b07e30] active:bg-[#9a6e2a]"
-            href="/login"
-          >
+          <Link href="/login" className="premium-button-amber mt-5 flex w-full">
             <CircleDollarSign size={18} aria-hidden="true" />
             Lisans Talebi
           </Link>

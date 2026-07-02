@@ -153,7 +153,7 @@ export default function StokPage() {
       case "return":
         return { label: "İade girişi", color: "text-emerald-600", icon: ArrowUpRight };
       default:
-        return { label: type, color: "text-slate-950", icon: Boxes };
+        return { label: type, color: "text-slate-950 dark:text-slate-50", icon: Boxes };
     }
   };
 
@@ -170,7 +170,7 @@ export default function StokPage() {
       />
 
       {message && (
-        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950">
+        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
           {message}
         </div>
       )}
@@ -178,7 +178,7 @@ export default function StokPage() {
       <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 text-sm text-slate-500">
+            <thead className="bg-slate-50 text-sm text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
               <tr>
                 <th className="px-6 py-4 font-medium">Tarih</th>
                 <th className="px-6 py-4 font-medium">Ürün</th>
@@ -187,7 +187,7 @@ export default function StokPage() {
                 <th className="px-6 py-4 font-medium">Not</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
@@ -205,13 +205,13 @@ export default function StokPage() {
                   const movementType = getMovementLabel(movement.movement_type);
                   const Icon = movementType.icon;
                   return (
-                    <tr key={movement.id} className="transition-colors hover:bg-slate-50">
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500">
+                    <tr key={movement.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
                         {formatTime(movement.created_at)}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium text-slate-950">{movement.products?.name}</div>
-                        <div className="font-mono text-xs text-slate-500">{movement.products?.barcode}</div>
+                        <div className="font-medium text-slate-950 dark:text-slate-50">{movement.products?.name}</div>
+                        <div className="font-mono text-xs text-slate-500 dark:text-slate-400">{movement.products?.barcode}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${movementType.color}`}>
@@ -219,10 +219,10 @@ export default function StokPage() {
                           {movementType.label}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-lg font-bold text-slate-950">
+                      <td className="px-6 py-4 text-lg font-bold text-slate-950 dark:text-slate-50">
                         {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-500">{movement.note || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{movement.note || "-"}</td>
                     </tr>
                   );
                 })
@@ -234,11 +234,11 @@ export default function StokPage() {
 
       {showEntry && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-          <div className="w-full max-w-lg rounded-2xl bg-[#F6F8FB] p-6 text-slate-950 shadow-2xl">
+          <div className="w-full max-w-lg rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
             <div className="mb-5 flex items-center justify-between gap-4">
               <h2 className="font-display text-2xl font-black">Yeni Stok Girişi</h2>
               <button
-                className="rounded-full bg-white p-2 transition-transform active:scale-90"
+                className="rounded-full bg-white p-2 text-slate-950 transition-transform active:scale-90 dark:bg-slate-800 dark:text-slate-50"
                 type="button"
                 onClick={() => setShowEntry(false)}
                 aria-label="Kapat"
@@ -248,7 +248,7 @@ export default function StokPage() {
             </div>
 
             <form className="grid gap-4" onSubmit={createStockEntry}>
-              <label className="grid gap-2 text-sm font-bold text-slate-800">
+              <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
                 Ürün
                 <select
                   className="premium-input"
@@ -268,7 +268,7 @@ export default function StokPage() {
                 <FormInput label="Miktar" value={quantity} onChange={setQuantity} required />
                 <FormInput label="Birim fiyat" value={unitPrice} onChange={setUnitPrice} />
               </div>
-              <label className="grid gap-2 text-sm font-bold text-slate-800">
+              <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
                 Not
                 <textarea
                   className="premium-input min-h-24 resize-none"
@@ -300,7 +300,7 @@ function FormInput({
   required?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm font-bold text-slate-800">
+    <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
       {label}
       <input
         className="premium-input"

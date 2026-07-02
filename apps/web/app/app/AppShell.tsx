@@ -3,7 +3,6 @@
 import type { Tables } from "@buneka/database";
 import type { LucideIcon } from "lucide-react";
 import {
-  Barcode,
   BarChart3,
   Boxes,
   LogOut,
@@ -17,6 +16,8 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { BunekaMark } from "@/components/BunekaMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { createClient } from "@/lib/supabase/client";
 
 type AppUserWithRelations = Tables<"app_users"> & {
@@ -56,8 +57,8 @@ function SidebarContent({
     <div className="sidebar-surface flex h-full flex-col text-white">
       <div className="flex h-20 shrink-0 items-center px-6">
         <Link href="/app" className="group flex items-center gap-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/40 transition-transform group-hover:scale-105">
-            <Barcode size={19} strokeWidth={2.5} />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-lg shadow-cyan-500/40 transition-transform group-hover:scale-105">
+            <BunekaMark size={20} glow={false} />
           </div>
           <span className="font-display text-xl font-bold tracking-tight text-white">Buneka</span>
         </Link>
@@ -96,13 +97,16 @@ function SidebarContent({
             <span className="text-xs text-slate-400">{user.organizations?.name}</span>
           </div>
         </div>
-        <button
-          onClick={onLogout}
-          className="flex w-full items-center gap-3 px-3 py-3 rounded-xl text-amber-300 hover:bg-amber-300/10 transition-colors active:scale-[0.98]"
-        >
-          <LogOut size={20} />
-          <span className="font-medium">Çıkış Yap</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onLogout}
+            className="flex flex-1 items-center gap-3 px-3 py-3 rounded-xl text-amber-300 hover:bg-amber-300/10 transition-colors active:scale-[0.98]"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">Çıkış Yap</span>
+          </button>
+          <ThemeToggle className="shrink-0 border-white/15 text-slate-300 hover:border-cyan-300/50 hover:text-white" />
+        </div>
       </div>
     </div>
   );
@@ -141,8 +145,8 @@ export default function AppShell({
 
       <div className="sidebar-surface md:hidden fixed top-0 left-0 right-0 h-16 flex items-center justify-between px-4 z-50 border-b border-white/10">
         <Link href="/app" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-md shadow-cyan-500/30">
-            <Barcode size={18} strokeWidth={2.5} />
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 shadow-md shadow-cyan-500/30">
+            <BunekaMark size={18} glow={false} />
           </div>
           <span className="font-display text-xl font-bold text-white">Buneka</span>
         </Link>
@@ -167,8 +171,8 @@ export default function AppShell({
         </div>
       )}
 
-      <div className="flex-1 flex flex-col min-w-0 md:rounded-tl-[2rem] bg-[#F6F8FB] border-l border-t border-white/10 overflow-hidden mt-16 md:mt-0 shadow-[-10px_-10px_30px_rgba(0,0,0,0.22)]">
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 text-slate-900">
+      <div className="flex-1 flex flex-col min-w-0 md:rounded-tl-[2rem] bg-[var(--color-bg)] border-l border-t border-white/10 overflow-hidden mt-16 md:mt-0 shadow-[-10px_-10px_30px_rgba(0,0,0,0.22)]">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 text-[color:var(--color-text)]">
           {children}
         </main>
       </div>
