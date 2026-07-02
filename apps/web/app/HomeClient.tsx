@@ -4,6 +4,7 @@ import { ArrowRight, ChevronDown, Phone, PhoneOff, ShieldCheck, Store } from "lu
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -187,7 +188,8 @@ export default function HomeClient() {
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)] sm:text-base" />
         </Link>
 
-        <div className="flex items-center gap-2.5 sm:gap-5">
+        <div className="flex items-center gap-2.5 sm:gap-4">
+          <BunekaNedirButton />
           <Link
             href="/demo"
             className="cta-primary-animated cta-hero-pulse group relative inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-3.5 py-2 text-xs font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.04] active:scale-95 sm:px-5 sm:py-2.5 sm:text-sm"

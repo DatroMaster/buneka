@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle2, MessageCircle, Route } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
@@ -56,6 +57,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
           >
             <ArrowLeft size={14} /> Sektörler
           </Link>
+          <BunekaNedirButton />
           <Link href="/demo" className="premium-button-primary text-xs sm:text-sm">
             Demo Paneli Aç
           </Link>

@@ -1,6 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { login } from "./actions";
@@ -16,6 +17,9 @@ export default async function LoginPage({
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[var(--color-bg)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
+      <div className="absolute left-6 top-6 z-20">
+        <BunekaNedirButton />
+      </div>
       <ThemeToggle className="absolute right-6 top-6 z-20 border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" />
 
       <div className="relative z-10 w-full max-w-md">

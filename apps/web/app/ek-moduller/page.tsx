@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, MessageCircle, Package } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
@@ -29,6 +30,7 @@ export default function EkModullerPage() {
             <BunekaWordmark className="text-sm text-[color:var(--color-text)]" />
           </Link>
           <div className="flex items-center gap-3">
+            <BunekaNedirButton />
             <Link href="/demo" className="premium-button-primary text-sm">
               Demo Paneli Aç
             </Link>

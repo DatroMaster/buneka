@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
@@ -135,6 +136,7 @@ export default function DemoPage() {
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
+          <BunekaNedirButton />
           <a
             href={whatsappLink("Merhaba, Buneka için canlı demo talep ediyorum.")}
             target="_blank"

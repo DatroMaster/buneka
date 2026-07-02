@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Boxes, Check, Crown, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
+import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { callLink, whatsappLink } from "@/lib/contact";
@@ -77,6 +78,7 @@ export default function PaketlerPage() {
           <span className="hidden items-center gap-1.5 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:flex">
             <ShieldCheck size={12} /> Yıllık lisans · Şeffaf fiyat
           </span>
+          <BunekaNedirButton />
           <Link href="/demo" className="premium-button-primary text-xs sm:text-sm">
             Demo Paneli Aç
           </Link>
