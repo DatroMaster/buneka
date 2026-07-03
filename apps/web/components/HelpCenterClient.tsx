@@ -244,6 +244,46 @@ const faqs = [
   },
 ];
 
+type SearchResult = {
+  title: string;
+  text: string;
+  href: string;
+  kind: string;
+};
+
+const searchIndex: SearchResult[] = [
+  ...contents.map((item) => ({
+    title: item.label,
+    text: "Rehber bölümü",
+    href: item.href,
+    kind: "Bölüm",
+  })),
+  ...scannerHelp.map((item) => ({
+    title: item.title,
+    text: item.text,
+    href: "#barkod",
+    kind: "Barkod",
+  })),
+  ...moduleGuides.map((module) => ({
+    title: module.title,
+    text: [module.use, module.who, module.when, module.mistake, module.tip, ...module.steps].join(" "),
+    href: "#moduller",
+    kind: "Modül",
+  })),
+  ...troubleshooting.map((item) => ({
+    title: item.split(":")[0] || "Sorun çözme",
+    text: item,
+    href: "#sorun-cozme",
+    kind: "Sorun",
+  })),
+  ...faqs.map((faq) => ({
+    title: faq.q,
+    text: faq.a,
+    href: "#sss",
+    kind: "SSS",
+  })),
+];
+
 function VisualCard({ title, lines }: { title: string; lines: string[] }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -288,27 +328,37 @@ export function HelpCenterClient() {
     });
   }, [normalizedQuery]);
 
+  const searchResults = useMemo(() => {
+    if (!normalizedQuery) return [];
+    return searchIndex
+      .filter((item) => {
+        const haystack = `${item.title} ${item.text} ${item.kind}`.toLocaleLowerCase("tr-TR");
+        return haystack.includes(normalizedQuery);
+      })
+      .slice(0, 6);
+  }, [normalizedQuery]);
+
   const handlePrint = () => {
     window.print();
   };
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-slate-50 text-slate-950">
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur-xl sm:px-6">
+    <main className="help-center-dark relative min-h-screen overflow-x-hidden bg-[#050A0F] text-slate-100">
+      <header className="sticky top-0 z-40 border-b border-cyan-300/15 bg-[#07111F]/90 px-4 py-3 backdrop-blur-xl sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5">
             <BunekaMark size={26} />
-            <BunekaWordmark className="text-sm text-slate-950" />
+            <BunekaWordmark className="text-sm text-slate-100" />
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 px-3 text-xs font-black text-slate-700 hover:border-cyan-400">
+            <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-cyan-300/20 px-3 text-xs font-black text-slate-200 hover:border-cyan-300">
               <Home size={14} /> Ana Menü
             </Link>
-            <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-slate-200 px-3 text-xs font-black text-slate-700 hover:border-cyan-400 sm:flex">
+            <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-cyan-300/20 px-3 text-xs font-black text-slate-200 hover:border-cyan-300 sm:flex">
               <LayoutDashboard size={14} /> Panele Dön
             </Link>
             <BunekaNedirButton />
-            <ThemeToggle className="border-slate-200 text-slate-700 hover:border-cyan-400" />
+            <ThemeToggle className="border-cyan-300/20 text-slate-200 hover:border-cyan-300" />
           </div>
           <Link
             href="/login"
@@ -321,7 +371,7 @@ export function HelpCenterClient() {
 
       <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[280px_1fr]">
         <aside className="lg:sticky lg:top-20 lg:self-start">
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="rounded-2xl border border-cyan-300/15 bg-[#07111F]/85 p-4 shadow-[0_18px_70px_rgba(0,0,0,0.28)] backdrop-blur">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-700">İçindekiler</p>
             <nav className="mt-3 grid gap-1">
               {contents.map((item) => (
@@ -334,35 +384,59 @@ export function HelpCenterClient() {
         </aside>
 
         <div className="grid gap-6">
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+          <section className="rounded-3xl border border-cyan-300/15 bg-[#07111F]/88 p-5 shadow-[0_18px_80px_rgba(0,0,0,0.34)] backdrop-blur sm:p-6">
             <Link href="/" className="mb-4 inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-950">
               Ana sayfa
             </Link>
-            <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+            <div className="grid gap-5 lg:grid-cols-[1fr_390px] lg:items-center">
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-700">
                   <BookOpenCheck size={13} /> Buneka Yardım Merkezi
                 </span>
-                <h1 className="mt-4 font-display text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                <h1 className="mt-4 max-w-4xl font-display text-3xl font-black tracking-tight text-slate-50 sm:text-4xl lg:text-5xl">
                   Kurulum, Barkod Okutma, Satış, Stok ve Kasa Takibi Rehberi
                 </h1>
-                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
+                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
                   Buneka&apos;yı 15 dakika içinde kurun, ilk ürünlerinizi ekleyin, barkodla fiyat sorgulayın, satışlarınızı
                   ve stok hareketlerinizi tek ekrandan takip edin.
                 </p>
-                <p className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold leading-6 text-emerald-900">
+                <p className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-4 text-sm font-bold leading-6 text-emerald-100">
                   Dükkanın hafızası artık tek kişinin aklında değil, sistemde.
                 </p>
               </div>
-              <div className="grid gap-3">
+              <div className="grid gap-3 rounded-2xl border border-cyan-300/15 bg-slate-950/35 p-3">
                 <div className="relative">
                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Rehberde ara: barkod, stok, veresiye, Excel, lisans..."
-                    className="h-13 w-full rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm font-semibold text-slate-950 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-100"
+                    className="h-[52px] w-full rounded-2xl border border-cyan-300/20 bg-slate-950/70 pl-11 pr-4 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-cyan-300 focus:ring-4 focus:ring-cyan-400/10"
                   />
+                  {normalizedQuery && (
+                    <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-2xl border border-cyan-300/20 bg-[#07111F]/95 p-2 shadow-2xl shadow-cyan-950/40 backdrop-blur">
+                      {searchResults.length > 0 ? (
+                        <div className="grid gap-1.5">
+                          {searchResults.map((result) => (
+                            <a
+                              key={`${result.kind}-${result.title}`}
+                              href={result.href}
+                              onClick={() => setQuery("")}
+                              className="rounded-xl border border-transparent px-3 py-2 transition hover:border-cyan-300/20 hover:bg-cyan-400/10"
+                            >
+                              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">{result.kind}</span>
+                              <p className="mt-0.5 text-sm font-black text-slate-100">{result.title}</p>
+                              <p className="mt-1 line-clamp-2 text-xs font-semibold leading-5 text-slate-400">{result.text}</p>
+                            </a>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="px-3 py-3 text-sm font-bold text-slate-300">
+                          Sonuç bulunamadı. Barkod, stok, veresiye veya lisans gibi başka bir kelime deneyin.
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <Link href="/login" className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 text-sm font-black text-white">

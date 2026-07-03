@@ -12,7 +12,6 @@ import {
   Package,
   ScanBarcode,
   Settings,
-  Store,
   WalletCards,
   X,
 } from "lucide-react";
@@ -47,7 +46,6 @@ const navItems: NavItem[] = [
   { name: "Ürünler", href: "/app/urunler", icon: Package },
   { name: "Veresiye", href: "/app/veresiye", icon: HandCoins },
   { name: "Raporlar", href: "/app/raporlar", icon: BarChart3 },
-  { name: "Sektörler", href: "/sektorler", icon: Store },
   { name: "Ayarlar", href: "/app/ayarlar", icon: Settings },
 ];
 

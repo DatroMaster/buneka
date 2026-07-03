@@ -793,3 +793,86 @@
     transform: scale(1.15);
   }
 }
+
+.help-center-dark {
+  background:
+    linear-gradient(rgba(0, 242, 254, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 254, 0.07) 1px, transparent 1px),
+    radial-gradient(circle at 22% 0%, rgba(0, 242, 254, 0.16), transparent 34%),
+    radial-gradient(circle at 85% 10%, rgba(43, 127, 255, 0.16), transparent 30%),
+    #050a0f;
+  background-size: 56px 56px, 56px 56px, auto, auto, auto;
+}
+
+.help-center-dark .bg-white,
+.help-center-dark .bg-slate-50 {
+  background-color: rgba(7, 17, 31, 0.86) !important;
+}
+
+.help-center-dark .bg-cyan-50 {
+  background-color: rgba(8, 145, 178, 0.13) !important;
+}
+
+.help-center-dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.13) !important;
+}
+
+.help-center-dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.13) !important;
+}
+
+.help-center-dark .border-slate-200,
+.help-center-dark .border-slate-100 {
+  border-color: rgba(0, 242, 254, 0.16) !important;
+}
+
+.help-center-dark .border-cyan-200 {
+  border-color: rgba(0, 242, 254, 0.28) !important;
+}
+
+.help-center-dark .border-emerald-200 {
+  border-color: rgba(16, 185, 129, 0.28) !important;
+}
+
+.help-center-dark .border-amber-200 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.help-center-dark .text-slate-950,
+.help-center-dark .text-slate-900,
+.help-center-dark .text-slate-800,
+.help-center-dark .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+
+.help-center-dark .text-slate-600,
+.help-center-dark .text-slate-500,
+.help-center-dark .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.help-center-dark .text-cyan-700,
+.help-center-dark .text-cyan-800 {
+  color: #22d3ee !important;
+}
+
+.help-center-dark .text-emerald-700,
+.help-center-dark .text-emerald-800,
+.help-center-dark .text-emerald-900 {
+  color: #6ee7b7 !important;
+}
+
+.help-center-dark .text-amber-700,
+.help-center-dark .text-amber-900,
+.help-center-dark .text-amber-950 {
+  color: #fcd34d !important;
+}
+
+.help-center-dark input {
+  background-color: rgba(2, 6, 23, 0.68) !important;
+  color: #e2e8f0 !important;
+}
+
+.help-center-dark input::placeholder {
+  color: #94a3b8 !important;
+}
