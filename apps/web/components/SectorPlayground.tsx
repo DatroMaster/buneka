@@ -6,17 +6,17 @@ import { useRef, useState } from "react";
 import { sectors } from "@/lib/content/sectors";
 
 const COLORS = [
-  "from-cyan-400 to-blue-500",
-  "from-emerald-400 to-teal-500",
-  "from-amber-400 to-orange-500",
-  "from-rose-400 to-pink-500",
-  "from-violet-400 to-purple-500",
-  "from-sky-400 to-indigo-500",
-  "from-lime-400 to-green-500",
-  "from-orange-400 to-red-500",
-  "from-teal-400 to-cyan-500",
-  "from-fuchsia-400 to-pink-500",
-  "from-indigo-400 to-blue-500",
+  "from-cyan-600 to-blue-700",
+  "from-emerald-600 to-teal-700",
+  "from-amber-500 to-orange-700",
+  "from-rose-600 to-pink-700",
+  "from-violet-600 to-purple-700",
+  "from-sky-600 to-indigo-700",
+  "from-lime-600 to-green-700",
+  "from-orange-600 to-red-700",
+  "from-teal-600 to-cyan-700",
+  "from-fuchsia-600 to-pink-700",
+  "from-indigo-600 to-blue-700",
 ];
 
 export function SectorPlayground() {
@@ -50,10 +50,12 @@ export function SectorPlayground() {
               onHoverStart={() => setHovered(sector.slug)}
               onHoverEnd={() => setHovered((current) => (current === sector.slug ? null : current))}
               onClick={() => router.push(`/sektorler/${sector.slug}`)}
-              className={`flex h-full w-full cursor-grab flex-col items-center justify-center gap-1 rounded-lg bg-gradient-to-br text-white shadow-lg ${COLORS[index % COLORS.length]}`}
+              className={`flex h-full w-full cursor-grab flex-col items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br text-white shadow-md ring-1 ring-black/15 ${COLORS[index % COLORS.length]}`}
             >
-              <sector.icon size={18} />
-              <span className="px-1 text-center text-[10px] font-bold leading-tight">{sector.title}</span>
+              <sector.icon size={22} className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]" />
+              <span className="px-1 text-center text-[11px] font-extrabold leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+                {sector.title}
+              </span>
             </motion.div>
           ))}
         </div>

@@ -119,8 +119,8 @@ function DesktopSidebar({
   user: AppUserWithRelations;
 }) {
   return (
-    <aside className="group/sidebar sidebar-supabase hidden h-full w-20 shrink-0 flex-col overflow-hidden border-r border-white/10 transition-[width] duration-300 ease-out hover:w-56 md:flex">
-      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-4">
+    <aside className="group/sidebar sidebar-supabase hidden h-full w-[60px] shrink-0 flex-col overflow-hidden border-r border-white/10 transition-[width] duration-300 ease-out hover:w-60 md:flex">
+      <div className="flex h-16 items-center justify-center gap-2 border-b border-white/10 px-2 group-hover/sidebar:justify-start group-hover/sidebar:px-4">
         <BunekaMark size={26} className="shrink-0" />
         <div className="min-w-0 opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
           <BunekaWordmark className="text-sm text-white" />
@@ -128,7 +128,7 @@ function DesktopSidebar({
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
+      <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto px-2 py-3">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -137,7 +137,7 @@ function DesktopSidebar({
               key={item.name}
               href={item.href}
               title={item.name}
-              className={`group/item flex h-10 items-center gap-3 rounded-md text-sm transition-all ${
+              className={`group/item flex h-10 items-center justify-center gap-3 rounded-md text-sm transition-all group-hover/sidebar:justify-start ${
                 isActive
                   ? "bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-slate-100"

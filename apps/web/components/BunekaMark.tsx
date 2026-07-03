@@ -22,8 +22,8 @@ export function BunekaMark({
     >
       <defs>
         <linearGradient id={GRADIENT_ID} x1="4" y1="4" x2="96" y2="96" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#00F2FE" />
-          <stop offset="100%" stopColor="#E2E8F0" />
+          <stop offset="0%" stopColor="var(--mark-from, #00F2FE)" />
+          <stop offset="100%" stopColor="var(--mark-to, #E2E8F0)" />
         </linearGradient>
       </defs>
       {/* Outer diamond */}
