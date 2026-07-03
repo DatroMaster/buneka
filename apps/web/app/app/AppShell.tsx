@@ -21,6 +21,7 @@ import { useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { CurrencyTicker } from "@/components/CurrencyTicker";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { CurrencyRates } from "@/lib/currency/tcmb";
@@ -116,8 +117,8 @@ function DesktopSidebar({
   user: AppUserWithRelations;
 }) {
   return (
-    <aside className="group/sidebar sidebar-supabase hidden h-full w-16 shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 ease-out hover:w-60 md:flex">
-      <div className="flex h-16 items-center gap-3 border-b border-white/10 px-3">
+    <aside className="group/sidebar sidebar-supabase hidden h-full w-[3.75rem] shrink-0 flex-col border-r border-white/10 transition-[width] duration-300 ease-out hover:w-56 md:flex">
+      <div className="flex h-16 items-center justify-center gap-3 border-b border-white/10 px-2 group-hover/sidebar:justify-start group-hover/sidebar:px-3">
         <BunekaMark size={26} className="shrink-0" />
         <div className="min-w-0 opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
           <BunekaWordmark className="text-sm text-white" />
@@ -125,7 +126,7 @@ function DesktopSidebar({
         </div>
       </div>
 
-      <nav className="flex-1 space-y-1 overflow-y-auto px-2.5 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
@@ -134,13 +135,21 @@ function DesktopSidebar({
               key={item.name}
               href={item.href}
               title={item.name}
-              className={`group/item flex h-10 items-center justify-center gap-3 rounded-md px-2.5 text-sm transition-all group-hover/sidebar:justify-start ${
+              className={`group/item flex h-10 items-center justify-center gap-3 rounded-md text-sm transition-all group-hover/sidebar:justify-start group-hover/sidebar:px-2 ${
                 isActive
-                  ? "border border-emerald-400/25 bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                  ? "bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                   : "text-slate-300 hover:bg-white/[0.06] hover:text-slate-100"
               }`}
             >
-              <Icon size={19} strokeWidth={2.25} className={isActive ? "text-emerald-300" : "text-slate-200 group-hover/item:text-emerald-300"} />
+              <span
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border ${
+                  isActive
+                    ? "border-emerald-300/45 bg-emerald-300/15 text-emerald-200"
+                    : "border-white/10 bg-white/[0.04] text-cyan-100 group-hover/item:border-emerald-300/35 group-hover/item:text-emerald-200"
+                }`}
+              >
+                <Icon size={19} strokeWidth={2.35} className="shrink-0 drop-shadow-[0_0_6px_rgba(103,232,249,0.45)]" />
+              </span>
               <span className="whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover/sidebar:opacity-100">
                 {item.name}
               </span>
@@ -188,6 +197,7 @@ export default function AppShell({
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
+  const isAdmin = ["super_admin", "admin_staff"].includes(user.role);
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -244,6 +254,14 @@ export default function AppShell({
 
           <div className="ml-auto flex items-center gap-2 md:gap-3">
             <CurrencyTicker rates={rates} />
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="hidden items-center gap-1.5 rounded-md border border-emerald-300/25 px-3 py-2 text-xs font-bold text-emerald-200 transition-all hover:border-emerald-300/50 hover:bg-emerald-300/10 sm:flex"
+              >
+                <Settings size={14} /> Yönetim
+              </Link>
+            )}
             <BunekaNedirButton variant="compact" className="border-white/15 text-emerald-300 hover:border-emerald-300/50" />
             <Link
               href="/"
@@ -268,6 +286,9 @@ export default function AppShell({
         <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-8">
           <CartProvider>{children}</CartProvider>
         </main>
+        <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-white/10 bg-[#050A0F]/70 px-3 py-1 text-[10px] font-semibold text-slate-400 backdrop-blur md:block">
+          BUNEKA © 2026 · Ankara, TR · <ClientIpBadge />
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import { ArrowLeft, CheckCircle2, MessageCircle, Route } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { ClientIpBadge } from "@/components/ClientIpBadge";
+import { SectorPackageBuilder } from "@/components/SectorPackageBuilder";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
 import { getModuleDetail, getSector, getWorkflowDetail, sectors } from "@/lib/content/sectors";
@@ -42,7 +44,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
   const recommendedPlan = plans[1];
 
   return (
-    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
+    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)] xl:h-[100dvh] xl:overflow-hidden">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
@@ -62,8 +64,8 @@ export default async function SectorPage({ params }: SectorPageProps) {
         </div>
       </header>
 
-      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-        <section className="glow-border flex flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:p-7">
+      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.618fr)_minmax(0,1fr)]">
+        <section className="glow-border flex min-h-0 flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:p-7">
           <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
             <sector.icon size={12} />
             {sector.title}
@@ -95,30 +97,22 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </a>
           </div>
 
-          <div className="mt-6">
-            <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
-              Paket önerisi
-            </p>
-            <div className="package-spark-card flex items-center justify-between gap-4 rounded-xl p-4">
-              <div>
-                <p className="font-display text-sm font-bold text-[color:var(--home-ink)]">{recommendedPlan.name}</p>
-                <p className="text-xs text-[color:var(--home-muted)]">{recommendedPlan.price} /yıl</p>
-              </div>
-              <Link href="/paketler" className="shrink-0 rounded-lg bg-[color:var(--home-glow)] px-3 py-2 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95">
-                Tüm paketler →
-              </Link>
-            </div>
-          </div>
+          <SectorPackageBuilder
+            sectorTitle={sector.title}
+            modules={sector.modules}
+            planName={recommendedPlan.name}
+            planPrice={recommendedPlan.price}
+          />
         </section>
 
-        <section className="glow-border grid min-h-0 grid-rows-2 overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
-          <div className="border-b border-[color:var(--home-border)] p-4 sm:p-5">
+        <section className="glow-border grid min-h-0 grid-rows-[1fr_1fr] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="flex min-h-0 flex-col border-b border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
               <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
             </p>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-2">
               {sector.workflow.map((step, index) => (
-                <div key={step} className="glow-border flex items-start gap-2 rounded-lg p-2.5">
+                <div key={step} className="glow-border flex h-full items-start gap-2 rounded-lg p-2.5">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-[11px] font-black text-white">
                     {index + 1}
                   </span>
@@ -135,11 +129,11 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </div>
           </div>
 
-          <div className="border-b border-[color:var(--home-border)] p-4 sm:p-5">
+          <div className="flex min-h-0 flex-col p-4 sm:p-5">
             <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
-            <div className="grid grid-cols-1 gap-2 pr-1 sm:grid-cols-2">
+            <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-3">
               {sector.modules.map((module) => (
-                <div key={module} className="glow-border rounded-lg px-3 py-2.5">
+                <div key={module} className="glow-border flex h-full flex-col justify-center rounded-lg px-3 py-2.5">
                   <p className="text-[11px] font-bold text-[color:var(--home-ink)]">{module}</p>
                   <p className="text-[10px] leading-snug text-[color:var(--home-muted)]">{getModuleDetail(module)}</p>
                 </div>
@@ -154,7 +148,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
         <Link href="/#sektorler" className="flex items-center gap-1.5 font-bold hover:text-[color:var(--home-ink)]">
           <ArrowLeft size={12} /> Sektörlere dön
         </Link>
-        <span>BUNEKA © 2026 · Ankara, TR</span>
+        <span className="flex items-center gap-2">BUNEKA © 2026 · Ankara, TR · <ClientIpBadge /></span>
       </footer>
     </main>
   );

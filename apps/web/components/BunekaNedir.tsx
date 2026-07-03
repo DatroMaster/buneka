@@ -84,12 +84,9 @@ export function BunekaNedirButton({
       </button>
 
       {open && (
-        <div
-          className="fixed inset-0 z-[999] grid place-items-center bg-black/80 p-4"
-          onClick={close}
-        >
+        <div className="fixed inset-0 z-[10000] grid place-items-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" onClick={close}>
           <div
-            className="bn-modal relative flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[color:var(--home-border)] shadow-2xl"
+            className="bn-modal relative my-auto flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[color:var(--home-border)] shadow-2xl"
             onClick={(event) => event.stopPropagation()}
             role="dialog"
             aria-modal="true"

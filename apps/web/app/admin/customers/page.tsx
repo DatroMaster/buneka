@@ -11,6 +11,7 @@ import { createLoginAccountAction, createOrganizationAction, updateOrganizationS
 
 type Organization = Tables<"organizations">;
 type AppUser = Tables<"app_users">;
+type Plan = Tables<"plans">;
 type LicenseWithPlan = Tables<"licenses"> & { plans: Pick<Tables<"plans">, "name"> | null };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -26,25 +27,35 @@ export default function AdminCustomersPage() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [users, setUsers] = useState<AppUser[]>([]);
   const [licenses, setLicenses] = useState<LicenseWithPlan[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
   const [showNew, setShowNew] = useState(false);
   const [accountOrgId, setAccountOrgId] = useState<string | null>(null);
   const [accountEmail, setAccountEmail] = useState("");
   const [accountPassword, setAccountPassword] = useState("");
+  const [accountPlanId, setAccountPlanId] = useState("");
+  const [accountStartsAt, setAccountStartsAt] = useState(() => new Date().toISOString().slice(0, 10));
+  const [accountExpiresAt, setAccountExpiresAt] = useState(() => {
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 365);
+    return expires.toISOString().slice(0, 10);
+  });
   const supabase = useMemo(() => createClient(), []);
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const [{ data: orgs }, { data: appUsers }, { data: licenseRows }] = await Promise.all([
+    const [{ data: orgs }, { data: appUsers }, { data: licenseRows }, { data: planRows }] = await Promise.all([
       supabase.from("organizations").select("*").order("created_at", { ascending: false }),
       supabase.from("app_users").select("*"),
       supabase.from("licenses").select("*, plans(name)").order("expires_at", { ascending: false }),
+      supabase.from("plans").select("*").order("annual_price"),
     ]);
 
     if (orgs) setOrganizations(orgs);
     if (appUsers) setUsers(appUsers);
     if (licenseRows) setLicenses(licenseRows as LicenseWithPlan[]);
+    if (planRows) setPlans(planRows);
     setLoading(false);
   }, [supabase]);
 
@@ -99,7 +110,14 @@ export default function AdminCustomersPage() {
 
     setSaving(true);
     setMessage("");
-    const result = await createLoginAccountAction(owner.id, accountEmail.trim(), accountPassword);
+    const result = await createLoginAccountAction(
+      owner.id,
+      accountEmail.trim(),
+      accountPassword,
+      accountPlanId || undefined,
+      accountPlanId ? accountStartsAt : undefined,
+      accountPlanId ? accountExpiresAt : undefined,
+    );
     if (result?.error) {
       setMessage(result.error);
     } else {
@@ -107,6 +125,7 @@ export default function AdminCustomersPage() {
       setAccountOrgId(null);
       setAccountEmail("");
       setAccountPassword("");
+      setAccountPlanId("");
       await loadData();
     }
     setSaving(false);
@@ -244,6 +263,24 @@ export default function AdminCustomersPage() {
               <Field name="email" label="E-posta" />
               <Field name="phone" label="Telefon" />
             </div>
+            <div className="grid gap-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-800">
+              <p className="text-sm font-black text-slate-950 dark:text-slate-50">İlk lisans / hesap süresi</p>
+              <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
+                Paket
+                <select className="premium-input" name="plan_id">
+                  <option value="">Lisansı sonra ata</option>
+                  {plans.map((plan) => (
+                    <option key={plan.id} value={plan.id}>
+                      {plan.name} — {plan.annual_price} TL
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <DateField name="starts_at" label="Başlangıç" />
+                <DateField name="expires_at" label="Bitiş" plusDays={365} />
+              </div>
+            </div>
             <button className="premium-button-primary mt-2" type="submit" disabled={saving}>
               {saving ? <Loader2 size={18} className="animate-spin" /> : <Building2 size={18} />}
               Müşteriyi Kaydet
@@ -279,6 +316,34 @@ export default function AdminCustomersPage() {
                 minLength={6}
               />
             </label>
+            <div className="grid gap-3 rounded-2xl border border-slate-200 p-4 dark:border-slate-800">
+              <p className="text-sm font-black text-slate-950 dark:text-slate-50">Hesap süresi / lisans</p>
+              <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
+                Paket
+                <select
+                  className="premium-input"
+                  value={accountPlanId}
+                  onChange={(event) => setAccountPlanId(event.target.value)}
+                >
+                  <option value="">Sadece giriş hesabı oluştur</option>
+                  {plans.map((plan) => (
+                    <option key={plan.id} value={plan.id}>
+                      {plan.name} — {plan.annual_price} TL
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
+                  Başlangıç
+                  <input className="premium-input" type="date" value={accountStartsAt} onChange={(event) => setAccountStartsAt(event.target.value)} />
+                </label>
+                <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
+                  Bitiş
+                  <input className="premium-input" type="date" value={accountExpiresAt} onChange={(event) => setAccountExpiresAt(event.target.value)} />
+                </label>
+              </div>
+            </div>
             <button className="premium-button-primary" type="submit" disabled={saving}>
               {saving ? <Loader2 size={18} className="animate-spin" /> : <KeyRound size={18} />}
               Hesabı Oluştur
@@ -323,6 +388,17 @@ function AdminStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; l
         <p className="text-xs text-slate-500 dark:text-slate-400">{hint}</p>
       </div>
     </div>
+  );
+}
+
+function DateField({ name, label, plusDays = 0 }: { name: string; label: string; plusDays?: number }) {
+  const date = new Date();
+  date.setDate(date.getDate() + plusDays);
+  return (
+    <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
+      {label}
+      <input className="premium-input" type="date" name={name} defaultValue={date.toISOString().slice(0, 10)} />
+    </label>
   );
 }
 

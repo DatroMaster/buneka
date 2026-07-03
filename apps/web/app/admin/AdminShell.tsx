@@ -8,6 +8,7 @@ import { useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const navItems = [
@@ -122,6 +123,9 @@ export default function AdminShell({
       <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-8">
         {children}
       </main>
+      <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-white/10 bg-[#050A0F]/70 px-3 py-1 text-[10px] font-semibold text-slate-400 backdrop-blur md:block">
+        BUNEKA © 2026 · Ankara, TR · <ClientIpBadge />
+      </div>
     </div>
   );
 }

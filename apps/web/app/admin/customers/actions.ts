@@ -4,6 +4,10 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
 
+function randomLicenseKey() {
+  return `BNK-${Math.random().toString(36).slice(2, 7).toUpperCase()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+}
+
 export async function createOrganizationAction(formData: FormData) {
   const supabase = await createClient();
 
@@ -13,6 +17,9 @@ export async function createOrganizationAction(formData: FormData) {
   const email = String(formData.get("email") || "").trim();
   const phone = String(formData.get("phone") || "").trim();
   const sector = String(formData.get("sector") || "").trim();
+  const planId = String(formData.get("plan_id") || "").trim();
+  const startsAt = String(formData.get("starts_at") || "").trim();
+  const expiresAt = String(formData.get("expires_at") || "").trim();
 
   if (!name) {
     return { error: "İşletme adı gerekli." };
@@ -49,6 +56,21 @@ export async function createOrganizationAction(formData: FormData) {
     }
   }
 
+  if (planId && startsAt && expiresAt) {
+    const { error: licenseError } = await supabase.from("licenses").insert({
+      organization_id: org.id,
+      plan_id: planId,
+      license_key: randomLicenseKey(),
+      starts_at: startsAt,
+      expires_at: expiresAt,
+      status: "active",
+    });
+
+    if (licenseError) {
+      return { error: `Müşteri oluşturuldu ama lisans eklenemedi: ${licenseError.message}` };
+    }
+  }
+
   revalidatePath("/admin/customers");
   return { success: true };
 }
@@ -60,7 +82,14 @@ export async function updateOrganizationStatusAction(organizationId: string, sta
   return error ? { error: error.message } : { success: true };
 }
 
-export async function createLoginAccountAction(appUserId: string, email: string, password: string) {
+export async function createLoginAccountAction(
+  appUserId: string,
+  email: string,
+  password: string,
+  planId?: string,
+  startsAt?: string,
+  expiresAt?: string,
+) {
   if (!hasServiceRoleKey()) {
     return {
       error:
@@ -73,6 +102,16 @@ export async function createLoginAccountAction(appUserId: string, email: string,
   }
 
   const admin = createAdminClient();
+
+  const { data: appUser, error: userLookupError } = await admin
+    .from("app_users")
+    .select("id, organization_id")
+    .eq("id", appUserId)
+    .single();
+
+  if (userLookupError || !appUser) {
+    return { error: userLookupError?.message || "Kullanıcı profili bulunamadı." };
+  }
 
   const { data: authUser, error: authError } = await admin.auth.admin.createUser({
     email,
@@ -91,6 +130,21 @@ export async function createLoginAccountAction(appUserId: string, email: string,
 
   if (linkError) {
     return { error: `Hesap oluşturuldu ama kullanıcıya bağlanamadı: ${linkError.message}` };
+  }
+
+  if (planId && startsAt && expiresAt) {
+    const { error: licenseError } = await admin.from("licenses").insert({
+      organization_id: appUser.organization_id,
+      plan_id: planId,
+      license_key: randomLicenseKey(),
+      starts_at: startsAt,
+      expires_at: expiresAt,
+      status: "active",
+    });
+
+    if (licenseError) {
+      return { error: `Hesap oluşturuldu ama lisans eklenemedi: ${licenseError.message}` };
+    }
   }
 
   revalidatePath("/admin/customers");
