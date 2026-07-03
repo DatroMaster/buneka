@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function EkModullerPage() {
   return (
-    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)] lg:h-[100dvh] lg:overflow-hidden">
+    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
@@ -39,7 +39,7 @@ export default function EkModullerPage() {
         </Link>
       </header>
 
-      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 gap-4 px-3 pb-3 sm:px-6 lg:min-h-0 lg:grid-rows-[auto_1fr]">
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 gap-4 px-3 pb-6 sm:px-6">
         <div className="glow-border shrink-0 rounded-2xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl">
           <Link href="/" className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)]">
             <ArrowLeft size={13} /> Ana sayfa
