@@ -384,8 +384,8 @@ export default function UrunlerPage() {
 
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left">
-            <thead className="sticky top-0 z-10 bg-slate-50 dark:bg-slate-900">
-              <tr className="text-sm text-slate-500 dark:text-slate-400">
+            <thead className="sticky top-0 z-10 bg-neutral-950 dark:bg-neutral-950">
+              <tr className="text-sm text-stone-200">
                 <th className="px-6 py-3 font-medium">Barkod / Ürün Adı</th>
                 <th className="px-6 py-3 font-medium">Kategori</th>
                 <th className="px-6 py-3 text-right font-medium">Alış Fiyatı</th>

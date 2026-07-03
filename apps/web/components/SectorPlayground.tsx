@@ -5,6 +5,19 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sectors } from "@/lib/content/sectors";
 
+const SECTOR_ACCENTS = [
+  "#F2B84B",
+  "#3ECF8E",
+  "#F97350",
+  "#A78BFA",
+  "#EAB308",
+  "#38BDF8",
+  "#FB7185",
+  "#22C55E",
+  "#C084FC",
+  "#F59E0B",
+];
+
 export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[] }) {
   const [hovered, setHovered] = useState<string | null>(null);
   const visibleSectors = sectors.filter((sector) => !excludeSlugs.includes(sector.slug));
@@ -15,7 +28,9 @@ export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[
     <div className="flex h-full min-h-0 flex-col gap-2">
       <div className="relative min-h-[360px] flex-1 overflow-y-auto rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5 sm:min-h-0">
         <div className="grid auto-rows-[minmax(82px,1fr)] grid-cols-1 gap-2 sm:h-full sm:grid-cols-5 sm:auto-rows-[minmax(92px,1fr)]">
-          {visibleSectors.map((sector) => (
+          {visibleSectors.map((sector, index) => {
+            const accent = SECTOR_ACCENTS[index % SECTOR_ACCENTS.length];
+            return (
             <motion.button
               key={sector.slug}
               type="button"
@@ -25,16 +40,19 @@ export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[
               onHoverEnd={() => setHovered((current) => (current === sector.slug ? null : current))}
               onFocus={() => setHovered(sector.slug)}
               onClick={() => router.push(`/sektorler/${sector.slug}`)}
-              className="group relative flex min-h-[82px] w-full max-w-full cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-emerald-300/18 bg-gradient-to-br from-[#1F2A24] via-[#151C18] to-[#0B0D0C] px-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_34px_rgba(0,0,0,0.22)] transition-colors hover:border-emerald-300/60 sm:min-h-[92px]"
+              className="sector-home-tile group relative flex min-h-[82px] w-full max-w-full cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border px-2 text-white transition-colors sm:min-h-[92px]"
+              style={{ borderColor: `${accent}66`, ["--sector-accent" as string]: accent }}
             >
-              <span className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/70 to-transparent" />
-              <span className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-emerald-300/10 blur-2xl transition-opacity group-hover:opacity-100" />
-              <sector.icon size={22} className="relative text-emerald-200 drop-shadow-[0_0_10px_rgba(62,207,142,0.22)]" />
+              <sector.icon size={82} className="sector-home-bg-icon" strokeWidth={1.15} />
+              <span className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[var(--sector-accent)] to-transparent opacity-70" />
+              <span className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-[var(--sector-accent)]/10 blur-2xl transition-opacity group-hover:opacity-100" />
+              <sector.icon size={22} className="relative text-[var(--sector-accent)] drop-shadow-[0_0_10px_rgba(255,255,255,0.08)]" />
               <span className="max-w-full px-1 text-center text-[11px] font-extrabold leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {sector.title}
               </span>
             </motion.button>
-          ))}
+            );
+          })}
         </div>
       </div>
 

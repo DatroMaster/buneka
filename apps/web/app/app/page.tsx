@@ -8,6 +8,7 @@ import {
   Loader2,
   Minus,
   Plus,
+  Printer,
   ScanBarcode,
   Settings,
   ShoppingCart,
@@ -184,6 +185,98 @@ export default function FiyatSorgulaPage() {
   }
 
   const cartTotal = cart.reduce((sum, item) => sum + item.product.sale_price * item.quantity, 0);
+
+  function escapeReceiptText(value: string) {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function printCartReceipt() {
+    if (cart.length === 0) return;
+
+    const receiptWindow = window.open("", "buneka-receipt", "width=420,height=720");
+    if (!receiptWindow) {
+      setCartMessage("Fiş penceresi açılamadı. Tarayıcı açılır pencere iznini kontrol edin.");
+      return;
+    }
+
+    const now = new Date();
+    const lines = cart
+      .map(
+        (item) => `
+          <tr>
+            <td>
+              <b>${escapeReceiptText(item.product.name)}</b>
+              <small>${escapeReceiptText(item.product.barcode)}</small>
+            </td>
+            <td>${item.quantity}</td>
+            <td>${formatMoney(item.product.sale_price * item.quantity)}</td>
+          </tr>`
+      )
+      .join("");
+
+    receiptWindow.document.write(`
+      <!doctype html>
+      <html lang="tr">
+        <head>
+          <meta charset="utf-8" />
+          <title>Buneka Sepet Fişi</title>
+          <style>
+            @page { size: 80mm auto; margin: 5mm; }
+            * { box-sizing: border-box; }
+            body {
+              width: 70mm;
+              margin: 0 auto;
+              color: #111;
+              background: #fff;
+              font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+              font-size: 11px;
+            }
+            header { text-align: center; border-bottom: 1px dashed #111; padding: 0 0 8px; margin-bottom: 8px; }
+            h1 { margin: 0; font-size: 17px; letter-spacing: 0.16em; }
+            p { margin: 3px 0; }
+            table { width: 100%; border-collapse: collapse; }
+            th { border-bottom: 1px dashed #111; padding: 5px 0; text-align: left; }
+            th:nth-child(2), td:nth-child(2) { text-align: center; width: 28px; }
+            th:nth-child(3), td:nth-child(3) { text-align: right; width: 70px; }
+            td { border-bottom: 1px dotted #aaa; padding: 6px 0; vertical-align: top; }
+            td b { display: block; font-size: 11px; }
+            td small { display: block; color: #555; font-size: 9px; margin-top: 2px; }
+            .total { display: flex; justify-content: space-between; border-top: 1px dashed #111; margin-top: 8px; padding-top: 8px; font-size: 15px; font-weight: 900; }
+            footer { margin-top: 10px; text-align: center; color: #444; }
+            @media screen { body { padding: 16px 0; } }
+          </style>
+        </head>
+        <body>
+          <header>
+            <h1>BUNEKA</h1>
+            <p>Sepet Fişi</p>
+            <p>${now.toLocaleDateString("tr-TR")} ${now.toLocaleTimeString("tr-TR")}</p>
+          </header>
+          <table>
+            <thead><tr><th>Ürün</th><th>Ad</th><th>Tutar</th></tr></thead>
+            <tbody>${lines}</tbody>
+          </table>
+          <div class="total"><span>Toplam</span><span>${formatMoney(cartTotal)}</span></div>
+          <footer>
+            <p>Toplam ürün: ${cart.reduce((sum, item) => sum + item.quantity, 0)}</p>
+            <p>Buneka resmi mali fiş değildir.</p>
+          </footer>
+          <script>
+            window.onload = () => {
+              window.focus();
+              window.print();
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    receiptWindow.document.close();
+  }
 
   async function handleCartCheckout() {
     if (!appUser || cart.length === 0 || checkingOut) return;
@@ -484,6 +577,13 @@ export default function FiyatSorgulaPage() {
                   <span className="text-xl text-emerald-200">{formatMoney(cartTotal)}</span>
                 </div>
                 <div className="mt-3 grid gap-2">
+                  <button
+                    type="button"
+                    onClick={printCartReceipt}
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-amber-300/30 bg-amber-300/10 px-4 py-3 text-sm font-black text-amber-100 transition hover:border-amber-300/60 hover:bg-amber-300/16 active:scale-95"
+                  >
+                    <Printer size={18} /> Fiş Yazdır / PDF
+                  </button>
                   <button
                     type="button"
                     onClick={handleCartCheckout}

@@ -14,8 +14,8 @@ export const metadata = {
 
 export default function SektorlerPage() {
   return (
-    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
-      <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
+    <main className="sector-page-shell relative flex min-h-screen w-full flex-col overflow-x-hidden text-stone-100">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_6%,rgba(242,184,75,0.08),transparent_30%)]" />
 
       <header className="relative z-10 grid shrink-0 gap-3 px-4 py-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:px-6 sm:py-4">
         <div className="flex min-w-0 items-center justify-between gap-3">
