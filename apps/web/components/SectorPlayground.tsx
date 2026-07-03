@@ -25,11 +25,11 @@ export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[
               onHoverEnd={() => setHovered((current) => (current === sector.slug ? null : current))}
               onFocus={() => setHovered(sector.slug)}
               onClick={() => router.push(`/sektorler/${sector.slug}`)}
-              className="group relative flex min-h-[82px] w-full max-w-full cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-emerald-300/18 bg-gradient-to-br from-[#24301D] via-[#162015] to-[#070807] px-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_34px_rgba(0,0,0,0.22)] transition-colors hover:border-lime-300/60 sm:min-h-[92px]"
+              className="group relative flex min-h-[82px] w-full max-w-full cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-emerald-300/18 bg-gradient-to-br from-[#1F2A24] via-[#151C18] to-[#0B0D0C] px-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_34px_rgba(0,0,0,0.22)] transition-colors hover:border-emerald-300/60 sm:min-h-[92px]"
             >
-              <span className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-lime-300/70 to-transparent" />
-              <span className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-lime-300/10 blur-2xl transition-opacity group-hover:opacity-100" />
-              <sector.icon size={22} className="relative text-lime-200 drop-shadow-[0_0_10px_rgba(127,227,41,0.22)]" />
+              <span className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-emerald-300/70 to-transparent" />
+              <span className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-emerald-300/10 blur-2xl transition-opacity group-hover:opacity-100" />
+              <sector.icon size={22} className="relative text-emerald-200 drop-shadow-[0_0_10px_rgba(62,207,142,0.22)]" />
               <span className="max-w-full px-1 text-center text-[11px] font-extrabold leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {sector.title}
               </span>

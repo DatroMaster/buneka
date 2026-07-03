@@ -181,10 +181,10 @@ export default function FiyatSorgulaPage() {
         </div>
 
         <div className="w-full max-w-2xl rounded-[2rem] border border-[color:var(--color-border)] bg-[color:var(--color-card)]/82 p-6 text-center shadow-[0_28px_120px_rgba(0,0,0,0.36)] backdrop-blur-2xl sm:p-10">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-lime-300 text-stone-950 shadow-[0_20px_70px_rgba(132,204,22,0.24)]">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-[color:var(--color-primary)] text-slate-950 shadow-[0_20px_70px_rgba(62,207,142,0.24)]">
             <ScanBarcode size={38} />
           </div>
-          <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-lime-300/30 bg-lime-300/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.22em] text-lime-200">
+          <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-emerald-300/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.22em] text-emerald-200">
             <Sparkles size={13} /> Tek tuşla başlar
           </p>
           <h1 className="mt-4 font-display text-4xl font-black tracking-tight text-white sm:text-6xl">
@@ -196,16 +196,16 @@ export default function FiyatSorgulaPage() {
           <button
             type="button"
             onClick={() => setIsPriceOpen(true)}
-            className="cta-primary-animated mt-8 inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-lime-300 via-[color:var(--color-primary)] to-emerald-500 px-6 text-lg font-black text-stone-950 shadow-[0_26px_80px_rgba(132,204,22,0.26)] transition-transform hover:scale-[1.01] active:scale-95 sm:w-auto sm:min-w-80"
+            className="cta-primary-animated mt-8 inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[color:var(--color-primary)] via-emerald-400 to-amber-300 px-6 text-lg font-black text-slate-950 shadow-[0_26px_80px_rgba(62,207,142,0.26)] transition-transform hover:scale-[1.01] active:scale-95 sm:w-auto sm:min-w-80"
           >
             <ScanBarcode size={24} /> Fiyat Gör Aç
           </button>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-stone-400">
-            <Link href="/" className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1.5 hover:border-lime-300/40 hover:text-lime-200">
+            <Link href="/" className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1.5 hover:border-emerald-300/40 hover:text-emerald-200">
               <Home size={13} /> Ana sayfa
             </Link>
-            <Link href="/app/ayarlar" className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1.5 hover:border-lime-300/40 hover:text-lime-200">
-              <Settings size={13} /> Ayarlar
+            <Link href="/app/urunler" className="inline-flex items-center gap-1 rounded-full border border-white/10 px-3 py-1.5 hover:border-emerald-300/40 hover:text-emerald-200">
+              <Settings size={13} /> Yönetim Platformu
             </Link>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function FiyatSorgulaPage() {
       <section className="mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col rounded-[1.75rem] border border-[color:var(--color-border)] bg-[color:var(--color-card)]/88 p-4 shadow-[0_28px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-lime-300 text-stone-950 shadow-[0_18px_52px_rgba(132,204,22,0.24)]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:var(--color-primary)] text-slate-950 shadow-[0_18px_52px_rgba(62,207,142,0.24)]">
               <ScanBarcode size={27} />
             </div>
             <div>
@@ -247,7 +247,7 @@ export default function FiyatSorgulaPage() {
             </div>
           </div>
           <div className="grid grid-cols-3 gap-2 text-center text-[11px] font-black text-stone-400">
-            <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-lime-300">{stats.sales}</b>Satış</span>
+            <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{stats.sales}</b>Satış</span>
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{formatMoney(stats.revenue)}</b>Kasa</span>
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-amber-300">{stats.queries}</b>Sorgu</span>
           </div>
@@ -260,12 +260,12 @@ export default function FiyatSorgulaPage() {
               type="text"
               value={barcode}
               onChange={(event) => setBarcode(event.target.value)}
-              className="premium-input h-16 rounded-2xl border-lime-300/35 bg-stone-950/70 px-14 text-center text-lg font-black tracking-[0.16em] text-white placeholder:text-center focus:border-lime-300"
+              className="premium-input h-16 rounded-2xl border-emerald-300/35 bg-neutral-950/70 px-14 text-center text-lg font-black tracking-[0.16em] text-white placeholder:text-center focus:border-emerald-300"
               placeholder="Barkod okutun..."
               autoComplete="off"
               disabled={loading}
             />
-            <ScanBarcode className="absolute left-5 top-1/2 -translate-y-1/2 text-lime-300/70" size={22} />
+            <ScanBarcode className="absolute left-5 top-1/2 -translate-y-1/2 text-emerald-300/70" size={22} />
             {!barcode && (
               <div className="scan-beam-track">
                 <div className="scan-beam" />
@@ -277,7 +277,7 @@ export default function FiyatSorgulaPage() {
 
         <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-3xl border border-white/10 bg-stone-950/38 p-4 text-center">
           {loading ? (
-            <div className="h-14 w-14 animate-spin rounded-full border-b-2 border-lime-300" />
+            <div className="h-14 w-14 animate-spin rounded-full border-b-2 border-emerald-300" />
           ) : error ? (
             <div className="w-full max-w-md rounded-2xl border border-amber-300/25 bg-amber-300/10 p-5 text-center">
               <AlertCircle size={38} className="mx-auto mb-3 text-amber-300" />
@@ -288,12 +288,12 @@ export default function FiyatSorgulaPage() {
             </div>
           ) : product ? (
             <div className="w-full max-w-3xl">
-              <span className="mb-3 inline-block rounded-full border border-lime-300/25 bg-lime-300/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-lime-200">
+              <span className="mb-3 inline-block rounded-full border border-emerald-300/25 bg-emerald-300/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-emerald-200">
                 {product.category || "Kategorisiz"}
               </span>
               <h2 className="text-4xl font-black leading-tight tracking-tight text-white sm:text-6xl">{product.name}</h2>
               <p className="mt-3 font-mono text-sm font-bold text-stone-500">{product.barcode}</p>
-              <div className="my-6 text-6xl font-black tracking-tight text-lime-300 sm:text-8xl">
+              <div className="my-6 text-6xl font-black tracking-tight text-emerald-300 sm:text-8xl">
                 {formatMoney(product.sale_price)}
               </div>
               <div className="mx-auto mb-6 inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3">
@@ -313,7 +313,7 @@ export default function FiyatSorgulaPage() {
             </div>
           ) : (
             <div className="flex min-h-[260px] w-full flex-col items-center justify-center">
-              <ScanBarcode size={58} className="mb-4 text-lime-300/45" />
+              <ScanBarcode size={58} className="mb-4 text-emerald-300/45" />
               <p className="text-lg font-black text-stone-300">Sorgulama yapmak için barkod okutun.</p>
               <p className="mt-2 text-sm font-semibold text-stone-500">Okuyucu klavye gibi çalışır; okutunca otomatik yazılır.</p>
             </div>

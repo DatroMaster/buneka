@@ -210,7 +210,7 @@ export default function AppShell({
 
   if (isPriceFocusEntry) {
     return (
-      <div className="min-h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-lime-300 selection:text-stone-950">
+      <div className="min-h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-emerald-300 selection:text-slate-950">
         <CartProvider>{children}</CartProvider>
       </div>
     );

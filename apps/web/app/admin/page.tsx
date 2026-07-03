@@ -26,7 +26,7 @@ const upcomingRoutes = [
 ] as const;
 
 const TONE_STYLES: Record<string, string> = {
-  lime: "bg-lime-300/12 text-lime-300 ring-1 ring-lime-300/20",
+  lime: "bg-emerald-300/12 text-emerald-300 ring-1 ring-emerald-300/20",
   emerald: "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20",
   amber: "bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20",
 };

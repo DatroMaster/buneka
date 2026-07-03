@@ -2,8 +2,8 @@ import type { LucideIcon } from "lucide-react";
 
 const TONE_STYLES = {
   primary: {
-    icon: "bg-lime-300/12 text-lime-300 ring-1 ring-lime-300/20",
-    value: "text-lime-300",
+    icon: "bg-emerald-300/12 text-emerald-300 ring-1 ring-emerald-300/20",
+    value: "text-emerald-300",
   },
   green: {
     icon: "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20",

@@ -36,33 +36,33 @@
 }
 
 .dark {
-  --home-bg-1: #10110F;
-  --home-bg-2: #171811;
-  --home-surface: #1D1F19;
-  --home-surface-soft: rgba(132, 204, 22, 0.08);
-  --home-ink: #F7F7EF;
-  --home-muted: #B8B79F;
-  --home-glow: #7FE329;
-  --home-border: #343626;
+  --home-bg-1: #171717;
+  --home-bg-2: #101010;
+  --home-surface: #202020;
+  --home-surface-soft: rgba(255, 255, 255, 0.04);
+  --home-ink: #F2F2F2;
+  --home-muted: #A3A3A3;
+  --home-glow: #3ECF8E;
+  --home-border: #2E2E2E;
   --home-star-opacity: 0;
 
-  /* App surfaces — warm black + grass green + mustard contrast */
-  --color-bg: #10110F;
-  --color-bg-secondary: #171811;
-  --color-card: #1D1F19;
-  --color-surface: #25281E;
-  --color-text: #F7F7EF;
-  --color-muted: #B8B79F;
-  --color-border: #343626;
-  --color-border-strong: #5B6138;
-  --color-primary: #7FE329;
-  --color-primary-hover: #9AF044;
-  --color-primary-deep: #55B917;
-  --color-primary-fg: #11130B;
+  /* App surfaces — Supabase neutral dark with green + mustard accents */
+  --color-bg: #171717;
+  --color-bg-secondary: #101010;
+  --color-card: #202020;
+  --color-surface: #262626;
+  --color-text: #F2F2F2;
+  --color-muted: #A3A3A3;
+  --color-border: #2E2E2E;
+  --color-border-strong: #4A4A4A;
+  --color-primary: #3ECF8E;
+  --color-primary-hover: #45D998;
+  --color-primary-deep: #1A9E63;
+  --color-primary-fg: #072012;
 
   /* Logo gradient — bright green → platinum on the dark background */
-  --mark-from: #7FE329;
-  --mark-to: #F3C742;
+  --mark-from: #3ECF8E;
+  --mark-to: #F2F2F2;
 }
 
 /* ── Theme tokens ─────────────────────────────────────────────────── */
@@ -313,8 +313,8 @@
   .sidebar-surface,
   .sidebar-supabase {
     background:
-      radial-gradient(circle at 22% 0%, rgba(127, 227, 41, 0.10), transparent 32%),
-      linear-gradient(180deg, #171811, #10110F);
+      radial-gradient(circle at 22% 0%, rgba(62, 207, 142, 0.10), transparent 32%),
+      linear-gradient(180deg, #171717, #101010);
   }
 
   .sidebar-supabase {
@@ -333,16 +333,58 @@
   .home-viewport {
     background:
       radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--home-glow) 16%, transparent), transparent 34%),
-      radial-gradient(circle at 90% 18%, rgba(243, 199, 66, 0.10), transparent 30%),
+      radial-gradient(circle at 90% 18%, rgba(245, 158, 11, 0.08), transparent 30%),
       linear-gradient(180deg, var(--home-bg-1), var(--home-bg-2));
   }
 
   .price-focus-bg {
     background:
-      radial-gradient(circle at 18% 10%, rgba(127, 227, 41, 0.20), transparent 32%),
-      radial-gradient(circle at 86% 14%, rgba(243, 199, 66, 0.12), transparent 28%),
-      radial-gradient(circle at 50% 105%, rgba(62, 207, 142, 0.12), transparent 34%),
-      linear-gradient(180deg, #10110f, #171811);
+      radial-gradient(circle at 18% 10%, rgba(62, 207, 142, 0.18), transparent 32%),
+      radial-gradient(circle at 86% 14%, rgba(245, 158, 11, 0.10), transparent 28%),
+      radial-gradient(circle at 50% 105%, rgba(62, 207, 142, 0.10), transparent 34%),
+      linear-gradient(180deg, #171717, #101010);
+  }
+
+  .dark .data-card thead,
+  .dark .glass-card thead {
+    background: linear-gradient(90deg, rgba(62, 207, 142, 0.12), rgba(245, 158, 11, 0.08)) !important;
+    color: #C8F8DF !important;
+  }
+
+  .dark .data-card th,
+  .dark .glass-card th {
+    color: #BFEFD4 !important;
+  }
+
+  .dark .data-card input,
+  .dark .data-card select,
+  .dark .data-card textarea,
+  .dark .glass-card input,
+  .dark .glass-card select,
+  .dark .glass-card textarea {
+    background: rgba(16, 16, 16, 0.72) !important;
+    border-color: rgba(62, 207, 142, 0.28) !important;
+    color: var(--color-text) !important;
+  }
+
+  .dark .data-card input:focus,
+  .dark .data-card select:focus,
+  .dark .data-card textarea:focus,
+  .dark .glass-card input:focus,
+  .dark .glass-card select:focus,
+  .dark .glass-card textarea:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.14) !important;
+  }
+
+  .dark .data-card tbody,
+  .dark .glass-card tbody {
+    border-color: rgba(62, 207, 142, 0.12) !important;
+  }
+
+  .dark .data-card tbody tr:hover,
+  .dark .glass-card tbody tr:hover {
+    background: rgba(62, 207, 142, 0.06) !important;
   }
 
   .home-viewport,
@@ -748,21 +790,21 @@
 
 .help-center-dark {
   background:
-    radial-gradient(circle at 18% 8%, rgba(127, 227, 41, 0.18), transparent 32%),
-    radial-gradient(circle at 82% 12%, rgba(243, 199, 66, 0.12), transparent 34%),
+    radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.16), transparent 32%),
+    radial-gradient(circle at 82% 12%, rgba(245, 158, 11, 0.10), transparent 34%),
     radial-gradient(circle at 50% 92%, rgba(62, 207, 142, 0.10), transparent 38%),
-    linear-gradient(180deg, #10110F, #171811),
-    #10110F;
+    linear-gradient(180deg, #171717, #101010),
+    #171717;
   background-attachment: fixed;
 }
 
 .help-center-dark .bg-white,
 .help-center-dark .bg-slate-50 {
-  background-color: rgba(29, 31, 25, 0.88) !important;
+  background-color: rgba(32, 32, 32, 0.88) !important;
 }
 
 .help-center-dark .bg-cyan-50 {
-  background-color: rgba(127, 227, 41, 0.12) !important;
+  background-color: rgba(62, 207, 142, 0.12) !important;
 }
 
 .help-center-dark .bg-emerald-50 {
@@ -770,16 +812,16 @@
 }
 
 .help-center-dark .bg-amber-50 {
-  background-color: rgba(243, 199, 66, 0.14) !important;
+  background-color: rgba(245, 158, 11, 0.14) !important;
 }
 
 .help-center-dark .border-slate-200,
 .help-center-dark .border-slate-100 {
-  border-color: rgba(127, 227, 41, 0.16) !important;
+  border-color: rgba(62, 207, 142, 0.16) !important;
 }
 
 .help-center-dark .border-cyan-200 {
-  border-color: rgba(127, 227, 41, 0.28) !important;
+  border-color: rgba(62, 207, 142, 0.28) !important;
 }
 
 .help-center-dark .border-emerald-200 {
@@ -787,11 +829,11 @@
 }
 
 .help-center-dark .border-amber-200 {
-  border-color: rgba(243, 199, 66, 0.30) !important;
+  border-color: rgba(245, 158, 11, 0.30) !important;
 }
 
 .help-center-dark input {
-  background-color: rgba(16, 17, 15, 0.82) !important;
+  background-color: rgba(16, 16, 16, 0.82) !important;
   color: #f7f7ef !important;
 }
 
@@ -801,20 +843,20 @@
 
 .dark .help-center-dark {
   background:
-    radial-gradient(circle at 18% 8%, rgba(127, 227, 41, 0.18), transparent 32%),
-    radial-gradient(circle at 82% 12%, rgba(243, 199, 66, 0.13), transparent 34%),
+    radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.16), transparent 32%),
+    radial-gradient(circle at 82% 12%, rgba(245, 158, 11, 0.10), transparent 34%),
     radial-gradient(circle at 50% 92%, rgba(62, 207, 142, 0.10), transparent 38%),
-    linear-gradient(180deg, #10110F, #171811),
-    #10110F;
+    linear-gradient(180deg, #171717, #101010),
+    #171717;
 }
 
 .dark .help-center-dark .bg-white,
 .dark .help-center-dark .bg-slate-50 {
-  background-color: rgba(29, 31, 25, 0.88) !important;
+  background-color: rgba(32, 32, 32, 0.88) !important;
 }
 
 .dark .help-center-dark .bg-cyan-50 {
-  background-color: rgba(127, 227, 41, 0.12) !important;
+  background-color: rgba(62, 207, 142, 0.12) !important;
 }
 
 .dark .help-center-dark .bg-emerald-50 {
@@ -857,12 +899,12 @@
 .dark .help-center-dark .text-cyan-300,
 .dark .help-center-dark .text-cyan-700,
 .dark .help-center-dark .text-cyan-800 {
-  color: #b7f15a !important;
+  color: #7BE7B2 !important;
 }
 
 .help-center-dark header {
-  background: rgba(16, 17, 15, 0.82) !important;
-  border-color: rgba(127, 227, 41, 0.16) !important;
+  background: rgba(16, 16, 16, 0.82) !important;
+  border-color: rgba(62, 207, 142, 0.16) !important;
 }
 
 .help-center-dark .shadow-sm,
