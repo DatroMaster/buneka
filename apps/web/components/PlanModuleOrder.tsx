@@ -10,6 +10,15 @@ type PlanModuleOrderProps = {
   planPrice: string;
 };
 
+function parsePrice(value: string) {
+  const numeric = value.replace(/\./g, "").match(/\d+/)?.[0];
+  return numeric ? Number(numeric) : 0;
+}
+
+function formatPrice(value: number) {
+  return `${new Intl.NumberFormat("tr-TR").format(value)} TL/yıl`;
+}
+
 export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -18,6 +27,13 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
     setSelected((current) => (current.includes(label) ? current.filter((item) => item !== label) : [...current, label]));
   };
 
+  const totalPrice = useMemo(() => {
+    return selected.reduce((sum, label) => {
+      const selectedModule = modules.find((item) => item.label === label);
+      return sum + parsePrice(selectedModule?.price || "0");
+    }, parsePrice(planPrice));
+  }, [planPrice, selected]);
+
   const message = useMemo(() => {
     const moduleText = selected.length
       ? selected.map((label) => {
@@ -25,11 +41,15 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
           return `${label} (${selectedModule?.price || "fiyat bilgisi"})`;
         }).join(", ")
       : "Ek modül istemiyorum";
-    return `Merhaba, ${planName} paketini satın almak istiyorum. Paket fiyatı: ${planPrice}/yıl. Ek modüller: ${moduleText}.`;
-  }, [planName, planPrice, selected]);
+    return `Merhaba, ${planName} paketini satın almak istiyorum. Paket fiyatı: ${planPrice}/yıl. Ek modüller: ${moduleText}. Tahmini toplam: ${formatPrice(totalPrice)}.`;
+  }, [planName, planPrice, selected, totalPrice]);
 
   return (
     <div className="mt-3 grid gap-2">
+      <div className="rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/5 px-3 py-2">
+        <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Toplam</p>
+        <p className="font-display text-lg font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
+      </div>
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}

@@ -291,7 +291,7 @@ export default function FiyatSorgulaPage() {
                 type="text"
                 value={barcode}
                 onChange={(event) => setBarcode(event.target.value)}
-                className="premium-input h-16 pl-16 text-lg font-medium tracking-wider"
+                className="premium-input h-16 px-16 text-center text-lg font-medium tracking-wider placeholder:text-center"
                 placeholder="Barkod okutun..."
                 autoComplete="off"
                 disabled={loading}

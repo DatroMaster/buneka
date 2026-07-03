@@ -8,8 +8,7 @@ import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { SectorPackageBuilder } from "@/components/SectorPackageBuilder";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
-import { getModulePrice, resolveModule } from "@/lib/content/module-lookup";
-import { getModuleDetail, getSector, getWorkflowDetail, sectors } from "@/lib/content/sectors";
+import { getSector, getWorkflowDetail, sectors } from "@/lib/content/sectors";
 import { plans } from "@/lib/content/plans";
 
 type SectorPageProps = {
@@ -29,7 +28,7 @@ export async function generateMetadata({ params }: SectorPageProps) {
   }
 
   return {
-    title: `${sector.title} | Buneka Sektör Paketi`,
+    title: `${sector.title} | Buneka Sektor Paketi`,
     description: sector.short,
   };
 }
@@ -58,7 +57,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
             href="/sektorler"
             className="hidden items-center gap-1.5 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)] sm:flex"
           >
-            <ArrowLeft size={14} /> Sektörler
+            <ArrowLeft size={14} /> Sektorler
           </Link>
           <BunekaNedirButton />
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
@@ -66,50 +65,43 @@ export default async function SectorPage({ params }: SectorPageProps) {
       </header>
 
       <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border flex min-h-0 flex-col justify-between rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6">
-          <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
-            <sector.icon size={12} />
-            {sector.title}
+        <section className="glow-border grid min-h-0 grid-rows-[auto_1fr] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="p-5 sm:p-6">
+            <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
+              <sector.icon size={12} />
+              {sector.title}
+            </div>
+            <h1 className="font-display text-2xl font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
+              {sector.headline}
+            </h1>
+            <p className="mt-3 text-sm leading-relaxed text-[color:var(--home-muted)] md:text-base">
+              {sector.description}
+            </p>
+
+            <ul className="mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+              {sector.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2 text-xs text-[color:var(--home-ink)] sm:text-sm">
+                  <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-emerald-400" />
+                  <span className="leading-snug">{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a
+                href={whatsappLink(`Merhaba, ${sector.title} sektoru icin Buneka lisansi almak istiyorum.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glow-border inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-[color:var(--home-ink)]"
+              >
+                <MessageCircle size={16} className="text-emerald-400" /> Hemen Satin Al
+              </a>
+            </div>
           </div>
-          <h1 className="font-display text-2xl font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
-            {sector.headline}
-          </h1>
-          <p className="mt-3 hidden text-sm leading-relaxed text-[color:var(--home-muted)] sm:block md:text-base">
-            {sector.description}
-          </p>
 
-          <ul className="mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
-            {sector.features.map((feature) => (
-              <li key={feature} className="flex items-start gap-2 text-xs text-[color:var(--home-ink)] sm:text-sm">
-                <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-emerald-400" />
-                <span className="leading-snug">{feature}</span>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a
-              href={whatsappLink(`Merhaba, ${sector.title} sektörü için Buneka lisansı almak istiyorum.`)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="glow-border inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-[color:var(--home-ink)]"
-            >
-              <MessageCircle size={16} className="text-emerald-400" /> Hemen Satın Al
-            </a>
-          </div>
-
-          <SectorPackageBuilder
-            sectorTitle={sector.title}
-            modules={sector.modules}
-            planName={recommendedPlan.name}
-            planPrice={recommendedPlan.price}
-          />
-        </section>
-
-        <section className="glow-border grid min-h-0 grid-rows-[0.9fr_1.1fr] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
-          <div className="flex min-h-0 flex-col border-b border-[color:var(--home-border)] p-4 sm:p-5">
+          <div className="flex min-h-0 flex-col border-t border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
-              <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
+              <Route size={16} className="text-[color:var(--home-glow)]" /> Gunluk akis
             </p>
             <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-2">
               {sector.workflow.map((step, index) => (
@@ -129,31 +121,21 @@ export default async function SectorPage({ params }: SectorPageProps) {
               ))}
             </div>
           </div>
+        </section>
 
-          <div className="flex min-h-0 flex-col p-4 sm:p-5">
-            <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
-            <div className="grid min-h-0 flex-1 grid-cols-1 gap-2">
-              {sector.modules.map((module) => (
-                <div key={module} className="glow-border flex h-full items-center justify-between gap-3 rounded-lg px-3 py-2.5">
-                  <span className="min-w-0">
-                    <p className="text-[11px] font-bold text-[color:var(--home-ink)]">{resolveModule(module)?.label || module}</p>
-                    <p className="text-[10px] leading-snug text-[color:var(--home-muted)]">{getModuleDetail(module)}</p>
-                  </span>
-                  <span className="shrink-0 text-right text-[11px] font-black text-[color:var(--home-glow)]">{getModulePrice(module)}</span>
-                </div>
-              ))}
-            </div>
-            <Link href="/ek-moduller" className="glow-border mt-2 inline-flex shrink-0 items-center justify-center rounded-lg py-2 text-xs font-black text-[color:var(--home-ink)]">
-              Tüm modülleri göster
-            </Link>
-          </div>
-
+        <section className="glow-border flex min-h-0 flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6">
+          <SectorPackageBuilder
+            sectorTitle={sector.title}
+            modules={sector.modules}
+            planName={recommendedPlan.name}
+            planPrice={recommendedPlan.price}
+          />
         </section>
       </main>
 
       <footer className="relative z-10 flex shrink-0 items-center justify-between px-4 py-2.5 text-[10px] text-[color:var(--home-muted)] sm:px-6 sm:text-xs">
         <Link href="/sektorler" className="flex items-center gap-1.5 font-bold hover:text-[color:var(--home-ink)]">
-          <ArrowLeft size={12} /> Sektörlere dön
+          <ArrowLeft size={12} /> Sektorlere don
         </Link>
         <span className="flex items-center gap-2">BUNEKA © 2026 · Ankara, TR · <ClientIpBadge /></span>
       </footer>

@@ -214,6 +214,25 @@ export default function AyarlarPage() {
         </div>
       )}
 
+      <div className="mb-3 grid shrink-0 grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:grid-cols-[auto_1fr_auto] md:items-center">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">
+          <ShieldCheck size={20} />
+        </div>
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-wide text-slate-500 dark:text-slate-400">Lisans ve yetki</p>
+          {license ? (
+            <p className="text-sm font-bold text-slate-950 dark:text-slate-50">
+              {license.plans?.name || "Aktif paket"} · {new Date(license.expires_at).toLocaleDateString("tr-TR")} · {license.status}
+            </p>
+          ) : (
+            <p className="text-sm font-bold text-slate-950 dark:text-slate-50">Aktif lisans kaydı bulunamadı.</p>
+          )}
+        </div>
+        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+          Görünür
+        </span>
+      </div>
+
       <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 lg:grid-cols-[1.25fr_0.85fr_1fr]">
         <form onSubmit={saveOrganization} className="data-card min-h-0 p-4">
           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
@@ -287,7 +306,7 @@ export default function AyarlarPage() {
           </button>
         </form>
 
-        <div className="data-card p-4">
+        <div className="hidden">
           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">
             <ShieldCheck size={20} />
           </div>

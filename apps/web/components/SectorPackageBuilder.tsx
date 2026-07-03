@@ -13,6 +13,15 @@ type SectorPackageBuilderProps = {
   planPrice: string;
 };
 
+function parsePrice(value: string) {
+  const numeric = value.replace(/\./g, "").match(/\d+/)?.[0];
+  return numeric ? Number(numeric) : 0;
+}
+
+function formatPrice(value: number) {
+  return `${new Intl.NumberFormat("tr-TR").format(value)} TL/yıl`;
+}
+
 export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice }: SectorPackageBuilderProps) {
   const [selected, setSelected] = useState<string[]>(() => modules.map((module) => resolveModule(module)?.label || module));
   const [customModule, setCustomModule] = useState("");
@@ -27,33 +36,38 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
     );
   };
 
+  const totalPrice = useMemo(() => {
+    return selected.reduce((sum, module) => sum + parsePrice(getModulePrice(module)), parsePrice(planPrice));
+  }, [planPrice, selected]);
+
   const message = useMemo(() => {
     const selectedText = selected.length
       ? selected.map((module) => `${module} (${getModulePrice(module)})`).join(", ")
       : "Modül seçmedim, önerinizi istiyorum";
     const customText = customModule.trim() ? ` Yeni modül talebim: ${customModule.trim()}.` : "";
-    return `Merhaba, ${sectorTitle} için paket talebi oluşturmak istiyorum. Paket: ${planName} (${planPrice}/yıl). Seçilen modüller: ${selectedText}.${customText}`;
-  }, [customModule, planName, planPrice, sectorTitle, selected]);
+    return `Merhaba, ${sectorTitle} için paket talebi oluşturmak istiyorum. Paket: ${planName} (${planPrice}/yıl). Seçilen modüller: ${selectedText}. Tahmini toplam: ${formatPrice(totalPrice)}.${customText}`;
+  }, [customModule, planName, planPrice, sectorTitle, selected, totalPrice]);
 
   return (
-    <div className="package-spark-card mt-4 rounded-xl p-3">
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+    <div className="package-spark-card flex min-h-0 flex-1 flex-col rounded-xl p-4 sm:p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">Paket oluştur</p>
           <p className="font-display mt-1 text-sm font-bold text-[color:var(--home-ink)]">{planName}</p>
           <p className="text-xs text-[color:var(--home-muted)]">{planPrice} /yıl başlangıç paketi</p>
+          <p className="mt-2 text-2xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
         </div>
         <a
           href={whatsappLink(message)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg bg-[color:var(--home-glow)] px-3 py-2 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95 sm:mt-0"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[color:var(--home-glow)] px-4 py-2.5 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95"
         >
           <MessageCircle size={14} /> Talebi Gönder
         </a>
       </div>
 
-      <div className="mt-2 grid max-h-24 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+      <div className="mt-4 grid min-h-0 flex-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
         {visibleModules.map((module) => {
           const isSelected = selected.includes(module);
           return (
@@ -61,7 +75,7 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
               key={module}
               type="button"
               onClick={() => toggle(module)}
-              className={`flex min-h-10 items-center gap-2 rounded-lg border px-3 py-1.5 text-left text-[11px] font-bold transition-all ${
+              className={`flex min-h-12 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] font-bold transition-all ${
                 isSelected
                   ? "border-[color:var(--home-glow)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-ink)]"
                   : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)]"
@@ -76,13 +90,14 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
           );
         })}
       </div>
-      <label className="mt-2 grid gap-1 text-[11px] font-bold text-[color:var(--home-muted)]">
+
+      <label className="mt-4 grid gap-1.5 text-[11px] font-bold text-[color:var(--home-muted)]">
         Yeni modül talebi
-        <input
+        <textarea
           value={customModule}
           onChange={(event) => setCustomModule(event.target.value)}
-          className="rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface)] px-3 py-1.5 text-xs text-[color:var(--home-ink)] outline-none focus:border-[color:var(--home-glow)]"
-          placeholder="Örn. vardiya takibi, kampanya ekranı..."
+          className="min-h-20 resize-none rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface)] px-3 py-2 text-xs text-[color:var(--home-ink)] outline-none focus:border-[color:var(--home-glow)]"
+          placeholder="Örn. vardiya takibi, kampanya ekranı, müşteri sadakat modülü..."
         />
       </label>
     </div>
