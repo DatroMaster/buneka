@@ -5,10 +5,14 @@ import {
   AlertCircle,
   CheckCircle2,
   Home,
+  Loader2,
+  Minus,
   Plus,
   ScanBarcode,
   Settings,
+  ShoppingCart,
   Sparkles,
+  Trash2,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -16,6 +20,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { createClient } from "@/lib/supabase/client";
+import { useCart } from "./CartContext";
 
 type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
 type Product = Tables<"products">;
@@ -28,8 +33,11 @@ export default function FiyatSorgulaPage() {
   const [stats, setStats] = useState({ queries: 0, sales: 0, revenue: 0 });
   const [appUser, setAppUser] = useState<AppUser | null>(null);
   const [isPriceOpen, setIsPriceOpen] = useState(false);
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [cartMessage, setCartMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const supabase = useMemo(() => createClient(), []);
+  const { cart, addToCart: addProductToCart, updateCartQuantity, removeFromCart, clearCart } = useCart();
 
   const loadUserAndStats = useCallback(async () => {
     const {
@@ -166,6 +174,86 @@ export default function FiyatSorgulaPage() {
     inputRef.current?.focus();
   }
 
+  function addToCart() {
+    if (!product) return;
+    addProductToCart(product);
+    setCartMessage(`${product.name} sepete eklendi.`);
+    setProduct(null);
+    setBarcode("");
+    inputRef.current?.focus();
+  }
+
+  const cartTotal = cart.reduce((sum, item) => sum + item.product.sale_price * item.quantity, 0);
+
+  async function handleCartCheckout() {
+    if (!appUser || cart.length === 0 || checkingOut) return;
+
+    setCheckingOut(true);
+    setCartMessage("");
+
+    const totalProfit = cart.reduce(
+      (sum, item) => sum + (item.product.sale_price - (item.product.purchase_price || 0)) * item.quantity,
+      0
+    );
+
+    const { data: saleData } = await supabase
+      .from("sales")
+      .insert({
+        organization_id: appUser.organization_id,
+        store_id: appUser.store_id,
+        user_id: appUser.id,
+        total_amount: cartTotal,
+        total_profit: totalProfit,
+        payment_type: "cash",
+      })
+      .select()
+      .single();
+
+    if (!saleData) {
+      setCartMessage("Sepet satışı kaydedilemedi. Lütfen tekrar deneyin.");
+      setCheckingOut(false);
+      return;
+    }
+
+    await supabase.from("sale_items").insert(
+      cart.map((item) => ({
+        sale_id: saleData.id,
+        product_id: item.product.id,
+        quantity: item.quantity,
+        sale_price: item.product.sale_price,
+        purchase_price: item.product.purchase_price,
+        profit: (item.product.sale_price - (item.product.purchase_price || 0)) * item.quantity,
+      }))
+    );
+
+    await Promise.all(
+      cart.map((item) =>
+        supabase
+          .from("products")
+          .update({ stock_quantity: item.product.stock_quantity - item.quantity })
+          .eq("id", item.product.id)
+      )
+    );
+
+    await supabase.from("stock_movements").insert(
+      cart.map((item) => ({
+        organization_id: appUser.organization_id,
+        store_id: appUser.store_id,
+        product_id: item.product.id,
+        movement_type: "sale",
+        quantity: -item.quantity,
+        unit_price: item.product.sale_price,
+        note: "Satış (sepet)",
+      }))
+    );
+
+    clearCart();
+    setCheckingOut(false);
+    setCartMessage("Sepet satışı tamamlandı.");
+    await loadUserAndStats();
+    inputRef.current?.focus();
+  }
+
   const formatMoney = (amount: number) =>
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
@@ -214,7 +302,7 @@ export default function FiyatSorgulaPage() {
   }
 
   return (
-    <main className="price-focus-bg relative flex min-h-screen flex-col overflow-hidden p-3 text-[color:var(--color-text)] sm:p-5">
+    <main className="price-focus-bg relative flex min-h-screen flex-col overflow-x-hidden overflow-y-auto p-3 text-[color:var(--color-text)] sm:p-5">
       <div className="mb-3 flex shrink-0 items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           <BunekaMark size={28} />
@@ -235,7 +323,7 @@ export default function FiyatSorgulaPage() {
         </button>
       </div>
 
-      <section className="mx-auto flex min-h-0 w-full max-w-5xl flex-1 flex-col rounded-[1.75rem] border border-[color:var(--color-border)] bg-[color:var(--color-card)]/88 p-4 shadow-[0_28px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-6">
+      <section className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col rounded-[1.75rem] border border-[color:var(--color-border)] bg-[color:var(--color-card)]/88 p-4 shadow-[0_28px_100px_rgba(0,0,0,0.34)] backdrop-blur-xl sm:p-6">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[color:var(--color-primary)] text-slate-950 shadow-[0_18px_52px_rgba(62,207,142,0.24)]">
@@ -275,7 +363,8 @@ export default function FiyatSorgulaPage() {
           </div>
         </form>
 
-        <div className="flex min-h-0 flex-1 flex-col items-center justify-center rounded-3xl border border-white/10 bg-stone-950/38 p-4 text-center">
+        <div className="grid min-h-0 flex-1 gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="flex min-h-[340px] flex-col items-center justify-center rounded-3xl border border-white/10 bg-stone-950/38 p-4 text-center">
           {loading ? (
             <div className="h-14 w-14 animate-spin rounded-full border-b-2 border-emerald-300" />
           ) : error ? (
@@ -302,9 +391,16 @@ export default function FiyatSorgulaPage() {
                   {product.stock_quantity} Adet
                 </span>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+              <div className="grid gap-3 sm:grid-cols-3">
                 <button onClick={handleSale} className="action-sale min-h-14 w-full px-4 py-4 text-lg" type="button">
                   <CheckCircle2 size={24} /> Satış Yap
+                </button>
+                <button
+                  onClick={addToCart}
+                  className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-emerald-300/35 bg-emerald-300/10 px-4 py-4 text-lg font-black text-emerald-100 transition hover:border-emerald-300 hover:bg-emerald-300/18 active:scale-95"
+                  type="button"
+                >
+                  <ShoppingCart size={24} /> Sepete Ekle
                 </button>
                 <button onClick={handleCancel} className="action-no-sale min-h-14 w-full px-4 py-4 text-lg" type="button">
                   Satış Yok
@@ -318,6 +414,100 @@ export default function FiyatSorgulaPage() {
               <p className="mt-2 text-sm font-semibold text-stone-500">Okuyucu klavye gibi çalışır; okutunca otomatik yazılır.</p>
             </div>
           )}
+        </div>
+        <aside className="flex min-h-[300px] flex-col rounded-3xl border border-emerald-300/18 bg-neutral-950/58 p-4">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <h2 className="inline-flex items-center gap-2 text-xl font-black text-white">
+              <ShoppingCart className="text-emerald-300" size={22} /> Sepet
+            </h2>
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-black text-stone-300">
+              {cart.length} ürün
+            </span>
+          </div>
+          {cartMessage && (
+            <p className="mb-3 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 px-3 py-2 text-xs font-black text-emerald-100">
+              {cartMessage}
+            </p>
+          )}
+          {cart.length === 0 ? (
+            <div className="flex flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 p-5 text-center">
+              <ShoppingCart size={42} className="mb-3 text-stone-600" />
+              <p className="text-sm font-bold text-stone-400">Çoklu ürün satışı için okutulan ürünleri sepete ekleyin.</p>
+            </div>
+          ) : (
+            <>
+              <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+                {cart.map((item) => (
+                  <div key={item.product.id} className="rounded-2xl border border-white/10 bg-white/[0.035] p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-black text-white">{item.product.name}</p>
+                        <p className="mt-1 text-xs font-bold text-stone-500">{formatMoney(item.product.sale_price)}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeFromCart(item.product.id)}
+                        className="rounded-lg border border-white/10 p-1.5 text-stone-400 transition hover:border-amber-300/40 hover:text-amber-200"
+                        aria-label="Sepetten çıkar"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                    <div className="mt-3 flex items-center justify-between gap-2">
+                      <div className="inline-flex items-center rounded-xl border border-white/10">
+                        <button
+                          type="button"
+                          onClick={() => updateCartQuantity(item.product.id, -1)}
+                          className="p-2 text-stone-300 hover:text-emerald-200"
+                          aria-label="Adet azalt"
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="min-w-8 text-center text-sm font-black text-white">{item.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() => updateCartQuantity(item.product.id, 1)}
+                          className="p-2 text-stone-300 hover:text-emerald-200"
+                          aria-label="Adet artır"
+                        >
+                          <Plus size={14} />
+                        </button>
+                      </div>
+                      <span className="text-sm font-black text-emerald-300">{formatMoney(item.product.sale_price * item.quantity)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 rounded-2xl border border-emerald-300/20 bg-emerald-300/10 p-3">
+                <div className="flex items-center justify-between text-sm font-black">
+                  <span className="text-stone-300">Toplam</span>
+                  <span className="text-xl text-emerald-200">{formatMoney(cartTotal)}</span>
+                </div>
+                <div className="mt-3 grid gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCartCheckout}
+                    disabled={checkingOut}
+                    className="action-sale min-h-12 w-full px-4 py-3"
+                  >
+                    {checkingOut ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={20} />}
+                    Sepeti Satışa Çevir
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearCart();
+                      setCartMessage("");
+                    }}
+                    className="action-no-sale min-h-11 w-full px-4 py-3"
+                  >
+                    Sepeti Temizle
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </aside>
         </div>
       </section>
     </main>

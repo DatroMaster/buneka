@@ -911,3 +911,83 @@
 .help-center-dark [class*="shadow-"] {
   box-shadow: 0 18px 70px rgba(0, 0, 0, 0.24) !important;
 }
+
+/* Help center: keep the guide intentionally black, calm, and readable. */
+.help-center-dark {
+  --guide-panel: rgba(16, 16, 16, 0.92);
+  --guide-panel-soft: rgba(24, 24, 24, 0.88);
+  --guide-line: rgba(62, 207, 142, 0.20);
+  background:
+    radial-gradient(circle at 14% 10%, rgba(62, 207, 142, 0.15), transparent 30%),
+    radial-gradient(circle at 86% 8%, rgba(245, 158, 11, 0.11), transparent 28%),
+    radial-gradient(circle at 52% 100%, rgba(62, 207, 142, 0.09), transparent 35%),
+    #050505 !important;
+  color: #f7f7ef !important;
+}
+
+.help-center-dark header {
+  background: rgba(5, 5, 5, 0.90) !important;
+  border-color: var(--guide-line) !important;
+}
+
+.help-center-dark .bg-white,
+.help-center-dark .bg-slate-50,
+.dark .help-center-dark .bg-white,
+.dark .help-center-dark .bg-slate-50 {
+  background-color: var(--guide-panel) !important;
+}
+
+.help-center-dark .bg-cyan-50,
+.help-center-dark .bg-emerald-50,
+.dark .help-center-dark .bg-cyan-50,
+.dark .help-center-dark .bg-emerald-50 {
+  background-color: rgba(62, 207, 142, 0.12) !important;
+}
+
+.help-center-dark .bg-amber-50,
+.dark .help-center-dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+}
+
+.help-center-dark .border-slate-200,
+.help-center-dark .border-slate-100,
+.dark .help-center-dark .border-slate-200,
+.dark .help-center-dark .border-slate-100 {
+  border-color: var(--guide-line) !important;
+}
+
+.help-center-dark :where(.text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700),
+.dark .help-center-dark :where(.text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700) {
+  color: #f7f7ef !important;
+}
+
+.help-center-dark :where(.text-slate-600, .text-slate-500, .text-slate-400),
+.dark .help-center-dark :where(.text-slate-600, .text-slate-500, .text-slate-400) {
+  color: #b8b79f !important;
+}
+
+.help-center-dark :where(.text-cyan-700, .text-cyan-800, .text-cyan-300),
+.dark .help-center-dark :where(.text-cyan-700, .text-cyan-800, .text-cyan-300) {
+  color: #3ecf8e !important;
+}
+
+.help-center-dark svg {
+  color: #3ecf8e;
+}
+
+.help-center-dark .bg-slate-950 svg,
+.help-center-dark a[href="/login"] svg {
+  color: currentColor;
+}
+
+.help-center-dark input,
+.dark .help-center-dark input {
+  background-color: rgba(5, 5, 5, 0.78) !important;
+  border-color: rgba(62, 207, 142, 0.24) !important;
+  color: #f7f7ef !important;
+}
+
+.help-center-dark input::placeholder,
+.dark .help-center-dark input::placeholder {
+  color: #9f9f8a !important;
+}

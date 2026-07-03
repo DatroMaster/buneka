@@ -286,19 +286,16 @@ const searchIndex: SearchResult[] = [
 
 function VisualCard({ title, lines }: { title: string; lines: string[] }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between border-b border-slate-100 pb-3">
-        <span className="h-2.5 w-20 rounded-full bg-cyan-200" />
-        <span className="h-2.5 w-10 rounded-full bg-emerald-200" />
-      </div>
-      <p className="font-display text-sm font-black text-slate-950">{title}</p>
+    <div className="rounded-2xl border border-emerald-300/18 bg-neutral-950/74 p-4 shadow-sm">
+      <p className="font-display text-base font-black text-stone-50">{title}</p>
+      <p className="mt-1 text-xs font-semibold text-stone-500">Ekranda sade sırayla ilerlenir.</p>
       <div className="mt-3 grid gap-2">
         {lines.map((line, index) => (
-          <div key={line} className="flex items-center gap-2 rounded-xl bg-slate-50 p-2">
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-[10px] font-black text-cyan-700">
+          <div key={line} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.035] p-2.5">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-300 text-[10px] font-black text-neutral-950">
               {index + 1}
             </span>
-            <span className="text-xs font-semibold text-slate-600">{line}</span>
+            <span className="text-xs font-bold text-stone-300">{line}</span>
           </div>
         ))}
       </div>
