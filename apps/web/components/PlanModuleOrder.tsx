@@ -1,8 +1,9 @@
 "use client";
 
-import { CheckCircle2, MessageCircle, Plus } from "lucide-react";
+import { CheckCircle2, ExternalLink, MessageCircle, Plus, Smartphone } from "lucide-react";
 import { useMemo, useState } from "react";
 import { whatsappLink } from "@/lib/contact";
+import { getHardwareDeliveryText, hardwareOptions, type HardwareDeliveryOption } from "@/lib/content/hardware";
 import { modules } from "@/lib/content/modules";
 
 type PlanModuleOrderProps = {
@@ -22,6 +23,7 @@ function formatPrice(value: number) {
 export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  const [deliveryOption, setDeliveryOption] = useState<HardwareDeliveryOption>("standard");
   const includesAllModules = planName === "Buneka Patron";
 
   const toggle = (label: string) => {
@@ -43,14 +45,16 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
     const moduleText = includesAllModules
       ? `Tüm ek modüller pakete dahil: ${modules.map((module) => module.label).join(", ")}`
       : selected.length
-        ? selected.map((label) => {
-            const selectedModule = modules.find((item) => item.label === label);
-            return `${label} (${selectedModule?.price || "fiyat bilgisi"})`;
-          }).join(", ")
+        ? selected
+            .map((label) => {
+              const selectedModule = modules.find((item) => item.label === label);
+              return `${label} (${selectedModule?.price || "fiyat bilgisi"})`;
+            })
+            .join(", ")
         : "Ek modül istemiyorum";
 
-    return `Merhaba, ${planName} paketini satın almak istiyorum. Paket fiyatı: ${planPrice}/yıl. Ek modüller: ${moduleText}. Barkod okuyucu desteği ücretsiz dahil. Tahmini toplam: ${formatPrice(totalPrice)}.`;
-  }, [includesAllModules, planName, planPrice, selected, totalPrice]);
+    return `Merhaba, ${planName} paketini satın almak istiyorum. Paket fiyatı: ${planPrice}/yıl. Ek modüller: ${moduleText}. Donanım teslim seçimim: ${getHardwareDeliveryText(deliveryOption)} Tahmini lisans toplamı: ${formatPrice(totalPrice)}.`;
+  }, [deliveryOption, includesAllModules, planName, planPrice, selected, totalPrice]);
 
   return (
     <div className="mt-5 grid shrink-0 gap-2.5">
@@ -66,7 +70,10 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
           </div>
           <div className="mt-2 flex flex-wrap gap-1.5">
             {modules.map((module) => (
-              <span key={module.label} className="inline-flex items-center gap-1 rounded-full border border-[color:var(--home-border)] px-2 py-1 text-[9px] font-bold text-[color:var(--home-ink)]">
+              <span
+                key={module.label}
+                className="inline-flex items-center gap-1 rounded-full border border-[color:var(--home-border)] px-2 py-1 text-[9px] font-bold text-[color:var(--home-ink)]"
+              >
                 <CheckCircle2 size={10} className="shrink-0 text-emerald-300" />
                 {module.label}
               </span>
@@ -106,6 +113,67 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
           )}
         </>
       )}
+
+      <div className="rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/70 p-3">
+        <div className="flex items-start gap-2">
+          <Smartphone size={16} className="mt-0.5 shrink-0 text-[color:var(--home-glow)]" />
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">Teslimat cihazı</p>
+            <p className="mt-1 text-[11px] font-bold leading-4 text-[color:var(--home-muted)]">
+              Bilgisayara bağlanan barkod okuyucu hediye. İsterseniz Android el terminali opsiyonuyla teslim edilir.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-3 grid gap-2">
+          {[
+            {
+              value: "standard" as const,
+              title: hardwareOptions.standardScanner.label,
+              meta: hardwareOptions.standardScanner.priceLabel,
+            },
+            {
+              value: "terminal" as const,
+              title: `${hardwareOptions.androidTerminal.model} el terminali`,
+              meta: hardwareOptions.androidTerminal.priceLabel,
+            },
+          ].map((option) => {
+            const isSelected = deliveryOption === option.value;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setDeliveryOption(option.value)}
+                className={`rounded-lg border px-3 py-2 text-left text-[10px] font-bold transition ${
+                  isSelected
+                    ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)]"
+                    : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)]"
+                }`}
+              >
+                <span className="block">{option.title}</span>
+                <span className="block text-[color:var(--home-glow)]">{option.meta}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {deliveryOption === "terminal" && (
+          <div className="mt-3 rounded-lg border border-amber-300/35 bg-amber-300/10 p-3">
+            <p className="text-[11px] font-black text-amber-200">{hardwareOptions.androidTerminal.livePriceLabel}</p>
+            <p className="mt-1 text-[10px] font-semibold leading-4 text-[color:var(--home-muted)]">
+              Son kontrol: {hardwareOptions.androidTerminal.priceUpdatedAt}. Nihai tedarik fiyatı sipariş öncesi tekrar teyit edilir.
+            </p>
+            <a
+              href={hardwareOptions.androidTerminal.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-1 text-[10px] font-black text-[color:var(--home-glow)]"
+            >
+              Canlı fiyatı kontrol et <ExternalLink size={11} />
+            </a>
+          </div>
+        )}
+      </div>
 
       <a
         href={whatsappLink(message)}

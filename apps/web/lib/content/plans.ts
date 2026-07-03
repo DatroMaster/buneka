@@ -7,7 +7,8 @@ export const plans = [
       "Fiyat sorgulama",
       "Ürün ekleme",
       "Basit sorgu raporu",
-      "Barkod okuyucu desteği ücretsiz",
+      "PC barkod okuyucu hediyeli",
+      "Android el terminali opsiyonu",
     ],
   },
   {
@@ -19,7 +20,8 @@ export const plans = [
       "Satış Yapıldı kaydı",
       "Günlük kasa",
       "En çok sorgulanan ürün",
-      "Barkod okuyucu desteği ücretsiz",
+      "PC barkod okuyucu hediyeli",
+      "Android el terminali opsiyonu",
     ],
   },
   {
@@ -30,7 +32,8 @@ export const plans = [
       "Stokta kalan",
       "Minimum stok uyarısı",
       "Stok hareketleri",
-      "Barkod okuyucu desteği ücretsiz",
+      "PC barkod okuyucu hediyeli",
+      "Android el terminali opsiyonu",
     ],
   },
   {
@@ -42,7 +45,8 @@ export const plans = [
       "Çoklu cihaz",
       "Kampanya görünümü",
       "Tüm ek modüller aktif",
-      "Barkod okuyucu desteği ücretsiz",
+      "PC barkod okuyucu hediyeli",
+      "Android el terminali opsiyonu",
     ],
   },
 ];

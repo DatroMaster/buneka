@@ -4,13 +4,16 @@ import {
   Boxes,
   Check,
   Crown,
+  ExternalLink,
   Home,
   LayoutDashboard,
   LogIn,
   Phone,
   ScanLine,
   ShieldCheck,
+  Smartphone,
   WalletCards,
+  Wifi,
 } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
@@ -18,6 +21,7 @@ import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { PlanModuleOrder } from "@/components/PlanModuleOrder";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { callLink } from "@/lib/contact";
+import { hardwareOptions } from "@/lib/content/hardware";
 import { plans } from "@/lib/content/plans";
 
 export const metadata = {
@@ -44,7 +48,8 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Barkodla fiyat sorgulama",
     "Hızlı ürün ekleme",
     "TCMB kuruyla USD fiyat girişi",
-    "Barkod okuyucu desteği ücretsiz",
+    "PC barkod okuyucu hediyeli",
+    "Android el terminali opsiyonu",
     "Toplu fiyat güncelleme",
     "Sorgu raporu",
   ],
@@ -53,7 +58,8 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Satış Yapıldı kaydı",
     "Günlük kasa raporu",
     "En çok sorgulanan ürün",
-    "Barkod okuyucu desteği ücretsiz",
+    "PC barkod okuyucu hediyeli",
+    "Android el terminali opsiyonu",
     "Sepetli çoklu ürün satışı",
   ],
   STOCK: [
@@ -61,7 +67,8 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Stokta kalan / minimum stok uyarısı",
     "Stok giriş-çıkış hareketleri",
     "Kar / marj görünürlüğü",
-    "Barkod okuyucu desteği ücretsiz",
+    "PC barkod okuyucu hediyeli",
+    "Android el terminali opsiyonu",
     "Detaylı raporlar",
   ],
   PATRON: [
@@ -70,7 +77,8 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Kampanya erişimi",
     "Haftalık/aylık özet raporlar",
     "Tüm ek modüller aktif",
-    "Barkod okuyucu desteği ücretsiz",
+    "PC barkod okuyucu hediyeli",
+    "Android el terminali opsiyonu",
     "Patron görünümü",
   ],
 };
@@ -121,6 +129,79 @@ export default function PaketlerPage() {
             Finansal netlikte paket karşılaştırması: yıllık fiyat, destek ve modül seçenekleri aynı tabloda.
           </p>
         </div>
+
+        <section className="grid gap-4 rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/82 p-4 shadow-[0_18px_60px_rgba(2,6,23,0.12)] backdrop-blur-xl lg:grid-cols-[0.95fr_1.25fr] lg:p-5">
+          <div className="flex gap-4">
+            <div className="relative hidden h-48 w-32 shrink-0 rounded-[1.65rem] border border-emerald-300/35 bg-neutral-950 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:block">
+              <div className="h-full rounded-[1.2rem] border border-white/10 bg-gradient-to-b from-slate-900 via-neutral-950 to-black p-3">
+                <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-white/20" />
+                <div className="grid h-28 place-items-center rounded-2xl bg-gradient-to-br from-emerald-300 via-sky-300 to-amber-300 text-slate-950">
+                  <ScanLine size={34} />
+                </div>
+                <div className="mt-3 grid gap-1.5">
+                  <span className="h-1.5 rounded-full bg-emerald-300/70" />
+                  <span className="h-1.5 w-2/3 rounded-full bg-white/20" />
+                  <span className="h-1.5 w-1/2 rounded-full bg-amber-300/70" />
+                </div>
+              </div>
+              <span className="absolute -right-2 top-16 h-8 w-1 rounded-full bg-amber-300" />
+            </div>
+            <div className="min-w-0">
+              <p className="inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-emerald-300/10 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
+                <Smartphone size={13} /> Donanım teslim seçeneği
+              </p>
+              <h2 className="font-display mt-3 text-2xl font-black tracking-tight text-[color:var(--home-ink)]">
+                Barkod okuyucu hediye, Android el terminali opsiyonel.
+              </h2>
+              <p className="mt-2 text-sm font-semibold leading-6 text-[color:var(--home-muted)]">
+                Standart kurulumda bilgisayara bağlanan barkod okuyucu ücretsiz sunulur. İsteyen müşteriye Buneka,
+                Android Wi-Fi + Bluetooth el terminali ile teslim edilebilir.
+              </p>
+              <div className="mt-3 grid gap-2 text-xs font-bold text-[color:var(--home-ink)] sm:grid-cols-2">
+                <span className="rounded-lg border border-[color:var(--home-border)] px-3 py-2">
+                  {hardwareOptions.standardScanner.label}:{" "}
+                  <b className="text-[color:var(--home-glow)]">{hardwareOptions.standardScanner.priceLabel}</b>
+                </span>
+                <span className="rounded-lg border border-amber-300/35 bg-amber-300/10 px-3 py-2">
+                  {hardwareOptions.androidTerminal.model}:{" "}
+                  <b className="text-amber-200">{hardwareOptions.androidTerminal.livePriceLabel}</b>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-3 lg:grid-cols-[1fr_0.85fr]">
+            <div className="rounded-xl border border-[color:var(--home-border)] bg-black/10 p-3">
+              <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">Özellikler</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                {hardwareOptions.androidTerminal.specs.map((spec) => (
+                  <span
+                    key={spec}
+                    className="inline-flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] px-3 py-2 text-[11px] font-bold text-[color:var(--home-ink)]"
+                  >
+                    <Wifi size={13} className="shrink-0 text-[color:var(--home-glow)]" /> {spec}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-xl border border-amber-300/30 bg-amber-300/10 p-3">
+              <p className="text-[10px] font-black uppercase tracking-wide text-amber-200">Canlı fiyat kontrolü</p>
+              <div className="mt-2 grid gap-1.5 text-[11px] font-semibold leading-5 text-[color:var(--home-muted)]">
+                {hardwareOptions.androidTerminal.marketNotes.map((note) => (
+                  <span key={note}>{note}</span>
+                ))}
+              </div>
+              <a
+                href={hardwareOptions.androidTerminal.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 inline-flex items-center gap-1 text-[11px] font-black text-[color:var(--home-glow)]"
+              >
+                Güncel internet fiyatını kontrol et <ExternalLink size={12} />
+              </a>
+            </div>
+          </div>
+        </section>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => {
@@ -178,7 +259,7 @@ export default function PaketlerPage() {
                   <div className="mt-4 grid gap-1.5 text-[11px] font-bold text-[color:var(--home-ink)]">
                     <span>7/24 destek hattı</span>
                     <span>Ücretsiz ilk kurulum</span>
-                    <span>Barkod okuyucu desteği ücretsiz</span>
+                    <span>PC barkod okuyucu hediyeli</span>
                   </div>
 
                   <div className="my-4 h-px bg-[color:var(--home-border)]" />
