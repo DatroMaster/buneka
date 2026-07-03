@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Boxes, Check, Crown, Home, LayoutDashboard, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
+import { Boxes, Check, Crown, Home, LayoutDashboard, LogIn, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -70,7 +70,7 @@ export default function PaketlerPage() {
     <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
-      <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+      <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="flex items-center gap-2.5">
           <BunekaMark size={26} />
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
@@ -88,6 +88,12 @@ export default function PaketlerPage() {
           <BunekaNedirButton />
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
+        <Link
+          href="/login"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(34,211,238,0.18)] sm:hidden"
+        >
+          <LogIn size={17} /> Sisteme Giriş Yap
+        </Link>
       </header>
 
       <div className="relative z-10 grid flex-1 gap-5 px-3 pb-4 sm:px-6">

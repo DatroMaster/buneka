@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CheckCircle2, MessageCircle, Route } from "lucide-react";
+import { ArrowLeft, CheckCircle2, LogIn, MessageCircle, Route } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -44,10 +44,10 @@ export default async function SectorPage({ params }: SectorPageProps) {
   const recommendedPlan = plans[1];
 
   return (
-    <main className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden text-[color:var(--home-ink)]">
+    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)] md:h-[100dvh] md:overflow-hidden">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
-      <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+      <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="flex items-center gap-2.5">
           <BunekaMark size={26} />
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
@@ -62,11 +62,17 @@ export default async function SectorPage({ params }: SectorPageProps) {
           <BunekaNedirButton />
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
+        <Link
+          href="/login"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(34,211,238,0.18)] sm:hidden"
+        >
+          <LogIn size={17} /> Sisteme Giriş Yap
+        </Link>
       </header>
 
-      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border grid min-h-0 grid-rows-[minmax(0,0.95fr)_minmax(0,0.75fr)] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
-          <div className="min-h-0 overflow-hidden p-4 sm:p-5">
+      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:min-h-0 md:grid-cols-2">
+        <section className="glow-border grid overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl md:min-h-0 md:grid-rows-[minmax(0,0.95fr)_minmax(0,0.75fr)]">
+          <div className="overflow-hidden p-4 sm:p-5 md:min-h-0">
             <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
               <sector.icon size={12} />
               {sector.title}
@@ -99,11 +105,11 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-col border-t border-[color:var(--home-border)] p-3 sm:p-4">
+          <div className="flex flex-col border-t border-[color:var(--home-border)] p-3 sm:p-4 md:min-h-0">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
               <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
             </p>
-            <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-4 gap-2 sm:grid-cols-2 sm:grid-rows-2">
+            <div className="grid flex-1 grid-cols-1 gap-2 sm:grid-cols-2 md:min-h-0 md:grid-rows-2">
               {sector.workflow.map((step, index) => (
                 <div key={step} className="glow-border flex min-h-0 items-start gap-2 rounded-lg p-2">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-[11px] font-black text-white">
@@ -123,7 +129,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
           </div>
         </section>
 
-        <section className="glow-border flex min-h-0 flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6">
+        <section className="glow-border flex flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:min-h-0">
           <SectorPackageBuilder
             sectorTitle={sector.title}
             modules={sector.modules}

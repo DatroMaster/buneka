@@ -64,8 +64,8 @@ export function ModuleAccordionExplorer() {
   const Icon = active.icon;
 
   return (
-    <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 lg:grid-cols-[380px_1fr]">
-      <aside className="glow-border flex min-h-0 flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl">
+    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[380px_1fr]">
+      <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl lg:min-h-0">
         <p className="px-2 pb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
           10 ek modül
         </p>
@@ -97,8 +97,8 @@ export function ModuleAccordionExplorer() {
         </div>
       </aside>
 
-      <section className="glow-border flex min-h-0 flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-6 backdrop-blur-xl">
-        <div className="flex items-start justify-between gap-4">
+      <section className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-4 backdrop-blur-xl sm:p-6 lg:min-h-0">
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
           <div>
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">
               <Icon size={26} />
@@ -107,7 +107,7 @@ export function ModuleAccordionExplorer() {
             <h2 className="font-display mt-2 text-3xl font-black tracking-tight text-[color:var(--home-ink)]">{active.label}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[color:var(--home-muted)]">{active.description}</p>
           </div>
-          <div className="rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/8 px-5 py-4 text-right">
+          <div className="w-full rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/8 px-5 py-4 text-left sm:w-auto sm:text-right">
             <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Yıllık fiyat</p>
             <p className="mt-1 text-2xl font-black text-[color:var(--home-glow)]">{active.price}</p>
           </div>

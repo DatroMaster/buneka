@@ -165,7 +165,7 @@ export default function HomeClient() {
   ];
 
   return (
-    <div className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden">
+    <div className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden md:h-[100dvh] md:overflow-hidden">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         {STARS.map((star, index) => (
@@ -183,7 +183,7 @@ export default function HomeClient() {
         ))}
       </div>
 
-      <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+      <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
         <Link href="/" className="flex items-center gap-3">
           <BunekaMark size={32} />
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)] sm:text-base" />
@@ -209,14 +209,20 @@ export default function HomeClient() {
           </div>
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
         </div>
+        <Link
+          href="/login"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(34,211,238,0.18)] sm:hidden"
+        >
+          <LogIn size={17} /> Sisteme Giriş Yap
+        </Link>
       </header>
 
-      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border flex min-h-0 flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:rounded-2xl sm:p-5">
+      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:min-h-0 md:grid-cols-2">
+        <section className="glow-border flex min-h-[420px] flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:rounded-2xl sm:p-5 md:min-h-0">
           <BunekaStoryCard />
         </section>
 
-        <section id="sektorler" className="glow-border flex min-h-0 flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+        <section id="sektorler" className="glow-border flex min-h-[520px] flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl md:min-h-0">
           {sections.map((section) => {
             const isOpen = openSection === section.id;
             return (
@@ -240,7 +246,7 @@ export default function HomeClient() {
                   />
                 </button>
                 {isOpen && (
-                  <div className="min-h-0 flex-1 px-4 pb-4 sm:px-5 sm:pb-5">{section.content}</div>
+                  <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-5 sm:pb-5">{section.content}</div>
                 )}
               </div>
             );
