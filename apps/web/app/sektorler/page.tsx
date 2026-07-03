@@ -40,13 +40,13 @@ export default function SektorlerPage() {
         </div>
         <Link
           href="/login"
-          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(34,211,238,0.18)] sm:hidden"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(62,207,142,0.18)] sm:hidden"
         >
           <LogIn size={17} /> Sisteme Giriş Yap
         </Link>
       </header>
 
-      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 gap-4 px-3 pb-24 sm:px-6 sm:pb-6">
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl gap-4 px-3 pb-24 sm:px-6 sm:pb-6">
         <div className="glow-border grid shrink-0 grid-cols-1 gap-3 rounded-2xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <Link href="/" className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)]">

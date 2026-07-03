@@ -275,7 +275,7 @@ export default function FiyatSorgulaPage() {
       <div className="flex min-h-0 flex-1 flex-col gap-3 lg:flex-row">
         <div className="glass-card flex min-h-0 flex-1 flex-col p-4 md:p-5">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/30">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[color:var(--color-primary)] text-slate-950 shadow-lg shadow-emerald-500/15">
               <ScanBarcode size={23} />
             </div>
             <div>
@@ -308,7 +308,7 @@ export default function FiyatSorgulaPage() {
 
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
             {loading ? (
-              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-500" />
+              <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-500" />
             ) : error ? (
               <div className="w-full max-w-md rounded-2xl bg-orange-50 p-5 text-center ring-1 ring-orange-200 dark:bg-orange-500/10 dark:ring-orange-500/20">
                 <AlertCircle size={36} className="mx-auto mb-3 text-orange-600 dark:text-orange-400" />
@@ -319,13 +319,13 @@ export default function FiyatSorgulaPage() {
               </div>
             ) : product ? (
               <div className="w-full max-w-2xl rounded-2xl bg-white p-5 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 md:p-6">
-                <span className="mb-2 inline-block rounded-full bg-cyan-50 px-3 py-1.5 text-[11px] font-black uppercase text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300">
+                <span className="mb-2 inline-block rounded-full bg-emerald-50 px-3 py-1.5 text-[11px] font-black uppercase text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
                   {product.category || "Kategorisiz"}
                 </span>
                 <h2 className="mb-2 text-3xl font-black leading-tight tracking-tight text-slate-950 md:text-5xl dark:text-slate-50">{product.name}</h2>
                 <p className="mb-4 font-mono text-xs font-bold text-slate-400 dark:text-slate-500">{product.barcode}</p>
 
-                <div className="mb-5 text-5xl font-black tracking-tight text-cyan-600 md:text-7xl dark:text-cyan-300">
+                <div className="mb-5 text-5xl font-black tracking-tight text-emerald-600 md:text-7xl dark:text-emerald-300">
                   {formatMoney(product.sale_price)}
                 </div>
 
@@ -342,7 +342,7 @@ export default function FiyatSorgulaPage() {
                   </button>
                   <button
                     onClick={addToCart}
-                    className="glow-border flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-cyan-50 px-4 py-3 text-base font-black text-cyan-700 transition-transform active:scale-95 dark:bg-cyan-500/10 dark:text-cyan-300"
+                    className="glow-border flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-base font-black text-emerald-700 transition-transform active:scale-95 dark:bg-emerald-500/10 dark:text-emerald-300"
                     type="button"
                   >
                     <ShoppingCart size={22} /> Sepete Ekle

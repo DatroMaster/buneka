@@ -74,11 +74,11 @@ function DrawerNav({
               onClick={onClose}
               className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-all duration-200 active:scale-[0.98] ${
                 isActive
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/30"
+                  ? "bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                   : "text-slate-300 hover:translate-x-0.5 hover:bg-white/10 hover:text-white"
               }`}
             >
-              <Icon size={20} className={isActive ? "text-white" : "text-cyan-300"} />
+              <Icon size={20} className={isActive ? "text-emerald-200" : "text-emerald-300"} />
               <span className="font-medium">{item.name}</span>
             </Link>
           );
@@ -87,7 +87,7 @@ function DrawerNav({
 
       <div className="border-t border-white/10 p-4">
         <div className="mb-4 flex items-center gap-3 px-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-cyan-300/25 bg-gradient-to-br from-cyan-400/25 to-blue-500/25 font-bold text-cyan-100 shadow-sm shadow-cyan-500/20">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-300/25 bg-emerald-400/10 font-bold text-emerald-100 shadow-sm shadow-emerald-500/10">
             {user.name?.charAt(0) || "U"}
           </div>
           <div className="flex flex-col">
@@ -145,7 +145,7 @@ function DesktopSidebar({
                 className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md border ${
                   isActive
                     ? "border-emerald-300/45 bg-emerald-300/15 text-emerald-200"
-                    : "border-white/10 bg-white/[0.04] text-cyan-100 group-hover/item:border-emerald-300/35 group-hover/item:text-emerald-200"
+                    : "border-white/10 bg-white/[0.04] text-emerald-100 group-hover/item:border-emerald-300/35 group-hover/item:text-emerald-200"
                 }`}
               >
                 <Icon size={18} strokeWidth={2.35} className="shrink-0 drop-shadow-[0_0_6px_rgba(103,232,249,0.45)]" />

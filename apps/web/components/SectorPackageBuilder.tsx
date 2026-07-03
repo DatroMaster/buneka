@@ -49,7 +49,7 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
   }, [customModule, planName, planPrice, sectorTitle, selected, totalPrice]);
 
   return (
-    <div className="package-spark-card flex min-h-0 flex-1 flex-col rounded-xl p-4 sm:p-5">
+    <div className="package-spark-card flex flex-col rounded-xl p-4 sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">Paket oluştur</p>
@@ -67,7 +67,7 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
         </a>
       </div>
 
-      <div className="mt-4 grid min-h-0 flex-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {visibleModules.map((module) => {
           const isSelected = selected.includes(module);
           return (
@@ -77,7 +77,7 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
               onClick={() => toggle(module)}
               className={`flex min-h-12 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] font-bold transition-all ${
                 isSelected
-                  ? "border-emerald-300 bg-gradient-to-r from-emerald-400/20 via-cyan-300/16 to-[color:var(--home-glow)]/10 text-white shadow-[inset_0_0_0_1px_rgba(110,231,183,0.18),0_0_22px_rgba(45,212,191,0.16)]"
+                  ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.18),0_0_22px_rgba(62,207,142,0.14)]"
                   : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)]"
               }`}
             >

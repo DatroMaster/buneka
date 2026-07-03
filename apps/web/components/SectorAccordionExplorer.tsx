@@ -11,12 +11,12 @@ export function SectorAccordionExplorer() {
   const Icon = active.icon;
 
   return (
-    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr]">
-      <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl lg:min-h-0">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr]">
+      <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl">
         <p className="px-2 pb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
           Sektörler
         </p>
-        <div className="grid max-h-[420px] gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-none lg:grid-cols-1 lg:grid-rows-11 lg:overflow-visible lg:pr-0">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
           {sectors.map((sector) => {
             const isActive = sector.slug === active.slug;
             const SectorIcon = sector.icon;
@@ -43,7 +43,7 @@ export function SectorAccordionExplorer() {
         </div>
       </aside>
 
-      <section className="glow-border grid rounded-2xl bg-[color:var(--home-surface)]/78 p-4 backdrop-blur-xl sm:p-6 lg:min-h-0 lg:grid-rows-[auto_1fr_auto]">
+      <section className="glow-border grid rounded-2xl bg-[color:var(--home-surface)]/78 p-4 backdrop-blur-xl sm:p-6">
         <div>
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">
             <Icon size={26} />
@@ -53,12 +53,12 @@ export function SectorAccordionExplorer() {
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[color:var(--home-muted)]">{active.description}</p>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 xl:min-h-0 xl:grid-cols-[0.9fr_1.1fr]">
+        <div className="mt-6 grid grid-cols-1 gap-4 xl:grid-cols-[0.9fr_1.1fr]">
           <div>
             <p className="mb-3 text-sm font-black text-[color:var(--home-ink)]">Öne çıkan ihtiyaçlar</p>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-1">
               {active.features.map((feature) => (
-                <div key={feature} className="flex min-h-[74px] items-center gap-2 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/60 p-3">
+                <div key={feature} className="flex min-h-[84px] items-center gap-2 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/60 p-3">
                   <CheckCircle2 size={16} className="shrink-0 text-emerald-400" />
                   <span className="text-sm font-bold text-[color:var(--home-ink)]">{feature}</span>
                 </div>
@@ -72,7 +72,7 @@ export function SectorAccordionExplorer() {
             </p>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-1">
               {active.workflow.map((step, index) => (
-                <div key={step} className="flex min-h-[74px] items-start gap-3 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/60 p-3">
+                <div key={step} className="flex min-h-[84px] items-start gap-3 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/60 p-3">
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--home-glow)] text-xs font-black text-slate-950">
                     {index + 1}
                   </span>

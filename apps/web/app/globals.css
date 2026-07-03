@@ -501,11 +501,13 @@
     }
   }
 
-  /* Subtle neutral dot grid (Supabase marketing texture) */
+  /* Soft light wash; no grid texture */
   .home-grid-pattern {
-    background-image: radial-gradient(var(--home-border) 1px, transparent 1px);
-    background-size: 22px 22px;
-    opacity: 0.6;
+    background:
+      radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--home-glow) 14%, transparent), transparent 32%),
+      radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--home-glow) 10%, transparent), transparent 30%),
+      radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--home-glow) 8%, transparent), transparent 38%);
+    opacity: 1;
   }
 
   /* Subtle "barcode scanning" light sweep, shown inside an empty barcode input */

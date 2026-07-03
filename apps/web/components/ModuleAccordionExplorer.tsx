@@ -64,12 +64,12 @@ export function ModuleAccordionExplorer() {
   const Icon = active.icon;
 
   return (
-    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr]">
-      <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl lg:min-h-0">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr]">
+      <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl">
         <p className="px-2 pb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
           10 ek modül
         </p>
-        <div className="grid max-h-[420px] gap-1.5 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-none lg:grid-cols-1 lg:overflow-visible lg:pr-0">
+        <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
           {modules.map((module) => {
             const isActive = module.label === active.label;
             const ModuleIcon = module.icon;
@@ -96,7 +96,7 @@ export function ModuleAccordionExplorer() {
         </div>
       </aside>
 
-      <section className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-4 backdrop-blur-xl sm:p-6 lg:min-h-0">
+      <section className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-4 backdrop-blur-xl sm:p-6">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
           <div>
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">

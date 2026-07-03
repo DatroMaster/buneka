@@ -106,13 +106,13 @@ export default function PaketlerPage() {
         </div>
         <Link
           href="/login"
-          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(34,211,238,0.18)] sm:hidden"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(62,207,142,0.18)] sm:hidden"
         >
           <LogIn size={17} /> Sisteme Giriş Yap
         </Link>
       </header>
 
-      <div className="relative z-10 grid flex-1 gap-7 px-3 pb-24 sm:px-6 sm:pb-5">
+      <div className="relative z-10 grid gap-9 px-3 pb-24 sm:px-6 sm:pb-8">
         <div>
           <h1 className="font-display text-2xl font-black tracking-tight md:text-4xl">
             Hangi pakette ne var, tek bakışta.
@@ -131,15 +131,15 @@ export default function PaketlerPage() {
             return (
               <article
                 key={plan.name}
-                className={`relative flex min-h-[560px] flex-col overflow-hidden rounded-2xl border shadow-[0_18px_50px_rgba(2,6,23,0.24)] backdrop-blur-xl ${
+                className={`relative flex flex-col overflow-hidden rounded-2xl border shadow-[0_18px_50px_rgba(2,6,23,0.14)] backdrop-blur-xl ${
                   isPremium
-                    ? "border-blue-400/45 bg-[#071528] text-white [--home-border:rgba(255,255,255,0.18)] [--home-glow:#22D3EE] [--home-ink:#F8FAFC] [--home-muted:#CBD5E1]"
+                    ? "border-emerald-300/45 bg-[#0B1713] text-white [--home-border:rgba(255,255,255,0.18)] [--home-glow:#3ECF8E] [--home-ink:#F8FAFC] [--home-muted:#CBD5E1]"
                     : "border-[color:var(--home-border)] bg-[color:var(--home-surface)]/90"
                 }`}
               >
                 <div className={`flex h-8 items-center justify-center px-3 text-center text-[10px] font-black uppercase tracking-wide ${
                   plan.badge
-                    ? "bg-gradient-to-r from-blue-500 to-cyan-400 text-white"
+                    ? "bg-gradient-to-r from-emerald-600 to-[color:var(--home-glow)] text-slate-950"
                     : "bg-white/5 text-transparent"
                 }`}>
                   {plan.badge || "Buneka"}
@@ -168,7 +168,7 @@ export default function PaketlerPage() {
                     href={callLink()}
                     className={`mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-black transition-transform hover:scale-[1.01] active:scale-95 ${
                       isPremium
-                        ? "bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 text-slate-950"
+                        ? "bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 text-slate-950"
                         : "bg-slate-950 text-white shadow-[0_12px_24px_rgba(2,6,23,0.18)] dark:bg-white dark:text-slate-950"
                     }`}
                   >
@@ -189,7 +189,7 @@ export default function PaketlerPage() {
                   <ul className="flex-1 space-y-2 pr-1">
                     {PLAN_HIGHLIGHTS[code].map((feature) => (
                       <li key={feature} className="flex items-start gap-2 text-xs leading-snug text-[color:var(--home-ink)]">
-                        <Check size={13} className="mt-0.5 shrink-0 text-blue-400" />
+                        <Check size={13} className="mt-0.5 shrink-0 text-emerald-400" />
                         {feature}
                       </li>
                     ))}

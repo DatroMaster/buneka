@@ -40,30 +40,30 @@ export default function AdminShell({
               <span className="text-xs font-semibold text-slate-400">Admin</span>
             </span>
           </span>
-          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-amber-400 via-cyan-400 to-transparent" />
+          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-emerald-400 via-[color:var(--color-primary)] to-transparent" />
           <span className="text-[11px] text-slate-400">{user.name} · {user.role}</span>
         </Link>
 
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/app"
-            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white sm:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-emerald-300/50 hover:text-white sm:flex"
           >
             <ArrowLeft size={14} /> Uygulamaya dön
           </Link>
-          <BunekaNedirButton variant="compact" className="hidden border-white/15 text-cyan-300 hover:border-cyan-300/50 sm:flex" />
+          <BunekaNedirButton variant="compact" className="hidden border-white/15 text-emerald-300 hover:border-emerald-300/50 sm:flex" />
           <Link
             href="/"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-emerald-300/50 hover:text-white active:scale-90"
             aria-label="Site ana sayfası"
             title="Site ana sayfası"
           >
             <Home size={16} />
           </Link>
-          <ThemeToggle className="border-white/15 text-slate-300 hover:border-cyan-300/50 hover:text-white" />
+          <ThemeToggle className="border-white/15 text-slate-300 hover:border-emerald-300/50 hover:text-white" />
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-emerald-300/50 hover:text-white active:scale-90"
             type="button"
             aria-label="Menüyü aç"
           >
@@ -92,11 +92,11 @@ export default function AdminShell({
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-all active:scale-[0.98] ${
                       isActive
-                        ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/30"
+                        ? "bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
                         : "text-slate-300 hover:bg-white/10 hover:text-white"
                     }`}
                   >
-                    <Icon size={20} className={isActive ? "text-white" : "text-cyan-300"} />
+                    <Icon size={20} className={isActive ? "text-emerald-200" : "text-emerald-300"} />
                     <span className="font-medium">{item.name}</span>
                   </Link>
                 );

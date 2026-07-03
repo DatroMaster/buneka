@@ -53,21 +53,21 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
   }, [includesAllModules, planName, planPrice, selected, totalPrice]);
 
   return (
-    <div className="mt-3 grid shrink-0 gap-2">
+    <div className="mt-5 grid shrink-0 gap-2.5">
       <div className="rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/5 px-3 py-2">
         <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Toplam</p>
         <p className="font-display text-lg font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
       </div>
 
       {includesAllModules ? (
-        <div className="rounded-lg border border-emerald-300/35 bg-gradient-to-r from-emerald-400/15 via-cyan-300/10 to-[color:var(--home-glow)]/10 p-3">
+        <div className="rounded-lg border border-emerald-300/35 bg-[color:var(--home-glow)]/8 p-3">
           <div className="flex items-center gap-2 text-xs font-black text-emerald-300">
             <CheckCircle2 size={15} /> Tüm ek modüller aktif
           </div>
-          <div className="mt-2 grid gap-1.5">
+          <div className="mt-2 flex flex-wrap gap-1.5">
             {modules.map((module) => (
-              <span key={module.label} className="flex items-center gap-2 text-[10px] font-bold text-[color:var(--home-ink)]">
-                <CheckCircle2 size={12} className="shrink-0 text-emerald-300" />
+              <span key={module.label} className="inline-flex items-center gap-1 rounded-full border border-[color:var(--home-border)] px-2 py-1 text-[9px] font-bold text-[color:var(--home-ink)]">
+                <CheckCircle2 size={10} className="shrink-0 text-emerald-300" />
                 {module.label}
               </span>
             ))}
@@ -93,7 +93,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
                     onClick={() => toggle(module.label)}
                     className={`flex items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-[10px] font-bold ${
                       isSelected
-                        ? "border-emerald-300 bg-gradient-to-r from-emerald-400/20 via-cyan-300/15 to-[color:var(--home-glow)]/10 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.16)]"
+                        ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.16)]"
                         : "border-[color:var(--home-border)] text-[color:var(--home-muted)]"
                     }`}
                   >
@@ -111,7 +111,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
         href={whatsappLink(message)}
         target="_blank"
         rel="noopener noreferrer"
-        className="cta-primary-animated group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 py-2.5 text-sm font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95"
+        className="cta-primary-animated group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 py-2.5 text-sm font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95"
       >
         <MessageCircle size={15} /> Siparişi Gönder
       </a>
