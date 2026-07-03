@@ -198,6 +198,7 @@ export default function AppShell({
   const router = useRouter();
   const supabase = createClient();
   const isAdmin = ["super_admin", "admin_staff"].includes(user.role);
+  const isPriceFocusEntry = pathname === "/app";
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -206,6 +207,14 @@ export default function AppShell({
     router.push("/");
     router.refresh();
   };
+
+  if (isPriceFocusEntry) {
+    return (
+      <div className="min-h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-lime-300 selection:text-stone-950">
+        <CartProvider>{children}</CartProvider>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-emerald-400 selection:text-slate-950">

@@ -14,7 +14,7 @@ export function QuickLinks({ links }: { links: QuickLink[] }) {
         <Link
           key={link.href}
           href={link.href}
-          className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-600 transition-colors hover:border-cyan-400 hover:text-cyan-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-cyan-500 dark:hover:text-cyan-300"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--color-border)] bg-[color:var(--color-card)] px-3.5 py-1.5 text-xs font-bold text-[color:var(--color-muted)] transition-colors hover:border-lime-300/60 hover:text-lime-200"
         >
           <link.icon size={13} />
           {link.label}

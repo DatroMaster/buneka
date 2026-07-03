@@ -10,12 +10,12 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-5 flex flex-col items-start justify-between gap-3 md:flex-row md:items-center">
+    <div className="mb-5 flex flex-col items-start justify-between gap-3 rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-card)]/70 px-4 py-3 md:flex-row md:items-center">
       <div>
-        <h1 className="font-display mb-1 text-3xl font-extrabold tracking-tight text-slate-950 dark:text-slate-50">
+        <h1 className="font-display mb-1 text-3xl font-extrabold tracking-tight text-[color:var(--color-text)]">
           {title}
         </h1>
-        {subtitle && <p className="text-slate-500 dark:text-slate-400">{subtitle}</p>}
+        {subtitle && <p className="font-semibold text-[color:var(--color-muted)]">{subtitle}</p>}
       </div>
       {action && <div className="flex w-full gap-2 md:w-auto">{action}</div>}
     </div>

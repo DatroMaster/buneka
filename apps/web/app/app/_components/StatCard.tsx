@@ -2,8 +2,8 @@ import type { LucideIcon } from "lucide-react";
 
 const TONE_STYLES = {
   primary: {
-    icon: "bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20",
-    value: "text-cyan-600 dark:text-cyan-300",
+    icon: "bg-lime-300/12 text-lime-300 ring-1 ring-lime-300/20",
+    value: "text-lime-300",
   },
   green: {
     icon: "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20",
@@ -14,8 +14,8 @@ const TONE_STYLES = {
     value: "text-amber-600 dark:text-amber-300",
   },
   slate: {
-    icon: "bg-slate-50 text-slate-600 ring-1 ring-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700",
-    value: "text-slate-950 dark:text-slate-50",
+    icon: "bg-stone-500/12 text-stone-300 ring-1 ring-white/10",
+    value: "text-[color:var(--color-text)]",
   },
 } as const;
 
@@ -38,7 +38,7 @@ export function StatCard({
         <Icon size={22} />
       </div>
       <div>
-        <p className="text-sm font-bold text-slate-500 dark:text-slate-400">{label}</p>
+        <p className="text-sm font-bold text-[color:var(--color-muted)]">{label}</p>
         <p className={`text-xl font-black ${styles.value}`}>{value}</p>
       </div>
     </div>

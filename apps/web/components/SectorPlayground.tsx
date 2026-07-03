@@ -5,20 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sectors } from "@/lib/content/sectors";
 
-const COLORS = [
-  "from-cyan-600 to-blue-700",
-  "from-emerald-600 to-teal-700",
-  "from-amber-500 to-orange-700",
-  "from-rose-600 to-pink-700",
-  "from-violet-600 to-purple-700",
-  "from-sky-600 to-indigo-700",
-  "from-lime-600 to-green-700",
-  "from-orange-600 to-red-700",
-  "from-teal-600 to-cyan-700",
-  "from-fuchsia-600 to-pink-700",
-  "from-indigo-600 to-blue-700",
-];
-
 export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[] }) {
   const [hovered, setHovered] = useState<string | null>(null);
   const visibleSectors = sectors.filter((sector) => !excludeSlugs.includes(sector.slug));
@@ -28,21 +14,23 @@ export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[
   return (
     <div className="flex h-full min-h-0 flex-col gap-2">
       <div className="relative min-h-[360px] flex-1 overflow-y-auto rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5 sm:min-h-0">
-        <div className="grid auto-rows-[minmax(92px,1fr)] grid-cols-2 gap-2 sm:h-full sm:grid-cols-5">
-          {visibleSectors.map((sector, index) => (
+        <div className="grid auto-rows-[minmax(82px,1fr)] grid-cols-1 gap-2 sm:h-full sm:grid-cols-5 sm:auto-rows-[minmax(92px,1fr)]">
+          {visibleSectors.map((sector) => (
             <motion.button
               key={sector.slug}
               type="button"
-              whileHover={{ scale: 1.06, zIndex: 20 }}
+              whileHover={{ scale: 1.02, zIndex: 20 }}
               whileTap={{ scale: 0.96 }}
               onHoverStart={() => setHovered(sector.slug)}
               onHoverEnd={() => setHovered((current) => (current === sector.slug ? null : current))}
               onFocus={() => setHovered(sector.slug)}
               onClick={() => router.push(`/sektorler/${sector.slug}`)}
-              className={`flex min-h-[92px] w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br px-1 text-white shadow-md ring-1 ring-black/15 ${COLORS[index % COLORS.length]}`}
+              className="group relative flex min-h-[82px] w-full max-w-full cursor-pointer flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border border-emerald-300/18 bg-gradient-to-br from-[#24301D] via-[#162015] to-[#070807] px-2 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_16px_34px_rgba(0,0,0,0.22)] transition-colors hover:border-lime-300/60 sm:min-h-[92px]"
             >
-              <sector.icon size={22} className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]" />
-              <span className="px-1 text-center text-[11px] font-extrabold leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
+              <span className="absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-lime-300/70 to-transparent" />
+              <span className="absolute -right-8 -top-8 h-20 w-20 rounded-full bg-lime-300/10 blur-2xl transition-opacity group-hover:opacity-100" />
+              <sector.icon size={22} className="relative text-lime-200 drop-shadow-[0_0_10px_rgba(127,227,41,0.22)]" />
+              <span className="max-w-full px-1 text-center text-[11px] font-extrabold leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {sector.title}
               </span>
             </motion.button>

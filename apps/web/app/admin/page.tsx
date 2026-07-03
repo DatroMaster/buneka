@@ -12,10 +12,10 @@ import {
 import { PageHeader } from "@/app/app/_components/PageHeader";
 
 const activeRoutes = [
-  { href: "/admin/customers", title: "Müşteriler", text: "İşletme, sahip ve lisans durumu.", icon: Users, tone: "cyan" },
+  { href: "/admin/customers", title: "Müşteriler", text: "İşletme, sahip ve lisans durumu.", icon: Users, tone: "lime" },
   { href: "/admin/licenses", title: "Lisanslar", text: "Paket ata, yenile, süresini yönet.", icon: KeyRound, tone: "emerald" },
   { href: "/admin/modules", title: "Modüller", text: "Müşteri bazlı ek modül erişimi.", icon: Puzzle, tone: "amber" },
-  { href: "/admin/analytics", title: "Analitik", text: "En çok satış/sorgu yapan işletmeler, lisans özeti.", icon: LineChart, tone: "cyan" },
+  { href: "/admin/analytics", title: "Analitik", text: "En çok satış/sorgu yapan işletmeler, lisans özeti.", icon: LineChart, tone: "lime" },
 ] as const;
 
 const upcomingRoutes = [
@@ -26,7 +26,7 @@ const upcomingRoutes = [
 ] as const;
 
 const TONE_STYLES: Record<string, string> = {
-  cyan: "bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20",
+  lime: "bg-lime-300/12 text-lime-300 ring-1 ring-lime-300/20",
   emerald: "bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20",
   amber: "bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20",
 };
