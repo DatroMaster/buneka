@@ -67,7 +67,6 @@ export default function SektorlerPage() {
                   <sector.icon size={19} />
                 </span>
                 <span className="font-display block text-base font-black leading-tight text-[color:var(--home-ink)]">{sector.title}</span>
-                <span className="mt-2 block h-8 overflow-hidden text-xs leading-4 text-[color:var(--home-muted)]">{sector.short}</span>
               </span>
               <span className="mt-4 inline-flex items-center gap-1 text-xs font-black text-[color:var(--home-glow)]">
                 Detayı incele <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />

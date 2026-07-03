@@ -67,7 +67,7 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
 
 export default function PaketlerPage() {
   return (
-    <main className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden text-[color:var(--home-ink)]">
+    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
@@ -90,7 +90,7 @@ export default function PaketlerPage() {
         </div>
       </header>
 
-      <div className="relative z-10 grid min-h-0 flex-1 grid-rows-[auto_1fr] gap-3 px-3 pb-2 sm:px-6">
+      <div className="relative z-10 grid flex-1 gap-3 px-3 pb-4 sm:px-6">
         <div>
         <h1 className="font-display text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
           Hangi pakette ne var, tek bakışta.
@@ -100,14 +100,14 @@ export default function PaketlerPage() {
         </p>
         </div>
 
-        <div className="grid min-h-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => {
             const code = PLAN_CODES[plan.name];
             const Icon = PLAN_ICONS[code];
             return (
               <div
                 key={plan.name}
-                className={`relative flex min-h-0 flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:p-5 ${PLAN_BORDER_COLORS[code]}`}
+                className={`relative flex min-h-[360px] flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:p-5 ${PLAN_BORDER_COLORS[code]}`}
               >
                 {plan.badge && (
                   <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-[color:var(--home-glow)] to-blue-600 px-3 py-1 text-[9px] font-bold uppercase tracking-wide text-slate-950 shadow-lg">
@@ -125,7 +125,7 @@ export default function PaketlerPage() {
                   <span className="text-xs font-medium text-[color:var(--home-muted)]"> /yıl</span>
                 </p>
 
-                <ul className="mt-3 min-h-0 flex-1 space-y-1.5 overflow-y-auto pr-1">
+                <ul className="mt-3 flex-1 space-y-1.5 pr-1">
                   {PLAN_HIGHLIGHTS[code].map((feature) => (
                     <li key={feature} className="flex items-start gap-1.5 text-[11px] leading-snug text-[color:var(--home-ink)] sm:text-xs">
                       <Check size={13} className="mt-0.5 shrink-0 text-emerald-400" />

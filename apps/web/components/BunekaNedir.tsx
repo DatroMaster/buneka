@@ -454,7 +454,7 @@ export function BunekaStoryCard() {
         <button
           type="button"
           onClick={replay}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)]"
+          className="hidden"
         >
           <RotateCcw size={13} /> Baştan oynat
         </button>

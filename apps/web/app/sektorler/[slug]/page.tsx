@@ -65,16 +65,16 @@ export default async function SectorPage({ params }: SectorPageProps) {
       </header>
 
       <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border grid min-h-0 grid-rows-[auto_1fr] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
-          <div className="p-5 sm:p-6">
+        <section className="glow-border grid min-h-0 grid-rows-[minmax(0,0.95fr)_minmax(0,0.75fr)] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="min-h-0 overflow-hidden p-4 sm:p-5">
             <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
               <sector.icon size={12} />
               {sector.title}
             </div>
-            <h1 className="font-display text-2xl font-bold leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
+            <h1 className="font-display text-2xl font-bold leading-[1.12] tracking-tight sm:text-3xl">
               {sector.headline}
             </h1>
-            <p className="mt-3 text-sm leading-relaxed text-[color:var(--home-muted)] md:text-base">
+            <p className="mt-3 text-sm leading-relaxed text-[color:var(--home-muted)]">
               {sector.description}
             </p>
 
@@ -87,7 +87,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
               ))}
             </ul>
 
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
               <a
                 href={whatsappLink(`Merhaba, ${sector.title} sektoru icin Buneka lisansi almak istiyorum.`)}
                 target="_blank"
@@ -99,13 +99,13 @@ export default async function SectorPage({ params }: SectorPageProps) {
             </div>
           </div>
 
-          <div className="flex min-h-0 flex-col border-t border-[color:var(--home-border)] p-4 sm:p-5">
+          <div className="flex min-h-0 flex-col border-t border-[color:var(--home-border)] p-3 sm:p-4">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
-              <Route size={16} className="text-[color:var(--home-glow)]" /> Gunluk akis
+              <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
             </p>
-            <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-4 gap-2 sm:grid-cols-2 sm:grid-rows-2">
               {sector.workflow.map((step, index) => (
-                <div key={step} className="glow-border flex h-full items-start gap-2 rounded-lg p-2.5">
+                <div key={step} className="glow-border flex min-h-0 items-start gap-2 rounded-lg p-2">
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-[11px] font-black text-white">
                     {index + 1}
                   </span>
@@ -113,7 +113,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
                     <span className="block text-[11px] font-semibold leading-tight text-[color:var(--home-ink)]">
                       {step}
                     </span>
-                    <span className="mt-0.5 block text-[10px] leading-snug text-[color:var(--home-muted)]">
+                    <span className="mt-0.5 block text-[10px] leading-tight text-[color:var(--home-muted)]">
                       {getWorkflowDetail(step)}
                     </span>
                   </span>

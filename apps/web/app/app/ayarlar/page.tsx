@@ -205,7 +205,7 @@ export default function AyarlarPage() {
   }
 
   return (
-    <div className="mx-auto flex h-full max-w-7xl flex-col overflow-hidden">
+    <div className="mx-auto flex min-h-full max-w-7xl flex-col pb-10">
       <PageHeader title="Ayarlar" subtitle="İşletme ve sistem ayarlarınız." />
 
       {message && (
@@ -233,8 +233,8 @@ export default function AyarlarPage() {
         </span>
       </div>
 
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 lg:grid-cols-[1.25fr_0.85fr_1fr]">
-        <form onSubmit={saveOrganization} className="data-card min-h-0 p-4">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1.25fr_0.85fr_1fr]">
+        <form onSubmit={saveOrganization} className="data-card p-4">
           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
             <Store size={20} />
           </div>
@@ -256,7 +256,7 @@ export default function AyarlarPage() {
           </button>
         </form>
 
-        <div className="grid min-h-0 gap-3">
+        <div className="grid gap-3">
         <form onSubmit={saveSettings} className="data-card p-4">
           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20">
             <MonitorSmartphone size={20} />
@@ -334,7 +334,7 @@ export default function AyarlarPage() {
         </div>
         </div>
 
-        <form onSubmit={importProducts} className="data-card min-h-0 p-4">
+        <form onSubmit={importProducts} className="data-card p-4">
           <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
             <FileSpreadsheet size={20} />
           </div>
