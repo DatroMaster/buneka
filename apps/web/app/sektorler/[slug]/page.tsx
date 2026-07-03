@@ -8,6 +8,7 @@ import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { SectorPackageBuilder } from "@/components/SectorPackageBuilder";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
+import { getModulePrice, resolveModule } from "@/lib/content/module-lookup";
 import { getModuleDetail, getSector, getWorkflowDetail, sectors } from "@/lib/content/sectors";
 import { plans } from "@/lib/content/plans";
 
@@ -44,7 +45,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
   const recommendedPlan = plans[1];
 
   return (
-    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
+    <main className="home-viewport relative flex h-[100dvh] w-full flex-col overflow-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <header className="relative z-10 flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
@@ -65,7 +66,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
       </header>
 
       <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
-        <section className="glow-border flex min-h-0 flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:p-7">
+        <section className="glow-border flex min-h-0 flex-col justify-between rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6">
           <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
             <sector.icon size={12} />
             {sector.title}
@@ -93,7 +94,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
               rel="noopener noreferrer"
               className="glow-border inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-[color:var(--home-ink)]"
             >
-              <MessageCircle size={16} className="text-emerald-400" /> WhatsApp&apos;tan Satın Al
+              <MessageCircle size={16} className="text-emerald-400" /> Hemen Satın Al
             </a>
           </div>
 
@@ -105,7 +106,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
           />
         </section>
 
-        <section className="glow-border grid min-h-0 grid-rows-[1fr_1fr] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+        <section className="glow-border grid min-h-0 grid-rows-[0.9fr_1.1fr] overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
           <div className="flex min-h-0 flex-col border-b border-[color:var(--home-border)] p-4 sm:p-5">
             <p className="font-display mb-3 flex items-center gap-2 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
               <Route size={16} className="text-[color:var(--home-glow)]" /> Günlük akış
@@ -131,14 +132,20 @@ export default async function SectorPage({ params }: SectorPageProps) {
 
           <div className="flex min-h-0 flex-col p-4 sm:p-5">
             <p className="font-display mb-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">Önerilen modüller</p>
-            <div className="grid min-h-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-3">
+            <div className="grid min-h-0 flex-1 grid-cols-1 gap-2">
               {sector.modules.map((module) => (
-                <div key={module} className="glow-border flex h-full flex-col justify-center rounded-lg px-3 py-2.5">
-                  <p className="text-[11px] font-bold text-[color:var(--home-ink)]">{module}</p>
-                  <p className="text-[10px] leading-snug text-[color:var(--home-muted)]">{getModuleDetail(module)}</p>
+                <div key={module} className="glow-border flex h-full items-center justify-between gap-3 rounded-lg px-3 py-2.5">
+                  <span className="min-w-0">
+                    <p className="text-[11px] font-bold text-[color:var(--home-ink)]">{resolveModule(module)?.label || module}</p>
+                    <p className="text-[10px] leading-snug text-[color:var(--home-muted)]">{getModuleDetail(module)}</p>
+                  </span>
+                  <span className="shrink-0 text-right text-[11px] font-black text-[color:var(--home-glow)]">{getModulePrice(module)}</span>
                 </div>
               ))}
             </div>
+            <Link href="/ek-moduller" className="glow-border mt-2 inline-flex shrink-0 items-center justify-center rounded-lg py-2 text-xs font-black text-[color:var(--home-ink)]">
+              Tüm modülleri göster
+            </Link>
           </div>
 
         </section>

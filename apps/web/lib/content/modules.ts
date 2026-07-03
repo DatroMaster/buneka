@@ -9,6 +9,7 @@ import {
   Smartphone,
   Tag,
   Wrench,
+  ReceiptText,
 } from "lucide-react";
 
 export type Module = {
@@ -72,5 +73,11 @@ export const modules: Module[] = [
     label: "Uzaktan / yerinde kurulum desteği",
     description: "Kurulum ve eğitim desteğini ekibimizden alın.",
     price: "3.000 TL/yıl'dan başlar",
+  },
+  {
+    icon: ReceiptText,
+    label: "Fatura fotoğrafından ürün aktarımı",
+    description: "Tedarikçi faturasının fotoğrafını çek; ürünler, adetler ve fiyatlar saniyeler içinde işlensin.",
+    price: "6.000 TL/yıl",
   },
 ];

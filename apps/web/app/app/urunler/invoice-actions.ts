@@ -2,10 +2,8 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 
-// Vision model used to read the invoice photo. Opus 4.8 gives the most
-// accurate extraction; switch to "claude-sonnet-4-6" or "claude-haiku-4-5"
-// to lower the per-scan cost if needed.
-const INVOICE_MODEL = "claude-opus-4-8";
+// Fast, lower-cost vision model for invoice photo extraction.
+const INVOICE_MODEL = "claude-haiku-4-5";
 
 export type ScannedInvoiceItem = {
   name: string;

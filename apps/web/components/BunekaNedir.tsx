@@ -4,6 +4,8 @@ import {
   Boxes,
   Camera,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   HandCoins,
   PhoneCall,
   PhoneOff,
@@ -47,6 +49,10 @@ export function BunekaNedirButton({
 
   const replay = useCallback(() => {
     setScene(0);
+    setPlaying(true);
+  }, []);
+  const goTo = useCallback((nextScene: number) => {
+    setScene((nextScene + SCENE_COUNT) % SCENE_COUNT);
     setPlaying(true);
   }, []);
 
@@ -143,6 +149,24 @@ export function BunekaNedirButton({
                     }`}
                   />
                 ))}
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => goTo(scene - 1)}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--home-border)] text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)]"
+                  aria-label="Önceki sahne"
+                >
+                  <ChevronLeft size={14} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goTo(scene + 1)}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--home-border)] text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)]"
+                  aria-label="Sonraki sahne"
+                >
+                  <ChevronRight size={14} />
+                </button>
               </div>
               <button
                 type="button"
@@ -300,7 +324,7 @@ function SceneInvoice() {
         Faturayı çek, ürünler <span className="text-[color:var(--home-glow)]">otomatik gelsin.</span>
       </h3>
       <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
-        Tedarikçi faturasının fotoğrafını çek; ürünler, adetler ve fiyatlar yapay zekâ ile saniyeler içinde işlensin.
+        Tedarikçi faturasının fotoğrafını çek; ürünler, adetler ve fiyatlar saniyeler içinde işlensin.
       </p>
     </>
   );
@@ -359,6 +383,10 @@ export function BunekaStoryCard() {
     setScene(0);
     setPlaying(true);
   };
+  const goTo = (nextScene: number) => {
+    setScene((nextScene + SCENE_COUNT) % SCENE_COUNT);
+    setPlaying(true);
+  };
 
   return (
     <div className="bn-modal glow-border relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl">
@@ -402,6 +430,24 @@ export function BunekaStoryCard() {
               }`}
             />
           ))}
+        </div>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => goTo(scene - 1)}
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--home-border)] text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)]"
+            aria-label="Önceki sahne"
+          >
+            <ChevronLeft size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={() => goTo(scene + 1)}
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--home-border)] text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)]"
+            aria-label="Sonraki sahne"
+          >
+            <ChevronRight size={14} />
+          </button>
         </div>
         <button
           type="button"

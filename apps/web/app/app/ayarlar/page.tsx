@@ -3,10 +3,8 @@
 import type { Tables } from "@buneka/database";
 import {
   FileSpreadsheet,
-  HandCoins,
   Loader2,
   MonitorSmartphone,
-  Package,
   Save,
   ShieldCheck,
   Store,
@@ -14,7 +12,6 @@ import {
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
-import { QuickLinks } from "../_components/QuickLinks";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id">;
 type Organization = Tables<"organizations">;
@@ -208,31 +205,25 @@ export default function AyarlarPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto flex h-full max-w-7xl flex-col overflow-hidden">
       <PageHeader title="Ayarlar" subtitle="İşletme ve sistem ayarlarınız." />
-      <QuickLinks
-        links={[
-          { href: "/app/urunler", label: "Ürünler", icon: Package },
-          { href: "/app/veresiye", label: "Veresiye", icon: HandCoins },
-        ]}
-      />
 
       {message && (
-        <div className="mb-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
+        <div className="mb-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50">
           {message}
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <form onSubmit={saveOrganization} className="data-card p-6 md:col-span-2">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
-            <Store size={24} />
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 lg:grid-cols-[1.25fr_0.85fr_1fr]">
+        <form onSubmit={saveOrganization} className="data-card min-h-0 p-4">
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
+            <Store size={20} />
           </div>
-          <h2 className="font-display mb-1 text-xl font-bold text-slate-950 dark:text-slate-50">İşletme bilgileri</h2>
-          <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+          <h2 className="font-display mb-1 text-lg font-bold text-slate-950 dark:text-slate-50">İşletme bilgileri</h2>
+          <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
             Üye işletmenizin bilgileri — burada güncelleyebilirsiniz.
           </p>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <Field label="İşletme adı" value={orgForm.name} onChange={(v) => setOrgForm({ ...orgForm, name: v })} required />
             <Field label="Şehir" value={orgForm.city} onChange={(v) => setOrgForm({ ...orgForm, city: v })} />
             <Field label="Telefon" value={orgForm.phone} onChange={(v) => setOrgForm({ ...orgForm, phone: v })} />
@@ -240,21 +231,22 @@ export default function AyarlarPage() {
             <Field label="Vergi no" value={orgForm.tax_number} onChange={(v) => setOrgForm({ ...orgForm, tax_number: v })} />
             <Field label="Sektör" value={orgForm.sector} onChange={(v) => setOrgForm({ ...orgForm, sector: v })} />
           </div>
-          <button className="premium-button-primary mt-5" type="submit" disabled={saving}>
+          <button className="premium-button-primary mt-3" type="submit" disabled={saving}>
             {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
             Kaydet
           </button>
         </form>
 
-        <form onSubmit={saveSettings} className="data-card p-6">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20">
-            <MonitorSmartphone size={24} />
+        <div className="grid min-h-0 gap-3">
+        <form onSubmit={saveSettings} className="data-card p-4">
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-500/20">
+            <MonitorSmartphone size={20} />
           </div>
-          <h2 className="font-display mb-1 text-xl font-bold text-slate-950 dark:text-slate-50">Cihaz ve satış ayarları</h2>
-          <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+          <h2 className="font-display mb-1 text-lg font-bold text-slate-950 dark:text-slate-50">Cihaz ve satış</h2>
+          <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
             Varsayılan ödeme tipi, stok uyarı seviyesi ve çoklu cihaz erişimi.
           </p>
-          <div className="grid gap-3">
+          <div className="grid gap-2">
             <label className="grid gap-1.5 text-sm font-bold text-slate-800 dark:text-slate-300">
               Varsayılan ödeme tipi
               <select
@@ -289,17 +281,17 @@ export default function AyarlarPage() {
               Çoklu cihaz erişimini aç
             </label>
           </div>
-          <button className="premium-button-primary mt-5" type="submit" disabled={saving}>
+          <button className="premium-button-primary mt-3" type="submit" disabled={saving}>
             {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
             Kaydet
           </button>
         </form>
 
-        <div className="data-card p-6">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">
-            <ShieldCheck size={24} />
+        <div className="data-card p-4">
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">
+            <ShieldCheck size={20} />
           </div>
-          <h2 className="font-display mb-1 text-xl font-bold text-slate-950 dark:text-slate-50">Lisans ve yetki</h2>
+          <h2 className="font-display mb-1 text-lg font-bold text-slate-950 dark:text-slate-50">Lisans ve yetki</h2>
           {license ? (
             <div className="mt-3 space-y-1 text-sm text-slate-600 dark:text-slate-400">
               <p>
@@ -321,23 +313,24 @@ export default function AyarlarPage() {
             </p>
           )}
         </div>
+        </div>
 
-        <form onSubmit={importProducts} className="data-card p-6 md:col-span-2">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
-            <FileSpreadsheet size={24} />
+        <form onSubmit={importProducts} className="data-card min-h-0 p-4">
+          <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 ring-1 ring-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:ring-cyan-500/20">
+            <FileSpreadsheet size={20} />
           </div>
-          <h2 className="font-display mb-1 text-xl font-bold text-slate-950 dark:text-slate-50">Toplu ürün aktarımı</h2>
-          <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">
+          <h2 className="font-display mb-1 text-lg font-bold text-slate-950 dark:text-slate-50">Toplu ürün aktarımı</h2>
+          <p className="mb-2 text-xs text-slate-500 dark:text-slate-400">
             Her satıra bir ürün: <code className="rounded bg-slate-100 px-1 dark:bg-slate-800">barkod;ad;kategori;fiyat;stok</code>
           </p>
           <textarea
-            className="premium-input min-h-32 resize-y font-mono text-sm"
+            className="premium-input h-32 resize-none font-mono text-sm"
             value={bulkText}
             onChange={(event) => setBulkText(event.target.value)}
             placeholder={"8690000000011;Su 500ml;İçecek;15;100\n8690000000028;Çikolata;Atıştırmalık;22;40"}
           />
           {bulkMessage && <p className="mt-2 text-sm font-bold text-slate-700 dark:text-slate-300">{bulkMessage}</p>}
-          <button className="premium-button-primary mt-4" type="submit" disabled={bulkSaving}>
+          <button className="premium-button-primary mt-3" type="submit" disabled={bulkSaving}>
             {bulkSaving ? <Loader2 size={18} className="animate-spin" /> : <FileSpreadsheet size={18} />}
             Ürünleri Aktar
           </button>

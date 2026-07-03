@@ -73,7 +73,7 @@ export default function HomeClient() {
       id: "sektorler",
       label: "Sektörler",
       icon: Store,
-      content: <SectorPlayground />,
+      content: <SectorPlayground excludeSlugs={["kozmetik"]} />,
     },
     {
       id: "moduller",
@@ -81,7 +81,7 @@ export default function HomeClient() {
       icon: LayoutGrid,
       content: (
         <div className="flex h-full min-h-0 flex-col gap-3">
-          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-y-auto">
+          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-hidden">
             {modules.map((module, index) => (
               <button
                 key={module.label}
@@ -116,7 +116,7 @@ export default function HomeClient() {
       icon: ShieldCheck,
       content: (
         <div className="flex h-full min-h-0 flex-col gap-3">
-          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-y-auto">
+          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-hidden">
             {plans.map((plan, index) => (
               <button
                 key={plan.name}
@@ -211,7 +211,7 @@ export default function HomeClient() {
         </div>
       </header>
 
-      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-2">
         <section className="glow-border flex min-h-0 flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:rounded-2xl sm:p-5">
           <BunekaStoryCard />
         </section>

@@ -3,8 +3,9 @@ import { Boxes, Check, Crown, Phone, ScanLine, ShieldCheck, WalletCards } from "
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { PlanModuleOrder } from "@/components/PlanModuleOrder";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { callLink, whatsappLink } from "@/lib/contact";
+import { callLink } from "@/lib/contact";
 import { plans } from "@/lib/content/plans";
 
 export const metadata = {
@@ -125,14 +126,7 @@ export default function PaketlerPage() {
                   ))}
                 </ul>
 
-                <a
-                  href={whatsappLink(`Merhaba, ${plan.name} paketini satın almak istiyorum.`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cta-primary-animated group mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 py-2.5 text-sm font-bold text-slate-950 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-95"
-                >
-                  Satın Al
-                </a>
+                <PlanModuleOrder planName={plan.name} planPrice={plan.price} />
               </div>
             );
           })}

@@ -19,10 +19,11 @@ const COLORS = [
   "from-indigo-600 to-blue-700",
 ];
 
-export function SectorPlayground() {
+export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<string | null>(null);
-  const hoveredSector = sectors.find((sector) => sector.slug === hovered);
+  const visibleSectors = sectors.filter((sector) => !excludeSlugs.includes(sector.slug));
+  const hoveredSector = visibleSectors.find((sector) => sector.slug === hovered);
   const router = useRouter();
 
   return (
@@ -31,14 +32,8 @@ export function SectorPlayground() {
         ref={containerRef}
         className="relative min-h-0 flex-1 overflow-hidden rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5"
       >
-        <div
-          className="grid h-full gap-2"
-          style={{
-            gridTemplateColumns: "repeat(auto-fill, minmax(84px, 1fr))",
-            gridAutoRows: "1fr",
-          }}
-        >
-          {sectors.map((sector, index) => (
+        <div className="grid h-full grid-cols-2 gap-2 sm:grid-cols-5">
+          {visibleSectors.map((sector, index) => (
             <motion.div
               key={sector.slug}
               drag

@@ -1,4 +1,4 @@
-import { ShieldCheck } from "lucide-react";
+import { Home, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
@@ -20,7 +20,17 @@ export default async function LoginPage({
       <div className="absolute left-6 top-6 z-20">
         <BunekaNedirButton />
       </div>
-      <ThemeToggle className="absolute right-6 top-6 z-20 border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" />
+      <div className="absolute right-6 top-6 z-20 flex items-center gap-2">
+        <Link
+          href="/"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition-colors hover:border-cyan-400 hover:text-cyan-500 dark:border-slate-700 dark:text-slate-300"
+          aria-label="Ana sayfa"
+          title="Ana sayfa"
+        >
+          <Home size={16} />
+        </Link>
+        <ThemeToggle className="border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300" />
+      </div>
 
       <div className="relative z-10 w-full max-w-md">
         <div className="glass-card glow-border flex flex-col space-y-8 rounded-2xl p-10">
