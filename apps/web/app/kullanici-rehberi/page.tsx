@@ -17,7 +17,6 @@ import {
   ShoppingCart,
   WalletCards,
 } from "lucide-react";
-import { BarcodeDeviceCards } from "@/components/BarcodeDeviceCards";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -213,24 +212,6 @@ export default function KullaniciRehberiPage() {
                 </article>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="glow-border rounded-2xl bg-[color:var(--home-surface)]/74 p-5 backdrop-blur-xl">
-          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <h2 className="font-display text-2xl font-black">Uygun fiyatlı barkod cihazları</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-[color:var(--home-muted)]">
-                Paketlere ek olarak aşağıdaki cihazlar başlangıç için uygundur. Fiyatlar kaynak sayfadan canlı
-                kontrol edilir; kaynak erişimi engellenirse son doğrulanan fiyat gösterilir.
-              </p>
-            </div>
-            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1.5 text-xs font-black text-[color:var(--home-glow)]">
-              <CheckCircle2 size={14} /> USB cihazlarla uyumlu
-            </span>
-          </div>
-          <div className="mt-4">
-            <BarcodeDeviceCards />
           </div>
         </section>
 

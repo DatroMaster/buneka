@@ -1,6 +1,17 @@
 import Link from "next/link";
-import { BookOpenCheck, Boxes, Check, Crown, Home, LayoutDashboard, LogIn, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
-import { BarcodeDeviceCards } from "@/components/BarcodeDeviceCards";
+import {
+  BookOpenCheck,
+  Boxes,
+  Check,
+  Crown,
+  Home,
+  LayoutDashboard,
+  LogIn,
+  Phone,
+  ScanLine,
+  ShieldCheck,
+  WalletCards,
+} from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -33,6 +44,7 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Barkodla fiyat sorgulama",
     "Hızlı ürün ekleme",
     "TCMB kuruyla USD fiyat girişi",
+    "Barkod okuyucu desteği ücretsiz",
     "Toplu fiyat güncelleme",
     "Sorgu raporu",
   ],
@@ -41,6 +53,7 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Satış Yapıldı kaydı",
     "Günlük kasa raporu",
     "En çok sorgulanan ürün",
+    "Barkod okuyucu desteği ücretsiz",
     "Sepetli çoklu ürün satışı",
   ],
   STOCK: [
@@ -48,6 +61,7 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Stokta kalan / minimum stok uyarısı",
     "Stok giriş-çıkış hareketleri",
     "Kar / marj görünürlüğü",
+    "Barkod okuyucu desteği ücretsiz",
     "Detaylı raporlar",
   ],
   PATRON: [
@@ -55,6 +69,8 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Çoklu cihaz senkronizasyonu",
     "Kampanya erişimi",
     "Haftalık/aylık özet raporlar",
+    "Tüm ek modüller aktif",
+    "Barkod okuyucu desteği ücretsiz",
     "Patron görünümü",
   ],
 };
@@ -159,6 +175,7 @@ export default function PaketlerPage() {
                   <div className="mt-4 grid gap-1.5 text-[11px] font-bold text-[color:var(--home-ink)]">
                     <span>7/24 destek hattı</span>
                     <span>Ücretsiz ilk kurulum</span>
+                    <span>Barkod okuyucu desteği ücretsiz</span>
                   </div>
 
                   <div className="my-4 h-px bg-[color:var(--home-border)]" />
@@ -181,24 +198,6 @@ export default function PaketlerPage() {
             );
           })}
         </div>
-
-        <section className="glow-border rounded-2xl bg-[color:var(--home-surface)]/74 p-5 backdrop-blur-xl">
-          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <h2 className="font-display text-2xl font-black tracking-tight">Paketlere ek barkod cihazları</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-[color:var(--home-muted)]">
-                Başlangıç için uygun fiyatlı cihazları ekledik. Fiyatlar kaynak sayfadan canlı kontrol edilir;
-                erişim engellenirse son doğrulanan fiyat gösterilir.
-              </p>
-            </div>
-            <Link href="/kullanici-rehberi" className="glow-border inline-flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2 text-xs font-black text-[color:var(--home-ink)]">
-              <BookOpenCheck size={14} /> Kullanım rehberi
-            </Link>
-          </div>
-          <div className="mt-4">
-            <BarcodeDeviceCards compact />
-          </div>
-        </section>
       </div>
 
       <footer className="relative z-10 shrink-0 px-3 pb-3 sm:px-6">
