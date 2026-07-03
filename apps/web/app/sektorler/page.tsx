@@ -23,8 +23,8 @@ export default function SektorlerPage() {
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/" className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" aria-label="Ana sayfa">
-            <Home size={16} />
+          <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" aria-label="Ana sayfa">
+            <Home size={14} /> Ana Menü
           </Link>
           <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex">
             <LayoutDashboard size={14} /> Panele Dön
@@ -60,14 +60,14 @@ export default function SektorlerPage() {
             <Link
               key={sector.slug}
               href={`/sektorler/${sector.slug}`}
-              className="glow-border group flex min-h-0 flex-col justify-between rounded-2xl bg-[color:var(--home-surface)]/75 p-4 backdrop-blur-xl transition-transform hover:-translate-y-0.5 active:scale-[0.99]"
+              className="glow-border group flex min-h-0 flex-col justify-between overflow-hidden rounded-2xl bg-[color:var(--home-surface)]/75 p-4 backdrop-blur-xl transition-transform hover:-translate-y-0.5 active:scale-[0.99]"
             >
               <span>
                 <span className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">
                   <sector.icon size={19} />
                 </span>
                 <span className="font-display block text-base font-black leading-tight text-[color:var(--home-ink)]">{sector.title}</span>
-                <span className="mt-2 line-clamp-2 block text-xs leading-relaxed text-[color:var(--home-muted)]">{sector.short}</span>
+                <span className="mt-2 block h-8 overflow-hidden text-xs leading-4 text-[color:var(--home-muted)]">{sector.short}</span>
               </span>
               <span className="mt-4 inline-flex items-center gap-1 text-xs font-black text-[color:var(--home-glow)]">
                 Detayı incele <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />

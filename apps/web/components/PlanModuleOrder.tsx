@@ -45,7 +45,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
   }, [planName, planPrice, selected, totalPrice]);
 
   return (
-    <div className="mt-3 grid gap-2">
+    <div className="mt-3 grid shrink-0 gap-2">
       <div className="rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/5 px-3 py-2">
         <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Toplam</p>
         <p className="font-display text-lg font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
@@ -58,7 +58,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
         <Plus size={14} /> Ek modül ekle
       </button>
       {open && (
-        <div className="grid max-h-28 gap-1.5 overflow-y-auto pr-1">
+        <div className="grid max-h-20 gap-1.5 overflow-y-auto pr-1">
           {modules.map((module) => {
             const isSelected = selected.includes(module.label);
             return (
@@ -68,7 +68,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
                 onClick={() => toggle(module.label)}
                 className={`flex items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-[10px] font-bold ${
                   isSelected
-                    ? "border-[color:var(--home-glow)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-ink)]"
+                    ? "border-emerald-300 bg-gradient-to-r from-emerald-400/20 via-cyan-300/15 to-[color:var(--home-glow)]/10 text-white shadow-[inset_0_0_0_1px_rgba(110,231,183,0.16)]"
                     : "border-[color:var(--home-border)] text-[color:var(--home-muted)]"
                 }`}
               >

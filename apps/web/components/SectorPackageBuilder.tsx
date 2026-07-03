@@ -77,7 +77,7 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
               onClick={() => toggle(module)}
               className={`flex min-h-12 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] font-bold transition-all ${
                 isSelected
-                  ? "border-[color:var(--home-glow)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-ink)]"
+                  ? "border-emerald-300 bg-gradient-to-r from-emerald-400/20 via-cyan-300/16 to-[color:var(--home-glow)]/10 text-white shadow-[inset_0_0_0_1px_rgba(110,231,183,0.18),0_0_22px_rgba(45,212,191,0.16)]"
                   : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)]"
               }`}
             >

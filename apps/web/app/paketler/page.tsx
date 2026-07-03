@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Boxes, Check, Crown, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
+import { Boxes, Check, Crown, Home, LayoutDashboard, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -76,6 +76,12 @@ export default function PaketlerPage() {
           <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
+          <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]">
+            <Home size={14} /> Ana Menü
+          </Link>
+          <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex">
+            <LayoutDashboard size={14} /> Panele Dön
+          </Link>
           <span className="hidden items-center gap-1.5 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:flex">
             <ShieldCheck size={12} /> Yıllık lisans · Şeffaf fiyat
           </span>
@@ -84,22 +90,24 @@ export default function PaketlerPage() {
         </div>
       </header>
 
-      <div className="relative z-10 min-h-0 flex-1 px-3 pb-2 sm:px-6">
+      <div className="relative z-10 grid min-h-0 flex-1 grid-rows-[auto_1fr] gap-3 px-3 pb-2 sm:px-6">
+        <div>
         <h1 className="font-display text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
           Hangi pakette ne var, tek bakışta.
         </h1>
         <p className="mt-1 max-w-2xl text-xs text-[color:var(--home-muted)] sm:text-sm">
           İhtiyaç büyüdükçe bir üst pakete geçebilirsiniz — kurulum ücreti veya sözleşme süresi yoktur.
         </p>
+        </div>
 
-        <div className="mt-3 grid h-[calc(100%-64px)] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid min-h-0 grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((plan) => {
             const code = PLAN_CODES[plan.name];
             const Icon = PLAN_ICONS[code];
             return (
               <div
                 key={plan.name}
-                className={`relative flex min-h-0 flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:p-5 ${PLAN_BORDER_COLORS[code]}`}
+                className={`relative flex min-h-0 flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:p-5 ${PLAN_BORDER_COLORS[code]}`}
               >
                 {plan.badge && (
                   <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-[color:var(--home-glow)] to-blue-600 px-3 py-1 text-[9px] font-bold uppercase tracking-wide text-slate-950 shadow-lg">

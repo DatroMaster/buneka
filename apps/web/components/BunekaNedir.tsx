@@ -17,6 +17,7 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { BunekaMark } from "@/components/BunekaMark";
 import { callLink } from "@/lib/contact";
 
@@ -89,7 +90,7 @@ export function BunekaNedirButton({
         {variant === "pill" && <span className="hidden sm:inline">Buneka Nedir?</span>}
       </button>
 
-      {open && (
+      {open && typeof document !== "undefined" && createPortal(
         <div className="fixed inset-0 z-[10000] grid place-items-center overflow-y-auto bg-black/85 p-4 backdrop-blur-sm" onClick={close}>
           <div
             className="bn-modal relative my-auto flex w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-[color:var(--home-border)] shadow-2xl"
@@ -177,7 +178,8 @@ export function BunekaNedirButton({
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </>
   );
