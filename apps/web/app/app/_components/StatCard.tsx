@@ -39,7 +39,7 @@ export function StatCard({
       </div>
       <div>
         <p className="text-sm font-bold text-slate-500 dark:text-slate-400">{label}</p>
-        <p className={`text-2xl font-black ${styles.value}`}>{value}</p>
+        <p className={`text-xl font-black ${styles.value}`}>{value}</p>
       </div>
     </div>
   );

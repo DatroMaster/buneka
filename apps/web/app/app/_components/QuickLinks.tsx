@@ -9,7 +9,7 @@ export type QuickLink = {
 
 export function QuickLinks({ links }: { links: QuickLink[] }) {
   return (
-    <div className="mb-6 flex flex-wrap gap-2">
+    <div className="mb-3 flex flex-wrap gap-2">
       {links.map((link) => (
         <Link
           key={link.href}

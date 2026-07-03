@@ -262,7 +262,7 @@ export default function FiyatSorgulaPage() {
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
   return (
-    <div className="mx-auto flex h-full max-w-6xl flex-col">
+    <div className="mx-auto flex h-full min-h-0 max-w-7xl flex-col">
       <QuickLinks
         links={[
           { href: "/app/kasa", label: "Günlük Kasa", icon: WalletCards },
@@ -272,31 +272,31 @@ export default function FiyatSorgulaPage() {
         ]}
       />
 
-      <div className="flex flex-1 flex-col gap-4 lg:flex-row">
-        <div className="glass-card flex flex-1 flex-col p-6 md:p-10">
-          <div className="mb-8 flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/30">
-              <ScanBarcode size={26} />
+      <div className="flex min-h-0 flex-1 flex-col gap-3 lg:flex-row">
+        <div className="glass-card flex min-h-0 flex-1 flex-col p-4 md:p-5">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-lg shadow-cyan-500/30">
+              <ScanBarcode size={23} />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-950 md:text-3xl dark:text-slate-50">Bu ne kadar?</h1>
+              <h1 className="font-display text-2xl font-extrabold tracking-tight text-slate-950 dark:text-slate-50">Bu ne kadar?</h1>
               <p className="font-medium text-slate-500 dark:text-slate-400">Ürün fiyat sorgulaması yap. Barkodu okut veya yaz.</p>
             </div>
           </div>
 
-          <form onSubmit={handleSearch} className="mb-8">
+          <form onSubmit={handleSearch} className="mb-4">
             <div className="relative">
               <input
                 ref={inputRef}
                 type="text"
                 value={barcode}
                 onChange={(event) => setBarcode(event.target.value)}
-                className="premium-input h-16 px-16 text-center text-lg font-medium tracking-wider placeholder:text-center"
+                className="premium-input h-14 px-14 text-center text-base font-medium tracking-wider placeholder:text-center"
                 placeholder="Barkod okutun..."
                 autoComplete="off"
                 disabled={loading}
               />
-              <ScanBarcode className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={22} />
+              <ScanBarcode className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600/50 dark:text-slate-400/60" size={20} />
               {!barcode && (
                 <div className="scan-beam-track">
                   <div className="scan-beam" />
@@ -306,30 +306,30 @@ export default function FiyatSorgulaPage() {
             </div>
           </form>
 
-          <div className="flex min-h-[280px] flex-1 flex-col items-center justify-center">
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
             {loading ? (
               <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-500" />
             ) : error ? (
-              <div className="w-full max-w-md rounded-2xl bg-orange-50 p-8 text-center ring-1 ring-orange-200 dark:bg-orange-500/10 dark:ring-orange-500/20">
-                <AlertCircle size={44} className="mx-auto mb-4 text-orange-600 dark:text-orange-400" />
-                <h3 className="mb-6 text-xl font-bold text-orange-600 dark:text-orange-400">{error}</h3>
+              <div className="w-full max-w-md rounded-2xl bg-orange-50 p-5 text-center ring-1 ring-orange-200 dark:bg-orange-500/10 dark:ring-orange-500/20">
+                <AlertCircle size={36} className="mx-auto mb-3 text-orange-600 dark:text-orange-400" />
+                <h3 className="mb-4 text-lg font-bold text-orange-600 dark:text-orange-400">{error}</h3>
                 <Link href="/app/urunler" className="premium-button-amber shadow-none">
                   <Plus size={20} /> Yeni Ürün Ekle
                 </Link>
               </div>
             ) : product ? (
-              <div className="w-full max-w-2xl rounded-2xl bg-white p-6 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 md:p-10">
-                <span className="mb-4 inline-block rounded-full bg-cyan-50 px-4 py-2 text-xs font-black uppercase text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300">
+              <div className="w-full max-w-2xl rounded-2xl bg-white p-5 text-center shadow-sm ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-800 md:p-6">
+                <span className="mb-2 inline-block rounded-full bg-cyan-50 px-3 py-1.5 text-[11px] font-black uppercase text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-300">
                   {product.category || "Kategorisiz"}
                 </span>
-                <h2 className="mb-3 text-4xl font-black leading-tight tracking-tight text-slate-950 md:text-6xl dark:text-slate-50">{product.name}</h2>
-                <p className="mb-6 font-mono text-sm font-bold text-slate-400 dark:text-slate-500">{product.barcode}</p>
+                <h2 className="mb-2 text-3xl font-black leading-tight tracking-tight text-slate-950 md:text-5xl dark:text-slate-50">{product.name}</h2>
+                <p className="mb-4 font-mono text-xs font-bold text-slate-400 dark:text-slate-500">{product.barcode}</p>
 
-                <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl dark:text-cyan-300">
+                <div className="mb-5 text-5xl font-black tracking-tight text-cyan-600 md:text-7xl dark:text-cyan-300">
                   {formatMoney(product.sale_price)}
                 </div>
 
-                <div className="mb-8 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 ring-1 ring-slate-200 dark:bg-slate-800/60 dark:ring-slate-700">
+                <div className="mb-5 flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-2.5 ring-1 ring-slate-200 dark:bg-slate-800/60 dark:ring-slate-700">
                   <span className="font-bold text-slate-500 dark:text-slate-400">Stok Durumu:</span>
                   <span className={`text-lg font-black ${product.stock_quantity <= product.min_stock ? "text-orange-600 dark:text-orange-400" : "text-slate-950 dark:text-slate-50"}`}>
                     {product.stock_quantity} Adet
@@ -337,38 +337,38 @@ export default function FiyatSorgulaPage() {
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
-                  <button onClick={handleSale} className="action-sale min-h-16 w-full px-4 py-4 text-base sm:text-lg" type="button">
+                  <button onClick={handleSale} className="action-sale min-h-12 w-full px-4 py-3 text-base" type="button">
                     <CheckCircle2 size={22} /> Satış Yap
                   </button>
                   <button
                     onClick={addToCart}
-                    className="glow-border flex min-h-16 w-full items-center justify-center gap-2 rounded-xl bg-cyan-50 px-4 py-4 text-base font-black text-cyan-700 transition-transform active:scale-95 dark:bg-cyan-500/10 dark:text-cyan-300 sm:text-lg"
+                    className="glow-border flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-cyan-50 px-4 py-3 text-base font-black text-cyan-700 transition-transform active:scale-95 dark:bg-cyan-500/10 dark:text-cyan-300"
                     type="button"
                   >
                     <ShoppingCart size={22} /> Sepete Ekle
                   </button>
-                  <button onClick={handleCancel} className="action-no-sale min-h-16 w-full px-4 py-4 text-base sm:text-lg" type="button">
+                  <button onClick={handleCancel} className="action-no-sale min-h-12 w-full px-4 py-3 text-base" type="button">
                     Tamam
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center dark:border-slate-700 dark:bg-slate-900/40">
-                <ScanBarcode size={48} className="mb-4 text-slate-300 dark:text-slate-600" />
-                <p className="text-lg font-semibold text-slate-600 dark:text-slate-400">Sorgulama yapmak için barkod okutun.</p>
+              <div className="flex h-full min-h-[180px] w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white/70 text-center dark:border-slate-700 dark:bg-slate-900/40">
+                <ScanBarcode size={40} className="mb-3 text-slate-300 dark:text-slate-600" />
+                <p className="text-base font-semibold text-slate-600 dark:text-slate-400">Sorgulama yapmak için barkod okutun.</p>
               </div>
             )}
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-4 border-t border-slate-200 pt-6 dark:border-slate-800 sm:grid-cols-3">
+          <div className="mt-4 grid grid-cols-3 gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
             <StatCard icon={CheckCircle2} label="Bugün Satış" value={String(stats.sales)} tone="primary" />
             <StatCard icon={TrendingUp} label="Bugün Kasa" value={formatMoney(stats.revenue)} tone="green" />
             <StatCard icon={Activity} label="Bugün Sorgu" value={String(stats.queries)} tone="amber" />
           </div>
         </div>
 
-        <aside className="glass-card flex w-full flex-col p-5 lg:w-80 lg:shrink-0">
-          <div className="mb-4 flex items-center gap-2">
+        <aside className="glass-card flex min-h-0 w-full flex-col p-4 lg:w-80 lg:shrink-0">
+          <div className="mb-3 flex items-center gap-2">
             <ShoppingCart size={20} className="text-cyan-500" />
             <h2 className="font-display text-lg font-bold text-slate-950 dark:text-slate-50">Sepet</h2>
             {cart.length > 0 && (
@@ -431,15 +431,15 @@ export default function FiyatSorgulaPage() {
                 <p className="mt-2 text-xs font-bold text-orange-600 dark:text-orange-400">{cartMessage}</p>
               )}
 
-              <div className="mt-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+              <div className="mt-3 border-t border-slate-200 pt-3 dark:border-slate-800">
                 <div className="mb-3 flex items-center justify-between">
                   <span className="font-bold text-slate-500 dark:text-slate-400">Toplam</span>
-                  <span className="text-2xl font-black text-slate-950 dark:text-slate-50">{formatMoney(cartTotal)}</span>
+                  <span className="text-xl font-black text-slate-950 dark:text-slate-50">{formatMoney(cartTotal)}</span>
                 </div>
                 <button
                   onClick={handleCartCheckout}
                   disabled={checkingOut}
-                  className="action-sale min-h-14 w-full text-base"
+                  className="action-sale min-h-12 w-full text-base"
                   type="button"
                 >
                   {checkingOut ? <Loader2 size={20} className="animate-spin" /> : <CheckCircle2 size={20} />}
@@ -448,7 +448,7 @@ export default function FiyatSorgulaPage() {
                 <button
                   onClick={cancelCart}
                   disabled={checkingOut}
-                  className="mt-2 flex min-h-10 w-full items-center justify-center gap-1.5 rounded-xl text-sm font-bold text-slate-500 transition-colors hover:text-orange-500 dark:text-slate-400"
+                  className="mt-1.5 flex min-h-9 w-full items-center justify-center gap-1.5 rounded-xl text-sm font-bold text-slate-500 transition-colors hover:text-orange-500 dark:text-slate-400"
                   type="button"
                 >
                   <X size={14} /> Sepeti İptal Et
