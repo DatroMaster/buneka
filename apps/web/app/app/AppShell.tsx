@@ -208,7 +208,7 @@ export default function AppShell({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#050A0F] selection:bg-emerald-400 selection:text-slate-950">
+    <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-emerald-400 selection:text-slate-950">
       <DesktopSidebar pathname={pathname} onLogout={handleLogout} user={user} />
 
       {isMenuOpen && (
@@ -240,7 +240,7 @@ export default function AppShell({
       )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sidebar-supabase z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 md:bg-[#050A0F]/95 md:px-6">
+        <header className="sidebar-supabase z-40 flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-4 md:px-6">
           <Link href="/app" className="flex items-center gap-2 md:hidden">
             <BunekaMark size={24} />
             <BunekaWordmark className="text-sm text-white" />
@@ -286,7 +286,7 @@ export default function AppShell({
         <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-5">
           <CartProvider>{children}</CartProvider>
         </main>
-        <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-white/10 bg-[#050A0F]/70 px-3 py-1 text-[10px] font-semibold text-slate-400 backdrop-blur md:block">
+        <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-[10px] font-semibold text-slate-500 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#050A0F]/70 dark:text-slate-400 md:block">
           BUNEKA © 2026 · Ankara, TR · <ClientIpBadge />
         </div>
       </div>

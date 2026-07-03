@@ -343,22 +343,22 @@ export function HelpCenterClient() {
   };
 
   return (
-    <main className="help-center-dark relative min-h-screen overflow-x-hidden bg-[#050A0F] text-slate-100">
-      <header className="sticky top-0 z-40 border-b border-cyan-300/15 bg-[#07111F]/90 px-4 py-3 backdrop-blur-xl sm:px-6">
+    <main className="help-center-dark relative min-h-screen overflow-x-hidden bg-[var(--color-bg)] text-[color:var(--color-text)]">
+      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/82 px-4 py-3 shadow-sm backdrop-blur-xl dark:border-cyan-300/15 dark:bg-[#07111F]/90 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-2.5">
             <BunekaMark size={26} />
-            <BunekaWordmark className="text-sm text-slate-100" />
+            <BunekaWordmark className="text-sm text-slate-950 dark:text-slate-100" />
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-cyan-300/20 px-3 text-xs font-black text-slate-200 hover:border-cyan-300">
+            <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 text-xs font-black text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300">
               <Home size={14} /> Ana Menü
             </Link>
-            <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-cyan-300/20 px-3 text-xs font-black text-slate-200 hover:border-cyan-300 sm:flex">
+            <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 text-xs font-black text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300 sm:flex">
               <LayoutDashboard size={14} /> Panele Dön
             </Link>
             <BunekaNedirButton />
-            <ThemeToggle className="border-cyan-300/20 text-slate-200 hover:border-cyan-300" />
+            <ThemeToggle className="border-slate-200 bg-white/70 text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300" />
           </div>
           <Link
             href="/login"
@@ -371,7 +371,7 @@ export function HelpCenterClient() {
 
       <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[280px_1fr]">
         <aside className="lg:sticky lg:top-20 lg:self-start">
-          <div className="rounded-2xl border border-cyan-300/15 bg-[#07111F]/85 p-4 shadow-[0_18px_70px_rgba(0,0,0,0.28)] backdrop-blur">
+          <div className="rounded-2xl border border-slate-200 bg-white/86 p-4 shadow-[0_18px_70px_rgba(10,25,49,0.10)] backdrop-blur dark:border-cyan-300/15 dark:bg-[#07111F]/85 dark:shadow-[0_18px_70px_rgba(0,0,0,0.28)]">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-700">İçindekiler</p>
             <nav className="mt-3 grid gap-1">
               {contents.map((item) => (
@@ -384,7 +384,7 @@ export function HelpCenterClient() {
         </aside>
 
         <div className="grid gap-6">
-          <section className="rounded-3xl border border-cyan-300/15 bg-[#07111F]/88 p-5 shadow-[0_18px_80px_rgba(0,0,0,0.34)] backdrop-blur sm:p-6">
+          <section className="rounded-3xl border border-slate-200 bg-white/88 p-5 shadow-[0_18px_80px_rgba(10,25,49,0.12)] backdrop-blur dark:border-cyan-300/15 dark:bg-[#07111F]/88 dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)] sm:p-6">
             <Link href="/" className="mb-4 inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-950">
               Ana sayfa
             </Link>
@@ -393,28 +393,28 @@ export function HelpCenterClient() {
                 <span className="inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-cyan-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-cyan-700">
                   <BookOpenCheck size={13} /> Buneka Yardım Merkezi
                 </span>
-                <h1 className="mt-4 max-w-4xl font-display text-3xl font-black tracking-tight text-slate-50 sm:text-4xl lg:text-5xl">
+                <h1 className="mt-4 max-w-4xl font-display text-3xl font-black tracking-tight text-slate-950 dark:text-slate-50 sm:text-4xl lg:text-5xl">
                   Kurulum, Barkod Okutma, Satış, Stok ve Kasa Takibi Rehberi
                 </h1>
-                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-300">
+                <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 dark:text-slate-300">
                   Buneka&apos;yı 15 dakika içinde kurun, ilk ürünlerinizi ekleyin, barkodla fiyat sorgulayın, satışlarınızı
                   ve stok hareketlerinizi tek ekrandan takip edin.
                 </p>
-                <p className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-4 text-sm font-bold leading-6 text-emerald-100">
+                <p className="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50/80 p-4 text-sm font-bold leading-6 text-emerald-900 dark:border-emerald-300/20 dark:bg-emerald-400/10 dark:text-emerald-100">
                   Dükkanın hafızası artık tek kişinin aklında değil, sistemde.
                 </p>
               </div>
-              <div className="grid gap-3 rounded-2xl border border-cyan-300/15 bg-slate-950/35 p-3">
+              <div className="grid gap-3 rounded-2xl border border-slate-200 bg-white/64 p-3 shadow-sm dark:border-cyan-300/15 dark:bg-slate-950/35">
                 <div className="relative">
                   <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     value={query}
                     onChange={(event) => setQuery(event.target.value)}
                     placeholder="Rehberde ara: barkod, stok, veresiye, Excel, lisans..."
-                    className="h-[52px] w-full rounded-2xl border border-cyan-300/20 bg-slate-950/70 pl-11 pr-4 text-sm font-semibold text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-cyan-300 focus:ring-4 focus:ring-cyan-400/10"
+                    className="h-[52px] w-full rounded-2xl border border-slate-200 bg-white/85 pl-11 pr-4 text-sm font-semibold text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-400/12 dark:border-cyan-300/20 dark:bg-slate-950/70 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-cyan-300"
                   />
                   {normalizedQuery && (
-                    <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-2xl border border-cyan-300/20 bg-[#07111F]/95 p-2 shadow-2xl shadow-cyan-950/40 backdrop-blur">
+                    <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-30 rounded-2xl border border-slate-200 bg-white/95 p-2 shadow-2xl shadow-slate-300/40 backdrop-blur dark:border-cyan-300/20 dark:bg-[#07111F]/95 dark:shadow-cyan-950/40">
                       {searchResults.length > 0 ? (
                         <div className="grid gap-1.5">
                           {searchResults.map((result) => (
@@ -424,9 +424,9 @@ export function HelpCenterClient() {
                               onClick={() => setQuery("")}
                               className="rounded-xl border border-transparent px-3 py-2 transition hover:border-cyan-300/20 hover:bg-cyan-400/10"
                             >
-                              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-300">{result.kind}</span>
-                              <p className="mt-0.5 text-sm font-black text-slate-100">{result.title}</p>
-                              <p className="mt-1 line-clamp-2 text-xs font-semibold leading-5 text-slate-400">{result.text}</p>
+                              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-300">{result.kind}</span>
+                              <p className="mt-0.5 text-sm font-black text-slate-950 dark:text-slate-100">{result.title}</p>
+                              <p className="mt-1 line-clamp-2 text-xs font-semibold leading-5 text-slate-500 dark:text-slate-400">{result.text}</p>
                             </a>
                           ))}
                         </div>

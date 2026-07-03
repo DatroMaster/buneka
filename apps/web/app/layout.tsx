@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#07111F",
+  themeColor: "#F6F8FB",
 };
 
 export default function RootLayout({
@@ -36,7 +36,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="buneka-theme-v2">
           {children}
           <FloatingWhatsappSupport />
         </ThemeProvider>
