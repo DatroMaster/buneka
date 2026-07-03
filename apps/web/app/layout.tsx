@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
+import { Overpass } from "next/font/google";
 import "./globals.css";
 import { FloatingWhatsappSupport } from "@/components/FloatingWhatsappSupport";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
-const inter = Inter({
+const overpass = Overpass({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inter",
-});
-
-const manrope = Manrope({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-manrope",
+  variable: "--font-overpass",
 });
 
 export const metadata: Metadata = {
@@ -37,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${inter.variable} ${manrope.variable}`}
+      className={overpass.variable}
       suppressHydrationWarning
     >
       <body className="font-sans antialiased">
