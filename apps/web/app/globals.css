@@ -520,11 +520,29 @@
   }
 
   /* Package builder card — flat surface with a subtle green edge */
-  .package-spark-card {
-    position: relative;
-    border: 1px solid color-mix(in srgb, var(--home-glow) 40%, var(--home-border));
-    background: var(--home-surface);
-  }
+.package-spark-card {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--home-glow) 40%, var(--home-border));
+  background: var(--home-surface);
+}
+
+.package-recommended-model::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(242, 184, 75, 0.22), transparent 26%),
+    linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.22) 46%, transparent 58%);
+  opacity: 0.88;
+  pointer-events: none;
+  transform: translateX(-18%);
+  animation: recommended-model-sheen 4.2s ease-in-out infinite;
+}
+
+.package-recommended-model > * {
+  position: relative;
+  z-index: 1;
+}
   .cta-hero-pulse:hover::after {
     animation-play-state: paused;
     opacity: 0;
@@ -711,6 +729,17 @@
   68%, 100% {
     transform: rotate(360deg) scale(1.08);
     opacity: 0;
+  }
+}
+
+@keyframes recommended-model-sheen {
+  0%, 100% {
+    opacity: 0.35;
+    transform: translateX(-34%) rotate(0deg);
+  }
+  48% {
+    opacity: 0.92;
+    transform: translateX(18%) rotate(2deg);
   }
 }
 

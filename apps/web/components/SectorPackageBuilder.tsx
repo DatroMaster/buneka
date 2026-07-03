@@ -6,6 +6,7 @@ import { whatsappLink } from "@/lib/contact";
 import { getHardwareDeliveryText, hardwareOptions, type HardwareDeliveryOption } from "@/lib/content/hardware";
 import { getModulePrice, resolveModule } from "@/lib/content/module-lookup";
 import { modules as allModules } from "@/lib/content/modules";
+import { plans } from "@/lib/content/plans";
 
 type SectorPackageBuilderProps = {
   sectorTitle: string;
@@ -27,6 +28,19 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
   const [selected, setSelected] = useState<string[]>(() => modules.map((module) => resolveModule(module)?.label || module));
   const [customModule, setCustomModule] = useState("");
   const [deliveryOption, setDeliveryOption] = useState<HardwareDeliveryOption>("standard");
+  const recommendedPlan = useMemo(
+    () =>
+      plans.find((plan) => plan.name === planName) || plans[1] || plans[0] || {
+        name: planName,
+        price: planPrice,
+        summary: "Sektör için tavsiye edilen başlangıç modeli.",
+        features: [],
+      },
+    [planName, planPrice],
+  );
+  const [selectedPlanName, setSelectedPlanName] = useState(recommendedPlan.name);
+  const selectedPlan = plans.find((plan) => plan.name === selectedPlanName) || recommendedPlan;
+  const includesAllModules = selectedPlan.name === "Buneka Patron";
   const visibleModules = useMemo(() => {
     const recommended = modules.map((module) => resolveModule(module)?.label || module);
     return Array.from(new Set([...recommended, ...allModules.map((module) => module.label)]));
@@ -39,44 +53,81 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
   };
 
   const totalPrice = useMemo(() => {
-    return selected.reduce((sum, module) => sum + parsePrice(getModulePrice(module)), parsePrice(planPrice));
-  }, [planPrice, selected]);
+    if (includesAllModules) {
+      return parsePrice(selectedPlan.price);
+    }
+
+    return selected.reduce((sum, module) => sum + parsePrice(getModulePrice(module)), parsePrice(selectedPlan.price));
+  }, [includesAllModules, selected, selectedPlan.price]);
 
   const message = useMemo(() => {
-    const selectedText = selected.length
+    const selectedText = includesAllModules
+      ? `Tüm ek modüller pakete dahil: ${allModules.map((module) => module.label).join(", ")}`
+      : selected.length
       ? selected.map((module) => `${module} (${getModulePrice(module)})`).join(", ")
       : "Modül seçmedim, önerinizi istiyorum";
     const customText = customModule.trim() ? ` Yeni modül talebim: ${customModule.trim()}.` : "";
-    return `Merhaba, ${sectorTitle} için paket talebi oluşturmak istiyorum. Paket: ${planName} (${planPrice}/yıl). Seçilen modüller: ${selectedText}. Donanım teslim seçimim: ${getHardwareDeliveryText(deliveryOption)} Tahmini lisans toplamı: ${formatPrice(totalPrice)}.${customText}`;
-  }, [customModule, deliveryOption, planName, planPrice, sectorTitle, selected, totalPrice]);
+    return `Merhaba, ${sectorTitle} için sipariş talebi oluşturmak istiyorum. Seçtiğim model: ${selectedPlan.name} (${selectedPlan.price}/yıl). Seçilen modüller: ${selectedText}. Donanım teslim seçimim: ${getHardwareDeliveryText(deliveryOption)} Tahmini lisans toplamı: ${formatPrice(totalPrice)}.${customText}`;
+  }, [customModule, deliveryOption, includesAllModules, sectorTitle, selected, selectedPlan.name, selectedPlan.price, totalPrice]);
 
   return (
     <div className="package-spark-card flex flex-col rounded-xl p-4 sm:p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">Paket oluştur</p>
-          <p className="font-display mt-1 text-sm font-bold text-[color:var(--home-ink)]">{planName}</p>
-          <p className="text-xs text-[color:var(--home-muted)]">{planPrice} /yıl başlangıç paketi</p>
-          <p className="mt-2 text-2xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
+      <div className="text-center sm:text-left">
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[color:var(--home-glow)]">Paket oluştur</p>
+        <h2 className="font-display mt-2 text-3xl font-black tracking-tight text-[color:var(--home-ink)] sm:text-4xl">
+          Modelini seç, talebini gönder.
+        </h2>
+        <p className="mt-2 text-sm font-bold leading-6 text-[color:var(--home-muted)]">
+          Tavsiye edilen model öne çıkarılır; isterseniz ihtiyacınıza göre farklı Buneka modelini seçebilirsiniz.
+        </p>
+      </div>
+
+      <div className="mt-5 grid gap-2 sm:grid-cols-2">
+        {plans.map((plan) => {
+          const isRecommended = plan.name === recommendedPlan.name;
+          const isSelected = plan.name === selectedPlan.name;
+          return (
+            <button
+              key={plan.name}
+              type="button"
+              onClick={() => setSelectedPlanName(plan.name)}
+              className={`relative min-h-24 overflow-hidden rounded-xl border p-3 text-left transition-all ${
+                isSelected
+                  ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[0_0_32px_rgba(62,207,142,0.18),inset_0_0_0_1px_rgba(110,231,183,0.16)]"
+                  : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)] hover:text-[color:var(--home-ink)]"
+              } ${isRecommended ? "package-recommended-model" : ""}`}
+            >
+              {isRecommended && (
+                <span className="mb-2 inline-flex rounded-full bg-amber-300 px-2 py-1 text-[9px] font-black uppercase tracking-wide text-neutral-950">
+                  Tavsiye edilen model
+                </span>
+              )}
+              <span className="block font-display text-base font-black">{plan.name}</span>
+              <span className="mt-1 block text-xl font-black text-[color:var(--home-glow)]">{plan.price}</span>
+              <span className="mt-1 block text-[11px] font-semibold leading-4">{plan.summary}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/6 p-3">
+        <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Seçilen model ve tahmini toplam</p>
+        <div className="mt-1 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <p className="font-display text-xl font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
+          <p className="font-display text-3xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
         </div>
-        <a
-          href={whatsappLink(message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-[color:var(--home-glow)] px-4 py-2.5 text-xs font-black text-slate-950 transition-transform hover:scale-[1.03] active:scale-95"
-        >
-          <MessageCircle size={14} /> Talebi Gönder
-        </a>
       </div>
 
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {visibleModules.map((module) => {
-          const isSelected = selected.includes(module);
+          const isSelected = includesAllModules || selected.includes(module);
           return (
             <button
               key={module}
               type="button"
-              onClick={() => toggle(module)}
+              onClick={() => {
+                if (!includesAllModules) toggle(module);
+              }}
               className={`flex min-h-12 items-center gap-2 rounded-lg border px-3 py-2 text-left text-[11px] font-bold transition-all ${
                 isSelected
                   ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.18),0_0_22px_rgba(62,207,142,0.14)]"
@@ -161,6 +212,15 @@ export function SectorPackageBuilder({ sectorTitle, modules, planName, planPrice
           placeholder="Örn. vardiya takibi, kampanya ekranı, müşteri sadakat modülü..."
         />
       </label>
+
+      <a
+        href={whatsappLink(message)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="cta-primary-animated mt-4 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-4 text-base font-black text-slate-950 shadow-[0_18px_46px_rgba(62,207,142,0.22)] transition-transform hover:scale-[1.01] active:scale-95"
+      >
+        <MessageCircle size={19} /> Sipariş Talebini Gönder
+      </a>
     </div>
   );
 }
