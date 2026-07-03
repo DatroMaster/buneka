@@ -16,7 +16,7 @@ import {
   WalletCards,
   X,
 } from "lucide-react";
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { convertUsdToTry } from "@/lib/currency/tcmb";
 import { PageHeader } from "../_components/PageHeader";
@@ -49,6 +49,38 @@ const emptyProductForm: ProductForm = {
   stock_quantity: "0",
   min_stock: "0",
 };
+
+const categoryPalette: Record<string, { background: string; border: string; color: string }> = {
+  "içecek": { background: "rgba(14, 165, 233, 0.16)", border: "rgba(56, 189, 248, 0.36)", color: "#7DD3FC" },
+  "icecek": { background: "rgba(14, 165, 233, 0.16)", border: "rgba(56, 189, 248, 0.36)", color: "#7DD3FC" },
+  "atıştırmalık": { background: "rgba(245, 158, 11, 0.16)", border: "rgba(251, 191, 36, 0.40)", color: "#FCD34D" },
+  "atistirmalik": { background: "rgba(245, 158, 11, 0.16)", border: "rgba(251, 191, 36, 0.40)", color: "#FCD34D" },
+  "çikolata": { background: "rgba(244, 63, 94, 0.15)", border: "rgba(251, 113, 133, 0.38)", color: "#FDA4AF" },
+  "cikolata": { background: "rgba(244, 63, 94, 0.15)", border: "rgba(251, 113, 133, 0.38)", color: "#FDA4AF" },
+  "yemek": { background: "rgba(34, 197, 94, 0.14)", border: "rgba(74, 222, 128, 0.34)", color: "#86EFAC" },
+};
+
+const fallbackCategoryPalette = [
+  { background: "rgba(62, 207, 142, 0.13)", border: "rgba(62, 207, 142, 0.34)", color: "#7BF0B7" },
+  { background: "rgba(242, 184, 75, 0.14)", border: "rgba(242, 184, 75, 0.36)", color: "#F2B84B" },
+  { background: "rgba(168, 85, 247, 0.13)", border: "rgba(192, 132, 252, 0.34)", color: "#D8B4FE" },
+  { background: "rgba(249, 115, 80, 0.13)", border: "rgba(251, 146, 60, 0.34)", color: "#FDBA74" },
+];
+
+function normalizeCategory(category: string) {
+  return category.trim().toLocaleLowerCase("tr-TR").normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
+
+function getCategoryStyle(category: string | null): CSSProperties {
+  if (!category) return {};
+  const exact = category.trim().toLocaleLowerCase("tr-TR");
+  const normalized = normalizeCategory(category);
+  const known = categoryPalette[exact] || categoryPalette[normalized];
+  if (known) return known;
+
+  const index = Array.from(normalized).reduce((sum, char) => sum + char.charCodeAt(0), 0) % fallbackCategoryPalette.length;
+  return fallbackCategoryPalette[index];
+}
 
 export default function UrunlerPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -384,8 +416,8 @@ export default function UrunlerPage() {
 
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left">
-            <thead className="sticky top-0 z-10 bg-neutral-950 dark:bg-neutral-950">
-              <tr className="text-sm text-stone-200">
+            <thead className="product-table-head sticky top-0 z-10">
+              <tr className="text-sm">
                 <th className="px-6 py-3 font-medium">Barkod / Ürün Adı</th>
                 <th className="px-6 py-3 font-medium">Kategori</th>
                 <th className="px-6 py-3 text-right font-medium">Alış Fiyatı</th>
@@ -419,7 +451,7 @@ export default function UrunlerPage() {
                       <div className="font-mono text-xs text-slate-500 dark:text-slate-400">{product.barcode}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="inline-block rounded-lg bg-slate-50 px-2 py-1 text-xs text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+                      <span className="category-badge" style={getCategoryStyle(product.category)}>
                         {product.category || "-"}
                       </span>
                     </td>

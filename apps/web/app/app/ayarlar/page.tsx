@@ -214,21 +214,21 @@ export default function AyarlarPage() {
         </div>
       )}
 
-      <div className="mb-3 grid shrink-0 grid-cols-1 gap-3 rounded-2xl border border-amber-300/45 bg-amber-50 px-4 py-3 shadow-sm dark:border-amber-300/35 dark:bg-amber-400/14 md:grid-cols-[auto_1fr_auto] md:items-center">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">
+      <div className="mb-3 grid shrink-0 grid-cols-1 gap-3 rounded-2xl border border-amber-200 bg-[#F2B84B] px-4 py-3 text-neutral-950 shadow-[0_18px_50px_rgba(242,184,75,0.16)] md:grid-cols-[auto_1fr_auto] md:items-center">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-950/12 text-neutral-950 ring-1 ring-neutral-950/18">
           <ShieldCheck size={20} />
         </div>
         <div>
-          <p className="text-[11px] font-black uppercase tracking-wide text-amber-700 dark:text-amber-200">Lisans ve yetki</p>
+          <p className="text-[11px] font-black uppercase tracking-wide text-neutral-950/75">Lisans ve yetki</p>
           {license ? (
-            <p className="text-sm font-bold text-slate-950 dark:text-slate-50">
+            <p className="text-sm font-black text-neutral-950">
               {license.plans?.name || "Aktif paket"} · {new Date(license.expires_at).toLocaleDateString("tr-TR")} · {license.status}
             </p>
           ) : (
-            <p className="text-sm font-bold text-slate-950 dark:text-slate-50">Aktif lisans kaydı bulunamadı.</p>
+            <p className="text-sm font-black text-neutral-950">Aktif lisans kaydı bulunamadı.</p>
           )}
         </div>
-        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+        <span className="rounded-full bg-neutral-950 px-3 py-1 text-xs font-black text-[#F2B84B]">
           Görünür
         </span>
       </div>

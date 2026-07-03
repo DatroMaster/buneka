@@ -70,6 +70,11 @@ const searchIndex = [
   { topic: "sales", title: "Satış ve günlük kasa", text: cashSteps.join(" ") },
   { topic: "stock", title: "Stok ve veresiye", text: stockSteps.join(" ") },
   { topic: "support", title: "Sorun çözme ve destek", text: "ürün bulunmuyor fiyat görünmüyor lisans destek whatsapp" },
+  {
+    topic: "recommendations",
+    title: "Önemli tavsiyeler",
+    text: "Buneka neden önemli operasyon hafızası özel modül özel yazılım süreç analizi işletme verimliliği",
+  },
 ];
 
 function StepList({ items }: { items: string[] }) {
@@ -313,6 +318,72 @@ const topics: GuideTopic[] = [
             className="guide-action guide-action-support"
           >
             <MessageCircle size={16} /> Destek al
+          </a>
+        </section>
+      </>
+    ),
+  },
+  {
+    id: "recommendations",
+    label: "Önemli tavsiyeler",
+    icon: ShieldCheck,
+    summary: "Buneka neden önemlidir, işletmede nasıl daha etkili kullanılır?",
+    headings: [
+      { id: "neden-onemli", label: "Neden önemli?" },
+      { id: "dogru-kullanim", label: "Doğru kullanım" },
+      { id: "ozel-cozum", label: "Özel çözüm" },
+    ],
+    body: (
+      <>
+        <section id="neden-onemli" className="guide-panel">
+          <h2>Buneka işletmenin günlük hafızasını güçlendirir.</h2>
+          <p>
+            Küçük işletmelerde fiyat bilgisi, stok durumu, kasa hareketi ve müşteri alışkanlığı çoğu zaman tek kişinin
+            aklında kalır. Buneka bu bilgiyi kişiye bağlı olmaktan çıkarır; işletmenin içinde düzenli, izlenebilir ve
+            tekrar kullanılabilir bir operasyon hafızası oluşturur.
+          </p>
+          <div className="guide-value-grid">
+            <InfoCard title="Fiyat güveni">Çalışan barkodu okutur ve müşteriye aynı cevabı verir.</InfoCard>
+            <InfoCard tone="amber" title="Kasa disiplini">Satış, sorgu ve stok hareketi günlük ritimde görünür olur.</InfoCard>
+            <InfoCard title="Stok farkındalığı">Eksilen ürünleri zamanında görür, raf boşluklarını azaltırsınız.</InfoCard>
+            <InfoCard tone="danger" title="Kaçan satışları azaltır">Fiyat bilinmediği için müşterinin beklemesini veya vazgeçmesini önler.</InfoCard>
+          </div>
+        </section>
+
+        <section id="dogru-kullanim" className="guide-panel guide-split">
+          <div>
+            <h2>Her ekranı küçük bir iş rutini gibi kullanın.</h2>
+            <p>
+              Fiyat Gör ekranı müşteri karşısındaki hız alanıdır. Ürünler ekranı raf bilgisini düzenler. Günlük Kasa
+              gün sonu kontrolünü, Stok Takibi ise ürün akışını takip eder. Bu ekranları birbirinin yerine değil, kendi
+              amacıyla kullanmak sistemi daha güvenilir hale getirir.
+            </p>
+          </div>
+          <StepList
+            items={[
+              "Sabah Fiyat Gör ekranını açık tutun.",
+              "Yeni ürün geldiğinde önce ürün kartını tamamlayın.",
+              "Satış gerçekleştiğinde mutlaka Satış Yap veya Sepeti Satışa Çevir seçimini kullanın.",
+              "Gün sonunda Günlük Kasa ekranıyla toplamı kontrol edin.",
+            ]}
+          />
+        </section>
+
+        <section id="ozel-cozum" className="guide-panel">
+          <h2>Standart paket yetmediğinde özel modül geliştirebiliriz.</h2>
+          <p>
+            Her işletmenin darboğazı farklıdır: vardiya takibi, sadakat sistemi, tedarikçi fiyat karşılaştırması, raf
+            etiketi otomasyonu, özel raporlar veya saha cihazı entegrasyonu gerekebilir. Buneka altyapısı bu ihtiyaçları
+            kurumsal bir analizle ele alır; işletmenizin operasyonel sorununu dinleyip ölçülebilir ve sürdürülebilir bir
+            yazılım çözümüne dönüştürebiliriz.
+          </p>
+          <a
+            href={whatsappLink("Merhaba, işletmem için Buneka özel modül veya özel yazılım çözümü hakkında görüşmek istiyorum.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="guide-action guide-action-support"
+          >
+            <MessageCircle size={16} /> Özel çözüm talep et
           </a>
         </section>
       </>

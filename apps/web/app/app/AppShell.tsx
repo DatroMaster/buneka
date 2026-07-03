@@ -49,6 +49,8 @@ const navItems: NavItem[] = [
   { name: "Ayarlar", href: "/app/ayarlar", icon: Settings },
 ];
 
+const APP_VERSION_LABEL = "BUNEKA V01";
+
 function DrawerNav({
   pathname,
   onClose,
@@ -86,6 +88,9 @@ function DrawerNav({
       </nav>
 
       <div className="border-t border-white/10 p-4">
+        <div className="mb-3 rounded-lg border border-amber-300/20 bg-amber-300/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-amber-200">
+          {APP_VERSION_LABEL}
+        </div>
         <div className="mb-4 flex items-center gap-3 px-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-300/25 bg-emerald-400/10 font-bold text-emerald-100 shadow-sm shadow-emerald-500/10">
             {user.name?.charAt(0) || "U"}
@@ -159,6 +164,9 @@ function DesktopSidebar({
       </nav>
 
       <div className="border-t border-white/10 p-2">
+        <div className="mb-2 rounded-md border border-amber-300/20 bg-amber-300/10 px-2 py-2 text-center text-[10px] font-black uppercase tracking-[0.18em] text-amber-200">
+          {APP_VERSION_LABEL}
+        </div>
         <div className="mb-2 flex h-10 w-full items-center justify-start gap-3 rounded-md px-2">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-400/10 text-sm font-black text-emerald-200">
             {user.name?.charAt(0) || "U"}
