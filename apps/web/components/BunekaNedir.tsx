@@ -2,12 +2,15 @@
 
 import {
   Boxes,
+  Camera,
   CheckCircle2,
+  HandCoins,
   PhoneCall,
   PhoneOff,
   PlayCircle,
   RotateCcw,
   ScanLine,
+  Sparkles,
   WalletCards,
   X,
 } from "lucide-react";
@@ -15,8 +18,8 @@ import { useCallback, useEffect, useState } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { callLink } from "@/lib/contact";
 
-const SCENE_MS = 5000;
-const SCENE_COUNT = 3;
+const SCENE_MS = 4500;
+const SCENE_COUNT = 5;
 
 type Variant = "pill" | "compact";
 
@@ -47,11 +50,10 @@ export function BunekaNedirButton({
     setPlaying(true);
   }, []);
 
-  // Auto-advance through the scenes; stops on the final scene.
+  // Auto-advance through the scenes, looping continuously.
   useEffect(() => {
     if (!open || !playing) return;
-    if (scene >= SCENE_COUNT - 1) return;
-    const id = window.setTimeout(() => setScene((current) => current + 1), SCENE_MS);
+    const id = window.setTimeout(() => setScene((current) => (current + 1) % SCENE_COUNT), SCENE_MS);
     return () => window.clearTimeout(id);
   }, [open, playing, scene]);
 
@@ -64,8 +66,6 @@ export function BunekaNedirButton({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, close]);
-
-  const isLast = scene >= SCENE_COUNT - 1;
 
   return (
     <>
@@ -101,13 +101,8 @@ export function BunekaNedirButton({
                     className="h-full rounded-full bg-[color:var(--home-glow)]"
                     style={{
                       width: index < scene ? "100%" : index > scene ? "0%" : undefined,
-                      animation:
-                        index === scene && playing && !isLast
-                          ? `bn-progress ${SCENE_MS}ms linear forwards`
-                          : index === scene
-                            ? undefined
-                            : "none",
-                      ...(index === scene && (isLast || !playing) ? { width: "100%" } : {}),
+                      animation: index === scene && playing ? `bn-progress ${SCENE_MS}ms linear forwards` : "none",
+                      ...(index === scene && !playing ? { width: "100%" } : {}),
                     }}
                   />
                 </div>
@@ -126,7 +121,9 @@ export function BunekaNedirButton({
             <div className="relative flex min-h-[300px] flex-col items-center justify-center gap-4 px-6 py-8 text-center sm:min-h-[340px]">
               {scene === 0 && <SceneProblem />}
               {scene === 1 && <SceneSolution />}
-              {scene === 2 && <SceneResult onCta={close} />}
+              {scene === 2 && <SceneVeresiye />}
+              {scene === 3 && <SceneInvoice />}
+              {scene === 4 && <SceneResult onCta={close} />}
             </div>
 
             {/* Footer controls */}
@@ -265,6 +262,50 @@ function SceneResult({ onCta }: { onCta: () => void }) {
 }
 
 
+function SceneVeresiye() {
+  return (
+    <>
+      <div className="bn-pop relative flex h-24 w-24 items-center justify-center">
+        <span className="bn-ring absolute inset-0 rounded-full border-2 border-emerald-400/45" />
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-400">
+          <HandCoins size={30} />
+        </div>
+        <span className="bn-float absolute -right-3 top-3 text-sm font-black text-emerald-400">₺</span>
+      </div>
+      <SceneTag tone="solution" label="Veresiye" />
+      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+        Veresiye defteri artık <span className="text-emerald-400">dijitalde.</span>
+      </h3>
+      <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
+        Kim ne kadar borçlu, kaç günde ödedi — hepsi tek ekranda. Tüm çalışanlar aynı defteri görür.
+      </p>
+    </>
+  );
+}
+
+function SceneInvoice() {
+  return (
+    <>
+      <div className="bn-pop relative flex h-24 w-24 items-center justify-center">
+        <span className="bn-ring absolute inset-0 rounded-full border-2 border-[color:var(--home-glow)]/45" />
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[color:var(--home-glow)]/15 text-[color:var(--home-glow)]">
+          <Camera size={28} />
+        </div>
+        <span className="bn-float absolute -right-2 -top-1 text-[color:var(--home-glow)]">
+          <Sparkles size={16} />
+        </span>
+      </div>
+      <SceneTag tone="result" label="Yapay Zekâ" />
+      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+        Faturayı çek, ürünler <span className="text-[color:var(--home-glow)]">otomatik gelsin.</span>
+      </h3>
+      <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
+        Tedarikçi faturasının fotoğrafını çek; ürünler, adetler ve fiyatlar yapay zekâ ile saniyeler içinde işlensin.
+      </p>
+    </>
+  );
+}
+
 export function BunekaExplainerCard() {
   return (
     <div className="bn-square-video glow-border relative mx-auto grid aspect-[16/9] w-full max-w-[620px] place-items-center overflow-hidden rounded-2xl bg-[color:var(--home-surface)]/80 p-3 backdrop-blur-xl sm:p-4">
@@ -307,13 +348,12 @@ export function BunekaExplainerCard() {
 export function BunekaStoryCard() {
   const [scene, setScene] = useState(0);
   const [playing, setPlaying] = useState(true);
-  const isLast = scene >= SCENE_COUNT - 1;
 
   useEffect(() => {
-    if (!playing || isLast) return;
-    const id = window.setTimeout(() => setScene((current) => current + 1), SCENE_MS);
+    if (!playing) return;
+    const id = window.setTimeout(() => setScene((current) => (current + 1) % SCENE_COUNT), SCENE_MS);
     return () => window.clearTimeout(id);
-  }, [isLast, playing, scene]);
+  }, [playing, scene]);
 
   const replay = () => {
     setScene(0);
@@ -330,8 +370,8 @@ export function BunekaStoryCard() {
               className="h-full rounded-full bg-[color:var(--home-glow)]"
               style={{
                 width: index < scene ? "100%" : index > scene ? "0%" : undefined,
-                animation: index === scene && playing && !isLast ? `bn-progress ${SCENE_MS}ms linear forwards` : index === scene ? undefined : "none",
-                ...(index === scene && (isLast || !playing) ? { width: "100%" } : {}),
+                animation: index === scene && playing ? `bn-progress ${SCENE_MS}ms linear forwards` : "none",
+                ...(index === scene && !playing ? { width: "100%" } : {}),
               }}
             />
           </div>
@@ -341,7 +381,9 @@ export function BunekaStoryCard() {
       <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-6 py-6 text-center">
         {scene === 0 && <SceneProblem />}
         {scene === 1 && <SceneSolution />}
-        {scene === 2 && <SceneResult onCta={() => setPlaying(false)} />}
+        {scene === 2 && <SceneVeresiye />}
+        {scene === 3 && <SceneInvoice />}
+        {scene === 4 && <SceneResult onCta={() => setPlaying(false)} />}
       </div>
 
       <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[color:var(--home-border)] px-4 py-3">

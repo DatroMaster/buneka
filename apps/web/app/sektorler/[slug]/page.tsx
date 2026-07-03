@@ -54,7 +54,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
         </Link>
         <div className="flex items-center gap-2 sm:gap-3">
           <Link
-            href="/#sektorler"
+            href="/sektorler"
             className="hidden items-center gap-1.5 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)] sm:flex"
           >
             <ArrowLeft size={14} /> Sektörler
@@ -145,7 +145,7 @@ export default async function SectorPage({ params }: SectorPageProps) {
       </main>
 
       <footer className="relative z-10 flex shrink-0 items-center justify-between px-4 py-2.5 text-[10px] text-[color:var(--home-muted)] sm:px-6 sm:text-xs">
-        <Link href="/#sektorler" className="flex items-center gap-1.5 font-bold hover:text-[color:var(--home-ink)]">
+        <Link href="/sektorler" className="flex items-center gap-1.5 font-bold hover:text-[color:var(--home-ink)]">
           <ArrowLeft size={12} /> Sektörlere dön
         </Link>
         <span className="flex items-center gap-2">BUNEKA © 2026 · Ankara, TR · <ClientIpBadge /></span>
