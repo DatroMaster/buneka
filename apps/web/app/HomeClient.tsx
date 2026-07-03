@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowRight, LogIn, PhoneCall, PhoneOff, ShieldCheck } from "lucide-react";
+import { ChevronDown, LogIn, PhoneCall, Store } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useRef, useSyncExternalStore } from "react";
+import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { BunekaMark } from "@/components/BunekaMark";
-import { BunekaExplainerCard } from "@/components/BunekaNedir";
+import { BunekaStoryCard } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { callLink } from "@/lib/contact";
 
@@ -41,6 +42,7 @@ function useLiveClock() {
 
 export default function HomeClient() {
   const now = useLiveClock();
+  const [openSection, setOpenSection] = useState<"sektorler">("sektorler");
 
   const time = now
     ? now.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
@@ -96,39 +98,31 @@ export default function HomeClient() {
         </div>
       </header>
 
-      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-        <section className="glow-border flex min-h-0 flex-col justify-center rounded-xl bg-[color:var(--home-surface)]/70 p-5 backdrop-blur-xl sm:rounded-2xl sm:p-6 md:p-7">
-          <p className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:text-xs">
-            <ShieldCheck size={12} /> Kurulumsuz başlar
-          </p>
-          <h1 className="font-display text-2xl font-bold leading-[1.15] tracking-tight text-[color:var(--home-ink)] sm:text-3xl md:text-4xl lg:text-[2.75rem]">
-            Dükkanın fiyat, kasa ve stok hafızası{" "}
-            <span className="text-[color:var(--home-glow)]">tek ekranda</span> toplansın.
-          </h1>
-          <p className="glow-border mt-4 flex items-center gap-2.5 rounded-lg bg-[color:var(--home-glow)]/10 px-4 py-3 text-sm font-bold text-[color:var(--home-ink)] sm:text-base">
-            <PhoneOff size={18} className="shrink-0 text-[color:var(--home-glow)]" />
-            Sen dükkanda yokken fiyat için seni aramasınlar.
-          </p>
-          <p className="mt-3 hidden text-sm leading-relaxed text-[color:var(--home-muted)] sm:block md:mt-4 md:text-base">
-            Buneka barkoddan fiyatı bulur, kasa hareketini kaydeder ve stok durumunu aynı akışta
-            gösterir.
-          </p>
-          <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:items-center">
-            <Link
-              href="/login"
-              className="group relative inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--home-muted)] transition-colors duration-500 ease-out hover:text-[color:var(--home-ink)] sm:text-sm"
-            >
-              <span className="relative">
-                Zaten müşterimisiniz? Giriş yapın
-                <span className="cta-login-underline absolute -bottom-0.5 left-0 h-px w-full bg-[color:var(--home-glow)]" />
-              </span>
-              <ArrowRight size={14} className="cta-login-arrow" />
-            </Link>
-          </div>
+      <main className="relative z-10 grid min-h-0 flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
+        <section className="glow-border flex min-h-0 flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:rounded-2xl sm:p-5">
+          <BunekaStoryCard />
         </section>
 
-        <section className="glow-border grid min-h-0 place-items-center overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:rounded-2xl sm:p-6">
-          <BunekaExplainerCard />
+        <section id="sektorler" className="glow-border flex min-h-0 flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl">
+          <div className="flex min-h-0 flex-1 flex-col border-b border-[color:var(--home-border)] last:border-b-0">
+            <button
+              type="button"
+              onClick={() => setOpenSection("sektorler")}
+              className="flex w-full shrink-0 items-center justify-between gap-3 px-4 py-3 text-left sm:px-5 sm:py-3.5"
+            >
+              <span className="font-display flex items-center gap-2 text-sm font-semibold text-[color:var(--home-ink)] sm:gap-3 sm:text-base">
+                <Store size={16} className="text-[color:var(--home-glow)]" />
+                Sektörler
+              </span>
+              <ChevronDown
+                size={16}
+                className={`text-[color:var(--home-glow)] transition-transform ${openSection === "sektorler" ? "rotate-180" : ""}`}
+              />
+            </button>
+            <div className="min-h-0 flex-1 px-4 pb-4 sm:px-5 sm:pb-5">
+              <SectorPlayground />
+            </div>
+          </div>
         </section>
       </main>
 

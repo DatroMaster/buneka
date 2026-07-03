@@ -303,3 +303,72 @@ export function BunekaExplainerCard() {
     </div>
   );
 }
+
+export function BunekaStoryCard() {
+  const [scene, setScene] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const isLast = scene >= SCENE_COUNT - 1;
+
+  useEffect(() => {
+    if (!playing || isLast) return;
+    const id = window.setTimeout(() => setScene((current) => current + 1), SCENE_MS);
+    return () => window.clearTimeout(id);
+  }, [isLast, playing, scene]);
+
+  const replay = () => {
+    setScene(0);
+    setPlaying(true);
+  };
+
+  return (
+    <div className="bn-modal glow-border relative flex h-full min-h-0 w-full flex-col overflow-hidden rounded-2xl">
+      <div className="flex items-center gap-1.5 px-4 pt-4">
+        {Array.from({ length: SCENE_COUNT }).map((_, index) => (
+          <div key={index} className="h-1 flex-1 overflow-hidden rounded-full bg-[color:var(--home-border)]">
+            <div
+              key={`${index}-${scene}-${playing}`}
+              className="h-full rounded-full bg-[color:var(--home-glow)]"
+              style={{
+                width: index < scene ? "100%" : index > scene ? "0%" : undefined,
+                animation: index === scene && playing && !isLast ? `bn-progress ${SCENE_MS}ms linear forwards` : index === scene ? undefined : "none",
+                ...(index === scene && (isLast || !playing) ? { width: "100%" } : {}),
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-6 py-6 text-center">
+        {scene === 0 && <SceneProblem />}
+        {scene === 1 && <SceneSolution />}
+        {scene === 2 && <SceneResult onCta={() => setPlaying(false)} />}
+      </div>
+
+      <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[color:var(--home-border)] px-4 py-3">
+        <div className="flex gap-1.5">
+          {Array.from({ length: SCENE_COUNT }).map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => {
+                setScene(index);
+                setPlaying(index < SCENE_COUNT - 1);
+              }}
+              aria-label={`${index + 1}. sahne`}
+              className={`h-2 w-2 rounded-full transition-colors ${
+                index === scene ? "bg-[color:var(--home-glow)]" : "bg-[color:var(--home-border)]"
+              }`}
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={replay}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-[color:var(--home-muted)] transition-colors hover:text-[color:var(--home-ink)]"
+        >
+          <RotateCcw size={13} /> Baştan oynat
+        </button>
+      </div>
+    </div>
+  );
+}
