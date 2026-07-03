@@ -106,7 +106,7 @@ export default function PaketlerPage() {
         </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-4">
           {plans.map((plan) => {
             const code = PLAN_CODES[plan.name];
             const Icon = PLAN_ICONS[code];
