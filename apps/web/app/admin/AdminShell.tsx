@@ -51,7 +51,7 @@ export default function AdminShell({
           >
             <ArrowLeft size={14} /> Uygulamaya dön
           </Link>
-          <BunekaNedirButton variant="compact" className="border-white/15 text-cyan-300 hover:border-cyan-300/50" />
+          <BunekaNedirButton variant="compact" className="hidden border-white/15 text-cyan-300 hover:border-cyan-300/50 sm:flex" />
           <Link
             href="/"
             className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-cyan-300/50 hover:text-white active:scale-90"

@@ -11,12 +11,12 @@ export function SectorAccordionExplorer() {
   const Icon = active.icon;
 
   return (
-    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[380px_1fr]">
+    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr]">
       <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl lg:min-h-0">
         <p className="px-2 pb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
           Sektörler
         </p>
-        <div className="grid gap-2 lg:grid-rows-11">
+        <div className="grid max-h-[420px] gap-2 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-none lg:grid-cols-1 lg:grid-rows-11 lg:overflow-visible lg:pr-0">
           {sectors.map((sector) => {
             const isActive = sector.slug === active.slug;
             const SectorIcon = sector.icon;
@@ -43,13 +43,13 @@ export function SectorAccordionExplorer() {
         </div>
       </aside>
 
-      <section className="glow-border grid rounded-2xl bg-[color:var(--home-surface)]/75 p-4 backdrop-blur-xl sm:p-6 lg:min-h-0 lg:grid-rows-[auto_1fr_auto]">
+      <section className="glow-border grid rounded-2xl bg-[color:var(--home-surface)]/78 p-4 backdrop-blur-xl sm:p-6 lg:min-h-0 lg:grid-rows-[auto_1fr_auto]">
         <div>
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">
             <Icon size={26} />
           </div>
           <p className="text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">{active.title}</p>
-          <h2 className="font-display mt-2 text-3xl font-black tracking-tight text-[color:var(--home-ink)]">{active.headline}</h2>
+          <h2 className="font-display mt-2 text-2xl font-black tracking-tight text-[color:var(--home-ink)] sm:text-3xl">{active.headline}</h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[color:var(--home-muted)]">{active.description}</p>
         </div>
 
@@ -88,7 +88,7 @@ export function SectorAccordionExplorer() {
 
         <Link
           href={`/sektorler/${active.slug}`}
-          className="mt-5 inline-flex w-fit items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-slate-950 transition-transform hover:scale-[1.02] active:scale-95"
+          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-slate-950 transition-transform hover:scale-[1.02] active:scale-95 sm:w-fit"
         >
           Sektör paketini incele <ArrowRight size={16} />
         </Link>

@@ -80,12 +80,15 @@ export default function PaketlerPage() {
     <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
-      <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
-        <Link href="/" className="flex items-center gap-2.5">
-          <BunekaMark size={26} />
-          <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
-        </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
+      <header className="relative z-10 grid shrink-0 gap-3 px-4 py-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <Link href="/" className="flex min-w-0 items-center gap-2.5">
+            <BunekaMark size={26} className="shrink-0" />
+            <BunekaWordmark className="whitespace-nowrap text-xs text-[color:var(--home-ink)] sm:text-sm" />
+          </Link>
+          <ThemeToggle className="shrink-0 border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:hidden" />
+        </div>
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]">
             <Home size={14} /> Ana Menü
           </Link>
@@ -99,7 +102,7 @@ export default function PaketlerPage() {
             <ShieldCheck size={12} /> Yıllık lisans · Şeffaf fiyat
           </span>
           <BunekaNedirButton />
-          <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
+          <ThemeToggle className="hidden border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex" />
         </div>
         <Link
           href="/login"
@@ -109,7 +112,7 @@ export default function PaketlerPage() {
         </Link>
       </header>
 
-      <div className="relative z-10 grid flex-1 gap-7 px-3 pb-5 sm:px-6">
+      <div className="relative z-10 grid flex-1 gap-7 px-3 pb-24 sm:px-6 sm:pb-5">
         <div>
           <h1 className="font-display text-2xl font-black tracking-tight md:text-4xl">
             Hangi pakette ne var, tek bakışta.
@@ -130,7 +133,7 @@ export default function PaketlerPage() {
                 key={plan.name}
                 className={`relative flex min-h-[560px] flex-col overflow-hidden rounded-2xl border shadow-[0_18px_50px_rgba(2,6,23,0.24)] backdrop-blur-xl ${
                   isPremium
-                    ? "border-blue-400/45 bg-[#071528] text-white"
+                    ? "border-blue-400/45 bg-[#071528] text-white [--home-border:rgba(255,255,255,0.18)] [--home-glow:#22D3EE] [--home-ink:#F8FAFC] [--home-muted:#CBD5E1]"
                     : "border-[color:var(--home-border)] bg-[color:var(--home-surface)]/90"
                 }`}
               >

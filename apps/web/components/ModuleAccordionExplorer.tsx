@@ -64,12 +64,12 @@ export function ModuleAccordionExplorer() {
   const Icon = active.icon;
 
   return (
-    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[380px_1fr]">
+    <div className="grid flex-1 grid-cols-1 gap-4 lg:min-h-0 lg:grid-cols-[340px_1fr] xl:grid-cols-[380px_1fr]">
       <aside className="glow-border flex flex-col rounded-2xl bg-[color:var(--home-surface)]/75 p-3 backdrop-blur-xl lg:min-h-0">
         <p className="px-2 pb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
           10 ek modül
         </p>
-        <div className="grid gap-1.5">
+        <div className="grid max-h-[420px] gap-1.5 overflow-y-auto pr-1 sm:grid-cols-2 lg:max-h-none lg:grid-cols-1 lg:overflow-visible lg:pr-0">
           {modules.map((module) => {
             const isActive = module.label === active.label;
             const ModuleIcon = module.icon;
@@ -103,7 +103,7 @@ export function ModuleAccordionExplorer() {
               <Icon size={26} />
             </div>
             <p className="text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">Ek modül detayı</p>
-            <h2 className="font-display mt-2 text-3xl font-black tracking-tight text-[color:var(--home-ink)]">{active.label}</h2>
+            <h2 className="font-display mt-2 text-2xl font-black tracking-tight text-[color:var(--home-ink)] sm:text-3xl">{active.label}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[color:var(--home-muted)]">{active.description}</p>
           </div>
           <div className="w-full rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/8 px-5 py-4 text-left sm:w-auto sm:text-right">
@@ -125,7 +125,7 @@ export function ModuleAccordionExplorer() {
           href={whatsappLink(`Merhaba, "${active.label}" modülünü lisansıma eklemek istiyorum.`)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-auto inline-flex w-fit items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-slate-950 transition-transform hover:scale-[1.02] active:scale-95"
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-slate-950 transition-transform hover:scale-[1.02] active:scale-95 sm:w-fit lg:mt-auto"
         >
           <MessageCircle size={16} /> Bu Modülü Talep Et
         </a>

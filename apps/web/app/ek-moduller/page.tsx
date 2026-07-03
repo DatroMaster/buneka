@@ -16,12 +16,15 @@ export default function EkModullerPage() {
     <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
-      <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
-        <Link href="/" className="flex items-center gap-2.5">
-          <BunekaMark size={26} />
-          <BunekaWordmark className="text-sm text-[color:var(--home-ink)]" />
-        </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
+      <header className="relative z-10 grid shrink-0 gap-3 px-4 py-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <Link href="/" className="flex min-w-0 items-center gap-2.5">
+            <BunekaMark size={26} className="shrink-0" />
+            <BunekaWordmark className="whitespace-nowrap text-xs text-[color:var(--home-ink)] sm:text-sm" />
+          </Link>
+          <ThemeToggle className="shrink-0 border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:hidden" />
+        </div>
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]">
             <Home size={14} /> Ana Menü
           </Link>
@@ -32,7 +35,7 @@ export default function EkModullerPage() {
             <BookOpenCheck size={14} /> Rehber
           </Link>
           <BunekaNedirButton />
-          <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
+          <ThemeToggle className="hidden border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex" />
         </div>
         <Link
           href="/login"
@@ -42,7 +45,7 @@ export default function EkModullerPage() {
         </Link>
       </header>
 
-      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 gap-4 px-3 pb-6 sm:px-6">
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl flex-1 gap-4 px-3 pb-24 sm:px-6 sm:pb-6">
         <div className="glow-border shrink-0 rounded-2xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl">
           <Link href="/" className="mb-2 inline-flex items-center gap-1 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)]">
             <ArrowLeft size={13} /> Ana sayfa

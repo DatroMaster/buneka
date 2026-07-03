@@ -96,6 +96,7 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -342,6 +343,15 @@
       radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.07), transparent 42%),
       linear-gradient(180deg, var(--home-bg-1), var(--home-bg-2));
     background-attachment: fixed;
+  }
+
+  .home-viewport,
+  .home-viewport * {
+    min-width: 0;
+  }
+
+  .home-viewport :where(h1, h2, h3, p, a, button, span, li) {
+    overflow-wrap: break-word;
   }
 
   .home-star {

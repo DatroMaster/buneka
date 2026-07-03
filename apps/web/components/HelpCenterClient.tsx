@@ -345,12 +345,15 @@ export function HelpCenterClient() {
   return (
     <main className="help-center-dark relative min-h-screen overflow-x-hidden bg-[var(--color-bg)] text-[color:var(--color-text)]">
       <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/82 px-4 py-3 shadow-sm backdrop-blur-xl dark:border-cyan-300/15 dark:bg-[#07111F]/90 sm:px-6">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
-          <Link href="/" className="flex items-center gap-2.5">
-            <BunekaMark size={26} />
-            <BunekaWordmark className="text-sm text-slate-950 dark:text-slate-100" />
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
+        <div className="mx-auto grid max-w-7xl gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center justify-between gap-3">
+            <Link href="/" className="flex min-w-0 items-center gap-2.5">
+              <BunekaMark size={26} className="shrink-0" />
+              <BunekaWordmark className="whitespace-nowrap text-xs text-slate-950 dark:text-slate-100 sm:text-sm" />
+            </Link>
+            <ThemeToggle className="shrink-0 border-slate-200 bg-white/70 text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300 sm:hidden" />
+          </div>
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 text-xs font-black text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300">
               <Home size={14} /> Ana Menü
             </Link>
@@ -358,7 +361,7 @@ export function HelpCenterClient() {
               <LayoutDashboard size={14} /> Panele Dön
             </Link>
             <BunekaNedirButton />
-            <ThemeToggle className="border-slate-200 bg-white/70 text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300" />
+            <ThemeToggle className="hidden border-slate-200 bg-white/70 text-slate-700 hover:border-cyan-400 dark:border-cyan-300/20 dark:bg-transparent dark:text-slate-200 dark:hover:border-cyan-300 sm:flex" />
           </div>
           <Link
             href="/login"
@@ -370,7 +373,7 @@ export function HelpCenterClient() {
       </header>
 
       <section className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[280px_1fr]">
-        <aside className="lg:sticky lg:top-20 lg:self-start">
+        <aside className="order-2 lg:sticky lg:top-20 lg:order-none lg:self-start">
           <div className="rounded-2xl border border-slate-200 bg-white/86 p-4 shadow-[0_18px_70px_rgba(10,25,49,0.10)] backdrop-blur dark:border-cyan-300/15 dark:bg-[#07111F]/85 dark:shadow-[0_18px_70px_rgba(0,0,0,0.28)]">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-cyan-700">İçindekiler</p>
             <nav className="mt-3 grid gap-1">
@@ -383,7 +386,7 @@ export function HelpCenterClient() {
           </div>
         </aside>
 
-        <div className="grid gap-6">
+        <div className="order-1 grid gap-6 lg:order-none">
           <section className="rounded-3xl border border-slate-200 bg-white/88 p-5 shadow-[0_18px_80px_rgba(10,25,49,0.12)] backdrop-blur dark:border-cyan-300/15 dark:bg-[#07111F]/88 dark:shadow-[0_18px_80px_rgba(0,0,0,0.34)] sm:p-6">
             <Link href="/" className="mb-4 inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-slate-950">
               Ana sayfa

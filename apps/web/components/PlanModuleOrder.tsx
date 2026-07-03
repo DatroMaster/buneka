@@ -93,7 +93,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
                     onClick={() => toggle(module.label)}
                     className={`flex items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-[10px] font-bold ${
                       isSelected
-                        ? "border-emerald-300 bg-gradient-to-r from-emerald-400/20 via-cyan-300/15 to-[color:var(--home-glow)]/10 text-white shadow-[inset_0_0_0_1px_rgba(110,231,183,0.16)]"
+                        ? "border-emerald-300 bg-gradient-to-r from-emerald-400/20 via-cyan-300/15 to-[color:var(--home-glow)]/10 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.16)]"
                         : "border-[color:var(--home-border)] text-[color:var(--home-muted)]"
                     }`}
                   >

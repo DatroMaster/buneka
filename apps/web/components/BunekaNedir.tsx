@@ -202,11 +202,11 @@ function SceneTag({ tone, label }: { tone: "problem" | "solution" | "result"; la
 function SceneProblem() {
   return (
     <>
-      <div className="bn-pop relative flex h-24 w-24 items-center justify-center">
+      <div className="bn-pop relative flex h-20 w-20 items-center justify-center sm:h-24 sm:w-24">
         <span className="bn-ring absolute inset-0 rounded-full border-2 border-amber-400/50" />
         <span className="bn-ring absolute inset-0 rounded-full border-2 border-amber-400/40" style={{ animationDelay: "0.9s" }} />
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-400/15 text-amber-400">
-          <PhoneOff size={30} />
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/15 text-amber-400 sm:h-16 sm:w-16">
+          <PhoneOff size={28} />
         </div>
         <span className="bn-float absolute -right-2 -top-1 text-lg font-black text-amber-400">?</span>
         <span className="bn-float absolute -left-3 top-4 text-sm font-black text-amber-400" style={{ animationDelay: "0.6s" }}>
@@ -214,10 +214,10 @@ function SceneProblem() {
         </span>
       </div>
       <SceneTag tone="problem" label="Sorun" />
-      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+      <h3 className="font-display max-w-[18rem] break-words px-1 text-lg font-bold leading-tight text-[color:var(--home-ink)] sm:max-w-sm sm:text-2xl">
         Sen dükkanda yokken <span className="text-amber-400">&quot;Bu Ne Kadar?&quot;</span> sorusu beklemez.
       </h3>
-      <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
+      <p className="max-w-sm text-xs leading-relaxed text-[color:var(--home-muted)] sm:text-sm">
         Fiyat bilgisi tek kişiye bağlı kalmaz. Çalışan barkodu okutur, cevabı hemen görür.
       </p>
     </>
@@ -227,7 +227,7 @@ function SceneProblem() {
 function SceneSolution() {
   return (
     <>
-      <div className="bn-pop flex w-full max-w-xs flex-col items-center gap-3">
+      <div className="bn-pop flex w-full max-w-xs flex-col items-center gap-2 sm:gap-3">
         <div className="relative flex h-16 w-52 items-center justify-center overflow-hidden rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/5">
           <div className="flex items-end gap-[3px]">
             {[10, 4, 8, 3, 9, 5, 7, 4, 10, 6, 3, 8, 5, 9].map((h, index) => (
@@ -242,7 +242,7 @@ function SceneSolution() {
         </div>
       </div>
       <SceneTag tone="solution" label="Çözüm" />
-      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+      <h3 className="font-display max-w-[18rem] break-words px-1 text-lg font-bold leading-tight text-[color:var(--home-ink)] sm:max-w-sm sm:text-2xl">
         Barkodu okut. Fiyatı gör. <span className="text-[color:var(--home-glow)]">Satış hareketlerini takip et.</span>
       </h3>
       <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-bold text-[color:var(--home-muted)]">
@@ -263,15 +263,15 @@ function SceneSolution() {
 function SceneResult({ onCta }: { onCta: () => void }) {
   return (
     <>
-      <div className="bn-pop relative flex h-24 w-24 items-center justify-center">
+      <div className="bn-pop relative flex h-20 w-20 items-center justify-center sm:h-24 sm:w-24">
         <span className="bn-ring absolute inset-0 rounded-full border-2 border-[color:var(--home-glow)]/40" />
         <BunekaMark size={56} />
       </div>
       <SceneTag tone="result" label="Buneka" />
-      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+      <h3 className="font-display max-w-[18rem] break-words px-1 text-lg font-bold leading-tight text-[color:var(--home-ink)] sm:max-w-sm sm:text-2xl">
         Dükkanının hafızası artık <span className="text-[color:var(--home-glow)]">cebinde.</span>
       </h3>
-      <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
+      <p className="max-w-sm text-xs leading-relaxed text-[color:var(--home-muted)] sm:text-sm">
         Kurulum yok, karmaşa yok. Fiyat, kasa, stok ve hareket hafızası aynı yerde toplansın.
       </p>
       <div className="mt-1 flex flex-col gap-2 sm:flex-row">
@@ -291,7 +291,7 @@ function SceneResult({ onCta }: { onCta: () => void }) {
 function SceneVeresiye() {
   return (
     <>
-      <div className="bn-pop relative flex h-24 w-24 items-center justify-center">
+      <div className="bn-pop relative flex h-20 w-20 items-center justify-center sm:h-24 sm:w-24">
         <span className="bn-ring absolute inset-0 rounded-full border-2 border-emerald-400/45" />
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-400">
           <HandCoins size={30} />
@@ -299,10 +299,10 @@ function SceneVeresiye() {
         <span className="bn-float absolute -right-3 top-3 text-sm font-black text-emerald-400">₺</span>
       </div>
       <SceneTag tone="solution" label="Veresiye" />
-      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+      <h3 className="font-display max-w-[18rem] break-words px-1 text-lg font-bold leading-tight text-[color:var(--home-ink)] sm:max-w-sm sm:text-2xl">
         Veresiye defteri artık <span className="text-emerald-400">dijitalde.</span>
       </h3>
-      <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
+      <p className="max-w-sm text-xs leading-relaxed text-[color:var(--home-muted)] sm:text-sm">
         Kim ne kadar borçlu, kaç günde ödedi — hepsi tek ekranda. Tüm çalışanlar aynı defteri görür.
       </p>
     </>
@@ -312,7 +312,7 @@ function SceneVeresiye() {
 function SceneInvoice() {
   return (
     <>
-      <div className="bn-pop relative flex h-24 w-24 items-center justify-center">
+      <div className="bn-pop relative flex h-20 w-20 items-center justify-center sm:h-24 sm:w-24">
         <span className="bn-ring absolute inset-0 rounded-full border-2 border-[color:var(--home-glow)]/45" />
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[color:var(--home-glow)]/15 text-[color:var(--home-glow)]">
           <Camera size={28} />
@@ -322,10 +322,10 @@ function SceneInvoice() {
         </span>
       </div>
       <SceneTag tone="result" label="Yapay Zekâ" />
-      <h3 className="font-display text-xl font-bold leading-tight text-[color:var(--home-ink)] sm:text-2xl">
+      <h3 className="font-display max-w-[18rem] break-words px-1 text-lg font-bold leading-tight text-[color:var(--home-ink)] sm:max-w-sm sm:text-2xl">
         Faturayı çek, ürünler <span className="text-[color:var(--home-glow)]">otomatik gelsin.</span>
       </h3>
-      <p className="max-w-sm text-sm leading-relaxed text-[color:var(--home-muted)]">
+      <p className="max-w-sm text-xs leading-relaxed text-[color:var(--home-muted)] sm:text-sm">
         Tedarikçi faturasının fotoğrafını çek; ürünler, adetler ve fiyatlar saniyeler içinde işlensin.
       </p>
     </>
@@ -408,7 +408,7 @@ export function BunekaStoryCard() {
         ))}
       </div>
 
-      <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-4 px-6 py-6 text-center">
+      <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-4 py-4 text-center sm:gap-4 sm:px-6 sm:py-6">
         {scene === 0 && <SceneProblem />}
         {scene === 1 && <SceneSolution />}
         {scene === 2 && <SceneVeresiye />}
@@ -416,7 +416,7 @@ export function BunekaStoryCard() {
         {scene === 4 && <SceneResult onCta={() => setPlaying(false)} />}
       </div>
 
-      <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[color:var(--home-border)] px-4 py-3">
+      <div className="flex shrink-0 items-center justify-between gap-2 border-t border-[color:var(--home-border)] px-3 py-2.5 sm:px-4 sm:py-3">
         <div className="flex gap-1.5">
           {Array.from({ length: SCENE_COUNT }).map((_, index) => (
             <button

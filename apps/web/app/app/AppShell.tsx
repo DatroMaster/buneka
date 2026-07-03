@@ -253,7 +253,9 @@ export default function AppShell({
           </div>
 
           <div className="ml-auto flex items-center gap-2 md:gap-3">
-            <CurrencyTicker rates={rates} />
+            <div className="hidden sm:block">
+              <CurrencyTicker rates={rates} />
+            </div>
             {isAdmin && (
               <Link
                 href="/admin"
@@ -262,7 +264,7 @@ export default function AppShell({
                 <Settings size={14} /> Yönetim
               </Link>
             )}
-            <BunekaNedirButton variant="compact" className="border-white/15 text-emerald-300 hover:border-emerald-300/50" />
+            <BunekaNedirButton variant="compact" className="hidden border-white/15 text-emerald-300 hover:border-emerald-300/50 sm:flex" />
             <Link
               href="/"
               className="flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-slate-300 transition-all hover:border-emerald-300/40 hover:bg-white/[0.04] hover:text-white active:scale-90"

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { sectors } from "@/lib/content/sectors";
 
 const COLORS = [
@@ -20,7 +20,6 @@ const COLORS = [
 ];
 
 export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[] }) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState<string | null>(null);
   const visibleSectors = sectors.filter((sector) => !excludeSlugs.includes(sector.slug));
   const hoveredSector = visibleSectors.find((sector) => sector.slug === hovered);
@@ -28,30 +27,25 @@ export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-2">
-      <div
-        ref={containerRef}
-        className="relative min-h-0 flex-1 overflow-hidden rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5"
-      >
-        <div className="grid h-full grid-cols-2 gap-2 sm:grid-cols-5">
+      <div className="relative min-h-[360px] flex-1 overflow-y-auto rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5 sm:min-h-0">
+        <div className="grid auto-rows-[minmax(92px,1fr)] grid-cols-2 gap-2 sm:h-full sm:grid-cols-5">
           {visibleSectors.map((sector, index) => (
-            <motion.div
+            <motion.button
               key={sector.slug}
-              drag
-              dragConstraints={containerRef}
-              dragElastic={0.18}
-              dragMomentum
+              type="button"
               whileHover={{ scale: 1.06, zIndex: 20 }}
-              whileTap={{ scale: 0.95, cursor: "grabbing" }}
+              whileTap={{ scale: 0.96 }}
               onHoverStart={() => setHovered(sector.slug)}
               onHoverEnd={() => setHovered((current) => (current === sector.slug ? null : current))}
+              onFocus={() => setHovered(sector.slug)}
               onClick={() => router.push(`/sektorler/${sector.slug}`)}
-              className={`flex h-full w-full cursor-grab flex-col items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br text-white shadow-md ring-1 ring-black/15 ${COLORS[index % COLORS.length]}`}
+              className={`flex min-h-[92px] w-full cursor-pointer flex-col items-center justify-center gap-1.5 rounded-lg bg-gradient-to-br px-1 text-white shadow-md ring-1 ring-black/15 ${COLORS[index % COLORS.length]}`}
             >
               <sector.icon size={22} className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.55)]" />
               <span className="px-1 text-center text-[11px] font-extrabold leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
                 {sector.title}
               </span>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
       </div>

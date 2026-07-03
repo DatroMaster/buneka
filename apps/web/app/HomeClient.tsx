@@ -81,7 +81,7 @@ export default function HomeClient() {
       icon: LayoutGrid,
       content: (
         <div className="flex h-full min-h-0 flex-col gap-3">
-          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-hidden">
+          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-y-auto pr-1">
             {modules.map((module, index) => (
               <button
                 key={module.label}
@@ -116,7 +116,7 @@ export default function HomeClient() {
       icon: ShieldCheck,
       content: (
         <div className="flex h-full min-h-0 flex-col gap-3">
-          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-hidden">
+          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-y-auto pr-1">
             {plans.map((plan, index) => (
               <button
                 key={plan.name}
@@ -183,13 +183,16 @@ export default function HomeClient() {
         ))}
       </div>
 
-      <header className="relative z-10 flex shrink-0 flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
-        <Link href="/" className="flex items-center gap-3">
-          <BunekaMark size={32} />
-          <BunekaWordmark className="text-sm text-[color:var(--home-ink)] sm:text-base" />
-        </Link>
+      <header className="relative z-10 grid shrink-0 gap-3 px-4 py-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <Link href="/" className="flex min-w-0 items-center gap-2.5">
+            <BunekaMark size={30} className="shrink-0 sm:h-8 sm:w-8" />
+            <BunekaWordmark className="whitespace-nowrap text-xs text-[color:var(--home-ink)] sm:text-base" />
+          </Link>
+          <ThemeToggle className="shrink-0 border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:hidden" />
+        </div>
 
-        <div className="flex items-center gap-2.5 sm:gap-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-4">
           <Link
             href="/kullanici-rehberi"
             className="hidden items-center gap-1.5 rounded-lg border border-[color:var(--home-border)] px-3.5 py-2 text-xs font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)] lg:inline-flex"
@@ -204,16 +207,16 @@ export default function HomeClient() {
           </Link>
           <Link
             href={callLink()}
-            className="cta-call-spark group inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-black transition-transform duration-300 ease-out sm:px-5 sm:py-2.5 sm:text-sm"
+            className="cta-call-spark group inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-black transition-transform duration-300 ease-out sm:flex-none sm:px-5 sm:py-2.5 sm:text-sm"
           >
             <PhoneCall size={14} />
             Hemen Arayın
           </Link>
-          <div className="text-right font-mono leading-tight text-[color:var(--home-glow)]">
+          <div className="hidden text-right font-mono leading-tight text-[color:var(--home-glow)] sm:block">
             <div className="text-xs tracking-wider sm:text-sm">{time}</div>
             <div className="hidden text-[10px] text-[color:var(--home-muted)] sm:block">{date}</div>
           </div>
-          <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
+          <ThemeToggle className="hidden border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex" />
         </div>
         <Link
           href="/login"
@@ -223,12 +226,12 @@ export default function HomeClient() {
         </Link>
       </header>
 
-      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-3 sm:gap-4 sm:px-6 md:min-h-0 md:grid-cols-2">
-        <section className="glow-border flex min-h-[420px] flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:rounded-2xl sm:p-5 md:min-h-0">
+      <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-24 sm:gap-4 sm:px-6 sm:pb-4 md:min-h-0 md:grid-cols-2">
+        <section className="glow-border flex min-h-[390px] flex-col rounded-xl bg-[color:var(--home-surface)]/78 p-3 backdrop-blur-xl sm:min-h-[420px] sm:rounded-2xl sm:p-5 md:min-h-0">
           <BunekaStoryCard />
         </section>
 
-        <section id="sektorler" className="glow-border flex min-h-[520px] flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/70 backdrop-blur-xl sm:rounded-2xl md:min-h-0">
+        <section id="sektorler" className="glow-border flex min-h-[520px] flex-col overflow-hidden rounded-xl bg-[color:var(--home-surface)]/78 backdrop-blur-xl sm:rounded-2xl md:min-h-0">
           {sections.map((section) => {
             const isOpen = openSection === section.id;
             return (
