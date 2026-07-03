@@ -69,7 +69,7 @@ export function ModuleAccordionExplorer() {
         <p className="px-2 pb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-glow)]">
           10 ek modül
         </p>
-        <div className="grid gap-2">
+        <div className="grid gap-1.5">
           {modules.map((module) => {
             const isActive = module.label === active.label;
             const ModuleIcon = module.icon;
@@ -78,18 +78,17 @@ export function ModuleAccordionExplorer() {
                 key={module.label}
                 type="button"
                 onClick={() => setActiveLabel(module.label)}
-                className={`flex items-center gap-3 rounded-xl border p-3 text-left transition-all ${
+                className={`flex min-h-11 items-center gap-2.5 rounded-lg border px-3 py-2 text-left transition-all ${
                   isActive
                     ? "border-[color:var(--home-glow)] bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[0_0_24px_rgba(34,211,238,0.12)]"
                     : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)] hover:text-[color:var(--home-ink)]"
                 }`}
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">
-                  <ModuleIcon size={18} />
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/10 text-[color:var(--home-glow)]">
+                  <ModuleIcon size={15} />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-black leading-tight">{module.label}</span>
-                  <span className="mt-1 block text-xs font-bold text-[color:var(--home-glow)]">{module.price}</span>
+                  <span className="block text-xs font-black leading-tight sm:text-sm">{module.label}</span>
                 </span>
               </button>
             );

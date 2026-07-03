@@ -27,13 +27,6 @@ const PLAN_ICONS: Record<string, typeof ScanLine> = {
   PATRON: Crown,
 };
 
-const PLAN_BORDER_COLORS: Record<string, string> = {
-  PRICE: "glow-border-turquoise",
-  CASH: "glow-border-amber",
-  STOCK: "glow-border-green",
-  PATRON: "glow-border-violet",
-};
-
 const PLAN_HIGHLIGHTS: Record<string, string[]> = {
   PRICE: [
     "Barkodla fiyat sorgulama",
@@ -53,7 +46,7 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
     "Kasa paketinin tümü",
     "Stokta kalan / minimum stok uyarısı",
     "Stok giriş-çıkış hareketleri",
-    "Kâr / marj görünürlüğü",
+    "Kar / marj görünürlüğü",
     "Detaylı raporlar",
   ],
   PATRON: [
@@ -96,52 +89,91 @@ export default function PaketlerPage() {
         </Link>
       </header>
 
-      <div className="relative z-10 grid flex-1 gap-5 px-3 pb-4 sm:px-6">
+      <div className="relative z-10 grid flex-1 gap-7 px-3 pb-5 sm:px-6">
         <div>
-        <h1 className="font-display text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
-          Hangi pakette ne var, tek bakışta.
-        </h1>
-        <p className="mt-1 max-w-2xl text-xs text-[color:var(--home-muted)] sm:text-sm">
-          İhtiyaç büyüdükçe bir üst pakete geçebilirsiniz — kurulum ücreti veya sözleşme süresi yoktur.
-        </p>
+          <h1 className="font-display text-2xl font-black tracking-tight md:text-4xl">
+            Hangi pakette ne var, tek bakışta.
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-[color:var(--home-muted)]">
+            Finansal netlikte paket karşılaştırması: yıllık fiyat, destek ve modül seçenekleri aynı tabloda.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => {
             const code = PLAN_CODES[plan.name];
             const Icon = PLAN_ICONS[code];
+            const isPremium = code === "PATRON";
+
             return (
-              <div
+              <article
                 key={plan.name}
-                className={`relative flex min-h-[360px] flex-col rounded-xl bg-[color:var(--home-surface)]/70 p-4 backdrop-blur-xl sm:p-5 ${PLAN_BORDER_COLORS[code]}`}
+                className={`relative flex min-h-[560px] flex-col overflow-hidden rounded-2xl border shadow-[0_18px_50px_rgba(2,6,23,0.24)] backdrop-blur-xl ${
+                  isPremium
+                    ? "border-blue-400/45 bg-[#071528] text-white"
+                    : "border-[color:var(--home-border)] bg-[color:var(--home-surface)]/90"
+                }`}
               >
-                {plan.badge && (
-                  <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-[color:var(--home-glow)] to-blue-600 px-3 py-1 text-[9px] font-bold uppercase tracking-wide text-slate-950 shadow-lg">
-                    {plan.badge}
-                  </span>
-                )}
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color:var(--home-glow)]/15 text-[color:var(--home-glow)]">
-                    <Icon size={20} />
-                  </div>
-                  <h2 className="font-display text-base font-bold sm:text-lg">{plan.name}</h2>
+                <div className={`flex h-8 items-center justify-center px-3 text-center text-[10px] font-black uppercase tracking-wide ${
+                  plan.badge
+                    ? "bg-gradient-to-r from-blue-500 to-cyan-400 text-white"
+                    : "bg-white/5 text-transparent"
+                }`}>
+                  {plan.badge || "Buneka"}
                 </div>
-                <p className="mt-3 text-2xl font-black tracking-tight text-[color:var(--home-glow)] sm:text-3xl">
-                  {plan.price}
-                  <span className="text-xs font-medium text-[color:var(--home-muted)]"> /yıl</span>
-                </p>
 
-                <ul className="mt-3 flex-1 space-y-1.5 pr-1">
-                  {PLAN_HIGHLIGHTS[code].map((feature) => (
-                    <li key={feature} className="flex items-start gap-1.5 text-[11px] leading-snug text-[color:var(--home-ink)] sm:text-xs">
-                      <Check size={13} className="mt-0.5 shrink-0 text-emerald-400" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[color:var(--home-glow)]/12 text-[color:var(--home-glow)] ring-1 ring-[color:var(--home-border)]">
+                      <Icon size={20} />
+                    </div>
+                    <h2 className="font-display text-lg font-bold text-[color:var(--home-ink)]">{plan.name}</h2>
+                  </div>
 
-                <PlanModuleOrder planName={plan.name} planPrice={plan.price} />
-              </div>
+                  <div className="mt-5">
+                    <p className="text-[11px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Yıllık lisans</p>
+                    <p className="mt-1 text-4xl font-black tracking-tight text-[color:var(--home-glow)]">
+                      {plan.price}
+                      <span className="ml-1 text-xs font-semibold text-[color:var(--home-muted)]">/yıl</span>
+                    </p>
+                    <p className="mt-1 min-h-8 text-[11px] font-semibold leading-4 text-[color:var(--home-muted)]">
+                      Kurulum, geçiş ve temel eğitim desteğiyle.
+                    </p>
+                  </div>
+
+                  <a
+                    href={callLink()}
+                    className={`mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-black transition-transform hover:scale-[1.01] active:scale-95 ${
+                      isPremium
+                        ? "bg-gradient-to-r from-[color:var(--home-glow)] to-blue-500 text-slate-950"
+                        : "bg-slate-950 text-white shadow-[0_12px_24px_rgba(2,6,23,0.18)] dark:bg-white dark:text-slate-950"
+                    }`}
+                  >
+                    Sizi Arayalım <Phone size={15} />
+                  </a>
+
+                  <div className="mt-4 grid gap-1.5 text-[11px] font-bold text-[color:var(--home-ink)]">
+                    <span>7/24 destek hattı</span>
+                    <span>Ücretsiz ilk kurulum</span>
+                  </div>
+
+                  <div className="my-4 h-px bg-[color:var(--home-border)]" />
+
+                  <p className="mb-2 text-[11px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">
+                    Pakete dahil
+                  </p>
+                  <ul className="flex-1 space-y-2 pr-1">
+                    {PLAN_HIGHLIGHTS[code].map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-xs leading-snug text-[color:var(--home-ink)]">
+                        <Check size={13} className="mt-0.5 shrink-0 text-blue-400" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <PlanModuleOrder planName={plan.name} planPrice={plan.price} />
+                </div>
+              </article>
             );
           })}
         </div>
