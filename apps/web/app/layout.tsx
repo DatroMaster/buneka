@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
+import { FloatingWhatsappSupport } from "@/components/FloatingWhatsappSupport";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           {children}
+          <FloatingWhatsappSupport />
         </ThemeProvider>
       </body>
     </html>

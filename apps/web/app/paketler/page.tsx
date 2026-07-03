@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Boxes, Check, Crown, Home, LayoutDashboard, LogIn, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
+import { BookOpenCheck, Boxes, Check, Crown, Home, LayoutDashboard, LogIn, Phone, ScanLine, ShieldCheck, WalletCards } from "lucide-react";
+import { BarcodeDeviceCards } from "@/components/BarcodeDeviceCards";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -74,6 +75,9 @@ export default function PaketlerPage() {
           </Link>
           <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex">
             <LayoutDashboard size={14} /> Panele Dön
+          </Link>
+          <Link href="/kullanici-rehberi" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] lg:flex">
+            <BookOpenCheck size={14} /> Rehber
           </Link>
           <span className="hidden items-center gap-1.5 rounded-full border border-[color:var(--home-border)] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-[color:var(--home-glow)] sm:flex">
             <ShieldCheck size={12} /> Yıllık lisans · Şeffaf fiyat
@@ -177,6 +181,24 @@ export default function PaketlerPage() {
             );
           })}
         </div>
+
+        <section className="glow-border rounded-2xl bg-[color:var(--home-surface)]/74 p-5 backdrop-blur-xl">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <h2 className="font-display text-2xl font-black tracking-tight">Paketlere ek barkod cihazları</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-[color:var(--home-muted)]">
+                Başlangıç için uygun fiyatlı cihazları ekledik. Fiyatlar kaynak sayfadan canlı kontrol edilir;
+                erişim engellenirse son doğrulanan fiyat gösterilir.
+              </p>
+            </div>
+            <Link href="/kullanici-rehberi" className="glow-border inline-flex w-fit items-center justify-center gap-2 rounded-lg px-4 py-2 text-xs font-black text-[color:var(--home-ink)]">
+              <BookOpenCheck size={14} /> Kullanım rehberi
+            </Link>
+          </div>
+          <div className="mt-4">
+            <BarcodeDeviceCards compact />
+          </div>
+        </section>
       </div>
 
       <footer className="relative z-10 shrink-0 px-3 pb-3 sm:px-6">

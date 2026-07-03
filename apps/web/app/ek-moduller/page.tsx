@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Home, LayoutDashboard, LogIn } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, Home, LayoutDashboard, LogIn } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -27,6 +27,9 @@ export default function EkModullerPage() {
           </Link>
           <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex">
             <LayoutDashboard size={14} /> Panele Dön
+          </Link>
+          <Link href="/kullanici-rehberi" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] lg:flex">
+            <BookOpenCheck size={14} /> Rehber
           </Link>
           <BunekaNedirButton />
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />

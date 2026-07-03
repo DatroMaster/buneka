@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ChevronDown, LayoutGrid, LogIn, PhoneCall, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, BookOpenCheck, ChevronDown, LayoutGrid, LogIn, PhoneCall, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { ClientIpBadge } from "@/components/ClientIpBadge";
@@ -190,6 +190,12 @@ export default function HomeClient() {
         </Link>
 
         <div className="flex items-center gap-2.5 sm:gap-4">
+          <Link
+            href="/kullanici-rehberi"
+            className="hidden items-center gap-1.5 rounded-lg border border-[color:var(--home-border)] px-3.5 py-2 text-xs font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)] lg:inline-flex"
+          >
+            <BookOpenCheck size={14} /> Kullanıcı Rehberi
+          </Link>
           <Link
             href="/login"
             className="hidden items-center gap-1.5 rounded-lg border border-[color:var(--home-border)] px-3.5 py-2 text-xs font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)] sm:inline-flex"

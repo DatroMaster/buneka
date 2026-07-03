@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, CheckCircle2, LogIn, MessageCircle, Route } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, CheckCircle2, LogIn, MessageCircle, Route } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
@@ -58,6 +58,12 @@ export default async function SectorPage({ params }: SectorPageProps) {
             className="hidden items-center gap-1.5 text-xs font-bold text-[color:var(--home-muted)] hover:text-[color:var(--home-ink)] sm:flex"
           >
             <ArrowLeft size={14} /> Sektorler
+          </Link>
+          <Link
+            href="/kullanici-rehberi"
+            className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] lg:flex"
+          >
+            <BookOpenCheck size={14} /> Rehber
           </Link>
           <BunekaNedirButton />
           <ThemeToggle className="border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]" />
