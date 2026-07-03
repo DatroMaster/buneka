@@ -90,7 +90,7 @@ export default function PaketlerPage() {
         </div>
       </header>
 
-      <div className="relative z-10 grid flex-1 gap-3 px-3 pb-4 sm:px-6">
+      <div className="relative z-10 grid flex-1 gap-5 px-3 pb-4 sm:px-6">
         <div>
         <h1 className="font-display text-xl font-bold tracking-tight sm:text-2xl md:text-3xl">
           Hangi pakette ne var, tek bakışta.

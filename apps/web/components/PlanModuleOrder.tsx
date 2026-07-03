@@ -58,7 +58,7 @@ export function PlanModuleOrder({ planName, planPrice }: PlanModuleOrderProps) {
         <Plus size={14} /> Ek modül ekle
       </button>
       {open && (
-        <div className="grid max-h-20 gap-1.5 overflow-y-auto pr-1">
+        <div className="grid gap-1.5 pr-1">
           {modules.map((module) => {
             const isSelected = selected.includes(module.label);
             return (
