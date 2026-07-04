@@ -396,6 +396,7 @@ export default function StokPage() {
               <tr>
                 <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
                 <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
+                <th className="px-6 py-4 font-medium">En eski stok</th>
                 <th className="px-6 py-4 font-medium">İşlem Tipi</th>
                 <SortableHeader label="Miktar" align="left" active={sortKey === "quantity"} dir={sortDir} onClick={() => toggleSort("quantity")} />
                 <th className="px-6 py-4 font-medium">Not</th>
@@ -404,13 +405,13 @@ export default function StokPage() {
             <tbody className="bg-[color:var(--color-card)]">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center">
+                  <td colSpan={6} className="p-8 text-center">
                     <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
               ) : sortedMovements.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>
+                  <td colSpan={6}>
                     <EmptyState icon={Boxes} message="Hareket bulunamadı." />
                   </td>
                 </tr>
@@ -438,12 +439,20 @@ export default function StokPage() {
                         >
                           <div className="font-medium text-[#F8FAFC]">{movement.products?.name}</div>
                           <div className="font-mono text-xs text-[#64748B]">{movement.products?.barcode}</div>
-                          {ageRow && (
-                            <div className="mt-1 inline-flex rounded-full border border-[#F59E0B]/35 px-2 py-0.5 text-[11px] font-black text-[#F59E0B]">
-                              En eski stok: {ageRow.stockDays} gün
-                            </div>
-                          )}
                         </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        {ageRow ? (
+                          <button
+                            type="button"
+                            onClick={() => movement.product_id && setSelectedHistoryProductId(movement.product_id)}
+                            className="inline-flex rounded-full border border-[#F59E0B]/35 px-3 py-1 text-xs font-black text-[#F59E0B] transition hover:border-[#F59E0B]/70 hover:bg-[#F59E0B]/10"
+                          >
+                            {ageRow.stockDays} gün
+                          </button>
+                        ) : (
+                          <span className="text-sm font-semibold text-[#64748B]">-</span>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${movementType.color}`}>

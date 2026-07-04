@@ -7,7 +7,7 @@
 /* ── Supabase design system — neutral surfaces + single green accent ──
    Light (default) tokens. Green brand: #3ECF8E. */
 :root {
-  --home-bg-1: #0a1921;
+  --home-bg-1: #020b0f;
   --home-bg-2: #111827;
   --home-surface: #1E293B;
   --home-surface-soft: rgba(0, 0, 0, 0.04);
@@ -17,7 +17,7 @@
   --home-border: #334155;
   --home-star-opacity: 0;
 
-  --color-bg: #0a1921;
+  --color-bg: #020b0f;
   --color-bg-secondary: #111827;
   --color-card: #1E293B;
   --color-surface: #1E293B;
@@ -36,7 +36,7 @@
 }
 
 .dark {
-  --home-bg-1: #0a1921;
+  --home-bg-1: #020b0f;
   --home-bg-2: #111827;
   --home-surface: #1E293B;
   --home-surface-soft: rgba(255, 255, 255, 0.04);
@@ -47,7 +47,7 @@
   --home-star-opacity: 0;
 
   /* App surfaces — Supabase neutral dark with green + mustard accents */
-  --color-bg: #0a1921;
+  --color-bg: #020b0f;
   --color-bg-secondary: #111827;
   --color-card: #1E293B;
   --color-surface: #1E293B;
@@ -76,7 +76,7 @@
     sans-serif;
 
   /* Brand colors — Supabase neutral + green */
-  --color-bg: #0a1921;
+  --color-bg: #020b0f;
   --color-bg-secondary: #111827;
   --color-card: #1E293B;
   --color-text: #F8FAFC;
@@ -343,12 +343,12 @@
       radial-gradient(circle at 18% 10%, rgba(62, 207, 142, 0.18), transparent 32%),
       radial-gradient(circle at 86% 14%, rgba(245, 158, 11, 0.10), transparent 28%),
       radial-gradient(circle at 50% 105%, rgba(62, 207, 142, 0.10), transparent 34%),
-      linear-gradient(180deg, #0a1921, #0a1921);
+      linear-gradient(180deg, #020b0f, #020b0f);
   }
 
   .package-page-shell {
-    --home-bg-1: #0a1921;
-    --home-bg-2: #0a1921;
+    --home-bg-1: #020b0f;
+    --home-bg-2: #020b0f;
     --home-surface: #050505;
     --home-surface-soft: rgba(255, 255, 255, 0.045);
     --home-ink: #f8fafc;
@@ -561,7 +561,7 @@
   overflow: hidden;
   border-radius: 0.85rem;
   border: 1px solid rgba(255, 107, 0, 0.44);
-  background: #0a1921;
+  background: #020b0f;
   padding: 1rem 1.25rem 1rem 4.1rem;
   color: #F8FAFC;
   font-size: 1rem;
@@ -1788,7 +1788,7 @@
 
 /* Current guide shell: black graphite panels, mustard/amber markers, no green wash. */
 .guide-shell {
-  --guide-bg: #0a1921;
+  --guide-bg: #020b0f;
   --guide-panel: #1E293B;
   --guide-panel-soft: #111827;
   --guide-line: rgba(148, 163, 184, 0.22);
@@ -1801,7 +1801,7 @@
   background:
     radial-gradient(circle at 18% 0%, rgba(255, 107, 0, 0.12), transparent 26%),
     radial-gradient(circle at 86% 12%, rgba(16, 185, 129, 0.08), transparent 28%),
-    linear-gradient(180deg, #0a1921 0%, #0a1921 100%);
+    linear-gradient(180deg, #020b0f 0%, #020b0f 100%);
   color: var(--guide-text);
 }
 
