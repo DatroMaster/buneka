@@ -5,18 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sectors } from "@/lib/content/sectors";
 
-const SECTOR_ACCENTS = [
-  "#F2B84B",
-  "#3ECF8E",
-  "#F97350",
-  "#A78BFA",
-  "#EAB308",
-  "#38BDF8",
-  "#FB7185",
-  "#22C55E",
-  "#C084FC",
-  "#F59E0B",
-];
+const SECTOR_ACCENT = "#06c3d4";
 
 export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[] }) {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -28,8 +17,8 @@ export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[
     <div className="flex h-full min-h-0 flex-col gap-2">
       <div className="relative min-h-[360px] flex-1 overflow-y-auto rounded-lg border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] p-2.5 sm:min-h-0">
         <div className="grid auto-rows-[minmax(82px,1fr)] grid-cols-1 gap-2 sm:h-full sm:grid-cols-5 sm:auto-rows-[minmax(92px,1fr)]">
-          {visibleSectors.map((sector, index) => {
-            const accent = SECTOR_ACCENTS[index % SECTOR_ACCENTS.length];
+          {visibleSectors.map((sector) => {
+            const accent = SECTOR_ACCENT;
             return (
             <motion.button
               key={sector.slug}

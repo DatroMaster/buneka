@@ -332,10 +332,18 @@
 
   /* ── Home (public landing) — flat Supabase surface ───────────────── */
   .home-viewport {
+    --home-bg-1: #020b0f;
+    --home-bg-2: #020b0f;
+    --home-surface: #050c0d;
+    --home-surface-soft: #050c0d;
+    --home-ink: #06c3d4;
+    --home-muted: color-mix(in srgb, #06c3d4 66%, #050c0d);
+    --home-glow: #06c3d4;
+    --home-border: color-mix(in srgb, #06c3d4 28%, #050c0d);
     background:
-      radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--home-glow) 16%, transparent), transparent 34%),
-      radial-gradient(circle at 90% 18%, rgba(245, 158, 11, 0.08), transparent 30%),
-      linear-gradient(180deg, var(--home-bg-1), var(--home-bg-2));
+      radial-gradient(circle at 12% 5%, color-mix(in srgb, #06c3d4 14%, transparent), transparent 34%),
+      radial-gradient(circle at 90% 18%, color-mix(in srgb, #06c3d4 8%, transparent), transparent 30%),
+      linear-gradient(180deg, #020b0f, #020b0f);
   }
 
   .price-focus-bg {
@@ -438,7 +446,7 @@
 
   .glow-border-selected {
     border-color: var(--home-glow) !important;
-    background: color-mix(in srgb, var(--home-glow) 10%, transparent);
+    background: color-mix(in srgb, #06c3d4 10%, #050c0d);
   }
 
   /* Colorful capillary-thin border variants — used to bring life to module/plan
@@ -508,13 +516,13 @@
   /* Call CTA — solid Supabase green button */
   .cta-call-spark {
     position: relative;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 78%, black);
-    background: var(--color-primary);
-    color: var(--color-primary-fg);
+    border: 1px solid #06c3d4;
+    background: #06c3d4;
+    color: #020b0f;
     transition: background 0.15s ease;
   }
   .cta-call-spark:hover {
-    background: var(--color-primary-hover);
+    background: color-mix(in srgb, #06c3d4 86%, #050c0d);
   }
   .cta-call-spark:active {
     transform: scale(0.99);
@@ -645,9 +653,9 @@
   /* Soft light wash; no grid texture */
   .home-grid-pattern {
     background:
-      radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--home-glow) 14%, transparent), transparent 32%),
-      radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--home-glow) 10%, transparent), transparent 30%),
-      radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--home-glow) 8%, transparent), transparent 38%);
+      radial-gradient(circle at 18% 8%, color-mix(in srgb, #06c3d4 14%, transparent), transparent 32%),
+      radial-gradient(circle at 82% 18%, color-mix(in srgb, #06c3d4 10%, transparent), transparent 30%),
+      radial-gradient(circle at 50% 100%, color-mix(in srgb, #06c3d4 8%, transparent), transparent 38%);
     opacity: 1;
   }
 
@@ -2323,10 +2331,9 @@
 
 .sector-home-tile {
   background:
-    radial-gradient(circle at 22% 12%, color-mix(in srgb, var(--sector-accent) 16%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015)),
-    rgba(8, 8, 8, 0.58);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 16px 34px rgba(0,0,0,0.20);
+    radial-gradient(circle at 22% 12%, color-mix(in srgb, #06c3d4 12%, transparent), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, #06c3d4 7%, #050c0d), #050c0d);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #06c3d4 10%, #050c0d), 0 16px 34px color-mix(in srgb, #020b0f 86%, transparent);
 }
 
 .sector-home-bg-icon {
@@ -2341,9 +2348,8 @@
 .sector-home-tile:hover {
   border-color: var(--sector-accent) !important;
   background:
-    radial-gradient(circle at 22% 12%, color-mix(in srgb, var(--sector-accent) 22%, transparent), transparent 34%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
-    rgba(8, 8, 8, 0.68);
+    radial-gradient(circle at 22% 12%, color-mix(in srgb, #06c3d4 18%, transparent), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, #06c3d4 10%, #050c0d), #050c0d);
 }
 
 .sector-directory-panel {

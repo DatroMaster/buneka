@@ -97,31 +97,18 @@ export default function StokPage() {
   const [unitPrice, setUnitPrice] = useState("");
   const [note, setNote] = useState("");
   const [selectedHistoryProductId, setSelectedHistoryProductId] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<"date" | "product" | "quantity">("date");
+  const [sortKey, setSortKey] = useState<"date" | "product" | "oldestStock" | "quantity">("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const supabase = useMemo(() => createClient(), []);
 
-  function toggleSort(key: "date" | "product" | "quantity") {
+  function toggleSort(key: "date" | "product" | "oldestStock" | "quantity") {
     if (sortKey === key) {
       setSortDir((current) => (current === "asc" ? "desc" : "asc"));
     } else {
       setSortKey(key);
-      setSortDir(key === "product" ? "asc" : "desc");
+      setSortDir(key === "product" || key === "oldestStock" ? "asc" : "desc");
     }
   }
-
-  const sortedMovements = useMemo(() => {
-    const factor = sortDir === "asc" ? 1 : -1;
-    return [...movements].sort((a, b) => {
-      if (sortKey === "product") {
-        return factor * (a.products?.name || "").localeCompare(b.products?.name || "", "tr");
-      }
-      if (sortKey === "quantity") {
-        return factor * (Number(a.quantity) - Number(b.quantity));
-      }
-      return factor * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    });
-  }, [movements, sortKey, sortDir]);
 
   const stockEntryTotal = movements
     .filter((movement) => Number(movement.quantity) > 0)
@@ -201,6 +188,26 @@ export default function StokPage() {
     () => new Map(stockAgeRows.map((row) => [row.product.id, row])),
     [stockAgeRows]
   );
+  const sortedMovements = useMemo(() => {
+    const factor = sortDir === "asc" ? 1 : -1;
+    return [...movements].sort((a, b) => {
+      if (sortKey === "product") {
+        return factor * (a.products?.name || "").localeCompare(b.products?.name || "", "tr");
+      }
+      if (sortKey === "oldestStock") {
+        const aDate = a.product_id ? stockAgeByProduct.get(a.product_id)?.oldestDate : null;
+        const bDate = b.product_id ? stockAgeByProduct.get(b.product_id)?.oldestDate : null;
+        if (!aDate && !bDate) return 0;
+        if (!aDate) return 1;
+        if (!bDate) return -1;
+        return factor * (new Date(aDate).getTime() - new Date(bDate).getTime());
+      }
+      if (sortKey === "quantity") {
+        return factor * (Number(a.quantity) - Number(b.quantity));
+      }
+      return factor * (new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    });
+  }, [movements, sortKey, sortDir, stockAgeByProduct]);
   const selectedHistoryRow = selectedHistoryProductId ? stockAgeByProduct.get(selectedHistoryProductId) || null : null;
   const selectedHistoryMovements = useMemo(
     () =>
@@ -396,7 +403,7 @@ export default function StokPage() {
               <tr>
                 <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
                 <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
-                <th className="px-6 py-4 font-medium">En eski stok</th>
+                <SortableHeader label="En eski stok" active={sortKey === "oldestStock"} dir={sortDir} onClick={() => toggleSort("oldestStock")} />
                 <th className="px-6 py-4 font-medium">İşlem Tipi</th>
                 <SortableHeader label="Miktar" align="left" active={sortKey === "quantity"} dir={sortDir} onClick={() => toggleSort("quantity")} />
                 <th className="px-6 py-4 font-medium">Not</th>

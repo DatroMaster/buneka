@@ -26,11 +26,7 @@ const STARS = [
 ];
 
 const CAPILLARY_COLORS = [
-  "glow-border-turquoise",
-  "glow-border-amber",
-  "glow-border-green",
-  "glow-border-violet",
-  "glow-border-rose",
+  "glow-border",
 ];
 
 type SectionId = "sektorler" | "moduller" | "paketler";
@@ -216,7 +212,7 @@ export default function HomeClient() {
         </div>
         <PublicPanelLink
           iconSize={17}
-          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(62,207,142,0.18)] sm:hidden"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-[#020b0f] shadow-none sm:hidden"
         />
       </header>
 
