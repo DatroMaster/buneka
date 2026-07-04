@@ -96,7 +96,7 @@ export default function StokPage() {
   const [quantity, setQuantity] = useState("");
   const [unitPrice, setUnitPrice] = useState("");
   const [note, setNote] = useState("");
-  const [selectedAgeProductId, setSelectedAgeProductId] = useState<string | null>(null);
+  const [selectedHistoryProductId, setSelectedHistoryProductId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<"date" | "product" | "quantity">("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const supabase = useMemo(() => createClient(), []);
@@ -197,7 +197,20 @@ export default function StokPage() {
       .sort((a, b) => new Date(a.oldestDate).getTime() - new Date(b.oldestDate).getTime());
   }, [movements, products]);
 
-  const selectedAgeRow = stockAgeRows.find((row) => row.product.id === selectedAgeProductId) || stockAgeRows[0] || null;
+  const stockAgeByProduct = useMemo(
+    () => new Map(stockAgeRows.map((row) => [row.product.id, row])),
+    [stockAgeRows]
+  );
+  const selectedHistoryRow = selectedHistoryProductId ? stockAgeByProduct.get(selectedHistoryProductId) || null : null;
+  const selectedHistoryMovements = useMemo(
+    () =>
+      selectedHistoryProductId
+        ? movements
+            .filter((movement) => movement.product_id === selectedHistoryProductId)
+            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+        : [],
+    [movements, selectedHistoryProductId]
+  );
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -380,11 +393,11 @@ export default function StokPage() {
         <div className="border-b border-[#1E293B] bg-[#0B0F19] px-5 py-4">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#00FF7B]">Stok yaşı</p>
-              <h2 className="font-display text-2xl font-black text-[#F8FAFC]">En eski stoklu ürünler</h2>
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#10B981]">Stoktaki ürünler</p>
+              <h2 className="font-display text-xl font-black text-[#F8FAFC]">En eski stok gün sayısı</h2>
             </div>
             <p className="max-w-2xl text-sm font-semibold text-[#CBD5E1]">
-              Giriş tarihleri FIFO mantığıyla takip edilir; satış/çıkışlar en eski partiden düşülür.
+              En eski kalan parti baz alınır; satıra tıklayınca ürün tarihçesi açılır.
             </p>
           </div>
         </div>
@@ -392,27 +405,23 @@ export default function StokPage() {
         {stockAgeRows.length === 0 ? (
           <EmptyState icon={Boxes} message="Stokta bekleyen ürün bulunamadı." />
         ) : (
-          <div className="grid min-h-[360px] lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
-            <div className="overflow-x-auto border-b border-[#1E293B] lg:border-b-0 lg:border-r">
+          <div className="overflow-x-auto">
+            <div>
               <table className="w-full text-left">
                 <thead className="bg-[#151E2E] text-xs uppercase tracking-wide text-[#CBD5E1]">
                   <tr>
                     <th className="px-5 py-3 font-black">Ürün</th>
-                    <th className="px-5 py-3 font-black">Stokta</th>
+                    <th className="px-5 py-3 font-black">En eski stok</th>
                     <th className="px-5 py-3 font-black">En eski giriş</th>
                     <th className="px-5 py-3 text-right font-black">Mevcut</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {stockAgeRows.slice(0, 12).map((row) => {
-                    const active = selectedAgeRow?.product.id === row.product.id;
-                    return (
+                  {stockAgeRows.map((row) => (
                       <tr
                         key={row.product.id}
-                        onClick={() => setSelectedAgeProductId(row.product.id)}
-                        className={`cursor-pointer border-t border-[#1E293B] transition hover:bg-[#1E293B] ${
-                          active ? "bg-[#1E293B]" : "bg-[#151E2E]"
-                        }`}
+                        onClick={() => setSelectedHistoryProductId(row.product.id)}
+                        className="cursor-pointer border-t border-[#1E293B] bg-[#151E2E] transition hover:bg-[#1E293B]"
                       >
                         <td className="px-5 py-4">
                           <p className="font-black text-[#F8FAFC]">{row.product.name}</p>
@@ -428,51 +437,10 @@ export default function StokPage() {
                           {row.product.stock_quantity}
                         </td>
                       </tr>
-                    );
-                  })}
+                  ))}
                 </tbody>
               </table>
             </div>
-
-            {selectedAgeRow && (
-              <aside className="bg-[#0B0F19] p-5">
-                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#00FF7B]">Ürün stok detayı</p>
-                <h3 className="mt-1 font-display text-2xl font-black text-[#F8FAFC]">{selectedAgeRow.product.name}</h3>
-                <p className="mt-1 font-mono text-xs font-semibold text-[#64748B]">{selectedAgeRow.product.barcode}</p>
-
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <StockAgeMetric label="Stoktaki gün" value={`${selectedAgeRow.stockDays}`} tone="amber" />
-                  <StockAgeMetric label="Mevcut stok" value={`${selectedAgeRow.product.stock_quantity}`} />
-                  <StockAgeMetric label="En eski giriş" value={formatDate(selectedAgeRow.oldestDate)} />
-                  <StockAgeMetric label="Son giriş" value={selectedAgeRow.latestEntryDate ? formatDate(selectedAgeRow.latestEntryDate) : "-"} />
-                </div>
-
-                <div className="mt-5 space-y-2">
-                  <p className="text-xs font-black uppercase tracking-wide text-[#CBD5E1]">Kalan parti / fatura geçmişi</p>
-                  {selectedAgeRow.remainingLots.map((lot) => (
-                    <div key={lot.id} className="rounded-xl border border-[#1E293B] bg-[#151E2E] p-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-black text-[#F8FAFC]">{formatDate(lot.date)}</p>
-                          <p className="mt-1 text-xs font-semibold text-[#CBD5E1]">
-                            {lot.supplier ? `Alınan firma: ${lot.supplier}` : "Firma bilgisi yok"}
-                          </p>
-                        </div>
-                        <span className="rounded-full bg-[#00FF7B]/10 px-3 py-1 text-xs font-black text-[#00FF7B]">
-                          {lot.quantity} adet
-                        </span>
-                      </div>
-                      <div className="mt-3 grid gap-1 text-xs font-semibold text-[#64748B]">
-                        <span>İlk giriş miktarı: {lot.originalQuantity}</span>
-                        <span>Alış fiyatı: {lot.unitPrice != null ? formatMoney(Number(lot.unitPrice)) : "-"}</span>
-                        <span>Fatura tarihi: {lot.invoiceDate || "-"}</span>
-                        <span>Not: {lot.note || "-"}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </aside>
-            )}
           </div>
         )}
       </section>
@@ -506,6 +474,7 @@ export default function StokPage() {
                 sortedMovements.map((movement) => {
                   const movementType = getMovementLabel(movement.movement_type);
                   const Icon = movementType.icon;
+                  const ageRow = movement.product_id ? stockAgeByProduct.get(movement.product_id) : null;
                   return (
                     <tr
                       key={movement.id}
@@ -517,8 +486,20 @@ export default function StokPage() {
                         {formatTime(movement.created_at)}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium text-[#F8FAFC]">{movement.products?.name}</div>
-                        <div className="font-mono text-xs text-[#64748B]">{movement.products?.barcode}</div>
+                        <button
+                          type="button"
+                          className="text-left transition hover:opacity-85"
+                          onClick={() => movement.product_id && setSelectedHistoryProductId(movement.product_id)}
+                          disabled={!movement.product_id}
+                        >
+                          <div className="font-medium text-[#F8FAFC]">{movement.products?.name}</div>
+                          <div className="font-mono text-xs text-[#64748B]">{movement.products?.barcode}</div>
+                          {ageRow && (
+                            <div className="mt-1 inline-flex rounded-full border border-[#F59E0B]/35 px-2 py-0.5 text-[11px] font-black text-[#F59E0B]">
+                              En eski stok: {ageRow.stockDays} gün
+                            </div>
+                          )}
+                        </button>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${movementType.color}`}>
@@ -538,6 +519,102 @@ export default function StokPage() {
           </table>
         </div>
       </div>
+
+      {selectedHistoryRow && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
+          <div className="max-h-[88vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-[#334155] bg-[#0F172A] text-[#F8FAFC] shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-[#334155] bg-[#1E293B] px-5 py-4">
+              <div>
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#10B981]">Ürün tarihçesi</p>
+                <h2 className="mt-1 font-display text-2xl font-black">{selectedHistoryRow.product.name}</h2>
+                <p className="mt-1 font-mono text-xs font-semibold text-[#94A3B8]">{selectedHistoryRow.product.barcode}</p>
+              </div>
+              <button
+                className="rounded-full border border-[#334155] bg-[#0F172A] p-2 text-[#CBD5E1] transition hover:border-[#FF6B00] hover:text-white active:scale-90"
+                type="button"
+                onClick={() => setSelectedHistoryProductId(null)}
+                aria-label="Kapat"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="max-h-[calc(88vh-96px)] overflow-y-auto p-5">
+              <div className="grid gap-3 sm:grid-cols-4">
+                <StockAgeMetric label="Stoktaki gün" value={`${selectedHistoryRow.stockDays}`} tone="amber" />
+                <StockAgeMetric label="Mevcut stok" value={`${selectedHistoryRow.product.stock_quantity}`} />
+                <StockAgeMetric label="En eski giriş" value={formatDate(selectedHistoryRow.oldestDate)} />
+                <StockAgeMetric
+                  label="Son giriş"
+                  value={selectedHistoryRow.latestEntryDate ? formatDate(selectedHistoryRow.latestEntryDate) : "-"}
+                />
+              </div>
+
+              <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                <section>
+                  <h3 className="text-sm font-black uppercase tracking-wide text-[#CBD5E1]">Kalan parti / fatura detayı</h3>
+                  <div className="mt-3 space-y-2">
+                    {selectedHistoryRow.remainingLots.map((lot) => (
+                      <div key={lot.id} className="rounded-xl border border-[#334155] bg-[#1E293B] p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-black text-[#F8FAFC]">{formatDate(lot.date)}</p>
+                            <p className="mt-1 text-xs font-semibold text-[#CBD5E1]">
+                              {lot.supplier ? `Alınan firma: ${lot.supplier}` : "Firma bilgisi yok"}
+                            </p>
+                          </div>
+                          <span className="rounded-full bg-[#10B981]/10 px-3 py-1 text-xs font-black text-[#10B981]">
+                            {lot.quantity} adet
+                          </span>
+                        </div>
+                        <div className="mt-3 grid gap-1 text-xs font-semibold text-[#94A3B8]">
+                          <span>İlk giriş miktarı: {lot.originalQuantity}</span>
+                          <span>Alış fiyatı: {lot.unitPrice != null ? formatMoney(Number(lot.unitPrice)) : "-"}</span>
+                          <span>Fatura tarihi: {lot.invoiceDate || "-"}</span>
+                          <span>Not: {lot.note || "-"}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-sm font-black uppercase tracking-wide text-[#CBD5E1]">Stok hareket tarihçesi</h3>
+                  <div className="mt-3 space-y-2">
+                    {selectedHistoryMovements.length === 0 ? (
+                      <div className="rounded-xl border border-[#334155] bg-[#1E293B] p-4 text-sm font-semibold text-[#94A3B8]">
+                        Bu ürün için hareket kaydı yok.
+                      </div>
+                    ) : (
+                      selectedHistoryMovements.map((movement) => {
+                        const movementType = getMovementLabel(movement.movement_type);
+                        const Icon = movementType.icon;
+                        return (
+                          <div key={movement.id} className="rounded-xl border border-[#334155] bg-[#1E293B] p-3">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <p className="text-sm font-black text-[#F8FAFC]">{formatTime(movement.created_at)}</p>
+                                <p className={`mt-1 flex items-center gap-1.5 text-xs font-black ${movementType.color}`}>
+                                  <Icon size={14} />
+                                  {movementType.label}
+                                </p>
+                              </div>
+                              <span className="text-lg font-black text-[#F8FAFC]">
+                                {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
+                              </span>
+                            </div>
+                            <p className="mt-2 text-xs font-semibold text-[#94A3B8]">{movement.note || "-"}</p>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showEntry && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">

@@ -103,6 +103,9 @@ export default function UrunlerPage() {
   const [usdRate, setUsdRate] = useState<number | null>(null);
   const [profitPercent, setProfitPercent] = useState("20");
   const [autoProfitEnabled, setAutoProfitEnabled] = useState(true);
+  const [autoUsdRateUpdate, setAutoUsdRateUpdate] = useState(
+    () => typeof window !== "undefined" && window.localStorage.getItem("buneka-auto-usd-rate-update") === "1"
+  );
   const [updatingUsdPrices, setUpdatingUsdPrices] = useState(false);
   const [bulkMode, setBulkMode] = useState<"percent" | "amount">("percent");
   const [bulkValue, setBulkValue] = useState("");
@@ -379,24 +382,24 @@ export default function UrunlerPage() {
     setSaving(false);
   }
 
-  async function updateUsdProductsByCurrentRate() {
+  const updateUsdProductsByCurrentRate = useCallback(async (options?: { silent?: boolean }) => {
     const usdProducts = products.filter(
       (product) => product.purchase_currency === "USD" && product.purchase_price_original != null
     );
 
     if (usdProducts.length === 0) {
-      setMessage("Kurla güncellenecek USD bazlı ürün bulunamadı.");
-      return;
+      if (!options?.silent) setMessage("Kurla güncellenecek USD bazlı ürün bulunamadı.");
+      return false;
     }
 
     setUpdatingUsdPrices(true);
-    setMessage("");
+    if (!options?.silent) setMessage("");
 
     const rate = usdRate ?? (await fetchUsdRateAction())?.usdToTry ?? null;
     if (!rate) {
-      setMessage("Güncel dolar kuru alınamadı, lütfen tekrar deneyin.");
+      if (!options?.silent) setMessage("Güncel dolar kuru alınamadı, lütfen tekrar deneyin.");
       setUpdatingUsdPrices(false);
-      return;
+      return false;
     }
 
     setUsdRate(rate);
@@ -418,16 +421,38 @@ export default function UrunlerPage() {
     const failed = results.find((result) => result.error);
 
     if (failed?.error) {
-      setMessage(`USD bazlı fiyatlar güncellenemedi: ${failed.error.message}`);
+      if (!options?.silent) setMessage(`USD bazlı fiyatlar güncellenemedi: ${failed.error.message}`);
+      setUpdatingUsdPrices(false);
+      return false;
     } else {
       setMessage(
-        `${usdProducts.length} USD bazlı ürün güncel kurla hesaplandı; satış fiyatları %${normalizedMargin} kârla yukarı yuvarlandı.`
+        options?.silent
+          ? `${usdProducts.length} USD bazlı ürün otomatik olarak güncel kurla yenilendi.`
+          : `${usdProducts.length} USD bazlı ürün güncel kurla hesaplandı; satış fiyatları %${normalizedMargin} kârla yukarı yuvarlandı.`
       );
       await loadProducts();
     }
 
     setUpdatingUsdPrices(false);
-  }
+    return true;
+  }, [loadProducts, products, profitPercent, supabase, usdRate]);
+
+  useEffect(() => {
+    if (!autoUsdRateUpdate || loading || updatingUsdPrices) return;
+    if (!products.some((product) => product.purchase_currency === "USD" && product.purchase_price_original != null)) return;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const key = "buneka-auto-usd-rate-updated-at";
+    if (window.localStorage.getItem(key) === today) return;
+
+    const timer = window.setTimeout(() => {
+      void updateUsdProductsByCurrentRate({ silent: true }).then((updated) => {
+        if (updated) window.localStorage.setItem(key, today);
+      });
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [autoUsdRateUpdate, loading, products, updateUsdProductsByCurrentRate, updatingUsdPrices]);
 
   async function applyBulkUpdate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -478,13 +503,32 @@ export default function UrunlerPage() {
             <button
               className="premium-button-secondary"
               type="button"
-              onClick={updateUsdProductsByCurrentRate}
+              onClick={() => void updateUsdProductsByCurrentRate()}
               disabled={updatingUsdPrices}
               title="USD bazlı ürünleri güncel TCMB kuru ve kâr oranı ile yeniler."
             >
               {updatingUsdPrices ? <Loader2 size={18} className="animate-spin" /> : <RefreshCw size={18} />}
               USD Kur Güncelle
             </button>
+            <label
+              className="premium-button-secondary cursor-pointer select-none"
+              title="Açık olduğunda ürünler sayfası günde bir kez USD bazlı ürünleri güncel kurla yeniler."
+            >
+              <input
+                type="checkbox"
+                checked={autoUsdRateUpdate}
+                onChange={(event) => {
+                  const enabled = event.target.checked;
+                  setAutoUsdRateUpdate(enabled);
+                  window.localStorage.setItem("buneka-auto-usd-rate-update", enabled ? "1" : "0");
+                  if (enabled) {
+                    window.localStorage.removeItem("buneka-auto-usd-rate-updated-at");
+                  }
+                }}
+                className="accent-[#FF6B00]"
+              />
+              Otomatik USD
+            </label>
             <button className="premium-button-secondary" type="button" onClick={() => setShowBulkAdd(true)}>
               <Layers size={18} /> Toplu Ekle
             </button>
