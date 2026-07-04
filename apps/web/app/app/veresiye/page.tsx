@@ -33,6 +33,15 @@ const formatMoney = (amount: number) =>
 const formatDate = (dateString: string) =>
   new Date(dateString).toLocaleDateString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
+const formatDateTime = (dateString: string) =>
+  new Date(dateString).toLocaleString("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
 function friendlyDbError(message?: string) {
   if (message && /schema cache/i.test(message)) {
     return "Veresiye özelliği için veritabanı kurulumu henüz tamamlanmadı. Lütfen yöneticinizle iletişime geçin.";
@@ -130,7 +139,7 @@ export default function VeresiyePage() {
         .select("*, app_users(name)")
         .eq("customer_id", customerId)
         .order("created_at", { ascending: false })
-        .limit(20);
+        .limit(50);
       if (data) setTransactions(data as Transaction[]);
     },
     [supabase]
@@ -143,6 +152,41 @@ export default function VeresiyePage() {
 
   const selectedCustomer = customers.find((customer) => customer.id === selectedCustomerId) || null;
   const totalDebt = customers.reduce((sum, customer) => sum + Math.max(0, Number(customer.credit_balance)), 0);
+  const selectedTimeline = useMemo(() => {
+    const sortedTransactions = [...transactions].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+    const timeline = sortedTransactions.reduce<{
+      balance: number;
+      items: Array<Transaction & { amount: number; balanceAfter: number; closedDebt: boolean; actionText: string }>;
+    }>(
+      (acc, tx) => {
+        const amount = Number(tx.amount);
+        const balanceBefore = acc.balance;
+        const balanceAfter = tx.type === "debt" ? balanceBefore + amount : Math.max(0, balanceBefore - amount);
+        const closedDebt = tx.type === "payment" && balanceBefore > 0 && balanceAfter === 0;
+        return {
+          balance: balanceAfter,
+          items: [
+            ...acc.items,
+            {
+              ...tx,
+              amount,
+              balanceAfter,
+              closedDebt,
+              actionText: closedDebt ? "Borcu kapattı" : tx.type === "debt" ? "Borç aldı" : "Ödeme yaptı",
+            },
+          ],
+        };
+      },
+      { balance: 0, items: [] }
+    );
+    return timeline.items.reverse();
+  }, [transactions]);
+  const debtTimelineItems = selectedTimeline.filter((tx) => tx.type === "debt");
+  const firstDebt = debtTimelineItems[debtTimelineItems.length - 1];
+  const lastPayment = selectedTimeline.find((tx) => tx.type === "payment");
+  const closedAt = selectedTimeline.find((tx) => tx.closedDebt);
 
   function daysSince(dateStr?: string) {
     if (!dateStr) return null;
@@ -623,6 +667,27 @@ export default function VeresiyePage() {
             </p>
           </div>
 
+          <div className="mb-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 dark:border-amber-500/25 dark:bg-amber-500/10">
+              <p className="text-[10px] font-black uppercase tracking-wide text-amber-700 dark:text-amber-300">İlk borç</p>
+              <p className="mt-1 text-sm font-black text-slate-950 dark:text-slate-50">
+                {firstDebt ? formatDate(firstDebt.created_at) : "-"}
+              </p>
+            </div>
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 dark:border-emerald-500/25 dark:bg-emerald-500/10">
+              <p className="text-[10px] font-black uppercase tracking-wide text-emerald-700 dark:text-emerald-300">Son ödeme</p>
+              <p className="mt-1 text-sm font-black text-slate-950 dark:text-slate-50">
+                {lastPayment ? `${formatDate(lastPayment.created_at)} - ${formatMoney(lastPayment.amount)}` : "-"}
+              </p>
+            </div>
+            <div className="rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-3 dark:border-cyan-500/25 dark:bg-cyan-500/10">
+              <p className="text-[10px] font-black uppercase tracking-wide text-cyan-700 dark:text-cyan-300">Kapanış</p>
+              <p className="mt-1 text-sm font-black text-slate-950 dark:text-slate-50">
+                {Number(selectedCustomer.credit_balance) === 0 && closedAt ? formatDate(closedAt.created_at) : "Açık"}
+              </p>
+            </div>
+          </div>
+
           {detailMessage && (
             <div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-800 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
               {detailMessage}
@@ -667,20 +732,72 @@ export default function VeresiyePage() {
             </button>
           </form>
 
-          {transactions.length > 0 && (
+          {selectedTimeline.length > 0 && (
             <div className="mt-5 border-t border-slate-200 pt-4 dark:border-slate-800">
               <p className="mb-2 text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Son İşlemler</p>
-              <div className="max-h-48 space-y-2 overflow-y-auto">
-                {transactions.map((tx) => (
-                  <div key={tx.id} className="flex items-center justify-between text-sm">
-                    <div>
+              <div className="space-y-3">
+                {selectedTimeline.map((tx) => (
+                  <div
+                    key={tx.id}
+                    className={`rounded-2xl border px-4 py-3 text-sm ${
+                      tx.closedDebt
+                        ? "border-cyan-300 bg-cyan-50 dark:border-cyan-400/30 dark:bg-cyan-400/10"
+                        : tx.type === "debt"
+                        ? "border-amber-200 bg-amber-50 dark:border-amber-500/25 dark:bg-amber-500/10"
+                        : "border-emerald-200 bg-emerald-50 dark:border-emerald-500/25 dark:bg-emerald-500/10"
+                    }`}
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wide ${
+                              tx.closedDebt
+                                ? "bg-cyan-500 text-white"
+                                : tx.type === "debt"
+                                ? "bg-amber-500 text-slate-950"
+                                : "bg-emerald-500 text-white"
+                            }`}
+                          >
+                            {tx.actionText}
+                          </span>
+                          <span className="text-xs font-black text-slate-700 dark:text-slate-200">
+                            {formatDateTime(tx.created_at)}
+                          </span>
+                        </div>
+                        <p className="mt-2 font-bold text-slate-800 dark:text-slate-100">
+                          {tx.type === "debt" ? "Müşteri veresiye aldı" : "Müşteri ödeme verdi"}
+                          {tx.closedDebt ? " ve borcunu kapattı" : ""}.
+                        </p>
+                        <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                          {tx.note && <span>Not: {tx.note}</span>}
+                          {tx.app_users?.name && <span>Kaydeden: {tx.app_users.name}</span>}
+                        </div>
+                      </div>
+                      <div className="shrink-0 text-left sm:text-right">
+                        <p
+                          className={`text-lg font-black ${
+                            tx.type === "debt"
+                              ? "text-amber-700 dark:text-amber-300"
+                              : "text-emerald-700 dark:text-emerald-300"
+                          }`}
+                        >
+                          {tx.type === "debt" ? "+" : "-"}
+                          {formatMoney(tx.amount)}
+                        </p>
+                        <p className="mt-1 text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                          Kalan: {formatMoney(tx.balanceAfter)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="hidden">
                       <span className={tx.type === "debt" ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"}>
                         {tx.type === "debt" ? "Borç" : "Ödeme"}
                       </span>
                       {tx.note && <span className="ml-2 text-slate-400">· {tx.note}</span>}
                       {tx.app_users?.name && <span className="ml-2 text-slate-400">· {tx.app_users.name}</span>}
                     </div>
-                    <span className="font-bold text-slate-800 dark:text-slate-200">{formatMoney(Number(tx.amount))}</span>
+                    <span className="hidden font-bold text-slate-800 dark:text-slate-200">{formatMoney(Number(tx.amount))}</span>
                   </div>
                 ))}
               </div>
@@ -695,7 +812,7 @@ export default function VeresiyePage() {
 function Modal({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
+      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
         <div className="mb-5 flex items-center justify-between gap-4">
           <h2 className="font-display text-2xl font-black">{title}</h2>
           <button
