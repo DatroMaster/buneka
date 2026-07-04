@@ -149,20 +149,22 @@ export function SectorPackageBuilder({
                   </span>
                 )}
                 <span className="block font-display text-base font-black">{plan.name}</span>
-                <span className="mt-1 block text-xl font-black text-[color:var(--home-glow)]">{plan.price}</span>
                 <span className="mt-1 block text-[11px] font-semibold leading-4">{plan.summary}</span>
               </button>
             );
           })}
         </div>
 
-        <div className="mt-4 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/6 p-3">
+        <div className="mt-4 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/6 p-4">
           <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">
             Seçilen model ve tahmini toplam
           </p>
-          <div className="mt-1 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mt-1 flex flex-col gap-1">
+            <p className="font-display text-4xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
             <p className="font-display text-xl font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
-            <p className="font-display text-3xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
+            <p className="text-xs font-bold text-[color:var(--home-muted)]">
+              {includesAllModules ? "TÃ¼m ek modÃ¼ller aktif" : `${selectedModules.length} ek modÃ¼l seÃ§ildi`}
+            </p>
           </div>
         </div>
 
@@ -280,7 +282,7 @@ export function SectorPackageBuilder({
 
       <section className="package-detail-panel flex flex-col rounded-xl p-4 sm:p-5">
         <div className="grid gap-3">
-          <div className="rounded-xl border border-[color:var(--home-glow)]/35 bg-[color:var(--home-glow)]/[0.055] p-4 shadow-[0_0_42px_rgba(0,255,123,0.08)]">
+          <div className="rounded-xl border border-[color:var(--home-glow)]/35 bg-[color:var(--home-glow)]/[0.055] p-4">
             <div className="flex items-start gap-3">
               <Sparkles size={20} className="mt-1 shrink-0 text-[color:var(--home-glow)]" />
               <div>
@@ -297,7 +299,7 @@ export function SectorPackageBuilder({
             <p className="text-[11px] font-black uppercase tracking-[0.16em] text-[color:var(--home-glow)]">
               Oluşturulan paket içeriği
             </p>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="hidden">
               <div className="rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 p-3">
                 <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Model</p>
                 <p className="mt-1 font-display text-lg font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
@@ -320,7 +322,7 @@ export function SectorPackageBuilder({
               ))}
               {selectedModules.slice(0, 6).map((module) => (
                 <div key={module} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 px-3 py-2">
-                  <PackageCheck size={14} className="shrink-0 text-[#f4f7fb]" />
+                  <PackageCheck size={14} className="shrink-0 text-[color:var(--home-glow)]" />
                   <span className="text-xs font-bold text-[color:var(--home-ink)]">{module}</span>
                 </div>
               ))}
@@ -373,7 +375,7 @@ export function SectorPackageBuilder({
             </div>
           </div>
 
-          <div className="rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-glow)]/7 p-4">
+          <div className="hidden">
             <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Satın alma talebi</p>
             <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>

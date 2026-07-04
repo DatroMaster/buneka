@@ -2392,7 +2392,7 @@
 .stock-movement-row {
   position: relative;
   background: var(--buneka-panel);
-  box-shadow: inset 0 -1px 0 var(--buneka-panel);
+  box-shadow: inset 0 -1px 0 var(--buneka-border);
   transition: background 140ms ease, box-shadow 140ms ease;
 }
 
@@ -2401,19 +2401,19 @@
 }
 
 .stock-movement-entry {
-  box-shadow: inset 3px 0 0 var(--buneka-accent), inset 0 -1px 0 var(--buneka-panel);
+  box-shadow: inset 3px 0 0 var(--buneka-status), inset 0 -1px 0 var(--buneka-border);
 }
 
 .stock-movement-exit {
-  box-shadow: inset 3px 0 0 var(--buneka-accent), inset 0 -1px 0 var(--buneka-panel);
+  box-shadow: inset 3px 0 0 #f5a623, inset 0 -1px 0 var(--buneka-border);
 }
 
 .stock-movement-entry:hover {
-  background: var(--buneka-panel);
+  background: color-mix(in srgb, var(--buneka-status) 7%, var(--buneka-panel));
 }
 
 .stock-movement-exit:hover {
-  background: var(--buneka-panel);
+  background: color-mix(in srgb, #f5a623 7%, var(--buneka-panel));
 }
 
 .category-badge {
@@ -2454,6 +2454,48 @@
 .license-authority-card > * {
   position: relative;
   z-index: 1;
+}
+
+.stock-age-metric,
+.stock-history-card {
+  border: 1px solid var(--buneka-border);
+  background: var(--buneka-panel);
+  color: var(--buneka-accent);
+}
+
+.stock-age-green {
+  border-color: color-mix(in srgb, var(--buneka-status) 34%, var(--buneka-border));
+}
+
+.stock-age-green p:last-child {
+  color: var(--buneka-status);
+}
+
+.stock-age-amber {
+  border-color: color-mix(in srgb, #f5a623 38%, var(--buneka-border));
+}
+
+.stock-age-amber p:last-child {
+  color: #f5a623;
+}
+
+.stock-history-backdrop {
+  background: color-mix(in srgb, var(--buneka-base) 90%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.stock-history-panel {
+  border: 1px solid color-mix(in srgb, var(--buneka-accent) 16%, var(--buneka-border));
+  background: var(--buneka-elevated);
+  color: var(--buneka-accent);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.44);
+}
+
+.stock-history-header {
+  border-bottom: 1px solid var(--buneka-border);
+  background:
+    radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--buneka-link) 12%, transparent), transparent 32%),
+    var(--buneka-panel);
 }
 
 @media print {
@@ -2518,9 +2560,6 @@
   .premium-input,
   .glass-card,
   .glass-panel,
-  .rounded-xl,
-  .rounded-2xl,
-  .rounded-3xl,
   .guide-panel,
   .guide-sidebar,
   .guide-hero,
@@ -2536,10 +2575,7 @@
   .bn-modal,
   .bn-square-video,
   .bn-square-video > div,
-  .product-table-head,
-  .stock-movement-row,
-  .stock-movement-entry:hover,
-  .stock-movement-exit:hover {
+  .product-table-head {
     background: var(--buneka-panel) !important;
     border-color: var(--buneka-border) !important;
     color: var(--buneka-accent) !important;

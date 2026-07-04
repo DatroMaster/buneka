@@ -221,11 +221,11 @@ export default function AyarlarPage() {
         <div>
           <p className="text-[11px] font-black uppercase tracking-wide text-[#f4f7fb]">Lisans ve yetki</p>
           {license ? (
-            <p className="text-sm font-black text-[#05070d]">
+            <p className="text-sm font-black text-[color:var(--buneka-accent)]">
               {license.plans?.name || "Aktif paket"} · {new Date(license.expires_at).toLocaleDateString("tr-TR")} · {license.status}
             </p>
           ) : (
-            <p className="text-sm font-black text-[#05070d]">Aktif lisans kaydı bulunamadı.</p>
+            <p className="text-sm font-black text-[color:var(--buneka-accent)]">Aktif lisans kaydı bulunamadı.</p>
           )}
         </div>
         <span className="rounded-full bg-[#090d14] px-3 py-1 text-xs font-black text-[#f4f7fb]">

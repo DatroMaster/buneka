@@ -481,16 +481,16 @@ export default function StokPage() {
       </div>
 
       {selectedHistoryRow && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
-          <div className="max-h-[88vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-[#090d14] bg-[#05070d] text-[#f4f7fb] shadow-2xl">
-            <div className="flex items-start justify-between gap-4 border-b border-[#090d14] bg-[#05070d] px-5 py-4">
+        <div className="stock-history-backdrop fixed inset-0 z-50 grid place-items-center p-4">
+          <div className="stock-history-panel max-h-[88vh] w-full max-w-4xl overflow-hidden rounded-2xl">
+            <div className="stock-history-header flex items-start justify-between gap-4 px-5 py-4">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#f4f7fb]">Ürün tarihçesi</p>
                 <h2 className="mt-1 font-display text-2xl font-black">{selectedHistoryRow.product.name}</h2>
                 <p className="mt-1 font-mono text-xs font-semibold text-[#f4f7fb]">{selectedHistoryRow.product.barcode}</p>
               </div>
               <button
-                className="rounded-full border border-[#090d14] bg-[#05070d] p-2 text-[#f4f7fb] transition hover:border-[#f4f7fb] hover:text-white active:scale-90"
+                className="rounded-full border border-[color:var(--buneka-border)] bg-[color:var(--buneka-panel)] p-2 text-[color:var(--buneka-accent)] transition hover:border-[color:var(--buneka-status)] active:scale-90"
                 type="button"
                 onClick={() => setSelectedHistoryProductId(null)}
                 aria-label="Kapat"
@@ -515,7 +515,7 @@ export default function StokPage() {
                   <h3 className="text-sm font-black uppercase tracking-wide text-[#f4f7fb]">Kalan parti / fatura detayı</h3>
                   <div className="mt-3 space-y-2">
                     {selectedHistoryRow.remainingLots.map((lot) => (
-                      <div key={lot.id} className="rounded-xl border border-[#090d14] bg-[#05070d] p-3">
+                      <div key={lot.id} className="stock-history-card rounded-xl p-3">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-sm font-black text-[#f4f7fb]">{formatDate(lot.date)}</p>
@@ -542,7 +542,7 @@ export default function StokPage() {
                   <h3 className="text-sm font-black uppercase tracking-wide text-[#f4f7fb]">Stok hareket tarihçesi</h3>
                   <div className="mt-3 space-y-2">
                     {selectedHistoryMovements.length === 0 ? (
-                      <div className="rounded-xl border border-[#090d14] bg-[#05070d] p-4 text-sm font-semibold text-[#f4f7fb]">
+                      <div className="stock-history-card rounded-xl p-4 text-sm font-semibold text-[color:var(--buneka-muted)]">
                         Bu ürün için hareket kaydı yok.
                       </div>
                     ) : (
@@ -550,7 +550,7 @@ export default function StokPage() {
                         const movementType = getMovementLabel(movement.movement_type);
                         const Icon = movementType.icon;
                         return (
-                          <div key={movement.id} className="rounded-xl border border-[#090d14] bg-[#05070d] p-3">
+                          <div key={movement.id} className="stock-history-card rounded-xl p-3">
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <p className="text-sm font-black text-[#f4f7fb]">{formatTime(movement.created_at)}</p>
@@ -642,9 +642,9 @@ function StockAgeMetric({
   tone?: "green" | "amber";
 }) {
   return (
-    <div className="rounded-xl border border-[#05070d] bg-[#090d14] p-3">
+    <div className={`stock-age-metric stock-age-${tone} rounded-xl p-3`}>
       <p className="text-[10px] font-black uppercase tracking-wide text-[#f4f7fb]">{label}</p>
-      <p className={`mt-1 text-lg font-black ${tone === "amber" ? "text-[#f4f7fb]" : "text-[#f4f7fb]"}`}>
+      <p className="mt-1 text-lg font-black">
         {value}
       </p>
     </div>

@@ -733,6 +733,11 @@ export default function UrunlerPage() {
                   ))}
                 </select>
               )}
+              {productForm.category && (
+                <span className="category-badge w-fit" style={getCategoryStyle(productForm.category)}>
+                  {productForm.category}
+                </span>
+              )}
             </div>
 
             <div className="grid gap-2">
@@ -950,12 +955,12 @@ function Modal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
-      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-[var(--color-bg)] p-6 text-slate-950 shadow-2xl dark:text-slate-50">
-        <div className="mb-5 flex items-center justify-between gap-4">
+    <div className="fixed inset-0 z-50 grid place-items-center bg-[#05070d]/88 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border border-[color:var(--buneka-border)] bg-[color:var(--buneka-elevated)] p-6 text-[color:var(--buneka-accent)] shadow-2xl ring-1 ring-white/5">
+        <div className="mb-5 flex items-center justify-between gap-4 border-b border-[color:var(--buneka-border)] pb-4">
           <h2 className="font-display text-2xl font-black">{title}</h2>
           <button
-            className="rounded-full bg-white p-2 text-slate-950 transition-transform active:scale-90 dark:bg-slate-800 dark:text-slate-50"
+            className="rounded-full border border-[color:var(--buneka-border)] bg-[color:var(--buneka-panel)] p-2 text-[color:var(--buneka-accent)] transition-transform active:scale-90"
             type="button"
             onClick={onClose}
             aria-label="Kapat"
