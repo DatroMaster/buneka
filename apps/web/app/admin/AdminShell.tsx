@@ -40,30 +40,30 @@ export default function AdminShell({
               <span className="text-xs font-semibold text-slate-400">Admin</span>
             </span>
           </span>
-          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-emerald-400 via-[color:var(--color-primary)] to-transparent" />
+          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-[#FF6B00] via-[#10B981] to-transparent" />
           <span className="text-[11px] text-slate-400">{user.name} · {user.role}</span>
         </Link>
 
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/app"
-            className="hidden items-center gap-1.5 rounded-full border border-white/15 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-emerald-300/50 hover:text-white sm:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-slate-600 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-[#FF6B00]/60 hover:text-white sm:flex"
           >
             <ArrowLeft size={14} /> Uygulamaya dön
           </Link>
-          <BunekaNedirButton variant="compact" className="hidden border-white/15 text-emerald-300 hover:border-emerald-300/50 sm:flex" />
+          <BunekaNedirButton variant="compact" className="hidden border-slate-600 text-[#10B981] hover:border-[#FF6B00]/60 sm:flex" />
           <Link
             href="/"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-emerald-300/50 hover:text-white active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-all hover:border-[#FF6B00]/60 hover:text-white active:scale-90"
             aria-label="Site ana sayfası"
             title="Site ana sayfası"
           >
             <Home size={16} />
           </Link>
-          <ThemeToggle className="border-white/15 text-slate-300 hover:border-emerald-300/50 hover:text-white" />
+          <ThemeToggle className="border-slate-600 text-slate-300 hover:border-[#FF6B00]/60 hover:text-white" />
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-slate-300 transition-all hover:border-emerald-300/50 hover:text-white active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-all hover:border-[#FF6B00]/60 hover:text-white active:scale-90"
             type="button"
             aria-label="Menüyü aç"
           >
@@ -92,11 +92,11 @@ export default function AdminShell({
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-all active:scale-[0.98] ${
                       isActive
-                        ? "bg-emerald-400/12 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-                        : "text-slate-300 hover:bg-white/10 hover:text-white"
+                        ? "border border-[#FF6B00]/45 bg-[#1E293B] text-white shadow-[inset_3px_0_0_#FF6B00]"
+                        : "border border-transparent text-slate-300 hover:border-slate-600 hover:bg-[#1E293B] hover:text-white"
                     }`}
                   >
-                    <Icon size={20} className={isActive ? "text-emerald-200" : "text-emerald-300"} />
+                    <Icon size={20} className={isActive ? "text-[#FF6B00]" : "text-[#10B981]"} />
                     <span className="font-medium">{item.name}</span>
                   </Link>
                 );
@@ -104,7 +104,7 @@ export default function AdminShell({
               <Link
                 href="/app"
                 onClick={() => setIsMenuOpen(false)}
-                className="mt-4 flex items-center gap-3 rounded-xl px-3 py-3 text-amber-300 transition-colors hover:bg-amber-300/10"
+                className="mt-4 flex items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-[#FFB020] transition-colors hover:border-[#FF6B00]/45 hover:bg-[#FF6B00]/10"
               >
                 <ArrowLeft size={20} />
                 <span className="font-medium">Uygulamaya dön</span>

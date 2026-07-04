@@ -13,6 +13,7 @@ import {
   PackagePlus,
   Percent,
   Plus,
+  RefreshCw,
   ScanBarcode,
   Search,
   WalletCards,
@@ -100,6 +101,9 @@ export default function UrunlerPage() {
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [newCategory, setNewCategory] = useState(false);
   const [usdRate, setUsdRate] = useState<number | null>(null);
+  const [profitPercent, setProfitPercent] = useState("20");
+  const [autoProfitEnabled, setAutoProfitEnabled] = useState(true);
+  const [updatingUsdPrices, setUpdatingUsdPrices] = useState(false);
   const [bulkMode, setBulkMode] = useState<"percent" | "amount">("percent");
   const [bulkValue, setBulkValue] = useState("");
   const [bulkCategory, setBulkCategory] = useState("");
@@ -192,21 +196,70 @@ export default function UrunlerPage() {
   const formatMoney = (amount: number) =>
     new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(amount);
 
+  const purchasePriceTryPreview = useMemo(() => {
+    const enteredPurchasePrice = productForm.purchase_price ? Number(productForm.purchase_price) : null;
+    if (!enteredPurchasePrice || !Number.isFinite(enteredPurchasePrice)) return null;
+    if (productForm.purchase_currency === "USD") {
+      return usdRate ? convertUsdToTry(enteredPurchasePrice, usdRate) : null;
+    }
+    return Math.ceil(enteredPurchasePrice);
+  }, [productForm.purchase_currency, productForm.purchase_price, usdRate]);
+
+  const suggestedSalePrice = useMemo(() => {
+    if (!purchasePriceTryPreview) return null;
+    const margin = Number(profitPercent || 0);
+    if (!Number.isFinite(margin)) return null;
+    return Math.ceil(purchasePriceTryPreview * (1 + margin / 100));
+  }, [profitPercent, purchasePriceTryPreview]);
+
+  function withSuggestedSalePrice(
+    nextForm: ProductForm,
+    options?: { auto?: boolean; profit?: string; rate?: number | null }
+  ) {
+    const shouldApply = options?.auto ?? autoProfitEnabled;
+    if (!shouldApply) return nextForm;
+
+    const enteredPurchasePrice = nextForm.purchase_price ? Number(nextForm.purchase_price) : null;
+    if (!enteredPurchasePrice || !Number.isFinite(enteredPurchasePrice)) return nextForm;
+
+    const rate = options?.rate ?? usdRate;
+    const purchaseTry =
+      nextForm.purchase_currency === "USD"
+        ? rate
+          ? convertUsdToTry(enteredPurchasePrice, rate)
+          : null
+        : Math.ceil(enteredPurchasePrice);
+
+    if (!purchaseTry) return nextForm;
+    const margin = Number(options?.profit ?? profitPercent ?? 0);
+    const normalizedMargin = Number.isFinite(margin) ? margin : 0;
+    return {
+      ...nextForm,
+      sale_price: String(Math.ceil(purchaseTry * (1 + normalizedMargin / 100))),
+    };
+  }
+
+  function updateProductForm(nextForm: ProductForm, options?: { auto?: boolean; profit?: string; rate?: number | null }) {
+    setProductForm(withSuggestedSalePrice(nextForm, options));
+  }
+
   function openNewProduct() {
     setEditingProductId(null);
     setProductForm(emptyProductForm);
     setNewCategory(categories.length === 0);
     setUsdRate(null);
+    setAutoProfitEnabled(true);
     setShowProductModal(true);
   }
 
   function openEditProduct(product: Product) {
+    const purchaseCurrency = (product.purchase_currency as "TRY" | "USD") || "TRY";
     setEditingProductId(product.id);
     setProductForm({
       barcode: product.barcode,
       name: product.name,
       category: product.category || "",
-      purchase_currency: (product.purchase_currency as "TRY" | "USD") || "TRY",
+      purchase_currency: purchaseCurrency,
       purchase_price:
         product.purchase_currency === "USD" && product.purchase_price_original != null
           ? String(product.purchase_price_original)
@@ -219,15 +272,24 @@ export default function UrunlerPage() {
     });
     setNewCategory(!!product.category && !categories.includes(product.category));
     setUsdRate(null);
+    setAutoProfitEnabled(false);
+    if (purchaseCurrency === "USD") {
+      void fetchUsdRateAction().then((rates) => setUsdRate(rates?.usdToTry ?? null));
+    }
     setShowProductModal(true);
   }
 
   async function handleCurrencyChange(currency: "TRY" | "USD") {
-    setProductForm((current) => ({ ...current, purchase_currency: currency }));
+    let nextRate = usdRate;
     if (currency === "USD" && usdRate === null) {
       const rates = await fetchUsdRateAction();
-      setUsdRate(rates?.usdToTry ?? null);
+      nextRate = rates?.usdToTry ?? null;
+      setUsdRate(nextRate);
     }
+    setAutoProfitEnabled(true);
+    setProductForm((current) =>
+      withSuggestedSalePrice({ ...current, purchase_currency: currency }, { auto: true, rate: nextRate })
+    );
   }
 
   async function saveProduct(event: FormEvent<HTMLFormElement>) {
@@ -252,6 +314,13 @@ export default function UrunlerPage() {
       purchasePriceTry = convertUsdToTry(enteredPurchasePrice, rate);
     }
 
+    const margin = Number(profitPercent || 0);
+    const normalizedMargin = Number.isFinite(margin) ? margin : 0;
+    const salePrice =
+      autoProfitEnabled && purchasePriceTry
+        ? Math.ceil(purchasePriceTry * (1 + normalizedMargin / 100))
+        : Number(productForm.sale_price);
+
     const payload = {
       barcode: productForm.barcode.trim(),
       name: productForm.name.trim(),
@@ -259,7 +328,7 @@ export default function UrunlerPage() {
       purchase_currency: productForm.purchase_currency,
       purchase_price: purchasePriceTry,
       purchase_price_original: purchasePriceOriginal,
-      sale_price: Number(productForm.sale_price),
+      sale_price: salePrice,
       stock_quantity: Number(productForm.stock_quantity || 0),
       min_stock: Number(productForm.min_stock || 0),
     };
@@ -310,6 +379,56 @@ export default function UrunlerPage() {
     setSaving(false);
   }
 
+  async function updateUsdProductsByCurrentRate() {
+    const usdProducts = products.filter(
+      (product) => product.purchase_currency === "USD" && product.purchase_price_original != null
+    );
+
+    if (usdProducts.length === 0) {
+      setMessage("Kurla güncellenecek USD bazlı ürün bulunamadı.");
+      return;
+    }
+
+    setUpdatingUsdPrices(true);
+    setMessage("");
+
+    const rate = usdRate ?? (await fetchUsdRateAction())?.usdToTry ?? null;
+    if (!rate) {
+      setMessage("Güncel dolar kuru alınamadı, lütfen tekrar deneyin.");
+      setUpdatingUsdPrices(false);
+      return;
+    }
+
+    setUsdRate(rate);
+    const margin = Number(profitPercent || 0);
+    const normalizedMargin = Number.isFinite(margin) ? margin : 0;
+    const updates = usdProducts.map((product) => {
+      const nextPurchaseTry = convertUsdToTry(Number(product.purchase_price_original), rate);
+      const nextSalePrice = Math.ceil(nextPurchaseTry * (1 + normalizedMargin / 100));
+      return supabase
+        .from("products")
+        .update({
+          purchase_price: nextPurchaseTry,
+          sale_price: nextSalePrice,
+        })
+        .eq("id", product.id);
+    });
+
+    const results = await Promise.all(updates);
+    const failed = results.find((result) => result.error);
+
+    if (failed?.error) {
+      setMessage(`USD bazlı fiyatlar güncellenemedi: ${failed.error.message}`);
+    } else {
+      setMessage(
+        `${usdProducts.length} USD bazlı ürün güncel kurla hesaplandı; satış fiyatları %${normalizedMargin} kârla yukarı yuvarlandı.`
+      );
+      await loadProducts();
+    }
+
+    setUpdatingUsdPrices(false);
+  }
+
   async function applyBulkUpdate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const value = Number(bulkValue);
@@ -356,6 +475,16 @@ export default function UrunlerPage() {
             <button className="premium-button-secondary" type="button" onClick={() => setShowBulkUpdate(true)}>
               <Percent size={18} /> Toplu Fiyat Güncelle
             </button>
+            <button
+              className="premium-button-secondary"
+              type="button"
+              onClick={updateUsdProductsByCurrentRate}
+              disabled={updatingUsdPrices}
+              title="USD bazlı ürünleri güncel TCMB kuru ve kâr oranı ile yeniler."
+            >
+              {updatingUsdPrices ? <Loader2 size={18} className="animate-spin" /> : <RefreshCw size={18} />}
+              USD Kur Güncelle
+            </button>
             <button className="premium-button-secondary" type="button" onClick={() => setShowBulkAdd(true)}>
               <Layers size={18} /> Toplu Ekle
             </button>
@@ -375,8 +504,8 @@ export default function UrunlerPage() {
       />
 
       <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
-        <div className="data-card border-cyan-200/70 p-4 dark:border-cyan-500/20">
-          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-cyan-600 dark:text-cyan-300">
+        <div className="data-card border-[#FF6B00]/25 p-4">
+          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#FFB020]">
             <PackagePlus size={15} /> Katalog Merkezi
           </div>
           <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -384,12 +513,12 @@ export default function UrunlerPage() {
           </p>
         </div>
         <div className="stat-card">
-          <div className="stat-card-icon bg-cyan-50 text-cyan-600 dark:bg-cyan-500/10 dark:text-cyan-300">
+          <div className="stat-card-icon bg-[#10B981]/10 text-[#10B981]">
             <Layers size={22} />
           </div>
           <div>
             <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Kayıtlı Ürün</p>
-            <p className="text-2xl font-black text-cyan-600 dark:text-cyan-300">{products.length}</p>
+            <p className="text-2xl font-black text-[#10B981]">{products.length}</p>
           </div>
         </div>
         <div className="stat-card">
@@ -418,14 +547,14 @@ export default function UrunlerPage() {
               placeholder="Ürün adı veya barkod ile ara..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
+              className="w-full rounded-xl border border-slate-700 bg-[#0F172A] py-2 pl-10 pr-4 text-slate-50 placeholder-slate-400 focus:border-[#FF6B00] focus:outline-none"
             />
           </div>
           {categories.length > 0 && (
             <select
               value={categoryFilter}
               onChange={(event) => setCategoryFilter(event.target.value)}
-              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-950 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
+              className="rounded-xl border border-slate-700 bg-[#0F172A] px-3 py-2 text-sm text-slate-50 focus:border-[#FF6B00] focus:outline-none"
             >
               <option value="">Tüm kategoriler</option>
               {categories.map((category) => (
@@ -453,7 +582,7 @@ export default function UrunlerPage() {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center">
-                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[#FF6B00]" />
                   </td>
                 </tr>
               ) : sortedProducts.length === 0 ? (
@@ -506,7 +635,7 @@ export default function UrunlerPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Pencil size={16} className="inline text-slate-300 group-hover:text-cyan-500 dark:text-slate-600" />
+                      <Pencil size={16} className="inline text-slate-500 group-hover:text-[#FF6B00]" />
                     </td>
                   </tr>
                 ))
@@ -531,7 +660,7 @@ export default function UrunlerPage() {
                 {categories.length > 0 && (
                   <button
                     type="button"
-                    className="text-xs font-bold text-cyan-600 dark:text-cyan-300"
+                    className="text-xs font-bold text-[#FFB020]"
                     onClick={() => setNewCategory((current) => !current)}
                   >
                     {newCategory ? "Listeden seç" : "+ Yeni kategori"}
@@ -567,14 +696,14 @@ export default function UrunlerPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "TRY" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "TRY" ? "border-[#10B981]/70 bg-[#10B981]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#0F172A] text-slate-200"}`}
                   onClick={() => handleCurrencyChange("TRY")}
                 >
                   TL
                 </button>
                 <button
                   type="button"
-                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "USD" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "USD" ? "border-[#10B981]/70 bg-[#10B981]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#0F172A] text-slate-200"}`}
                   onClick={() => handleCurrencyChange("USD")}
                 >
                   USD ($)
@@ -583,7 +712,7 @@ export default function UrunlerPage() {
               {productForm.purchase_currency === "USD" && (
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   {usdRate
-                    ? `Güncel kur: 1$ = ${usdRate.toFixed(2)} TL (TCMB). Girilen tutar TL'ye çevrilip yukarı yuvarlanır.`
+                    ? `Güncel kur: 1$ = ${usdRate.toFixed(2)} TL (TCMB). Girilen tutar TL’ye çevrilip yukarı yuvarlanır.`
                     : "Güncel dolar kuru TCMB'den alınıyor..."}
                 </p>
               )}
@@ -594,11 +723,68 @@ export default function UrunlerPage() {
                 label={productForm.purchase_currency === "USD" ? "Alış fiyatı ($)" : "Alış fiyatı (TL)"}
                 type="number"
                 value={productForm.purchase_price}
-                onChange={(value) => setProductForm({ ...productForm, purchase_price: value })}
+                onChange={(value) => updateProductForm({ ...productForm, purchase_price: value })}
               />
-              <FormInput label="Satış fiyatı (TL)" type="number" value={productForm.sale_price} onChange={(value) => setProductForm({ ...productForm, sale_price: value })} required />
+              <FormInput
+                label="Kâr oranı (%)"
+                type="number"
+                value={profitPercent}
+                onChange={(value) => {
+                  setProfitPercent(value);
+                  setAutoProfitEnabled(true);
+                  updateProductForm(productForm, { auto: true, profit: value });
+                }}
+              />
+              <FormInput
+                label="Satış fiyatı (TL)"
+                type="number"
+                value={productForm.sale_price}
+                onChange={(value) => {
+                  setAutoProfitEnabled(false);
+                  setProductForm({ ...productForm, sale_price: value });
+                }}
+                required
+              />
               <FormInput label="Stok" type="number" value={productForm.stock_quantity} onChange={(value) => setProductForm({ ...productForm, stock_quantity: value })} />
               <FormInput label="Minimum stok" type="number" value={productForm.min_stock} onChange={(value) => setProductForm({ ...productForm, min_stock: value })} />
+            </div>
+            <div className="rounded-2xl border border-slate-700/70 bg-[#0F172A] p-4 text-sm text-slate-200">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#FF6B00]">Otomatik kârlı fiyat</p>
+                  <p className="mt-1 text-slate-300">
+                    USD bazlı ürünlerde maliyet güncel TCMB kuru ile TL’ye çevrilir; satış fiyatı kâr oranıyla en yakın üst TL’ye yuvarlanır.
+                  </p>
+                </div>
+                <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#1E293B] px-3 py-2 text-xs font-black text-slate-100">
+                  <input
+                    type="checkbox"
+                    checked={autoProfitEnabled}
+                    onChange={(event) => {
+                      setAutoProfitEnabled(event.target.checked);
+                      if (event.target.checked) {
+                        updateProductForm(productForm, { auto: true });
+                      }
+                    }}
+                    className="accent-[#FF6B00]"
+                  />
+                  Otomatik uygula
+                </label>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-slate-700 bg-[#111827] p-3">
+                  <p className="text-xs font-bold text-slate-400">TL maliyet</p>
+                  <p className="mt-1 text-xl font-black text-[#F8FAFC]">
+                    {purchasePriceTryPreview !== null ? formatMoney(purchasePriceTryPreview) : "-"}
+                  </p>
+                </div>
+                <div className="rounded-xl border border-[#FF6B00]/45 bg-[#FF6B00]/10 p-3">
+                  <p className="text-xs font-bold text-slate-300">Önerilen satış</p>
+                  <p className="mt-1 text-xl font-black text-[#FFB020]">
+                    {suggestedSalePrice !== null ? formatMoney(suggestedSalePrice) : "-"}
+                  </p>
+                </div>
+              </div>
             </div>
             <button className="premium-button-primary mt-2" type="submit" disabled={saving}>
               {saving ? <Loader2 size={18} className="animate-spin" /> : <PackagePlus size={18} />}
@@ -646,14 +832,14 @@ export default function UrunlerPage() {
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button
-                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-[#10B981]/70 bg-[#10B981]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#0F172A] text-slate-200"}`}
                 type="button"
                 onClick={() => setBulkMode("percent")}
               >
                 Yüzde
               </button>
               <button
-                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-cyan-400 bg-cyan-50 text-slate-800 shadow-sm dark:bg-cyan-500/10 dark:text-cyan-200" : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-[#10B981]/70 bg-[#10B981]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#0F172A] text-slate-200"}`}
                 type="button"
                 onClick={() => setBulkMode("amount")}
               >

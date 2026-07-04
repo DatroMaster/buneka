@@ -7,28 +7,28 @@
 /* ── Supabase design system — neutral surfaces + single green accent ──
    Light (default) tokens. Green brand: #3ECF8E. */
 :root {
-  --home-bg-1: #FFFFFF;
-  --home-bg-2: #F6F6F6;
-  --home-surface: #FFFFFF;
+  --home-bg-1: #0F172A;
+  --home-bg-2: #111827;
+  --home-surface: #1E293B;
   --home-surface-soft: rgba(0, 0, 0, 0.04);
-  --home-ink: #171717;
-  --home-muted: #6B6B6B;
+  --home-ink: #F8FAFC;
+  --home-muted: #CBD5E1;
   --home-glow: #10B981;
-  --home-border: #E6E6E6;
+  --home-border: #334155;
   --home-star-opacity: 0;
 
-  --color-bg: #FCFCFC;
-  --color-bg-secondary: #F4F4F4;
-  --color-card: #FFFFFF;
-  --color-surface: #FBFBFB;
-  --color-text: #171717;
-  --color-muted: #64748B;
-  --color-border: #E6E6E6;
-  --color-border-strong: #D4D4D4;
-  --color-primary: #00FF7B;
-  --color-primary-hover: #00FF7B;
-  --color-primary-deep: #10B981;
-  --color-primary-fg: #022C22;
+  --color-bg: #0F172A;
+  --color-bg-secondary: #111827;
+  --color-card: #1E293B;
+  --color-surface: #1E293B;
+  --color-text: #F8FAFC;
+  --color-muted: #CBD5E1;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  --color-primary: #FF6B00;
+  --color-primary-hover: #F97316;
+  --color-primary-deep: #EA580C;
+  --color-primary-fg: #F8FAFC;
 
   /* Logo gradient — deep green → near-black, crisp on the light background */
   --mark-from: #1A9E63;
@@ -36,32 +36,32 @@
 }
 
 .dark {
-  --home-bg-1: #0B0F19;
-  --home-bg-2: #080B12;
-  --home-surface: #151E2E;
+  --home-bg-1: #0F172A;
+  --home-bg-2: #111827;
+  --home-surface: #1E293B;
   --home-surface-soft: rgba(255, 255, 255, 0.04);
   --home-ink: #F8FAFC;
   --home-muted: #CBD5E1;
-  --home-glow: #00FF7B;
-  --home-border: #1E293B;
+  --home-glow: #10B981;
+  --home-border: #334155;
   --home-star-opacity: 0;
 
   /* App surfaces — Supabase neutral dark with green + mustard accents */
-  --color-bg: #0B0F19;
-  --color-bg-secondary: #080B12;
-  --color-card: #151E2E;
+  --color-bg: #0F172A;
+  --color-bg-secondary: #111827;
+  --color-card: #1E293B;
   --color-surface: #1E293B;
   --color-text: #F8FAFC;
   --color-muted: #CBD5E1;
-  --color-border: #1E293B;
+  --color-border: #334155;
   --color-border-strong: #334155;
-  --color-primary: #00FF7B;
-  --color-primary-hover: #00FF7B;
-  --color-primary-deep: #10B981;
-  --color-primary-fg: #022C22;
+  --color-primary: #FF6B00;
+  --color-primary-hover: #F97316;
+  --color-primary-deep: #EA580C;
+  --color-primary-fg: #F8FAFC;
 
   /* Logo gradient — bright green → platinum on the dark background */
-  --mark-from: #00FF7B;
+  --mark-from: #10B981;
   --mark-to: #F2F2F2;
 }
 
@@ -76,17 +76,17 @@
     sans-serif;
 
   /* Brand colors — Supabase neutral + green */
-  --color-bg: #FCFCFC;
-  --color-bg-secondary: #F4F4F4;
-  --color-card: #FFFFFF;
-  --color-text: #171717;
-  --color-muted: #64748B;
-  --color-green: #00FF7B;
+  --color-bg: #0F172A;
+  --color-bg-secondary: #111827;
+  --color-card: #1E293B;
+  --color-text: #F8FAFC;
+  --color-muted: #CBD5E1;
+  --color-green: #10B981;
   --color-green-deep: #10B981;
-  --color-amber: #F59E0B;
-  --color-border: #E6E6E6;
-  --color-primary: #00FF7B;
-  --color-primary-deep: #10B981;
+  --color-amber: #FF6B00;
+  --color-border: #334155;
+  --color-primary: #FF6B00;
+  --color-primary-deep: #EA580C;
   --color-info: #F59E0B;
 
   /* Animation */
@@ -167,7 +167,7 @@
     color: var(--color-muted);
   }
 
-  /* Primary button — solid Supabase green */
+  /* Primary button — solid shopping orange */
   .premium-button-primary {
     display: inline-flex;
     align-items: center;
@@ -178,15 +178,15 @@
     color: var(--color-primary-fg);
     font-weight: 600;
     font-size: 0.875rem;
-    border: 1px solid rgba(0, 255, 123, 0.72);
+    border: 1px solid rgba(255, 107, 0, 0.78);
     border-radius: 0.5rem;
     cursor: pointer;
-    box-shadow: 0 0 0 1px rgba(0, 255, 123, 0.16), 0 14px 34px rgba(0, 255, 123, 0.14);
+    box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.18), 0 14px 34px rgba(255, 107, 0, 0.16);
     transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .premium-button-primary:hover {
     background: var(--color-primary);
-    box-shadow: 0 0 0 1px rgba(0, 255, 123, 0.22), 0 18px 46px rgba(0, 255, 123, 0.18);
+    box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.26), 0 18px 46px rgba(255, 107, 0, 0.22);
   }
   .premium-button-primary:active {
     transform: scale(0.99);
@@ -245,15 +245,15 @@
     justify-content: center;
     gap: 0.5rem;
     border-radius: 0.5rem;
-    background: var(--color-primary);
-    color: var(--color-primary-fg);
+    background: #10B981;
+    color: #F8FAFC;
     font-weight: 700;
-    border: 1px solid rgba(0, 255, 123, 0.72);
-    box-shadow: 0 0 0 1px rgba(0, 255, 123, 0.14), 0 12px 32px rgba(0, 255, 123, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.72);
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.14), 0 12px 32px rgba(16, 185, 129, 0.14);
     transition: background 0.15s ease, transform 0.12s ease;
   }
   .action-sale:hover {
-    background: var(--color-primary);
+    background: #10B981;
   }
   .action-sale:active {
     transform: scale(0.98);
@@ -562,8 +562,8 @@
   gap: 0.65rem;
   overflow: hidden;
   border-radius: 0.85rem;
-  border: 1px solid rgba(0, 255, 123, 0.38);
-  background: #0B0F19;
+  border: 1px solid rgba(255, 107, 0, 0.44);
+  background: #0F172A;
   padding: 1rem 1.25rem 1rem 4.1rem;
   color: #F8FAFC;
   font-size: 1rem;
@@ -1790,20 +1790,20 @@
 
 /* Current guide shell: black graphite panels, mustard/amber markers, no green wash. */
 .guide-shell {
-  --guide-bg: #050505;
-  --guide-panel: #151515;
-  --guide-panel-soft: #1b1b1b;
-  --guide-line: rgba(255, 255, 255, 0.10);
-  --guide-line-strong: rgba(242, 184, 75, 0.38);
-  --guide-text: #f5f2ea;
-  --guide-muted: #aaa49a;
-  --guide-amber: #f2b84b;
-  --guide-gold: #d9a441;
-  --guide-red: #f97350;
+  --guide-bg: #0F172A;
+  --guide-panel: #1E293B;
+  --guide-panel-soft: #111827;
+  --guide-line: rgba(148, 163, 184, 0.22);
+  --guide-line-strong: rgba(255, 107, 0, 0.48);
+  --guide-text: #F8FAFC;
+  --guide-muted: #CBD5E1;
+  --guide-amber: #FF6B00;
+  --guide-gold: #F59E0B;
+  --guide-red: #EF4444;
   background:
-    radial-gradient(circle at 20% 4%, rgba(242, 184, 75, 0.10), transparent 28%),
-    radial-gradient(circle at 88% 12%, rgba(255, 255, 255, 0.05), transparent 28%),
-    linear-gradient(180deg, #050505 0%, #0b0b0b 100%);
+    radial-gradient(circle at 18% 0%, rgba(255, 107, 0, 0.12), transparent 26%),
+    radial-gradient(circle at 86% 12%, rgba(16, 185, 129, 0.08), transparent 28%),
+    linear-gradient(180deg, #0F172A 0%, #111827 100%);
   color: var(--guide-text);
 }
 
@@ -1816,7 +1816,7 @@
   top: 0;
   z-index: 40;
   border-bottom: 1px solid var(--guide-line);
-  background: rgba(5, 5, 5, 0.92);
+  background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(18px);
 }
 
@@ -1829,7 +1829,7 @@
   gap: 8px;
   border-radius: 10px;
   border: 1px solid var(--guide-line);
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(30, 41, 59, 0.72);
   color: var(--guide-text);
   font-size: 12px;
   font-weight: 900;
@@ -1848,7 +1848,7 @@
 .guide-footer-note {
   border: 1px solid var(--guide-line);
   background: var(--guide-panel);
-  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.30);
+  box-shadow: 0 18px 70px rgba(2, 6, 23, 0.34);
 }
 
 .guide-sidebar {
@@ -1874,7 +1874,7 @@
   gap: 12px;
   border-radius: 13px;
   border: 1px solid var(--guide-line);
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(15, 23, 42, 0.72);
   color: var(--guide-muted);
   padding: 10px;
   text-align: left;
@@ -2380,8 +2380,8 @@
 
 .stock-movement-row {
   position: relative;
-  background: #151E2E;
-  box-shadow: inset 0 -1px 0 #1E293B;
+  background: #1E293B;
+  box-shadow: inset 0 -1px 0 #334155;
   transition: background 140ms ease, box-shadow 140ms ease;
 }
 
@@ -2390,11 +2390,11 @@
 }
 
 .stock-movement-entry {
-  box-shadow: inset 3px 0 0 #10B981, inset 0 -1px 0 #1E293B;
+  box-shadow: inset 3px 0 0 #10B981, inset 0 -1px 0 #334155;
 }
 
 .stock-movement-exit {
-  box-shadow: inset 3px 0 0 #F59E0B, inset 0 -1px 0 #1E293B;
+  box-shadow: inset 3px 0 0 #F59E0B, inset 0 -1px 0 #334155;
 }
 
 .stock-movement-entry:hover {
