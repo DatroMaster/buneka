@@ -214,21 +214,21 @@ export default function AyarlarPage() {
         </div>
       )}
 
-      <div className="mb-3 grid shrink-0 grid-cols-1 gap-3 rounded-2xl border border-amber-200 bg-[#F2B84B] px-4 py-3 text-neutral-950 shadow-[0_18px_50px_rgba(242,184,75,0.16)] md:grid-cols-[auto_1fr_auto] md:items-center">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-950/12 text-neutral-950 ring-1 ring-neutral-950/18">
+      <div className="license-authority-card mb-3 grid shrink-0 grid-cols-1 gap-3 rounded-2xl px-4 py-3 md:grid-cols-[auto_1fr_auto] md:items-center">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#022C22] text-[#00FF7B] ring-1 ring-[#00FF7B]/20">
           <ShieldCheck size={20} />
         </div>
         <div>
-          <p className="text-[11px] font-black uppercase tracking-wide text-neutral-950/75">Lisans ve yetki</p>
+          <p className="text-[11px] font-black uppercase tracking-wide text-[#10B981]">Lisans ve yetki</p>
           {license ? (
-            <p className="text-sm font-black text-neutral-950">
+            <p className="text-sm font-black text-[#0B0F19]">
               {license.plans?.name || "Aktif paket"} · {new Date(license.expires_at).toLocaleDateString("tr-TR")} · {license.status}
             </p>
           ) : (
-            <p className="text-sm font-black text-neutral-950">Aktif lisans kaydı bulunamadı.</p>
+            <p className="text-sm font-black text-[#0B0F19]">Aktif lisans kaydı bulunamadı.</p>
           )}
         </div>
-        <span className="rounded-full bg-neutral-950 px-3 py-1 text-xs font-black text-[#F2B84B]">
+        <span className="rounded-full bg-[#022C22] px-3 py-1 text-xs font-black text-[#00FF7B]">
           Görünür
         </span>
       </div>

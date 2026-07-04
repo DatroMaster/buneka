@@ -50,9 +50,6 @@ function moduleDescription(module: string) {
 
 export function SectorPackageBuilder({
   sectorTitle,
-  sectorHeadline,
-  sectorDescription,
-  sectorFeatures,
   workflow,
   modules,
   planName,
@@ -147,7 +144,7 @@ export function SectorPackageBuilder({
                 } ${isRecommended ? "package-recommended-model" : ""}`}
               >
                 {isRecommended && (
-                  <span className="mb-2 inline-flex rounded-full bg-amber-300 px-2 py-1 text-[9px] font-black uppercase tracking-wide text-neutral-950">
+                  <span className="mb-2 inline-flex rounded-full bg-[#00FF7B] px-2 py-1 text-[9px] font-black uppercase tracking-wide text-[#022C22]">
                     Tavsiye edilen model
                   </span>
                 )}
@@ -186,7 +183,7 @@ export function SectorPackageBuilder({
                     isSelected
                       ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.18),0_0_22px_rgba(62,207,142,0.14)]"
                       : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)]"
-                  } ${isActive ? "ring-2 ring-amber-300/60" : ""}`}
+                  } ${isActive ? "ring-2 ring-[#00FF7B]/45" : ""}`}
                 >
                   <CheckCircle2
                     size={14}
@@ -275,46 +272,56 @@ export function SectorPackageBuilder({
           href={whatsappLink(message)}
           target="_blank"
           rel="noopener noreferrer"
-          className="cta-primary-animated mt-4 inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 via-lime-500 to-emerald-600 px-5 py-4 text-base font-black text-white shadow-[0_18px_46px_rgba(34,197,94,0.30)] transition-transform hover:scale-[1.01] active:scale-95"
+          className="purchase-request-button mt-4"
         >
           <MessageCircle size={19} /> Sipariş Talebini Gönder
         </a>
       </section>
 
       <section className="package-detail-panel flex flex-col rounded-xl p-4 sm:p-5">
-        <div className="rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/72 p-4">
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[color:var(--home-glow)]">{sectorTitle}</p>
-          <h3 className="font-display mt-2 text-2xl font-black leading-tight text-[color:var(--home-ink)] sm:text-3xl">
-            {sectorHeadline}
-          </h3>
-          <p className="mt-3 text-sm font-semibold leading-6 text-[color:var(--home-muted)]">{sectorDescription}</p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            {sectorFeatures.map((feature) => (
-              <div key={feature} className="flex items-start gap-2 rounded-lg border border-[color:var(--home-border)] p-3">
-                <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[color:var(--home-glow)]" />
-                <span className="text-xs font-bold leading-5 text-[color:var(--home-ink)]">{feature}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-4 grid gap-3">
-          <div className="rounded-xl border border-amber-300/28 bg-amber-300/8 p-4">
+        <div className="grid gap-3">
+          <div className="rounded-xl border border-[color:var(--home-glow)]/35 bg-[color:var(--home-glow)]/[0.055] p-4 shadow-[0_0_42px_rgba(0,255,123,0.08)]">
             <div className="flex items-start gap-3">
-              <Sparkles size={20} className="mt-1 shrink-0 text-amber-300" />
+              <Sparkles size={20} className="mt-1 shrink-0 text-[color:var(--home-glow)]" />
               <div>
-                <p className="text-[11px] font-black uppercase tracking-[0.16em] text-amber-300">
+                <p className="text-[11px] font-black uppercase tracking-[0.16em] text-[color:var(--home-glow)]">
                   {selectedPlan.name === recommendedPlan.name ? "Tavsiye edilen model" : "Seçilen model"}
                 </p>
                 <h4 className="font-display mt-1 text-2xl font-black text-[color:var(--home-ink)]">{selectedPlan.name}</h4>
                 <p className="mt-2 text-sm font-bold leading-6 text-[color:var(--home-muted)]">{selectedPlan.summary}</p>
               </div>
             </div>
+          </div>
+
+          <div className="rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/72 p-4">
+            <p className="text-[11px] font-black uppercase tracking-[0.16em] text-[color:var(--home-glow)]">
+              Oluşturulan paket içeriği
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <div className="rounded-lg border border-[color:var(--home-border)] bg-[#0B0F19]/35 p-3">
+                <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Model</p>
+                <p className="mt-1 font-display text-lg font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
+                <p className="mt-1 text-sm font-black text-[color:var(--home-glow)]">{selectedPlan.price}/yıl</p>
+              </div>
+              <div className="rounded-lg border border-[color:var(--home-border)] bg-[#0B0F19]/35 p-3">
+                <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Toplam</p>
+                <p className="mt-1 font-display text-2xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
+                <p className="mt-1 text-xs font-bold text-[color:var(--home-muted)]">
+                  {includesAllModules ? "Tüm ek modüller aktif" : `${selectedModules.length} ek modül seçildi`}
+                </p>
+              </div>
+            </div>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {selectedPlan.features.map((feature) => (
-                <div key={feature} className="flex items-center gap-2 rounded-lg bg-[color:var(--home-surface)]/55 px-3 py-2">
-                  <CheckCircle2 size={14} className="shrink-0 text-amber-300" />
+                <div key={feature} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#0B0F19]/35 px-3 py-2">
+                  <CheckCircle2 size={14} className="shrink-0 text-[color:var(--home-glow)]" />
                   <span className="text-xs font-bold text-[color:var(--home-ink)]">{feature}</span>
+                </div>
+              ))}
+              {selectedModules.slice(0, 6).map((module) => (
+                <div key={module} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#0B0F19]/35 px-3 py-2">
+                  <PackageCheck size={14} className="shrink-0 text-[#10B981]" />
+                  <span className="text-xs font-bold text-[color:var(--home-ink)]">{module}</span>
                 </div>
               ))}
             </div>

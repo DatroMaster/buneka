@@ -83,7 +83,7 @@ export function PriceClient() {
     <div className="mx-auto w-full max-w-4xl">
       <div className="glass-card rounded-2xl p-6 md:p-10">
         <div className="mb-10 flex items-center gap-5">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-sm shadow-cyan-500/30">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#00FF7B] text-[#022C22] shadow-[0_14px_42px_rgba(0,255,123,0.16)]">
             <ScanLine size={32} aria-hidden="true" />
           </div>
           <div>
@@ -129,7 +129,7 @@ export function PriceClient() {
             <span>Kamera ile Okut</span>
           </button>
           <Link className="premium-button-secondary px-5 py-3 text-sm" href="/app/urunler">
-            <PackagePlus size={18} aria-hidden="true" className="text-orange-500" />
+            <PackagePlus size={18} aria-hidden="true" className="text-[#F59E0B]" />
             <span>Hızlı Ürün Ekle</span>
           </Link>
         </div>
@@ -152,7 +152,7 @@ export function PriceClient() {
                 {product.category || "Kategorisiz"}
               </p>
               <h2 className="mb-6 text-4xl font-black tracking-tight text-slate-950 md:text-6xl dark:text-slate-50">{product.name}</h2>
-              <div className="mb-8 text-7xl font-black tracking-tight text-cyan-600 md:text-8xl dark:text-cyan-300">
+              <div className="mb-8 text-7xl font-black tracking-tight text-[#00FF7B] md:text-8xl">
                 {currency.format(product.sale_price)}
               </div>
               <div className="mb-10 flex flex-wrap justify-center gap-3">
@@ -175,14 +175,14 @@ export function PriceClient() {
               </div>
             </div>
           ) : notFound ? (
-            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl bg-orange-50 p-10 text-center ring-1 ring-orange-200 dark:bg-orange-500/10 dark:ring-orange-500/20">
-              <Search size={36} className="mb-4 text-orange-600 dark:text-orange-400" />
-              <h2 className="mb-2 text-2xl font-bold text-orange-600 dark:text-orange-400">Ürün bulunamadı</h2>
+            <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-[#F59E0B]/45 bg-[#0B0F19] p-10 text-center">
+              <Search size={36} className="mb-4 text-[#F59E0B]" />
+              <h2 className="mb-2 text-2xl font-bold text-[#F8FAFC]">Ürün bulunamadı</h2>
               <p className="mb-8 text-slate-600 dark:text-slate-400">
                 <strong className="text-slate-950 dark:text-slate-50">{selectedBarcode}</strong> barkod numaralı ürün sistemde kayıtlı değil.
               </p>
               <div className="flex flex-col gap-4 sm:flex-row">
-                <Link className="premium-button-amber shadow-none" href="/app/urunler">
+                <Link className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#F59E0B]/55 bg-transparent px-4 py-2.5 text-sm font-black text-[#F59E0B] transition hover:border-[#F59E0B] hover:bg-[#F59E0B]/10" href="/app/urunler">
                   <PackagePlus size={20} />
                   <span>Hemen Ürün Ekle</span>
                 </Link>

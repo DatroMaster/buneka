@@ -182,15 +182,15 @@ export default function StokPage() {
   const getMovementLabel = (type: string) => {
     switch (type) {
       case "sale":
-        return { label: "Satış çıkışı", color: "text-amber-600", icon: ArrowDownRight };
+        return { label: "Satış çıkışı", color: "text-[#F59E0B]", icon: ArrowDownRight };
       case "purchase":
-        return { label: "Stok girişi", color: "text-emerald-600", icon: ArrowUpRight };
+        return { label: "Stok girişi", color: "text-[#10B981]", icon: ArrowUpRight };
       case "adjustment":
-        return { label: "Düzeltme", color: "text-amber-500", icon: AlertTriangle };
+        return { label: "Düzeltme", color: "text-[#F59E0B]", icon: AlertTriangle };
       case "return":
-        return { label: "İade girişi", color: "text-emerald-600", icon: ArrowUpRight };
+        return { label: "İade girişi", color: "text-[#10B981]", icon: ArrowUpRight };
       default:
-        return { label: type, color: "text-slate-950 dark:text-slate-50", icon: Boxes };
+        return { label: type, color: "text-[color:var(--color-text)]", icon: Boxes };
     }
   };
 
@@ -214,30 +214,30 @@ export default function StokPage() {
       />
 
       <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
-        <div className="data-card border-emerald-400/45 bg-[#050505] p-4 text-white shadow-[0_0_0_1px_rgba(62,207,142,0.12),0_18px_54px_rgba(0,0,0,0.28)]">
-          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-emerald-600 dark:text-emerald-300">
+        <div className="data-card p-4">
+          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#00FF7B]">
             <Boxes size={15} /> Hareket Defteri
           </div>
-          <p className="text-sm leading-6 text-slate-300">
+          <p className="text-sm leading-6 text-[color:var(--color-muted)]">
             Stok Takibi sayfası ürün kartı açmak için değil, depoya giren ve satışla çıkan miktarları izlemek içindir.
           </p>
         </div>
-        <div className="stat-card border-emerald-400/30 bg-[#050505] text-white">
+        <div className="stat-card border-[#1E293B]">
           <div className="stat-card-icon bg-emerald-400/12 text-emerald-300">
             <ArrowUpRight size={22} />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-400">Toplam Giriş</p>
-            <p className="text-2xl font-black text-emerald-300">+{stockEntryTotal}</p>
+            <p className="text-sm font-bold text-[color:var(--color-muted)]">Toplam Giriş</p>
+            <p className="text-2xl font-black text-[#10B981]">+{stockEntryTotal}</p>
           </div>
         </div>
-        <div className="stat-card border-amber-400/30 bg-[#050505] text-white">
-          <div className="stat-card-icon bg-amber-400/12 text-amber-300">
+        <div className="stat-card border-[#1E293B]">
+          <div className="stat-card-icon bg-[#F59E0B]/12 text-[#F59E0B]">
             <ArrowDownRight size={22} />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-400">Toplam Çıkış</p>
-            <p className="text-2xl font-black text-amber-300">-{stockExitTotal}</p>
+            <p className="text-sm font-bold text-[color:var(--color-muted)]">Toplam Çıkış</p>
+            <p className="text-2xl font-black text-[#F59E0B]">-{stockExitTotal}</p>
           </div>
         </div>
       </div>
@@ -248,10 +248,10 @@ export default function StokPage() {
         </div>
       )}
 
-      <div className="data-card overflow-hidden border-white/10 bg-[#050505] text-white shadow-[0_22px_70px_rgba(0,0,0,0.35)]">
+      <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-[#020202] text-sm text-slate-300 shadow-[inset_0_-1px_0_rgba(62,207,142,0.22)]">
+            <thead className="bg-[#0B0F19] text-sm text-[#CBD5E1] shadow-[inset_0_-1px_0_#1E293B]">
               <tr>
                 <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
                 <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
@@ -260,7 +260,7 @@ export default function StokPage() {
                 <th className="px-6 py-4 font-medium">Not</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 bg-[#050505]">
+            <tbody className="bg-[color:var(--color-card)]">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
@@ -284,12 +284,12 @@ export default function StokPage() {
                         Number(movement.quantity) >= 0 ? "stock-movement-entry" : "stock-movement-exit"
                       }`}
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-[#CBD5E1]">
                         {formatTime(movement.created_at)}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium text-white">{movement.products?.name}</div>
-                        <div className="font-mono text-xs text-slate-400">{movement.products?.barcode}</div>
+                        <div className="font-medium text-[#F8FAFC]">{movement.products?.name}</div>
+                        <div className="font-mono text-xs text-[#64748B]">{movement.products?.barcode}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${movementType.color}`}>
@@ -297,10 +297,10 @@ export default function StokPage() {
                           {movementType.label}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-lg font-black text-white">
+                      <td className="px-6 py-4 text-lg font-black text-[#F8FAFC]">
                         {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-300">{movement.note || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-[#CBD5E1]">{movement.note || "-"}</td>
                     </tr>
                   );
                 })
@@ -384,15 +384,15 @@ function SortableHeader({
       <button
         type="button"
         onClick={onClick}
-        className={`flex items-center gap-1 transition-colors hover:text-cyan-600 dark:hover:text-cyan-300 ${
+        className={`flex items-center gap-1 transition-colors hover:text-[#00FF7B] ${
           align === "right" ? "ml-auto flex-row-reverse" : ""
-        } ${active ? "text-cyan-600 dark:text-cyan-300" : ""}`}
+        } ${active ? "text-[#00FF7B]" : ""}`}
       >
         {label}
         {active ? (
           <ArrowUp size={13} className={`transition-transform ${dir === "desc" ? "rotate-180" : ""}`} />
         ) : (
-          <ArrowUpDown size={13} className="text-slate-300 dark:text-slate-600" />
+          <ArrowUpDown size={13} className="text-[#64748B]" />
         )}
       </button>
     </th>

@@ -13,7 +13,7 @@
   --home-surface-soft: rgba(0, 0, 0, 0.04);
   --home-ink: #171717;
   --home-muted: #6B6B6B;
-  --home-glow: #1A9E63;
+  --home-glow: #10B981;
   --home-border: #E6E6E6;
   --home-star-opacity: 0;
 
@@ -22,13 +22,13 @@
   --color-card: #FFFFFF;
   --color-surface: #FBFBFB;
   --color-text: #171717;
-  --color-muted: #6B6B6B;
+  --color-muted: #64748B;
   --color-border: #E6E6E6;
   --color-border-strong: #D4D4D4;
-  --color-primary: #3ECF8E;
-  --color-primary-hover: #34B87C;
-  --color-primary-deep: #1A9E63;
-  --color-primary-fg: #072012;
+  --color-primary: #00FF7B;
+  --color-primary-hover: #00FF7B;
+  --color-primary-deep: #10B981;
+  --color-primary-fg: #022C22;
 
   /* Logo gradient — deep green → near-black, crisp on the light background */
   --mark-from: #1A9E63;
@@ -36,32 +36,32 @@
 }
 
 .dark {
-  --home-bg-1: #171717;
-  --home-bg-2: #101010;
-  --home-surface: #202020;
+  --home-bg-1: #0B0F19;
+  --home-bg-2: #080B12;
+  --home-surface: #151E2E;
   --home-surface-soft: rgba(255, 255, 255, 0.04);
-  --home-ink: #F2F2F2;
-  --home-muted: #A3A3A3;
-  --home-glow: #3ECF8E;
-  --home-border: #2E2E2E;
+  --home-ink: #F8FAFC;
+  --home-muted: #CBD5E1;
+  --home-glow: #00FF7B;
+  --home-border: #1E293B;
   --home-star-opacity: 0;
 
   /* App surfaces — Supabase neutral dark with green + mustard accents */
-  --color-bg: #171717;
-  --color-bg-secondary: #101010;
-  --color-card: #202020;
-  --color-surface: #262626;
-  --color-text: #F2F2F2;
-  --color-muted: #A3A3A3;
-  --color-border: #2E2E2E;
-  --color-border-strong: #4A4A4A;
-  --color-primary: #3ECF8E;
-  --color-primary-hover: #45D998;
-  --color-primary-deep: #1A9E63;
-  --color-primary-fg: #072012;
+  --color-bg: #0B0F19;
+  --color-bg-secondary: #080B12;
+  --color-card: #151E2E;
+  --color-surface: #1E293B;
+  --color-text: #F8FAFC;
+  --color-muted: #CBD5E1;
+  --color-border: #1E293B;
+  --color-border-strong: #334155;
+  --color-primary: #00FF7B;
+  --color-primary-hover: #00FF7B;
+  --color-primary-deep: #10B981;
+  --color-primary-fg: #022C22;
 
   /* Logo gradient — bright green → platinum on the dark background */
-  --mark-from: #3ECF8E;
+  --mark-from: #00FF7B;
   --mark-to: #F2F2F2;
 }
 
@@ -80,13 +80,13 @@
   --color-bg-secondary: #F4F4F4;
   --color-card: #FFFFFF;
   --color-text: #171717;
-  --color-muted: #6B6B6B;
-  --color-green: #3ECF8E;
-  --color-green-deep: #1A9E63;
+  --color-muted: #64748B;
+  --color-green: #00FF7B;
+  --color-green-deep: #10B981;
   --color-amber: #F59E0B;
   --color-border: #E6E6E6;
-  --color-primary: #3ECF8E;
-  --color-primary-deep: #1A9E63;
+  --color-primary: #00FF7B;
+  --color-primary-deep: #10B981;
   --color-info: #F59E0B;
 
   /* Animation */
@@ -178,13 +178,15 @@
     color: var(--color-primary-fg);
     font-weight: 600;
     font-size: 0.875rem;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 78%, black);
+    border: 1px solid rgba(0, 255, 123, 0.72);
     border-radius: 0.5rem;
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    box-shadow: 0 0 0 1px rgba(0, 255, 123, 0.16), 0 14px 34px rgba(0, 255, 123, 0.14);
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .premium-button-primary:hover {
-    background: var(--color-primary-hover);
+    background: var(--color-primary);
+    box-shadow: 0 0 0 1px rgba(0, 255, 123, 0.22), 0 18px 46px rgba(0, 255, 123, 0.18);
   }
   .premium-button-primary:active {
     transform: scale(0.99);
@@ -246,11 +248,12 @@
     background: var(--color-primary);
     color: var(--color-primary-fg);
     font-weight: 700;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 78%, black);
+    border: 1px solid rgba(0, 255, 123, 0.72);
+    box-shadow: 0 0 0 1px rgba(0, 255, 123, 0.14), 0 12px 32px rgba(0, 255, 123, 0.14);
     transition: background 0.15s ease, transform 0.12s ease;
   }
   .action-sale:hover {
-    background: var(--color-primary-hover);
+    background: var(--color-primary);
   }
   .action-sale:active {
     transform: scale(0.98);
@@ -545,9 +548,52 @@
 .package-detail-panel {
   border: 1px solid color-mix(in srgb, var(--home-glow) 24%, var(--home-border));
   background:
-    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--home-glow) 10%, transparent), transparent 34%),
-    radial-gradient(circle at 92% 12%, rgba(242, 184, 75, 0.08), transparent 30%),
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--home-glow) 8%, transparent), transparent 34%),
     var(--home-surface);
+}
+
+.purchase-request-button {
+  position: relative;
+  display: inline-flex;
+  min-height: 3.5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(0, 255, 123, 0.38);
+  background: #0B0F19;
+  padding: 1rem 1.25rem 1rem 4.1rem;
+  color: #F8FAFC;
+  font-size: 1rem;
+  font-weight: 950;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 48px rgba(0, 0, 0, 0.32);
+  transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+}
+
+.purchase-request-button::before {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  top: 50%;
+  height: 2.35rem;
+  width: 2.35rem;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(0, 255, 123, 0.92) 0 34%, rgba(0, 255, 123, 0.18) 35% 56%, transparent 57%),
+    #022C22;
+  box-shadow: 0 0 30px rgba(0, 255, 123, 0.28);
+}
+
+.purchase-request-button:hover {
+  border-color: rgba(0, 255, 123, 0.7);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 22px 58px rgba(0, 255, 123, 0.12);
+}
+
+.purchase-request-button:active {
+  transform: scale(0.985);
 }
 
 .package-recommended-model::before {
@@ -2334,39 +2380,29 @@
 
 .stock-movement-row {
   position: relative;
-  background: #050505;
-  transition: background 160ms ease, box-shadow 160ms ease;
+  background: #151E2E;
+  box-shadow: inset 0 -1px 0 #1E293B;
+  transition: background 140ms ease, box-shadow 140ms ease;
 }
 
 .stock-movement-row td {
-  border-bottom: 8px solid #050505;
-  border-top: 8px solid #050505;
+  border: 0;
 }
 
 .stock-movement-entry {
-  box-shadow:
-    inset 4px 0 0 rgba(62, 207, 142, 0.95),
-    inset 0 0 0 1px rgba(62, 207, 142, 0.28);
-  background:
-    linear-gradient(90deg, rgba(62, 207, 142, 0.16), rgba(62, 207, 142, 0.035) 42%, #050505);
+  box-shadow: inset 3px 0 0 #10B981, inset 0 -1px 0 #1E293B;
 }
 
 .stock-movement-exit {
-  box-shadow:
-    inset 4px 0 0 rgba(242, 184, 75, 0.98),
-    inset 0 0 0 1px rgba(242, 184, 75, 0.28);
-  background:
-    linear-gradient(90deg, rgba(242, 184, 75, 0.17), rgba(242, 184, 75, 0.04) 42%, #050505);
+  box-shadow: inset 3px 0 0 #F59E0B, inset 0 -1px 0 #1E293B;
 }
 
 .stock-movement-entry:hover {
-  background:
-    linear-gradient(90deg, rgba(62, 207, 142, 0.22), rgba(62, 207, 142, 0.06) 48%, #080808);
+  background: #1E293B;
 }
 
 .stock-movement-exit:hover {
-  background:
-    linear-gradient(90deg, rgba(242, 184, 75, 0.24), rgba(242, 184, 75, 0.065) 48%, #080808);
+  background: #1E293B;
 }
 
 .category-badge {
@@ -2380,6 +2416,33 @@
   font-size: 11px;
   font-weight: 900;
   line-height: 1;
+}
+
+.license-authority-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(203, 213, 225, 0.72);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94)),
+    #ffffff;
+  color: #0B0F19;
+  box-shadow: 0 18px 50px rgba(2, 44, 34, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.license-authority-card::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    repeating-linear-gradient(45deg, rgba(16, 185, 129, 0.08) 0 1px, transparent 1px 16px),
+    radial-gradient(circle at 88% 22%, rgba(0, 255, 123, 0.14), transparent 24%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.license-authority-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 @media print {
