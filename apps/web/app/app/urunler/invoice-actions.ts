@@ -21,6 +21,12 @@ export type ScanInvoiceResult =
     }
   | { ok: false; error: "no-key" | "empty" | "failed"; message?: string };
 
+type ScanInvoiceInput = {
+  base64: string;
+  mediaType: string;
+  fileName?: string;
+};
+
 const INVOICE_SCHEMA = {
   type: "object",
   additionalProperties: false,
@@ -58,17 +64,25 @@ type RawInvoice = {
   items?: { name?: string; barcode?: string; quantity?: number; unit_price?: number }[];
 };
 
-export async function scanInvoiceAction(
-  base64Image: string,
-  mediaType: string
-): Promise<ScanInvoiceResult> {
+export async function scanInvoiceAction(input: ScanInvoiceInput): Promise<ScanInvoiceResult> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return { ok: false, error: "no-key" };
 
-  const allowed = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
-  const media = (allowed.includes(mediaType as (typeof allowed)[number])
-    ? mediaType
-    : "image/jpeg") as (typeof allowed)[number];
+  const allowedImages = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
+  const isPdf = input.mediaType === "application/pdf";
+  const media = (allowedImages.includes(input.mediaType as (typeof allowedImages)[number])
+    ? input.mediaType
+    : "image/jpeg") as (typeof allowedImages)[number];
+  const invoiceDocument = isPdf
+    ? ({
+        type: "document",
+        source: { type: "base64", media_type: "application/pdf", data: input.base64 },
+        title: input.fileName || "tedarikci-faturasi.pdf",
+      } as const)
+    : ({
+        type: "image",
+        source: { type: "base64", media_type: media, data: input.base64 },
+      } as const);
 
   const client = new Anthropic({ apiKey });
 
@@ -78,17 +92,17 @@ export async function scanInvoiceAction(
       max_tokens: 8000,
       system:
         "Sen bir Türk perakende işletmesi için fatura okuma asistanısın. Sana verilen tedarikçi " +
-        "alış faturası fotoğrafından tedarikçi ünvanını, fatura tarihini ve satır satır ürün " +
+        "alış faturası fotoğrafı veya PDF dosyasından tedarikçi ünvanını, fatura tarihini ve satır satır ürün " +
         "kalemlerini (ad, varsa barkod, miktar, birim alış fiyatı) çıkar. Tahmin etme; net " +
         "okuyamadığın alanı boş ya da 0 bırak. Yalnızca istenen yapılandırılmış çıktıyı üret.",
       messages: [
         {
           role: "user",
           content: [
-            { type: "image", source: { type: "base64", media_type: media, data: base64Image } },
+            invoiceDocument,
             {
               type: "text",
-              text: "Bu alış faturasındaki tedarikçiyi, fatura tarihini ve tüm ürün kalemlerini çıkar.",
+              text: "Bu alış faturasındaki tedarikçiyi, fatura tarihini ve tüm ürün kalemlerini çıkar. PDF ise tüm sayfaları dikkate al.",
             },
           ],
         },

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BookOpenCheck, CheckCircle2, LogIn } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, CheckCircle2 } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ClientIpBadge } from "@/components/ClientIpBadge";
+import { PublicPanelLink } from "@/components/PublicPanelLink";
 import { SectorPackageBuilder } from "@/components/SectorPackageBuilder";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { getSector, sectors } from "@/lib/content/sectors";
@@ -61,6 +62,10 @@ export default async function SectorPage({ params }: SectorPageProps) {
           >
             <ArrowLeft size={14} /> Sektörler
           </Link>
+          <PublicPanelLink
+            authenticatedLabel="Yönetim Platformu"
+            className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] md:flex"
+          />
           <Link
             href="/kullanici-rehberi"
             className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] lg:flex"
@@ -70,12 +75,10 @@ export default async function SectorPage({ params }: SectorPageProps) {
           <BunekaNedirButton />
           <ThemeToggle className="hidden border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex" />
         </div>
-        <Link
-          href="/login"
+        <PublicPanelLink
+          iconSize={17}
           className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(62,207,142,0.18)] sm:hidden"
-        >
-          <LogIn size={17} /> Sisteme Giriş Yap
-        </Link>
+        />
       </header>
 
       <main className="relative z-10 flex flex-col gap-4 px-3 pb-24 sm:px-6 sm:pb-6">

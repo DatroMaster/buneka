@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowRight, BookOpenCheck, ChevronDown, LayoutGrid, LogIn, PhoneCall, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, BookOpenCheck, ChevronDown, LayoutGrid, PhoneCall, ShieldCheck, Store } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaStoryCard } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { PublicPanelLink } from "@/components/PublicPanelLink";
 import { SectorPlayground } from "@/components/SectorPlayground";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { callLink } from "@/lib/contact";
@@ -199,12 +200,7 @@ export default function HomeClient() {
           >
             <BookOpenCheck size={14} /> Kullanıcı Rehberi
           </Link>
-          <Link
-            href="/login"
-            className="hidden items-center gap-1.5 rounded-lg border border-[color:var(--home-border)] px-3.5 py-2 text-xs font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)] sm:inline-flex"
-          >
-            <LogIn size={14} /> Sisteme Giriş Yap
-          </Link>
+          <PublicPanelLink className="hidden items-center gap-1.5 rounded-lg border border-[color:var(--home-border)] px-3.5 py-2 text-xs font-bold text-[color:var(--home-ink)] transition-colors hover:border-[color:var(--home-glow)] sm:inline-flex" />
           <Link
             href={callLink()}
             className="cta-call-spark group inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-xs font-black transition-transform duration-300 ease-out sm:flex-none sm:px-5 sm:py-2.5 sm:text-sm"
@@ -218,12 +214,10 @@ export default function HomeClient() {
           </div>
           <ThemeToggle className="hidden border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex" />
         </div>
-        <Link
-          href="/login"
+        <PublicPanelLink
+          iconSize={17}
           className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(62,207,142,0.18)] sm:hidden"
-        >
-          <LogIn size={17} /> Sisteme Giriş Yap
-        </Link>
+        />
       </header>
 
       <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-24 sm:gap-4 sm:px-6 sm:pb-4 md:min-h-0 md:grid-cols-2">

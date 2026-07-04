@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowLeft, BookOpenCheck, Home, LayoutDashboard, LogIn } from "lucide-react";
+import { ArrowLeft, BookOpenCheck, Home } from "lucide-react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ModuleAccordionExplorer } from "@/components/ModuleAccordionExplorer";
+import { PublicPanelLink } from "@/components/PublicPanelLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata = {
@@ -28,21 +29,20 @@ export default function EkModullerPage() {
           <Link href="/" className="inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)]">
             <Home size={14} /> Ana Menü
           </Link>
-          <Link href="/app" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex">
-            <LayoutDashboard size={14} /> Panele Dön
-          </Link>
+          <PublicPanelLink
+            authenticatedLabel="Yönetim Platformu"
+            className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex"
+          />
           <Link href="/kullanici-rehberi" className="hidden h-9 items-center gap-2 rounded-full border border-[color:var(--home-border)] px-3 text-xs font-black text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] lg:flex">
             <BookOpenCheck size={14} /> Rehber
           </Link>
           <BunekaNedirButton />
           <ThemeToggle className="hidden border-[color:var(--home-border)] text-[color:var(--home-ink)] hover:border-[color:var(--home-glow)] sm:flex" />
         </div>
-        <Link
-          href="/login"
+        <PublicPanelLink
+          iconSize={17}
           className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-[0_16px_36px_rgba(62,207,142,0.18)] sm:hidden"
-        >
-          <LogIn size={17} /> Sisteme Giriş Yap
-        </Link>
+        />
       </header>
 
       <section className="relative z-10 mx-auto grid w-full max-w-7xl gap-4 px-3 pb-24 sm:px-6 sm:pb-6">

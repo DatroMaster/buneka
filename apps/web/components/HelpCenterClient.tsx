@@ -9,8 +9,6 @@ import {
   FileSpreadsheet,
   HelpCircle,
   Home,
-  LayoutDashboard,
-  LogIn,
   MessageCircle,
   Printer,
   ScanLine,
@@ -25,6 +23,7 @@ import { useMemo, useState, type ReactNode } from "react";
 import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
+import { PublicPanelLink } from "@/components/PublicPanelLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { whatsappLink } from "@/lib/contact";
 
@@ -420,9 +419,7 @@ export function HelpCenterClient() {
             <Link href="/" className="guide-nav-button">
               <Home size={14} /> Ana Menü
             </Link>
-            <Link href="/app" className="guide-nav-button">
-              <LayoutDashboard size={14} /> Panele Dön
-            </Link>
+            <PublicPanelLink authenticatedLabel="Yönetim Platformu" className="guide-nav-button" />
             <BunekaNedirButton />
             <ThemeToggle className="guide-icon-button" />
           </div>
@@ -496,9 +493,12 @@ export function HelpCenterClient() {
                   )}
                 </div>
                 <div className="guide-quick-actions">
-                  <Link href="/login" className="guide-action guide-action-primary">
-                    <LogIn size={16} /> Giriş yap
-                  </Link>
+                  <PublicPanelLink
+                    iconSize={16}
+                    authenticatedLabel="Yönetim Platformu"
+                    guestLabel="Giriş yap"
+                    className="guide-action guide-action-primary"
+                  />
                   <button type="button" onClick={handlePrint} className="guide-action">
                     <Printer size={16} /> PDF kaydet
                   </button>

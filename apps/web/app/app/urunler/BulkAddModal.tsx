@@ -3,12 +3,12 @@
 import {
   Camera,
   Download,
+  FileText,
   FileSpreadsheet,
   Loader2,
   PackagePlus,
   Plus,
   ReceiptText,
-  Sparkles,
   Trash2,
   Upload,
   X,
@@ -47,6 +47,22 @@ const emptyRow = (): BulkRow => ({
 });
 
 const TEMPLATE_FILENAME = "buneka-urun-sablonu.xlsx";
+const INVOICE_MAX_BYTES = 12 * 1024 * 1024;
+const INVOICE_ACCEPT = "image/*,application/pdf,.pdf";
+
+function isInvoiceFile(file: File) {
+  return file.type.startsWith("image/") || file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+}
+
+async function fileToBase64(file: File): Promise<string> {
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("read"));
+    reader.readAsDataURL(file);
+  });
+  return dataUrl.split(",")[1] ?? "";
+}
 
 // Read a photo, downscale it, and return base64 JPEG. Downscaling keeps the
 // upload small (cheaper/faster scan, works on low-end phones) and the image
@@ -75,6 +91,15 @@ async function fileToDownscaledBase64(file: File, maxEdge = 1600): Promise<{ bas
   ctx.drawImage(img, 0, 0, width, height);
   const base64 = canvas.toDataURL("image/jpeg", 0.85).split(",")[1] ?? "";
   return { base64, mediaType: "image/jpeg" };
+}
+
+async function fileToInvoicePayload(file: File): Promise<{ base64: string; mediaType: string; fileName: string }> {
+  if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+    return { base64: await fileToBase64(file), mediaType: "application/pdf", fileName: file.name };
+  }
+
+  const payload = await fileToDownscaledBase64(file);
+  return { ...payload, fileName: file.name };
 }
 
 function parseTrDate(value: string): string | null {
@@ -106,6 +131,7 @@ export function BulkAddModal({
   const [invoiceDate, setInvoiceDate] = useState("");
   const [saving, setSaving] = useState(false);
   const [scanning, setScanning] = useState(false);
+  const [isDraggingInvoice, setIsDraggingInvoice] = useState(false);
   const [message, setMessage] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const photoCaptureRef = useRef<HTMLInputElement>(null);
@@ -207,11 +233,19 @@ export function BulkAddModal({
 
   async function handlePhoto(file: File) {
     setMessage("");
+    if (!isInvoiceFile(file)) {
+      setMessage("Lütfen fatura fotoğrafı veya PDF fatura yükleyin.");
+      return;
+    }
+    if (file.size > INVOICE_MAX_BYTES) {
+      setMessage("Fatura dosyası 12 MB altında olmalı. Daha küçük bir PDF veya daha net sıkıştırılmış görsel deneyin.");
+      return;
+    }
     setScanning(true);
     try {
-      const { base64, mediaType } = await fileToDownscaledBase64(file);
-      const result = await scanInvoiceAction(base64, mediaType);
-      // The image (base64) goes out of scope here — it is never stored on the
+      const payload = await fileToInvoicePayload(file);
+      const result = await scanInvoiceAction(payload);
+      // The file payload goes out of scope here; it is never stored on the
       // server or in component state after the scan completes.
 
       if (!result.ok) {
@@ -245,10 +279,10 @@ export function BulkAddModal({
       ]);
       setMode("grid");
       setMessage(
-        `Fatura okundu: ${result.items.length} kalem geldi. Fotoğraf işlendi ve silindi. Satış fiyatlarını girip kaydedin.`
+        `Fatura okundu: ${result.items.length} kalem geldi. Dosya işlendi ve saklanmadı. Satış fiyatlarını girip kaydedin.`
       );
     } catch {
-      setMessage("Fotoğraf işlenemedi. Lütfen tekrar deneyin.");
+      setMessage("Fatura dosyası işlenemedi. Lütfen daha net bir fotoğraf veya okunabilir PDF ile tekrar deneyin.");
     }
     setScanning(false);
   }
@@ -421,15 +455,39 @@ export function BulkAddModal({
 
         {mode === "photo" && (
           <div className="px-4 pb-4 pt-2">
-            <div className="rounded-xl border border-dashed border-cyan-300 bg-cyan-50/50 p-5 text-center dark:border-cyan-500/30 dark:bg-cyan-500/5">
+            <div
+              onDragEnter={(event) => {
+                event.preventDefault();
+                setIsDraggingInvoice(true);
+              }}
+              onDragOver={(event) => {
+                event.preventDefault();
+                setIsDraggingInvoice(true);
+              }}
+              onDragLeave={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setIsDraggingInvoice(false);
+                }
+              }}
+              onDrop={(event) => {
+                event.preventDefault();
+                setIsDraggingInvoice(false);
+                const file = event.dataTransfer.files?.[0];
+                if (file) void handlePhoto(file);
+              }}
+              className={`rounded-xl border border-dashed p-5 text-center transition-all ${
+                isDraggingInvoice
+                  ? "border-emerald-300 bg-emerald-500/10 shadow-[0_0_0_1px_rgba(52,211,153,0.28),0_18px_50px_rgba(52,211,153,0.12)]"
+                  : "border-cyan-300 bg-cyan-50/50 dark:border-cyan-500/30 dark:bg-cyan-500/5"
+              }`}
+            >
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-300">
-                <Sparkles size={22} />
+                <FileText size={22} />
               </div>
-              <p className="font-display text-base font-bold">Faturayı okut, ürünler otomatik gelsin</p>
+              <p className="font-display text-base font-bold">Faturayı sürükle bırak, ürünler otomatik gelsin</p>
               <p className="mx-auto mt-1 max-w-md text-xs text-slate-500 dark:text-slate-400">
-                Tedarikçi alış faturasının fotoğrafını çekin; tedarikçi, tarih ve tüm ürünler tabloya
-                gelir. Kaydetmeden önce elle düzeltebilirsiniz. Fotoğraf işlendikten sonra silinir,
-                hiçbir yere kaydedilmez.
+                Tedarikçi faturasının fotoğrafını çek; ürünler, adetler ve fiyatlar saniyeler içinde işlensin.
+                PDF faturayı da buraya sürükleyip bırakabilirsiniz. Dosya işlendikten sonra saklanmaz.
               </p>
 
               <input
@@ -447,7 +505,7 @@ export function BulkAddModal({
               <input
                 ref={photoUploadRef}
                 type="file"
-                accept="image/*"
+                accept={INVOICE_ACCEPT}
                 className="hidden"
                 onChange={(event) => {
                   const file = event.target.files?.[0];
@@ -474,10 +532,13 @@ export function BulkAddModal({
                     onClick={() => photoUploadRef.current?.click()}
                     className="premium-button-secondary text-sm"
                   >
-                    <Upload size={16} /> Galeriden Seç
+                    <Upload size={16} /> Foto/PDF Yükle
                   </button>
                 </div>
               )}
+              <p className="mt-3 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                Desteklenen formatlar: PDF, JPG, PNG, WebP. En fazla 12 MB.
+              </p>
             </div>
           </div>
         )}
