@@ -215,20 +215,20 @@ export default function AyarlarPage() {
       )}
 
       <div className="license-authority-card mb-3 grid shrink-0 grid-cols-1 gap-3 rounded-2xl px-4 py-3 md:grid-cols-[auto_1fr_auto] md:items-center">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#022C22] text-[#00FF7B] ring-1 ring-[#00FF7B]/20">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#002b28] text-[#b8fff0] ring-1 ring-[#b8fff0]/20">
           <ShieldCheck size={20} />
         </div>
         <div>
-          <p className="text-[11px] font-black uppercase tracking-wide text-[#10B981]">Lisans ve yetki</p>
+          <p className="text-[11px] font-black uppercase tracking-wide text-[#b8fff0]">Lisans ve yetki</p>
           {license ? (
-            <p className="text-sm font-black text-[#0B0F19]">
+            <p className="text-sm font-black text-[#00040d]">
               {license.plans?.name || "Aktif paket"} · {new Date(license.expires_at).toLocaleDateString("tr-TR")} · {license.status}
             </p>
           ) : (
-            <p className="text-sm font-black text-[#0B0F19]">Aktif lisans kaydı bulunamadı.</p>
+            <p className="text-sm font-black text-[#00040d]">Aktif lisans kaydı bulunamadı.</p>
           )}
         </div>
-        <span className="rounded-full bg-[#022C22] px-3 py-1 text-xs font-black text-[#00FF7B]">
+        <span className="rounded-full bg-[#002b28] px-3 py-1 text-xs font-black text-[#b8fff0]">
           Görünür
         </span>
       </div>

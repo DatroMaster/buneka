@@ -128,7 +128,7 @@ export default function PaketlerPage() {
           </p>
         </div>
 
-        <section className="grid gap-4 rounded-2xl border border-emerald-400/20 bg-[#050505]/92 p-4 shadow-[0_24px_90px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl lg:grid-cols-[0.95fr_1.25fr] lg:p-5">
+        <section className="grid gap-4 rounded-2xl border border-emerald-400/20 bg-[#00040d]/92 p-4 shadow-[0_24px_90px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl lg:grid-cols-[0.95fr_1.25fr] lg:p-5">
           <div className="flex gap-4">
             <div className="relative hidden h-48 w-32 shrink-0 rounded-[1.65rem] border border-emerald-300/35 bg-neutral-950 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:block">
               <div className="h-full rounded-[1.2rem] border border-white/10 bg-gradient-to-b from-slate-900 via-neutral-950 to-black p-3">
@@ -212,8 +212,8 @@ export default function PaketlerPage() {
                 key={plan.name}
                   className={`relative flex min-h-[660px] flex-col overflow-hidden rounded-2xl border shadow-[0_22px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl ${
                   isPremium
-                    ? "border-amber-300/50 bg-[#050505] text-white [--home-border:rgba(242,184,75,0.26)] [--home-glow:#F2B84B] [--home-ink:#F8FAFC] [--home-muted:#CBD5E1]"
-                    : "border-emerald-400/22 bg-[#050505]/94 text-white [--home-border:rgba(62,207,142,0.20)] [--home-glow:#3ECF8E] [--home-ink:#F8FAFC] [--home-muted:#B7C3D0]"
+                    ? "border-amber-300/50 bg-[#00040d] text-white [--home-border:rgba(242,184,75,0.26)] [--home-glow:#b8fff0] [--home-ink:#b8fff0] [--home-muted:#b8fff0]"
+                    : "border-emerald-400/22 bg-[#00040d]/94 text-white [--home-border:rgba(62,207,142,0.20)] [--home-glow:#b8fff0] [--home-ink:#b8fff0] [--home-muted:#b8fff0]"
                 }`}
               >
                 <div className={`flex h-8 items-center justify-center px-3 text-center text-[10px] font-black uppercase tracking-wide ${

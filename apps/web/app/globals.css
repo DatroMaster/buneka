@@ -5,64 +5,67 @@
 
 /* ── Home (public landing) tokens — flip between :root and .dark ──── */
 /* ── Supabase design system — neutral surfaces + single green accent ──
-   Light (default) tokens. Green brand: #3ECF8E. */
+   Light (default) tokens. Green brand: #b8fff0. */
 :root {
-  --home-bg-1: #020b0f;
-  --home-bg-2: #111827;
-  --home-surface: #010b1f;
-  --home-surface-soft: rgba(0, 0, 0, 0.04);
-  --home-ink: #F8FAFC;
-  --home-muted: #CBD5E1;
-  --home-glow: #10B981;
-  --home-border: #334155;
+  --buneka-base: #00040d;
+  --buneka-panel: #002b28;
+  --buneka-accent: #b8fff0;
+  --home-bg-1: var(--buneka-base);
+  --home-bg-2: var(--buneka-base);
+  --home-surface: var(--buneka-panel);
+  --home-surface-soft: color-mix(in srgb, var(--buneka-panel) 70%, var(--buneka-base));
+  --home-ink: var(--buneka-accent);
+  --home-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
+  --home-glow: var(--buneka-accent);
+  --home-border: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel));
   --home-star-opacity: 0;
 
-  --color-bg: #020b0f;
-  --color-bg-secondary: #111827;
-  --color-card: #010b1f;
-  --color-surface: #010b1f;
-  --color-text: #F8FAFC;
-  --color-muted: #CBD5E1;
-  --color-border: #334155;
-  --color-border-strong: #475569;
-  --color-primary: #FF6B00;
-  --color-primary-hover: #F97316;
-  --color-primary-deep: #EA580C;
-  --color-primary-fg: #F8FAFC;
+  --color-bg: var(--buneka-base);
+  --color-bg-secondary: var(--buneka-base);
+  --color-card: var(--buneka-panel);
+  --color-surface: var(--buneka-panel);
+  --color-text: var(--buneka-accent);
+  --color-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
+  --color-border: color-mix(in srgb, var(--buneka-accent) 20%, var(--buneka-panel));
+  --color-border-strong: color-mix(in srgb, var(--buneka-accent) 44%, var(--buneka-panel));
+  --color-primary: var(--buneka-accent);
+  --color-primary-hover: color-mix(in srgb, var(--buneka-accent) 84%, var(--buneka-panel));
+  --color-primary-deep: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-panel));
+  --color-primary-fg: var(--buneka-base);
 
   /* Logo gradient — deep green → near-black, crisp on the light background */
-  --mark-from: #1A9E63;
-  --mark-to: #171717;
+  --mark-from: var(--buneka-accent);
+  --mark-to: var(--buneka-panel);
 }
 
 .dark {
-  --home-bg-1: #020b0f;
-  --home-bg-2: #111827;
-  --home-surface: #010b1f;
-  --home-surface-soft: rgba(255, 255, 255, 0.04);
-  --home-ink: #F8FAFC;
-  --home-muted: #CBD5E1;
-  --home-glow: #10B981;
-  --home-border: #334155;
+  --home-bg-1: var(--buneka-base);
+  --home-bg-2: var(--buneka-base);
+  --home-surface: var(--buneka-panel);
+  --home-surface-soft: color-mix(in srgb, var(--buneka-panel) 70%, var(--buneka-base));
+  --home-ink: var(--buneka-accent);
+  --home-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
+  --home-glow: var(--buneka-accent);
+  --home-border: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel));
   --home-star-opacity: 0;
 
   /* App surfaces — Supabase neutral dark with green + mustard accents */
-  --color-bg: #020b0f;
-  --color-bg-secondary: #111827;
-  --color-card: #010b1f;
-  --color-surface: #010b1f;
-  --color-text: #F8FAFC;
-  --color-muted: #CBD5E1;
-  --color-border: #334155;
-  --color-border-strong: #334155;
-  --color-primary: #FF6B00;
-  --color-primary-hover: #F97316;
-  --color-primary-deep: #EA580C;
-  --color-primary-fg: #F8FAFC;
+  --color-bg: var(--buneka-base);
+  --color-bg-secondary: var(--buneka-base);
+  --color-card: var(--buneka-panel);
+  --color-surface: var(--buneka-panel);
+  --color-text: var(--buneka-accent);
+  --color-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
+  --color-border: color-mix(in srgb, var(--buneka-accent) 20%, var(--buneka-panel));
+  --color-border-strong: color-mix(in srgb, var(--buneka-accent) 44%, var(--buneka-panel));
+  --color-primary: var(--buneka-accent);
+  --color-primary-hover: color-mix(in srgb, var(--buneka-accent) 84%, var(--buneka-panel));
+  --color-primary-deep: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-panel));
+  --color-primary-fg: var(--buneka-base);
 
   /* Logo gradient — bright green → platinum on the dark background */
-  --mark-from: #10B981;
-  --mark-to: #F2F2F2;
+  --mark-from: var(--buneka-accent);
+  --mark-to: var(--buneka-panel);
 }
 
 /* ── Theme tokens ─────────────────────────────────────────────────── */
@@ -76,18 +79,18 @@
     sans-serif;
 
   /* Brand colors — Supabase neutral + green */
-  --color-bg: #020b0f;
-  --color-bg-secondary: #111827;
-  --color-card: #010b1f;
-  --color-text: #F8FAFC;
-  --color-muted: #CBD5E1;
-  --color-green: #10B981;
-  --color-green-deep: #10B981;
-  --color-amber: #FF6B00;
-  --color-border: #334155;
-  --color-primary: #FF6B00;
-  --color-primary-deep: #EA580C;
-  --color-info: #F59E0B;
+  --color-bg: #00040d;
+  --color-bg-secondary: #00040d;
+  --color-card: #002b28;
+  --color-text: #b8fff0;
+  --color-muted: #b8fff0;
+  --color-green: #b8fff0;
+  --color-green-deep: #b8fff0;
+  --color-amber: #b8fff0;
+  --color-border: #002b28;
+  --color-primary: #b8fff0;
+  --color-primary-deep: #b8fff0;
+  --color-info: #b8fff0;
 
   /* Animation */
   --animate-fade-in-up: fade-in-up 0.7s ease-out both;
@@ -245,15 +248,15 @@
     justify-content: center;
     gap: 0.5rem;
     border-radius: 0.5rem;
-    background: #10B981;
-    color: #F8FAFC;
+    background: var(--buneka-accent);
+    color: var(--buneka-accent);
     font-weight: 700;
     border: 1px solid rgba(16, 185, 129, 0.72);
     box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.14), 0 12px 32px rgba(16, 185, 129, 0.14);
     transition: background 0.15s ease, transform 0.12s ease;
   }
   .action-sale:hover {
-    background: #10B981;
+    background: var(--buneka-accent);
   }
   .action-sale:active {
     transform: scale(0.98);
@@ -332,18 +335,18 @@
 
   /* ── Home (public landing) — flat Supabase surface ───────────────── */
   .home-viewport {
-    --home-bg-1: #020b0f;
-    --home-bg-2: #020b0f;
-    --home-surface: #050c0d;
-    --home-surface-soft: #050c0d;
-    --home-ink: #06c3d4;
-    --home-muted: color-mix(in srgb, #06c3d4 66%, #050c0d);
-    --home-glow: #06c3d4;
-    --home-border: color-mix(in srgb, #06c3d4 28%, #050c0d);
+    --home-bg-1: var(--buneka-base);
+    --home-bg-2: var(--buneka-base);
+    --home-surface: var(--buneka-panel);
+    --home-surface-soft: var(--buneka-panel);
+    --home-ink: var(--buneka-accent);
+    --home-muted: color-mix(in srgb, var(--buneka-accent) 66%, var(--buneka-panel));
+    --home-glow: var(--buneka-accent);
+    --home-border: color-mix(in srgb, var(--buneka-accent) 28%, var(--buneka-panel));
     background:
-      radial-gradient(circle at 12% 5%, color-mix(in srgb, #06c3d4 14%, transparent), transparent 34%),
-      radial-gradient(circle at 90% 18%, color-mix(in srgb, #06c3d4 8%, transparent), transparent 30%),
-      linear-gradient(180deg, #020b0f, #020b0f);
+      radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--buneka-accent) 14%, transparent), transparent 34%),
+      radial-gradient(circle at 90% 18%, color-mix(in srgb, var(--buneka-accent) 8%, transparent), transparent 30%),
+      linear-gradient(180deg, var(--buneka-base), var(--buneka-base));
   }
 
   .price-focus-bg {
@@ -351,34 +354,34 @@
       radial-gradient(circle at 18% 10%, rgba(62, 207, 142, 0.18), transparent 32%),
       radial-gradient(circle at 86% 14%, rgba(245, 158, 11, 0.10), transparent 28%),
       radial-gradient(circle at 50% 105%, rgba(62, 207, 142, 0.10), transparent 34%),
-      linear-gradient(180deg, #020b0f, #020b0f);
+      linear-gradient(180deg, var(--buneka-base), var(--buneka-base));
   }
 
   .package-page-shell {
-    --home-bg-1: #020b0f;
-    --home-bg-2: #020b0f;
-    --home-surface: #050505;
+    --home-bg-1: var(--buneka-base);
+    --home-bg-2: var(--buneka-base);
+    --home-surface: #00040d;
     --home-surface-soft: rgba(255, 255, 255, 0.045);
-    --home-ink: #f8fafc;
-    --home-muted: #aeb8c5;
-    --home-glow: #3ecf8e;
+    --home-ink: #b8fff0;
+    --home-muted: #b8fff0;
+    --home-glow: #b8fff0;
     --home-border: rgba(255, 255, 255, 0.12);
     background:
       radial-gradient(circle at 12% 6%, rgba(62, 207, 142, 0.15), transparent 28%),
       radial-gradient(circle at 86% 12%, rgba(242, 184, 75, 0.10), transparent 24%),
       radial-gradient(circle at 50% 100%, rgba(62, 207, 142, 0.09), transparent 34%),
-      linear-gradient(180deg, #020202 0%, #050505 42%, #0a0a0a 100%);
+      linear-gradient(180deg, #00040d 0%, #00040d 42%, #00040d 100%);
   }
 
   .dark .data-card thead,
   .dark .glass-card thead {
     background: linear-gradient(90deg, rgba(62, 207, 142, 0.12), rgba(245, 158, 11, 0.08)) !important;
-    color: #C8F8DF !important;
+    color: #b8fff0 !important;
   }
 
   .dark .data-card th,
   .dark .glass-card th {
-    color: #BFEFD4 !important;
+    color: #b8fff0 !important;
   }
 
   .dark .data-card input,
@@ -446,7 +449,7 @@
 
   .glow-border-selected {
     border-color: var(--home-glow) !important;
-    background: color-mix(in srgb, #06c3d4 10%, #050c0d);
+    background: color-mix(in srgb, var(--buneka-accent) 10%, var(--buneka-panel));
   }
 
   /* Colorful capillary-thin border variants — used to bring life to module/plan
@@ -516,13 +519,13 @@
   /* Call CTA — solid Supabase green button */
   .cta-call-spark {
     position: relative;
-    border: 1px solid #06c3d4;
-    background: #06c3d4;
-    color: #020b0f;
+    border: 1px solid var(--buneka-accent);
+    background: var(--buneka-accent);
+    color: var(--buneka-base);
     transition: background 0.15s ease;
   }
   .cta-call-spark:hover {
-    background: color-mix(in srgb, #06c3d4 86%, #050c0d);
+    background: color-mix(in srgb, var(--buneka-accent) 86%, var(--buneka-panel));
   }
   .cta-call-spark:active {
     transform: scale(0.99);
@@ -569,9 +572,9 @@
   overflow: hidden;
   border-radius: 0.85rem;
   border: 1px solid rgba(255, 107, 0, 0.44);
-  background: #020b0f;
+  background: var(--buneka-base);
   padding: 1rem 1.25rem 1rem 4.1rem;
-  color: #F8FAFC;
+  color: var(--buneka-accent);
   font-size: 1rem;
   font-weight: 950;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 48px rgba(0, 0, 0, 0.32);
@@ -589,7 +592,7 @@
   border-radius: 999px;
   background:
     radial-gradient(circle, rgba(0, 255, 123, 0.92) 0 34%, rgba(0, 255, 123, 0.18) 35% 56%, transparent 57%),
-    #022C22;
+    var(--buneka-panel);
   box-shadow: 0 0 30px rgba(0, 255, 123, 0.28);
 }
 
@@ -653,9 +656,9 @@
   /* Soft light wash; no grid texture */
   .home-grid-pattern {
     background:
-      radial-gradient(circle at 18% 8%, color-mix(in srgb, #06c3d4 14%, transparent), transparent 32%),
-      radial-gradient(circle at 82% 18%, color-mix(in srgb, #06c3d4 10%, transparent), transparent 30%),
-      radial-gradient(circle at 50% 100%, color-mix(in srgb, #06c3d4 8%, transparent), transparent 38%);
+      radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--buneka-accent) 14%, transparent), transparent 32%),
+      radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--buneka-accent) 10%, transparent), transparent 30%),
+      radial-gradient(circle at 50% 100%, color-mix(in srgb, var(--buneka-accent) 8%, transparent), transparent 38%);
     opacity: 1;
   }
 
@@ -898,8 +901,8 @@
     radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.16), transparent 32%),
     radial-gradient(circle at 82% 12%, rgba(245, 158, 11, 0.10), transparent 34%),
     radial-gradient(circle at 50% 92%, rgba(62, 207, 142, 0.10), transparent 38%),
-    linear-gradient(180deg, #171717, #101010),
-    #171717;
+    linear-gradient(180deg, #00040d, #00040d),
+    #00040d;
   background-attachment: fixed;
 }
 
@@ -939,11 +942,11 @@
 
 .help-center-dark input {
   background-color: rgba(16, 16, 16, 0.82) !important;
-  color: #f7f7ef !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark input::placeholder {
-  color: #a3a38d !important;
+  color: #b8fff0 !important;
 }
 
 .dark .help-center-dark {
@@ -951,8 +954,8 @@
     radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.16), transparent 32%),
     radial-gradient(circle at 82% 12%, rgba(245, 158, 11, 0.10), transparent 34%),
     radial-gradient(circle at 50% 92%, rgba(62, 207, 142, 0.10), transparent 38%),
-    linear-gradient(180deg, #171717, #101010),
-    #171717;
+    linear-gradient(180deg, #00040d, #00040d),
+    #00040d;
 }
 
 .dark .help-center-dark .bg-white,
@@ -981,22 +984,22 @@
 .dark .help-center-dark .text-slate-900,
 .dark .help-center-dark .text-slate-800,
 .dark .help-center-dark .text-slate-700 {
-  color: #f7f7ef !important;
+  color: #b8fff0 !important;
 }
 
 .dark .help-center-dark .text-slate-600,
 .dark .help-center-dark .text-slate-500,
 .dark .help-center-dark .text-slate-400 {
-  color: #b8b79f !important;
+  color: #b8fff0 !important;
 }
 
 .dark .help-center-dark input {
   background-color: rgba(16, 17, 15, 0.78) !important;
-  color: #f7f7ef !important;
+  color: #b8fff0 !important;
 }
 
 .dark .help-center-dark input::placeholder {
-  color: #a3a38d !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark .text-cyan-700,
@@ -1004,7 +1007,7 @@
 .dark .help-center-dark .text-cyan-300,
 .dark .help-center-dark .text-cyan-700,
 .dark .help-center-dark .text-cyan-800 {
-  color: #7BE7B2 !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark header {
@@ -1026,8 +1029,8 @@
     radial-gradient(circle at 14% 10%, rgba(62, 207, 142, 0.15), transparent 30%),
     radial-gradient(circle at 86% 8%, rgba(245, 158, 11, 0.11), transparent 28%),
     radial-gradient(circle at 52% 100%, rgba(62, 207, 142, 0.09), transparent 35%),
-    #050505 !important;
-  color: #f7f7ef !important;
+    #00040d !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark header {
@@ -1063,21 +1066,21 @@
 
 .help-center-dark :where(.text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700),
 .dark .help-center-dark :where(.text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700) {
-  color: #f7f7ef !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark :where(.text-slate-600, .text-slate-500, .text-slate-400),
 .dark .help-center-dark :where(.text-slate-600, .text-slate-500, .text-slate-400) {
-  color: #b8b79f !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark :where(.text-cyan-700, .text-cyan-800, .text-cyan-300),
 .dark .help-center-dark :where(.text-cyan-700, .text-cyan-800, .text-cyan-300) {
-  color: #3ecf8e !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark svg {
-  color: #3ecf8e;
+  color: #b8fff0;
 }
 
 .help-center-dark .bg-slate-950 svg,
@@ -1089,30 +1092,30 @@
 .dark .help-center-dark input {
   background-color: rgba(5, 5, 5, 0.78) !important;
   border-color: rgba(62, 207, 142, 0.24) !important;
-  color: #f7f7ef !important;
+  color: #b8fff0 !important;
 }
 
 .help-center-dark input::placeholder,
 .dark .help-center-dark input::placeholder {
-  color: #9f9f8a !important;
+  color: #b8fff0 !important;
 }
 
 /* Supabase-like help center shell */
 .help-center-dark {
-  --help-bg: #050505;
+  --help-bg: #00040d;
   --help-panel: rgba(15, 15, 15, 0.94);
   --help-panel-2: rgba(19, 19, 19, 0.96);
   --help-border: rgba(62, 207, 142, 0.18);
   --help-border-strong: rgba(62, 207, 142, 0.36);
-  --help-text: #f5f5f0;
-  --help-muted: #a7a79a;
-  --help-green: #3ecf8e;
-  --help-amber: #f2b84b;
-  --help-red: #f97350;
+  --help-text: #b8fff0;
+  --help-muted: #b8fff0;
+  --help-green: #b8fff0;
+  --help-amber: #b8fff0;
+  --help-red: #b8fff0;
   background:
     radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.12), transparent 30%),
     radial-gradient(circle at 80% 4%, rgba(242, 184, 75, 0.10), transparent 28%),
-    linear-gradient(180deg, #050505 0%, #080908 100%) !important;
+    linear-gradient(180deg, #00040d 0%, #00040d 100%) !important;
   color: var(--help-text) !important;
 }
 
@@ -1140,7 +1143,7 @@
   border: 1px solid rgba(62, 207, 142, 0.20);
   background: rgba(255, 255, 255, 0.035);
   padding: 0 14px;
-  color: #f5f5f0;
+  color: #b8fff0;
   font-size: 12px;
   font-weight: 900;
   transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
@@ -1190,7 +1193,7 @@
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  color: #d4d4cc;
+  color: #b8fff0;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.35;
@@ -1217,11 +1220,11 @@
   border: 1px solid rgba(242, 184, 75, 0.28);
   background: rgba(242, 184, 75, 0.08);
   padding: 12px;
-  color: #e7d5a7;
+  color: #b8fff0;
 }
 
 .help-mini-callout p {
-  color: #d8c899;
+  color: #b8fff0;
   font-size: 12px;
   font-weight: 750;
   line-height: 1.55;
@@ -1300,7 +1303,7 @@
   width: 100%;
   border-radius: 18px;
   border: 1px solid rgba(62, 207, 142, 0.20);
-  background: #050505 !important;
+  background: #00040d !important;
   color: var(--help-text) !important;
   font-size: 16px;
   font-weight: 800;
@@ -1321,7 +1324,7 @@
   z-index: 30;
   border: 1px solid var(--help-border-strong);
   border-radius: 18px;
-  background: #080808;
+  background: #00040d;
   padding: 8px;
   box-shadow: 0 26px 80px rgba(0, 0, 0, 0.48);
 }
@@ -1385,19 +1388,19 @@
 
 .help-action-primary {
   background: var(--help-green);
-  color: #04110b;
+  color: #00040d;
 }
 
 .help-action-success {
   border-color: rgba(62, 207, 142, 0.34);
   background: rgba(62, 207, 142, 0.12);
-  color: #a8ffd2;
+  color: #b8fff0;
 }
 
 .help-action-warning {
   border-color: rgba(242, 184, 75, 0.34);
   background: rgba(242, 184, 75, 0.12);
-  color: #ffe0a3;
+  color: #b8fff0;
 }
 
 .help-topic-card {
@@ -1494,7 +1497,7 @@
   justify-content: center;
   border-radius: 999px;
   background: var(--help-green);
-  color: #04110b;
+  color: #00040d;
   font-size: 12px;
   font-weight: 950;
 }
@@ -1509,8 +1512,8 @@
 .help-start-button {
   width: fit-content;
   margin-top: 18px;
-  background: linear-gradient(135deg, var(--help-amber), #f97350);
-  color: #120a02;
+  background: linear-gradient(135deg, var(--help-amber), #b8fff0);
+  color: #00040d;
 }
 
 .help-flow-card {
@@ -1643,7 +1646,7 @@
   border-radius: 999px;
   border: 1px solid rgba(62, 207, 142, 0.22);
   background: rgba(62, 207, 142, 0.10);
-  color: #b7ffd8;
+  color: #b8fff0;
   font-size: 12px;
   font-weight: 800;
   padding: 6px 10px;
@@ -1667,7 +1670,7 @@
 
 .help-alert span {
   display: block;
-  color: #d7d7cb;
+  color: #b8fff0;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.55;
@@ -1766,7 +1769,7 @@
   border-radius: 18px;
   border: 1px solid rgba(62, 207, 142, 0.48);
   background: var(--help-green);
-  color: #04110b;
+  color: #00040d;
   box-shadow: 0 18px 60px rgba(62, 207, 142, 0.28);
 }
 
@@ -1796,20 +1799,20 @@
 
 /* Current guide shell: black graphite panels, mustard/amber markers, no green wash. */
 .guide-shell {
-  --guide-bg: #020b0f;
-  --guide-panel: #010b1f;
-  --guide-panel-soft: #111827;
+  --guide-bg: var(--buneka-base);
+  --guide-panel: var(--buneka-panel);
+  --guide-panel-soft: #00040d;
   --guide-line: rgba(148, 163, 184, 0.22);
   --guide-line-strong: rgba(255, 107, 0, 0.48);
-  --guide-text: #F8FAFC;
-  --guide-muted: #CBD5E1;
-  --guide-amber: #FF6B00;
-  --guide-gold: #F59E0B;
-  --guide-red: #EF4444;
+  --guide-text: var(--buneka-accent);
+  --guide-muted: var(--buneka-accent);
+  --guide-amber: var(--buneka-accent);
+  --guide-gold: var(--buneka-accent);
+  --guide-red: #b8fff0;
   background:
     radial-gradient(circle at 18% 0%, rgba(255, 107, 0, 0.12), transparent 26%),
     radial-gradient(circle at 86% 12%, rgba(16, 185, 129, 0.08), transparent 28%),
-    linear-gradient(180deg, #020b0f 0%, #020b0f 100%);
+    linear-gradient(180deg, var(--buneka-base) 0%, var(--buneka-base) 100%);
   color: var(--guide-text);
 }
 
@@ -1978,7 +1981,7 @@
   width: 100%;
   border-radius: 14px;
   border: 1px solid var(--guide-line);
-  background: #080808;
+  background: #00040d;
   color: var(--guide-text);
   font-size: 14px;
   font-weight: 800;
@@ -2001,7 +2004,7 @@
   gap: 6px;
   border-radius: 14px;
   border: 1px solid var(--guide-line-strong);
-  background: #090909;
+  background: #00040d;
   padding: 8px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
@@ -2061,7 +2064,7 @@
 .guide-action-support {
   border-color: rgba(242, 184, 75, 0.42);
   background: var(--guide-amber);
-  color: #15100a;
+  color: #00040d;
 }
 
 .guide-heading-tabs {
@@ -2151,7 +2154,7 @@
   justify-content: center;
   border-radius: 999px;
   background: var(--guide-amber);
-  color: #120c04;
+  color: #00040d;
   font-size: 12px;
   font-weight: 950;
 }
@@ -2220,7 +2223,7 @@
 .guide-screen-demo {
   border-radius: 18px;
   border: 1px solid rgba(242, 184, 75, 0.24);
-  background: #0a0a0a;
+  background: #00040d;
   padding: 14px;
 }
 
@@ -2331,9 +2334,9 @@
 
 .sector-home-tile {
   background:
-    radial-gradient(circle at 22% 12%, color-mix(in srgb, #06c3d4 12%, transparent), transparent 34%),
-    linear-gradient(135deg, color-mix(in srgb, #06c3d4 7%, #050c0d), #050c0d);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, #06c3d4 10%, #050c0d), 0 16px 34px color-mix(in srgb, #020b0f 86%, transparent);
+    radial-gradient(circle at 22% 12%, color-mix(in srgb, var(--buneka-accent) 12%, transparent), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, var(--buneka-accent) 7%, var(--buneka-panel)), var(--buneka-panel));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--buneka-accent) 10%, var(--buneka-panel)), 0 16px 34px color-mix(in srgb, var(--buneka-base) 86%, transparent);
 }
 
 .sector-home-bg-icon {
@@ -2348,44 +2351,44 @@
 .sector-home-tile:hover {
   border-color: var(--sector-accent) !important;
   background:
-    radial-gradient(circle at 22% 12%, color-mix(in srgb, #06c3d4 18%, transparent), transparent 34%),
-    linear-gradient(135deg, color-mix(in srgb, #06c3d4 10%, #050c0d), #050c0d);
+    radial-gradient(circle at 22% 12%, color-mix(in srgb, var(--buneka-accent) 18%, transparent), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, var(--buneka-accent) 10%, var(--buneka-panel)), var(--buneka-panel));
 }
 
 .sector-directory-panel {
   border: 1px solid rgba(255,255,255,0.10);
-  background: #171717;
+  background: #00040d;
   box-shadow: 0 18px 70px rgba(0,0,0,0.22);
 }
 
 .sector-page-shell {
   background:
     radial-gradient(circle at 82% 10%, rgba(255,255,255,0.04), transparent 28%),
-    linear-gradient(180deg, #050505, #101010);
+    linear-gradient(180deg, #00040d, #00040d);
 }
 
 .sector-page-shell .glow-border {
   border-color: rgba(255,255,255,0.10);
-  background: #171717;
+  background: #00040d;
   box-shadow: 0 18px 70px rgba(0,0,0,0.22);
 }
 
 .product-table-head {
   background: #00040d !important;
-  color: #f5f2ea !important;
+  color: #b8fff0 !important;
   box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.22), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .product-table-head th {
-  color: #f5f2ea !important;
+  color: #b8fff0 !important;
   font-weight: 950 !important;
   text-shadow: none !important;
 }
 
 .stock-movement-row {
   position: relative;
-  background: #010b1f;
-  box-shadow: inset 0 -1px 0 #334155;
+  background: var(--buneka-panel);
+  box-shadow: inset 0 -1px 0 var(--buneka-panel);
   transition: background 140ms ease, box-shadow 140ms ease;
 }
 
@@ -2394,19 +2397,19 @@
 }
 
 .stock-movement-entry {
-  box-shadow: inset 3px 0 0 #10B981, inset 0 -1px 0 #334155;
+  box-shadow: inset 3px 0 0 var(--buneka-accent), inset 0 -1px 0 var(--buneka-panel);
 }
 
 .stock-movement-exit {
-  box-shadow: inset 3px 0 0 #F59E0B, inset 0 -1px 0 #334155;
+  box-shadow: inset 3px 0 0 var(--buneka-accent), inset 0 -1px 0 var(--buneka-panel);
 }
 
 .stock-movement-entry:hover {
-  background: #010b1f;
+  background: var(--buneka-panel);
 }
 
 .stock-movement-exit:hover {
-  background: #010b1f;
+  background: var(--buneka-panel);
 }
 
 .category-badge {
@@ -2428,8 +2431,8 @@
   border: 1px solid rgba(203, 213, 225, 0.72);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94)),
-    #ffffff;
-  color: #0B0F19;
+    #b8fff0;
+  color: #00040d;
   box-shadow: 0 18px 50px rgba(2, 44, 34, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
@@ -2459,13 +2462,215 @@
   }
 
   .guide-shell {
-    background: #fff !important;
-    color: #111 !important;
+    background: #b8fff0 !important;
+    color: #00040d !important;
   }
 
   .guide-hero,
   .guide-panel {
     box-shadow: none !important;
     break-inside: avoid;
+  }
+}
+
+/* Buneka three-color screen system
+   Base: #00040d, surface: #002b28, accent/text: #b8fff0. */
+@layer utilities {
+  html,
+  body,
+  [class*="bg-[var(--color-bg)]"],
+  .home-viewport,
+  .price-focus-bg,
+  .guide-shell,
+  .sector-page-shell,
+  .package-page-shell,
+  main {
+    background-color: var(--buneka-base) !important;
+    color: var(--buneka-accent) !important;
+  }
+
+  .home-viewport,
+  .price-focus-bg,
+  .guide-shell,
+  .sector-page-shell,
+  .package-page-shell {
+    background:
+      radial-gradient(circle at 12% 4%, color-mix(in srgb, var(--buneka-accent) 10%, transparent), transparent 30%),
+      radial-gradient(circle at 88% 14%, color-mix(in srgb, var(--buneka-panel) 72%, transparent), transparent 32%),
+      linear-gradient(180deg, var(--buneka-base), var(--buneka-base)) !important;
+  }
+
+  .sidebar-surface,
+  .sidebar-supabase,
+  header.sidebar-supabase,
+  header.sidebar-surface {
+    background: var(--buneka-base) !important;
+    border-color: color-mix(in srgb, var(--buneka-accent) 16%, var(--buneka-base)) !important;
+  }
+
+  .data-card,
+  .stat-card,
+  .table-card,
+  .premium-input,
+  .glass-card,
+  .glass-panel,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl,
+  .guide-panel,
+  .guide-sidebar,
+  .guide-hero,
+  .guide-search-area,
+  .guide-heading-tabs,
+  .guide-screen-demo,
+  .guide-info,
+  .sector-directory-panel,
+  .sector-directory button,
+  .sector-home-tile,
+  .package-spark-card,
+  .package-detail-panel,
+  .bn-modal,
+  .bn-square-video,
+  .bn-square-video > div,
+  .product-table-head,
+  .stock-movement-row,
+  .stock-movement-entry:hover,
+  .stock-movement-exit:hover {
+    background: var(--buneka-panel) !important;
+    border-color: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel)) !important;
+    color: var(--buneka-accent) !important;
+    box-shadow: none !important;
+  }
+
+  .premium-button-primary,
+  .action-sale,
+  .cta-call-spark,
+  .guide-action-primary,
+  .purchase-request-button,
+  .cta-primary-animated {
+    background: var(--buneka-accent) !important;
+    border-color: var(--buneka-accent) !important;
+    color: var(--buneka-base) !important;
+    box-shadow: none !important;
+  }
+
+  .premium-button-secondary,
+  .premium-button-amber,
+  .action-no-sale,
+  .guide-action,
+  .guide-nav-button,
+  .guide-icon-button,
+  .guide-topic-button,
+  .guide-topic-button-active,
+  .glow-border,
+  .category-badge,
+  input,
+  select,
+  textarea {
+    background: var(--buneka-panel) !important;
+    border-color: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel)) !important;
+    color: var(--buneka-accent) !important;
+  }
+
+  [class*="text-emerald"],
+  [class*="text-amber"],
+  [class*="text-cyan"],
+  [class*="text-sky"],
+  [class*="text-blue"],
+  [class*="text-indigo"],
+  [class*="text-violet"],
+  [class*="text-purple"],
+  [class*="text-rose"],
+  [class*="text-red"],
+  [class*="text-orange"],
+  [class*="text-yellow"],
+  [class*="text-lime"],
+  [class*="text-green"],
+  [class*="text-slate"],
+  [class*="text-stone"],
+  [class*="text-neutral"],
+  [class*="text-zinc"],
+  [class*="text-white"],
+  [class*="placeholder-slate"]::placeholder,
+  [class*="placeholder-stone"]::placeholder,
+  [class*="placeholder-white"]::placeholder {
+    color: var(--buneka-accent) !important;
+  }
+
+  [class*="bg-emerald"],
+  [class*="bg-amber"],
+  [class*="bg-cyan"],
+  [class*="bg-sky"],
+  [class*="bg-blue"],
+  [class*="bg-indigo"],
+  [class*="bg-violet"],
+  [class*="bg-purple"],
+  [class*="bg-rose"],
+  [class*="bg-red"],
+  [class*="bg-orange"],
+  [class*="bg-yellow"],
+  [class*="bg-lime"],
+  [class*="bg-green"],
+  [class*="bg-slate"],
+  [class*="bg-stone"],
+  [class*="bg-neutral"],
+  [class*="bg-zinc"],
+  [class*="bg-black"],
+  [class*="bg-white"],
+  [class*="bg-transparent"],
+  [class*="bg-gradient"] {
+    background: var(--buneka-panel) !important;
+  }
+
+  [class*="border-emerald"],
+  [class*="border-amber"],
+  [class*="border-cyan"],
+  [class*="border-sky"],
+  [class*="border-blue"],
+  [class*="border-indigo"],
+  [class*="border-violet"],
+  [class*="border-purple"],
+  [class*="border-rose"],
+  [class*="border-red"],
+  [class*="border-orange"],
+  [class*="border-yellow"],
+  [class*="border-lime"],
+  [class*="border-green"],
+  [class*="border-slate"],
+  [class*="border-stone"],
+  [class*="border-neutral"],
+  [class*="border-zinc"],
+  [class*="border-black"],
+  [class*="border-white"] {
+    border-color: color-mix(in srgb, var(--buneka-accent) 24%, var(--buneka-panel)) !important;
+  }
+
+  [class*="ring-emerald"],
+  [class*="ring-amber"],
+  [class*="ring-cyan"],
+  [class*="ring-slate"],
+  [class*="ring-white"],
+  [class*="ring-black"] {
+    --tw-ring-color: color-mix(in srgb, var(--buneka-accent) 26%, var(--buneka-panel)) !important;
+  }
+
+  [class*="shadow"],
+  [class*="drop-shadow"] {
+    --tw-shadow: none !important;
+    --tw-shadow-colored: none !important;
+    filter: none !important;
+  }
+
+  .premium-button-primary,
+  .action-sale,
+  .cta-call-spark,
+  .guide-action-primary,
+  .purchase-request-button,
+  .cta-primary-animated,
+  button[type="submit"],
+  a[href^="tel:"] {
+    background: var(--buneka-accent) !important;
+    border-color: var(--buneka-accent) !important;
+    color: var(--buneka-base) !important;
   }
 }

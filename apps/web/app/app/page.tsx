@@ -199,7 +199,7 @@ export default function FiyatSorgulaPage() {
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(/'/g, "&#39;");
   }
 
   function printCartReceipt() {
@@ -239,23 +239,23 @@ export default function FiyatSorgulaPage() {
             body {
               width: 70mm;
               margin: 0 auto;
-              color: #111;
-              background: #fff;
+              color: #00040d;
+              background: #b8fff0;
               font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
               font-size: 11px;
             }
-            header { text-align: center; border-bottom: 1px dashed #111; padding: 0 0 8px; margin-bottom: 8px; }
+            header { text-align: center; border-bottom: 1px dashed #00040d; padding: 0 0 8px; margin-bottom: 8px; }
             h1 { margin: 0; font-size: 17px; letter-spacing: 0.08em; overflow-wrap: anywhere; }
             p { margin: 3px 0; }
             table { width: 100%; border-collapse: collapse; }
-            th { border-bottom: 1px dashed #111; padding: 5px 0; text-align: left; }
+            th { border-bottom: 1px dashed #00040d; padding: 5px 0; text-align: left; }
             th:nth-child(2), td:nth-child(2) { text-align: center; width: 28px; }
             th:nth-child(3), td:nth-child(3) { text-align: right; width: 70px; }
-            td { border-bottom: 1px dotted #aaa; padding: 6px 0; vertical-align: top; }
+            td { border-bottom: 1px dotted #b8fff0; padding: 6px 0; vertical-align: top; }
             td b { display: block; font-size: 11px; }
-            td small { display: block; color: #555; font-size: 9px; margin-top: 2px; }
-            .total { display: flex; justify-content: space-between; border-top: 1px dashed #111; margin-top: 8px; padding-top: 8px; font-size: 15px; font-weight: 900; }
-            footer { margin-top: 10px; text-align: center; color: #444; }
+            td small { display: block; color: #002b28; font-size: 9px; margin-top: 2px; }
+            .total { display: flex; justify-content: space-between; border-top: 1px dashed #00040d; margin-top: 8px; padding-top: 8px; font-size: 15px; font-weight: 900; }
+            footer { margin-top: 10px; text-align: center; color: #002b28; }
             @media screen { body { padding: 16px 0; } }
           </style>
         </head>
@@ -385,7 +385,7 @@ export default function FiyatSorgulaPage() {
           <button
             type="button"
             onClick={() => setIsPriceOpen(true)}
-            className="mt-8 inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-[#00FF7B] px-6 text-lg font-black text-[#022C22] shadow-[0_0_0_1px_rgba(0,255,123,0.24),0_24px_70px_rgba(0,255,123,0.18)] transition-transform hover:scale-[1.01] active:scale-95 sm:w-auto sm:min-w-80"
+            className="mt-8 inline-flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-[#b8fff0] px-6 text-lg font-black text-[#002b28] shadow-[0_0_0_1px_rgba(0,255,123,0.24),0_24px_70px_rgba(0,255,123,0.18)] transition-transform hover:scale-[1.01] active:scale-95 sm:w-auto sm:min-w-80"
           >
             <ScanBarcode size={24} /> Fiyat Gör Aç
           </button>
@@ -418,7 +418,7 @@ export default function FiyatSorgulaPage() {
             setIsPriceOpen(false);
             handleCancel();
           }}
-          className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 text-xs font-black text-stone-200 transition hover:border-[#00FF7B]/45 hover:text-[#00FF7B]"
+          className="inline-flex h-10 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 text-xs font-black text-stone-200 transition hover:border-[#b8fff0]/45 hover:text-[#b8fff0]"
         >
           <X size={16} /> Fiyat Görü Kapat
         </button>
@@ -438,7 +438,7 @@ export default function FiyatSorgulaPage() {
           <div className="grid grid-cols-3 gap-2 text-center text-[11px] font-black text-stone-400">
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{stats.sales}</b>Satış</span>
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{formatMoney(stats.revenue)}</b>Kasa</span>
-            <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-[#F59E0B]">{stats.queries}</b>Sorgu</span>
+            <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-[#b8fff0]">{stats.queries}</b>Sorgu</span>
           </div>
         </div>
 
@@ -469,10 +469,10 @@ export default function FiyatSorgulaPage() {
           {loading ? (
             <div className="h-14 w-14 animate-spin rounded-full border-b-2 border-emerald-300" />
           ) : error ? (
-            <div className="w-full max-w-md rounded-2xl border border-[#F59E0B]/45 bg-[#0B0F19] p-5 text-center shadow-[0_0_0_1px_rgba(245,158,11,0.08)]">
-              <AlertCircle size={38} className="mx-auto mb-3 text-[#F59E0B]" />
-              <h3 className="mb-4 text-lg font-black text-[#F8FAFC]">{error}</h3>
-              <Link href="/app/urunler" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#F59E0B]/55 bg-transparent px-4 py-2.5 text-sm font-black text-[#F59E0B] transition hover:border-[#F59E0B] hover:bg-[#F59E0B]/10">
+            <div className="w-full max-w-md rounded-2xl border border-[#b8fff0]/45 bg-[#00040d] p-5 text-center shadow-[0_0_0_1px_rgba(245,158,11,0.08)]">
+              <AlertCircle size={38} className="mx-auto mb-3 text-[#b8fff0]" />
+              <h3 className="mb-4 text-lg font-black text-[#b8fff0]">{error}</h3>
+              <Link href="/app/urunler" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#b8fff0]/55 bg-transparent px-4 py-2.5 text-sm font-black text-[#b8fff0] transition hover:border-[#b8fff0] hover:bg-[#b8fff0]/10">
                 <Plus size={20} /> Yeni Ürün Ekle
               </Link>
             </div>
@@ -488,7 +488,7 @@ export default function FiyatSorgulaPage() {
               </div>
               <div className="mx-auto mb-6 inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3">
                 <span className="font-bold text-stone-400">Stok:</span>
-                <span className={`text-xl font-black ${product.stock_quantity <= product.min_stock ? "text-[#F59E0B]" : "text-white"}`}>
+                <span className={`text-xl font-black ${product.stock_quantity <= product.min_stock ? "text-[#b8fff0]" : "text-white"}`}>
                   {product.stock_quantity} Adet
                 </span>
               </div>
@@ -548,7 +548,7 @@ export default function FiyatSorgulaPage() {
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.product.id)}
-                        className="rounded-lg border border-white/10 p-1.5 text-stone-400 transition hover:border-[#EF4444]/40 hover:text-[#EF4444]"
+                        className="rounded-lg border border-white/10 p-1.5 text-stone-400 transition hover:border-[#b8fff0]/40 hover:text-[#b8fff0]"
                         aria-label="Sepetten çıkar"
                       >
                         <Trash2 size={14} />
@@ -588,7 +588,7 @@ export default function FiyatSorgulaPage() {
                   <button
                     type="button"
                     onClick={printCartReceipt}
-                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#334155] bg-[#0B0F19] px-4 py-3 text-sm font-black text-[#F8FAFC] transition hover:border-[#00FF7B]/50 active:scale-95"
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#002b28] bg-[#00040d] px-4 py-3 text-sm font-black text-[#b8fff0] transition hover:border-[#b8fff0]/50 active:scale-95"
                   >
                     <Printer size={18} /> Fiş Yazdır / PDF
                   </button>

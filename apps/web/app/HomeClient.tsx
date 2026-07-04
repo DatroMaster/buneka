@@ -212,7 +212,7 @@ export default function HomeClient() {
         </div>
         <PublicPanelLink
           iconSize={17}
-          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-[#020b0f] shadow-none sm:hidden"
+          className="cta-primary-animated inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--home-glow)] px-5 py-3 text-sm font-black text-[color:var(--buneka-base)] shadow-none sm:hidden"
         />
       </header>
 
