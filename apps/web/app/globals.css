@@ -526,6 +526,14 @@
   background: var(--home-surface);
 }
 
+.package-detail-panel {
+  border: 1px solid color-mix(in srgb, var(--home-glow) 24%, var(--home-border));
+  background:
+    radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--home-glow) 10%, transparent), transparent 34%),
+    radial-gradient(circle at 92% 12%, rgba(242, 184, 75, 0.08), transparent 30%),
+    var(--home-surface);
+}
+
 .package-recommended-model::before {
   content: "";
   position: absolute;
