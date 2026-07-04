@@ -800,7 +800,7 @@ export default function UrunlerPage() {
                     USD bazlı ürünlerde maliyet güncel TCMB kuru ile TL’ye çevrilir; satış fiyatı kâr oranıyla en yakın üst TL’ye yuvarlanır.
                   </p>
                 </div>
-                <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#1E293B] px-3 py-2 text-xs font-black text-slate-100">
+                <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#010b1f] px-3 py-2 text-xs font-black text-slate-100">
                   <input
                     type="checkbox"
                     checked={autoProfitEnabled}

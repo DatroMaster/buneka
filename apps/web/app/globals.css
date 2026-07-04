@@ -9,7 +9,7 @@
 :root {
   --home-bg-1: #020b0f;
   --home-bg-2: #111827;
-  --home-surface: #1E293B;
+  --home-surface: #010b1f;
   --home-surface-soft: rgba(0, 0, 0, 0.04);
   --home-ink: #F8FAFC;
   --home-muted: #CBD5E1;
@@ -19,8 +19,8 @@
 
   --color-bg: #020b0f;
   --color-bg-secondary: #111827;
-  --color-card: #1E293B;
-  --color-surface: #1E293B;
+  --color-card: #010b1f;
+  --color-surface: #010b1f;
   --color-text: #F8FAFC;
   --color-muted: #CBD5E1;
   --color-border: #334155;
@@ -38,7 +38,7 @@
 .dark {
   --home-bg-1: #020b0f;
   --home-bg-2: #111827;
-  --home-surface: #1E293B;
+  --home-surface: #010b1f;
   --home-surface-soft: rgba(255, 255, 255, 0.04);
   --home-ink: #F8FAFC;
   --home-muted: #CBD5E1;
@@ -49,8 +49,8 @@
   /* App surfaces — Supabase neutral dark with green + mustard accents */
   --color-bg: #020b0f;
   --color-bg-secondary: #111827;
-  --color-card: #1E293B;
-  --color-surface: #1E293B;
+  --color-card: #010b1f;
+  --color-surface: #010b1f;
   --color-text: #F8FAFC;
   --color-muted: #CBD5E1;
   --color-border: #334155;
@@ -78,7 +78,7 @@
   /* Brand colors — Supabase neutral + green */
   --color-bg: #020b0f;
   --color-bg-secondary: #111827;
-  --color-card: #1E293B;
+  --color-card: #010b1f;
   --color-text: #F8FAFC;
   --color-muted: #CBD5E1;
   --color-green: #10B981;
@@ -292,14 +292,14 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.9rem;
-    background: linear-gradient(135deg, var(--color-card), color-mix(in srgb, var(--color-surface) 80%, black));
+    background: var(--color-card);
     border: 1px solid var(--color-border);
     border-radius: 0.9rem;
     transition: border-color 0.15s ease, background 0.15s ease;
   }
   .stat-card:hover {
     border-color: var(--color-border-strong);
-    background: var(--color-surface);
+    background: var(--color-card);
   }
 
   .stat-card-icon {
@@ -1797,7 +1797,7 @@
 /* Current guide shell: black graphite panels, mustard/amber markers, no green wash. */
 .guide-shell {
   --guide-bg: #020b0f;
-  --guide-panel: #1E293B;
+  --guide-panel: #010b1f;
   --guide-panel-soft: #111827;
   --guide-line: rgba(148, 163, 184, 0.22);
   --guide-line-strong: rgba(255, 107, 0, 0.48);
@@ -2384,7 +2384,7 @@
 
 .stock-movement-row {
   position: relative;
-  background: #1E293B;
+  background: #010b1f;
   box-shadow: inset 0 -1px 0 #334155;
   transition: background 140ms ease, box-shadow 140ms ease;
 }
@@ -2402,11 +2402,11 @@
 }
 
 .stock-movement-entry:hover {
-  background: #1E293B;
+  background: #010b1f;
 }
 
 .stock-movement-exit:hover {
-  background: #1E293B;
+  background: #010b1f;
 }
 
 .category-badge {

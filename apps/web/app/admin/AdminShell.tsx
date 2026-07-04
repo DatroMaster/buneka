@@ -92,8 +92,8 @@ export default function AdminShell({
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-all active:scale-[0.98] ${
                       isActive
-                        ? "border border-[#FF6B00]/45 bg-[#1E293B] text-white shadow-[inset_3px_0_0_#FF6B00]"
-                        : "border border-transparent text-slate-300 hover:border-slate-600 hover:bg-[#1E293B] hover:text-white"
+                        ? "border border-[#FF6B00]/45 bg-[#010b1f] text-white shadow-[inset_3px_0_0_#FF6B00]"
+                        : "border border-transparent text-slate-300 hover:border-slate-600 hover:bg-[#010b1f] hover:text-white"
                     }`}
                   >
                     <Icon size={20} className={isActive ? "text-[#FF6B00]" : "text-[#10B981]"} />

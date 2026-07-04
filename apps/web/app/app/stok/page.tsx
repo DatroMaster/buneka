@@ -370,7 +370,7 @@ export default function StokPage() {
             Stok Takibi sayfası ürün kartı açmak için değil, depoya giren ve satışla çıkan miktarları izlemek içindir.
           </p>
         </div>
-        <div className="stat-card border-[#1E293B]">
+        <div className="stat-card border-[#010b1f]">
           <div className="stat-card-icon bg-emerald-400/12 text-emerald-300">
             <ArrowUpRight size={22} />
           </div>
@@ -379,7 +379,7 @@ export default function StokPage() {
             <p className="text-2xl font-black text-[#10B981]">+{stockEntryTotal}</p>
           </div>
         </div>
-        <div className="stat-card border-[#1E293B]">
+        <div className="stat-card border-[#010b1f]">
           <div className="stat-card-icon bg-[#F59E0B]/12 text-[#F59E0B]">
             <ArrowDownRight size={22} />
           </div>
@@ -399,7 +399,7 @@ export default function StokPage() {
       <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-[#0B0F19] text-sm text-[#CBD5E1] shadow-[inset_0_-1px_0_#1E293B]">
+            <thead className="bg-[#0B0F19] text-sm text-[#CBD5E1] shadow-[inset_0_-1px_0_#010b1f]">
               <tr>
                 <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
                 <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
@@ -483,7 +483,7 @@ export default function StokPage() {
       {selectedHistoryRow && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
           <div className="max-h-[88vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-[#334155] bg-[#0F172A] text-[#F8FAFC] shadow-2xl">
-            <div className="flex items-start justify-between gap-4 border-b border-[#334155] bg-[#1E293B] px-5 py-4">
+            <div className="flex items-start justify-between gap-4 border-b border-[#334155] bg-[#010b1f] px-5 py-4">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#10B981]">Ürün tarihçesi</p>
                 <h2 className="mt-1 font-display text-2xl font-black">{selectedHistoryRow.product.name}</h2>
@@ -515,7 +515,7 @@ export default function StokPage() {
                   <h3 className="text-sm font-black uppercase tracking-wide text-[#CBD5E1]">Kalan parti / fatura detayı</h3>
                   <div className="mt-3 space-y-2">
                     {selectedHistoryRow.remainingLots.map((lot) => (
-                      <div key={lot.id} className="rounded-xl border border-[#334155] bg-[#1E293B] p-3">
+                      <div key={lot.id} className="rounded-xl border border-[#334155] bg-[#010b1f] p-3">
                         <div className="flex items-start justify-between gap-3">
                           <div>
                             <p className="text-sm font-black text-[#F8FAFC]">{formatDate(lot.date)}</p>
@@ -542,7 +542,7 @@ export default function StokPage() {
                   <h3 className="text-sm font-black uppercase tracking-wide text-[#CBD5E1]">Stok hareket tarihçesi</h3>
                   <div className="mt-3 space-y-2">
                     {selectedHistoryMovements.length === 0 ? (
-                      <div className="rounded-xl border border-[#334155] bg-[#1E293B] p-4 text-sm font-semibold text-[#94A3B8]">
+                      <div className="rounded-xl border border-[#334155] bg-[#010b1f] p-4 text-sm font-semibold text-[#94A3B8]">
                         Bu ürün için hareket kaydı yok.
                       </div>
                     ) : (
@@ -550,7 +550,7 @@ export default function StokPage() {
                         const movementType = getMovementLabel(movement.movement_type);
                         const Icon = movementType.icon;
                         return (
-                          <div key={movement.id} className="rounded-xl border border-[#334155] bg-[#1E293B] p-3">
+                          <div key={movement.id} className="rounded-xl border border-[#334155] bg-[#010b1f] p-3">
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <p className="text-sm font-black text-[#F8FAFC]">{formatTime(movement.created_at)}</p>
@@ -642,7 +642,7 @@ function StockAgeMetric({
   tone?: "green" | "amber";
 }) {
   return (
-    <div className="rounded-xl border border-[#1E293B] bg-[#151E2E] p-3">
+    <div className="rounded-xl border border-[#010b1f] bg-[#151E2E] p-3">
       <p className="text-[10px] font-black uppercase tracking-wide text-[#64748B]">{label}</p>
       <p className={`mt-1 text-lg font-black ${tone === "amber" ? "text-[#F59E0B]" : "text-[#00FF7B]"}`}>
         {value}
