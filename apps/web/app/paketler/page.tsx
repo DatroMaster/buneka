@@ -85,7 +85,7 @@ const PLAN_HIGHLIGHTS: Record<string, string[]> = {
 
 export default function PaketlerPage() {
   return (
-    <main className="home-viewport relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
+    <main className="package-page-shell relative flex min-h-screen w-full flex-col overflow-x-hidden text-[color:var(--home-ink)]">
       <div aria-hidden className="home-grid-pattern pointer-events-none absolute inset-0" />
 
       <header className="relative z-10 grid shrink-0 gap-3 px-4 py-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:px-6 sm:py-4">
@@ -130,7 +130,7 @@ export default function PaketlerPage() {
           </p>
         </div>
 
-        <section className="grid gap-4 rounded-2xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/82 p-4 shadow-[0_18px_60px_rgba(2,6,23,0.12)] backdrop-blur-xl lg:grid-cols-[0.95fr_1.25fr] lg:p-5">
+        <section className="grid gap-4 rounded-2xl border border-emerald-400/20 bg-[#050505]/92 p-4 shadow-[0_24px_90px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl lg:grid-cols-[0.95fr_1.25fr] lg:p-5">
           <div className="flex gap-4">
             <div className="relative hidden h-48 w-32 shrink-0 rounded-[1.65rem] border border-emerald-300/35 bg-neutral-950 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:block">
               <div className="h-full rounded-[1.2rem] border border-white/10 bg-gradient-to-b from-slate-900 via-neutral-950 to-black p-3">
@@ -212,10 +212,10 @@ export default function PaketlerPage() {
             return (
               <article
                 key={plan.name}
-                className={`relative flex flex-col overflow-hidden rounded-2xl border shadow-[0_18px_50px_rgba(2,6,23,0.14)] backdrop-blur-xl ${
+                  className={`relative flex min-h-[660px] flex-col overflow-hidden rounded-2xl border shadow-[0_22px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl ${
                   isPremium
-                    ? "border-emerald-300/45 bg-[#0B1713] text-white [--home-border:rgba(255,255,255,0.18)] [--home-glow:#3ECF8E] [--home-ink:#F8FAFC] [--home-muted:#CBD5E1]"
-                    : "border-[color:var(--home-border)] bg-[color:var(--home-surface)]/90"
+                    ? "border-amber-300/50 bg-[#050505] text-white [--home-border:rgba(242,184,75,0.26)] [--home-glow:#F2B84B] [--home-ink:#F8FAFC] [--home-muted:#CBD5E1]"
+                    : "border-emerald-400/22 bg-[#050505]/94 text-white [--home-border:rgba(62,207,142,0.20)] [--home-glow:#3ECF8E] [--home-ink:#F8FAFC] [--home-muted:#B7C3D0]"
                 }`}
               >
                 <div className={`flex h-8 items-center justify-center px-3 text-center text-[10px] font-black uppercase tracking-wide ${
@@ -245,19 +245,7 @@ export default function PaketlerPage() {
                     </p>
                   </div>
 
-                  <a
-                    href={callLink()}
-                    className={`mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-black transition-transform hover:scale-[1.01] active:scale-95 ${
-                      isPremium
-                        ? "bg-gradient-to-r from-[color:var(--home-glow)] to-emerald-500 text-slate-950"
-                        : "bg-slate-950 text-white shadow-[0_12px_24px_rgba(2,6,23,0.18)] dark:bg-white dark:text-slate-950"
-                    }`}
-                  >
-                    Sizi Arayalım <Phone size={15} />
-                  </a>
-
-                  <div className="mt-4 grid gap-1.5 text-[11px] font-bold text-[color:var(--home-ink)]">
-                    <span>7/24 destek hattı</span>
+                  <div className="mt-5 grid gap-1.5 rounded-xl border border-[color:var(--home-border)] bg-white/[0.03] px-3 py-3 text-[11px] font-bold text-[color:var(--home-ink)]">
                     <span>Ücretsiz ilk kurulum</span>
                     <span>PC barkod okuyucu hediyeli</span>
                   </div>

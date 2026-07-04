@@ -214,30 +214,30 @@ export default function StokPage() {
       />
 
       <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
-        <div className="data-card border-emerald-200/70 p-4 dark:border-emerald-500/20">
+        <div className="data-card border-emerald-400/45 bg-[#050505] p-4 text-white shadow-[0_0_0_1px_rgba(62,207,142,0.12),0_18px_54px_rgba(0,0,0,0.28)]">
           <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-emerald-600 dark:text-emerald-300">
             <Boxes size={15} /> Hareket Defteri
           </div>
-          <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
+          <p className="text-sm leading-6 text-slate-300">
             Stok Takibi sayfası ürün kartı açmak için değil, depoya giren ve satışla çıkan miktarları izlemek içindir.
           </p>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-icon bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300">
+        <div className="stat-card border-emerald-400/30 bg-[#050505] text-white">
+          <div className="stat-card-icon bg-emerald-400/12 text-emerald-300">
             <ArrowUpRight size={22} />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Toplam Giriş</p>
-            <p className="text-2xl font-black text-emerald-600 dark:text-emerald-300">+{stockEntryTotal}</p>
+            <p className="text-sm font-bold text-slate-400">Toplam Giriş</p>
+            <p className="text-2xl font-black text-emerald-300">+{stockEntryTotal}</p>
           </div>
         </div>
-        <div className="stat-card">
-          <div className="stat-card-icon bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-300">
+        <div className="stat-card border-amber-400/30 bg-[#050505] text-white">
+          <div className="stat-card-icon bg-amber-400/12 text-amber-300">
             <ArrowDownRight size={22} />
           </div>
           <div>
-            <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Toplam Çıkış</p>
-            <p className="text-2xl font-black text-amber-600 dark:text-amber-300">-{stockExitTotal}</p>
+            <p className="text-sm font-bold text-slate-400">Toplam Çıkış</p>
+            <p className="text-2xl font-black text-amber-300">-{stockExitTotal}</p>
           </div>
         </div>
       </div>
@@ -248,10 +248,10 @@ export default function StokPage() {
         </div>
       )}
 
-      <div className="data-card overflow-hidden">
+      <div className="data-card overflow-hidden border-white/10 bg-[#050505] text-white shadow-[0_22px_70px_rgba(0,0,0,0.35)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 text-sm text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
+            <thead className="bg-[#020202] text-sm text-slate-300 shadow-[inset_0_-1px_0_rgba(62,207,142,0.22)]">
               <tr>
                 <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
                 <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
@@ -260,7 +260,7 @@ export default function StokPage() {
                 <th className="px-6 py-4 font-medium">Not</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-white/5 bg-[#050505]">
               {loading ? (
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
@@ -278,13 +278,18 @@ export default function StokPage() {
                   const movementType = getMovementLabel(movement.movement_type);
                   const Icon = movementType.icon;
                   return (
-                    <tr key={movement.id} className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60">
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-500 dark:text-slate-400">
+                    <tr
+                      key={movement.id}
+                      className={`stock-movement-row ${
+                        Number(movement.quantity) >= 0 ? "stock-movement-entry" : "stock-movement-exit"
+                      }`}
+                    >
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">
                         {formatTime(movement.created_at)}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium text-slate-950 dark:text-slate-50">{movement.products?.name}</div>
-                        <div className="font-mono text-xs text-slate-500 dark:text-slate-400">{movement.products?.barcode}</div>
+                        <div className="font-medium text-white">{movement.products?.name}</div>
+                        <div className="font-mono text-xs text-slate-400">{movement.products?.barcode}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`flex items-center gap-1.5 text-sm font-medium ${movementType.color}`}>
@@ -292,10 +297,10 @@ export default function StokPage() {
                           {movementType.label}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-lg font-bold text-slate-950 dark:text-slate-50">
+                      <td className="px-6 py-4 text-lg font-black text-white">
                         {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
                       </td>
-                      <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{movement.note || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-slate-300">{movement.note || "-"}</td>
                     </tr>
                   );
                 })

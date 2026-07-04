@@ -3,6 +3,8 @@
 import type { Tables } from "@buneka/database";
 import {
   AlertTriangle,
+  ArrowUp,
+  ArrowUpDown,
   Boxes,
   HandCoins,
   Layers,
@@ -27,6 +29,7 @@ import { BulkAddModal } from "./BulkAddModal";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Tables<"products">;
+type ProductSortKey = "name" | "category" | "purchase_price" | "sale_price" | "stock_quantity";
 
 type ProductForm = {
   barcode: string;
@@ -100,7 +103,18 @@ export default function UrunlerPage() {
   const [bulkMode, setBulkMode] = useState<"percent" | "amount">("percent");
   const [bulkValue, setBulkValue] = useState("");
   const [bulkCategory, setBulkCategory] = useState("");
+  const [sortKey, setSortKey] = useState<ProductSortKey>("name");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const supabase = useMemo(() => createClient(), []);
+
+  function toggleSort(key: ProductSortKey) {
+    if (sortKey === key) {
+      setSortDir((current) => (current === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir(key === "name" || key === "category" ? "asc" : "desc");
+    }
+  }
 
   const loadProducts = useCallback(async () => {
     setLoading(true);
@@ -155,6 +169,15 @@ export default function UrunlerPage() {
     const matchesCategory = !categoryFilter || product.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });
+
+  const sortedProducts = useMemo(() => {
+    const factor = sortDir === "asc" ? 1 : -1;
+    return [...filteredProducts].sort((a, b) => {
+      if (sortKey === "name") return factor * a.name.localeCompare(b.name, "tr");
+      if (sortKey === "category") return factor * (a.category || "").localeCompare(b.category || "", "tr");
+      return factor * (Number(a[sortKey]) - Number(b[sortKey]));
+    });
+  }, [filteredProducts, sortDir, sortKey]);
 
   const bulkTargets = products.filter((product) => {
     const query = search.toLowerCase();
@@ -418,11 +441,11 @@ export default function UrunlerPage() {
           <table className="w-full text-left">
             <thead className="product-table-head sticky top-0 z-10">
               <tr className="text-sm">
-                <th className="px-6 py-3 font-medium">Barkod / Ürün Adı</th>
-                <th className="px-6 py-3 font-medium">Kategori</th>
-                <th className="px-6 py-3 text-right font-medium">Alış Fiyatı</th>
-                <th className="px-6 py-3 text-right font-medium">Satış Fiyatı</th>
-                <th className="px-6 py-3 text-right font-medium">Stok</th>
+                <ProductSortableHeader label="Barkod / Ürün Adı" active={sortKey === "name"} dir={sortDir} onClick={() => toggleSort("name")} />
+                <ProductSortableHeader label="Kategori" active={sortKey === "category"} dir={sortDir} onClick={() => toggleSort("category")} />
+                <ProductSortableHeader label="Alış Fiyatı" align="right" active={sortKey === "purchase_price"} dir={sortDir} onClick={() => toggleSort("purchase_price")} />
+                <ProductSortableHeader label="Satış Fiyatı" align="right" active={sortKey === "sale_price"} dir={sortDir} onClick={() => toggleSort("sale_price")} />
+                <ProductSortableHeader label="Stok" align="right" active={sortKey === "stock_quantity"} dir={sortDir} onClick={() => toggleSort("stock_quantity")} />
                 <th className="px-6 py-3 text-right font-medium" />
               </tr>
             </thead>
@@ -433,14 +456,14 @@ export default function UrunlerPage() {
                     <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-cyan-400" />
                   </td>
                 </tr>
-              ) : filteredProducts.length === 0 ? (
+              ) : sortedProducts.length === 0 ? (
                 <tr>
                   <td colSpan={6}>
                     <EmptyState icon={Search} message="Ürün bulunamadı." />
                   </td>
                 </tr>
               ) : (
-                filteredProducts.map((product) => (
+                sortedProducts.map((product) => (
                   <tr
                     key={product.id}
                     className="group cursor-pointer transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
@@ -651,6 +674,39 @@ export default function UrunlerPage() {
         </Modal>
       )}
     </div>
+  );
+}
+
+function ProductSortableHeader({
+  label,
+  active,
+  dir,
+  onClick,
+  align = "left",
+}: {
+  label: string;
+  active: boolean;
+  dir: "asc" | "desc";
+  onClick: () => void;
+  align?: "left" | "right";
+}) {
+  return (
+    <th className={`px-6 py-3 font-medium ${align === "right" ? "text-right" : ""}`}>
+      <button
+        type="button"
+        onClick={onClick}
+        className={`inline-flex items-center gap-1.5 transition-colors hover:text-emerald-300 ${
+          align === "right" ? "justify-end" : ""
+        } ${active ? "text-emerald-300" : ""}`}
+      >
+        {label}
+        {active ? (
+          <ArrowUp size={13} className={`transition-transform ${dir === "desc" ? "rotate-180" : ""}`} />
+        ) : (
+          <ArrowUpDown size={13} className="text-slate-500" />
+        )}
+      </button>
+    </th>
   );
 }
 
