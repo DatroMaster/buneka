@@ -305,7 +305,7 @@ export default function AppShell({
         <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-5">
           <CartProvider>{children}</CartProvider>
         </main>
-        <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-[10px] font-semibold text-slate-500 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#00040d]/70 dark:text-slate-400 md:block">
+        <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-[10px] font-semibold text-slate-500 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#05070d]/70 dark:text-slate-400 md:block">
           BUNEKA © 2026 · Ankara, TR · <ClientIpBadge />
         </div>
       </div>

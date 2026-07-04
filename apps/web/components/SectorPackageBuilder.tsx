@@ -144,7 +144,7 @@ export function SectorPackageBuilder({
                 } ${isRecommended ? "package-recommended-model" : ""}`}
               >
                 {isRecommended && (
-                  <span className="mb-2 inline-flex rounded-full bg-[#b8fff0] px-2 py-1 text-[9px] font-black uppercase tracking-wide text-[#002b28]">
+                  <span className="mb-2 inline-flex rounded-full bg-[#f4f7fb] px-2 py-1 text-[9px] font-black uppercase tracking-wide text-[#090d14]">
                     Tavsiye edilen model
                   </span>
                 )}
@@ -183,7 +183,7 @@ export function SectorPackageBuilder({
                     isSelected
                       ? "border-emerald-300 bg-[color:var(--home-glow)]/12 text-[color:var(--home-ink)] shadow-[inset_0_0_0_1px_rgba(110,231,183,0.18),0_0_22px_rgba(62,207,142,0.14)]"
                       : "border-[color:var(--home-border)] text-[color:var(--home-muted)] hover:border-[color:var(--home-glow)]"
-                  } ${isActive ? "ring-2 ring-[#b8fff0]/45" : ""}`}
+                  } ${isActive ? "ring-2 ring-[#f4f7fb]/45" : ""}`}
                 >
                   <CheckCircle2
                     size={14}
@@ -298,12 +298,12 @@ export function SectorPackageBuilder({
               Oluşturulan paket içeriği
             </p>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              <div className="rounded-lg border border-[color:var(--home-border)] bg-[#00040d]/35 p-3">
+              <div className="rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 p-3">
                 <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Model</p>
                 <p className="mt-1 font-display text-lg font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
                 <p className="mt-1 text-sm font-black text-[color:var(--home-glow)]">{selectedPlan.price}/yıl</p>
               </div>
-              <div className="rounded-lg border border-[color:var(--home-border)] bg-[#00040d]/35 p-3">
+              <div className="rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 p-3">
                 <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Toplam</p>
                 <p className="mt-1 font-display text-2xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
                 <p className="mt-1 text-xs font-bold text-[color:var(--home-muted)]">
@@ -313,14 +313,14 @@ export function SectorPackageBuilder({
             </div>
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {selectedPlan.features.map((feature) => (
-                <div key={feature} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#00040d]/35 px-3 py-2">
+                <div key={feature} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 px-3 py-2">
                   <CheckCircle2 size={14} className="shrink-0 text-[color:var(--home-glow)]" />
                   <span className="text-xs font-bold text-[color:var(--home-ink)]">{feature}</span>
                 </div>
               ))}
               {selectedModules.slice(0, 6).map((module) => (
-                <div key={module} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#00040d]/35 px-3 py-2">
-                  <PackageCheck size={14} className="shrink-0 text-[#b8fff0]" />
+                <div key={module} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 px-3 py-2">
+                  <PackageCheck size={14} className="shrink-0 text-[#f4f7fb]" />
                   <span className="text-xs font-bold text-[color:var(--home-ink)]">{module}</span>
                 </div>
               ))}

@@ -40,30 +40,30 @@ export default function AdminShell({
               <span className="text-xs font-semibold text-slate-400">Admin</span>
             </span>
           </span>
-          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-[#b8fff0] via-[#b8fff0] to-transparent" />
+          <span className="h-[2px] w-full max-w-[9rem] rounded-full bg-gradient-to-r from-[#f4f7fb] via-[#f4f7fb] to-transparent" />
           <span className="text-[11px] text-slate-400">{user.name} · {user.role}</span>
         </Link>
 
         <div className="flex items-center gap-2 md:gap-3">
           <Link
             href="/app"
-            className="hidden items-center gap-1.5 rounded-full border border-slate-600 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-[#b8fff0]/60 hover:text-white sm:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-slate-600 px-3 py-1.5 text-xs font-semibold text-slate-300 transition-all hover:border-[#f4f7fb]/60 hover:text-white sm:flex"
           >
             <ArrowLeft size={14} /> Uygulamaya dön
           </Link>
-          <BunekaNedirButton variant="compact" className="hidden border-slate-600 text-[#b8fff0] hover:border-[#b8fff0]/60 sm:flex" />
+          <BunekaNedirButton variant="compact" className="hidden border-slate-600 text-[#f4f7fb] hover:border-[#f4f7fb]/60 sm:flex" />
           <Link
             href="/"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-all hover:border-[#b8fff0]/60 hover:text-white active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-all hover:border-[#f4f7fb]/60 hover:text-white active:scale-90"
             aria-label="Site ana sayfası"
             title="Site ana sayfası"
           >
             <Home size={16} />
           </Link>
-          <ThemeToggle className="border-slate-600 text-slate-300 hover:border-[#b8fff0]/60 hover:text-white" />
+          <ThemeToggle className="border-slate-600 text-slate-300 hover:border-[#f4f7fb]/60 hover:text-white" />
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-all hover:border-[#b8fff0]/60 hover:text-white active:scale-90"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-600 text-slate-300 transition-all hover:border-[#f4f7fb]/60 hover:text-white active:scale-90"
             type="button"
             aria-label="Menüyü aç"
           >
@@ -92,11 +92,11 @@ export default function AdminShell({
                     onClick={() => setIsMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-3 transition-all active:scale-[0.98] ${
                       isActive
-                        ? "border border-[#b8fff0]/45 bg-[#00040d] text-white shadow-[inset_3px_0_0_#b8fff0]"
-                        : "border border-transparent text-slate-300 hover:border-slate-600 hover:bg-[#00040d] hover:text-white"
+                        ? "border border-[#f4f7fb]/45 bg-[#05070d] text-white shadow-[inset_3px_0_0_#f4f7fb]"
+                        : "border border-transparent text-slate-300 hover:border-slate-600 hover:bg-[#05070d] hover:text-white"
                     }`}
                   >
-                    <Icon size={20} className={isActive ? "text-[#b8fff0]" : "text-[#b8fff0]"} />
+                    <Icon size={20} className={isActive ? "text-[#f4f7fb]" : "text-[#f4f7fb]"} />
                     <span className="font-medium">{item.name}</span>
                   </Link>
                 );
@@ -104,7 +104,7 @@ export default function AdminShell({
               <Link
                 href="/app"
                 onClick={() => setIsMenuOpen(false)}
-                className="mt-4 flex items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-[#b8fff0] transition-colors hover:border-[#b8fff0]/45 hover:bg-[#b8fff0]/10"
+                className="mt-4 flex items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-[#f4f7fb] transition-colors hover:border-[#f4f7fb]/45 hover:bg-[#f4f7fb]/10"
               >
                 <ArrowLeft size={20} />
                 <span className="font-medium">Uygulamaya dön</span>
@@ -123,7 +123,7 @@ export default function AdminShell({
       <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-8">
         {children}
       </main>
-      <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-[10px] font-semibold text-slate-500 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#00040d]/70 dark:text-slate-400 md:block">
+      <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-[10px] font-semibold text-slate-500 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#05070d]/70 dark:text-slate-400 md:block">
         BUNEKA © 2026 · Ankara, TR · <ClientIpBadge />
       </div>
     </div>

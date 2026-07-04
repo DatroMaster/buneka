@@ -330,13 +330,13 @@ export default function StokPage() {
   const getMovementLabel = (type: string) => {
     switch (type) {
       case "sale":
-        return { label: "Satış çıkışı", color: "text-[#b8fff0]", icon: ArrowDownRight };
+        return { label: "Satış çıkışı", color: "text-[#f4f7fb]", icon: ArrowDownRight };
       case "purchase":
-        return { label: "Stok girişi", color: "text-[#b8fff0]", icon: ArrowUpRight };
+        return { label: "Stok girişi", color: "text-[#f4f7fb]", icon: ArrowUpRight };
       case "adjustment":
-        return { label: "Düzeltme", color: "text-[#b8fff0]", icon: AlertTriangle };
+        return { label: "Düzeltme", color: "text-[#f4f7fb]", icon: AlertTriangle };
       case "return":
-        return { label: "İade girişi", color: "text-[#b8fff0]", icon: ArrowUpRight };
+        return { label: "İade girişi", color: "text-[#f4f7fb]", icon: ArrowUpRight };
       default:
         return { label: type, color: "text-[color:var(--color-text)]", icon: Boxes };
     }
@@ -363,29 +363,29 @@ export default function StokPage() {
 
       <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
         <div className="data-card p-4">
-          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#b8fff0]">
+          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#f4f7fb]">
             <Boxes size={15} /> Hareket Defteri
           </div>
           <p className="text-sm leading-6 text-[color:var(--color-muted)]">
             Stok Takibi sayfası ürün kartı açmak için değil, depoya giren ve satışla çıkan miktarları izlemek içindir.
           </p>
         </div>
-        <div className="stat-card border-[#00040d]">
+        <div className="stat-card border-[#05070d]">
           <div className="stat-card-icon bg-emerald-400/12 text-emerald-300">
             <ArrowUpRight size={22} />
           </div>
           <div>
             <p className="text-sm font-bold text-[color:var(--color-muted)]">Toplam Giriş</p>
-            <p className="text-2xl font-black text-[#b8fff0]">+{stockEntryTotal}</p>
+            <p className="text-2xl font-black text-[#f4f7fb]">+{stockEntryTotal}</p>
           </div>
         </div>
-        <div className="stat-card border-[#00040d]">
-          <div className="stat-card-icon bg-[#b8fff0]/12 text-[#b8fff0]">
+        <div className="stat-card border-[#05070d]">
+          <div className="stat-card-icon bg-[#f4f7fb]/12 text-[#f4f7fb]">
             <ArrowDownRight size={22} />
           </div>
           <div>
             <p className="text-sm font-bold text-[color:var(--color-muted)]">Toplam Çıkış</p>
-            <p className="text-2xl font-black text-[#b8fff0]">-{stockExitTotal}</p>
+            <p className="text-2xl font-black text-[#f4f7fb]">-{stockExitTotal}</p>
           </div>
         </div>
       </div>
@@ -399,7 +399,7 @@ export default function StokPage() {
       <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-[#00040d] text-sm text-[#b8fff0] shadow-[inset_0_-1px_0_#00040d]">
+            <thead className="bg-[#05070d] text-sm text-[#f4f7fb] shadow-[inset_0_-1px_0_#05070d]">
               <tr>
                 <SortableHeader label="Tarih" active={sortKey === "date"} dir={sortDir} onClick={() => toggleSort("date")} />
                 <SortableHeader label="Ürün" active={sortKey === "product"} dir={sortDir} onClick={() => toggleSort("product")} />
@@ -434,7 +434,7 @@ export default function StokPage() {
                         Number(movement.quantity) >= 0 ? "stock-movement-entry" : "stock-movement-exit"
                       }`}
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-[#b8fff0]">
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-[#f4f7fb]">
                         {formatTime(movement.created_at)}
                       </td>
                       <td className="px-6 py-4">
@@ -444,8 +444,8 @@ export default function StokPage() {
                           onClick={() => movement.product_id && setSelectedHistoryProductId(movement.product_id)}
                           disabled={!movement.product_id}
                         >
-                          <div className="font-medium text-[#b8fff0]">{movement.products?.name}</div>
-                          <div className="font-mono text-xs text-[#b8fff0]">{movement.products?.barcode}</div>
+                          <div className="font-medium text-[#f4f7fb]">{movement.products?.name}</div>
+                          <div className="font-mono text-xs text-[#f4f7fb]">{movement.products?.barcode}</div>
                         </button>
                       </td>
                       <td className="px-6 py-4">
@@ -453,12 +453,12 @@ export default function StokPage() {
                           <button
                             type="button"
                             onClick={() => movement.product_id && setSelectedHistoryProductId(movement.product_id)}
-                            className="inline-flex rounded-full border border-[#b8fff0]/35 px-3 py-1 text-xs font-black text-[#b8fff0] transition hover:border-[#b8fff0]/70 hover:bg-[#b8fff0]/10"
+                            className="inline-flex rounded-full border border-[#f4f7fb]/35 px-3 py-1 text-xs font-black text-[#f4f7fb] transition hover:border-[#f4f7fb]/70 hover:bg-[#f4f7fb]/10"
                           >
                             {ageRow.stockDays} gün
                           </button>
                         ) : (
-                          <span className="text-sm font-semibold text-[#b8fff0]">-</span>
+                          <span className="text-sm font-semibold text-[#f4f7fb]">-</span>
                         )}
                       </td>
                       <td className="px-6 py-4">
@@ -467,10 +467,10 @@ export default function StokPage() {
                           {movementType.label}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-lg font-black text-[#b8fff0]">
+                      <td className="px-6 py-4 text-lg font-black text-[#f4f7fb]">
                         {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
                       </td>
-                      <td className="px-6 py-4 text-sm text-[#b8fff0]">{movement.note || "-"}</td>
+                      <td className="px-6 py-4 text-sm text-[#f4f7fb]">{movement.note || "-"}</td>
                     </tr>
                   );
                 })
@@ -482,15 +482,15 @@ export default function StokPage() {
 
       {selectedHistoryRow && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4">
-          <div className="max-h-[88vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-[#002b28] bg-[#00040d] text-[#b8fff0] shadow-2xl">
-            <div className="flex items-start justify-between gap-4 border-b border-[#002b28] bg-[#00040d] px-5 py-4">
+          <div className="max-h-[88vh] w-full max-w-4xl overflow-hidden rounded-2xl border border-[#090d14] bg-[#05070d] text-[#f4f7fb] shadow-2xl">
+            <div className="flex items-start justify-between gap-4 border-b border-[#090d14] bg-[#05070d] px-5 py-4">
               <div>
-                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#b8fff0]">Ürün tarihçesi</p>
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#f4f7fb]">Ürün tarihçesi</p>
                 <h2 className="mt-1 font-display text-2xl font-black">{selectedHistoryRow.product.name}</h2>
-                <p className="mt-1 font-mono text-xs font-semibold text-[#b8fff0]">{selectedHistoryRow.product.barcode}</p>
+                <p className="mt-1 font-mono text-xs font-semibold text-[#f4f7fb]">{selectedHistoryRow.product.barcode}</p>
               </div>
               <button
-                className="rounded-full border border-[#002b28] bg-[#00040d] p-2 text-[#b8fff0] transition hover:border-[#b8fff0] hover:text-white active:scale-90"
+                className="rounded-full border border-[#090d14] bg-[#05070d] p-2 text-[#f4f7fb] transition hover:border-[#f4f7fb] hover:text-white active:scale-90"
                 type="button"
                 onClick={() => setSelectedHistoryProductId(null)}
                 aria-label="Kapat"
@@ -512,22 +512,22 @@ export default function StokPage() {
 
               <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
                 <section>
-                  <h3 className="text-sm font-black uppercase tracking-wide text-[#b8fff0]">Kalan parti / fatura detayı</h3>
+                  <h3 className="text-sm font-black uppercase tracking-wide text-[#f4f7fb]">Kalan parti / fatura detayı</h3>
                   <div className="mt-3 space-y-2">
                     {selectedHistoryRow.remainingLots.map((lot) => (
-                      <div key={lot.id} className="rounded-xl border border-[#002b28] bg-[#00040d] p-3">
+                      <div key={lot.id} className="rounded-xl border border-[#090d14] bg-[#05070d] p-3">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <p className="text-sm font-black text-[#b8fff0]">{formatDate(lot.date)}</p>
-                            <p className="mt-1 text-xs font-semibold text-[#b8fff0]">
+                            <p className="text-sm font-black text-[#f4f7fb]">{formatDate(lot.date)}</p>
+                            <p className="mt-1 text-xs font-semibold text-[#f4f7fb]">
                               {lot.supplier ? `Alınan firma: ${lot.supplier}` : "Firma bilgisi yok"}
                             </p>
                           </div>
-                          <span className="rounded-full bg-[#b8fff0]/10 px-3 py-1 text-xs font-black text-[#b8fff0]">
+                          <span className="rounded-full bg-[#f4f7fb]/10 px-3 py-1 text-xs font-black text-[#f4f7fb]">
                             {lot.quantity} adet
                           </span>
                         </div>
-                        <div className="mt-3 grid gap-1 text-xs font-semibold text-[#b8fff0]">
+                        <div className="mt-3 grid gap-1 text-xs font-semibold text-[#f4f7fb]">
                           <span>İlk giriş miktarı: {lot.originalQuantity}</span>
                           <span>Alış fiyatı: {lot.unitPrice != null ? formatMoney(Number(lot.unitPrice)) : "-"}</span>
                           <span>Fatura tarihi: {lot.invoiceDate || "-"}</span>
@@ -539,10 +539,10 @@ export default function StokPage() {
                 </section>
 
                 <section>
-                  <h3 className="text-sm font-black uppercase tracking-wide text-[#b8fff0]">Stok hareket tarihçesi</h3>
+                  <h3 className="text-sm font-black uppercase tracking-wide text-[#f4f7fb]">Stok hareket tarihçesi</h3>
                   <div className="mt-3 space-y-2">
                     {selectedHistoryMovements.length === 0 ? (
-                      <div className="rounded-xl border border-[#002b28] bg-[#00040d] p-4 text-sm font-semibold text-[#b8fff0]">
+                      <div className="rounded-xl border border-[#090d14] bg-[#05070d] p-4 text-sm font-semibold text-[#f4f7fb]">
                         Bu ürün için hareket kaydı yok.
                       </div>
                     ) : (
@@ -550,20 +550,20 @@ export default function StokPage() {
                         const movementType = getMovementLabel(movement.movement_type);
                         const Icon = movementType.icon;
                         return (
-                          <div key={movement.id} className="rounded-xl border border-[#002b28] bg-[#00040d] p-3">
+                          <div key={movement.id} className="rounded-xl border border-[#090d14] bg-[#05070d] p-3">
                             <div className="flex items-start justify-between gap-3">
                               <div>
-                                <p className="text-sm font-black text-[#b8fff0]">{formatTime(movement.created_at)}</p>
+                                <p className="text-sm font-black text-[#f4f7fb]">{formatTime(movement.created_at)}</p>
                                 <p className={`mt-1 flex items-center gap-1.5 text-xs font-black ${movementType.color}`}>
                                   <Icon size={14} />
                                   {movementType.label}
                                 </p>
                               </div>
-                              <span className="text-lg font-black text-[#b8fff0]">
+                              <span className="text-lg font-black text-[#f4f7fb]">
                                 {Number(movement.quantity) > 0 ? `+${movement.quantity}` : movement.quantity}
                               </span>
                             </div>
-                            <p className="mt-2 text-xs font-semibold text-[#b8fff0]">{movement.note || "-"}</p>
+                            <p className="mt-2 text-xs font-semibold text-[#f4f7fb]">{movement.note || "-"}</p>
                           </div>
                         );
                       })
@@ -642,9 +642,9 @@ function StockAgeMetric({
   tone?: "green" | "amber";
 }) {
   return (
-    <div className="rounded-xl border border-[#00040d] bg-[#002b28] p-3">
-      <p className="text-[10px] font-black uppercase tracking-wide text-[#b8fff0]">{label}</p>
-      <p className={`mt-1 text-lg font-black ${tone === "amber" ? "text-[#b8fff0]" : "text-[#b8fff0]"}`}>
+    <div className="rounded-xl border border-[#05070d] bg-[#090d14] p-3">
+      <p className="text-[10px] font-black uppercase tracking-wide text-[#f4f7fb]">{label}</p>
+      <p className={`mt-1 text-lg font-black ${tone === "amber" ? "text-[#f4f7fb]" : "text-[#f4f7fb]"}`}>
         {value}
       </p>
     </div>
@@ -669,15 +669,15 @@ function SortableHeader({
       <button
         type="button"
         onClick={onClick}
-        className={`flex items-center gap-1 transition-colors hover:text-[#b8fff0] ${
+        className={`flex items-center gap-1 transition-colors hover:text-[#f4f7fb] ${
           align === "right" ? "ml-auto flex-row-reverse" : ""
-        } ${active ? "text-[#b8fff0]" : ""}`}
+        } ${active ? "text-[#f4f7fb]" : ""}`}
       >
         {label}
         {active ? (
           <ArrowUp size={13} className={`transition-transform ${dir === "desc" ? "rotate-180" : ""}`} />
         ) : (
-          <ArrowUpDown size={13} className="text-[#b8fff0]" />
+          <ArrowUpDown size={13} className="text-[#f4f7fb]" />
         )}
       </button>
     </th>

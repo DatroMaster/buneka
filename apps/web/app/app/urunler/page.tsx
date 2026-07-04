@@ -55,20 +55,20 @@ const emptyProductForm: ProductForm = {
 };
 
 const categoryPalette: Record<string, { background: string; border: string; color: string }> = {
-  "içecek": { background: "rgba(14, 165, 233, 0.16)", border: "rgba(56, 189, 248, 0.36)", color: "#b8fff0" },
-  "icecek": { background: "rgba(14, 165, 233, 0.16)", border: "rgba(56, 189, 248, 0.36)", color: "#b8fff0" },
-  "atıştırmalık": { background: "rgba(245, 158, 11, 0.16)", border: "rgba(251, 191, 36, 0.40)", color: "#b8fff0" },
-  "atistirmalik": { background: "rgba(245, 158, 11, 0.16)", border: "rgba(251, 191, 36, 0.40)", color: "#b8fff0" },
-  "çikolata": { background: "rgba(244, 63, 94, 0.15)", border: "rgba(251, 113, 133, 0.38)", color: "#b8fff0" },
-  "cikolata": { background: "rgba(244, 63, 94, 0.15)", border: "rgba(251, 113, 133, 0.38)", color: "#b8fff0" },
-  "yemek": { background: "rgba(34, 197, 94, 0.14)", border: "rgba(74, 222, 128, 0.34)", color: "#b8fff0" },
+  "içecek": { background: "color-mix(in srgb, #3291ff 14%, #090d14)", border: "color-mix(in srgb, #3291ff 38%, #242b38)", color: "#f4f7fb" },
+  "icecek": { background: "color-mix(in srgb, #3291ff 14%, #090d14)", border: "color-mix(in srgb, #3291ff 38%, #242b38)", color: "#f4f7fb" },
+  "atıştırmalık": { background: "color-mix(in srgb, #50e3c2 12%, #090d14)", border: "color-mix(in srgb, #50e3c2 36%, #242b38)", color: "#f4f7fb" },
+  "atistirmalik": { background: "color-mix(in srgb, #50e3c2 12%, #090d14)", border: "color-mix(in srgb, #50e3c2 36%, #242b38)", color: "#f4f7fb" },
+  "çikolata": { background: "color-mix(in srgb, #f5a623 12%, #090d14)", border: "color-mix(in srgb, #f5a623 34%, #242b38)", color: "#f4f7fb" },
+  "cikolata": { background: "color-mix(in srgb, #f5a623 12%, #090d14)", border: "color-mix(in srgb, #f5a623 34%, #242b38)", color: "#f4f7fb" },
+  "yemek": { background: "color-mix(in srgb, #50e3c2 12%, #090d14)", border: "color-mix(in srgb, #50e3c2 36%, #242b38)", color: "#f4f7fb" },
 };
 
 const fallbackCategoryPalette = [
-  { background: "rgba(62, 207, 142, 0.13)", border: "rgba(62, 207, 142, 0.34)", color: "#b8fff0" },
-  { background: "rgba(242, 184, 75, 0.14)", border: "rgba(242, 184, 75, 0.36)", color: "#b8fff0" },
-  { background: "rgba(168, 85, 247, 0.13)", border: "rgba(192, 132, 252, 0.34)", color: "#b8fff0" },
-  { background: "rgba(249, 115, 80, 0.13)", border: "rgba(251, 146, 60, 0.34)", color: "#b8fff0" },
+  { background: "color-mix(in srgb, #3291ff 12%, #090d14)", border: "color-mix(in srgb, #3291ff 34%, #242b38)", color: "#f4f7fb" },
+  { background: "color-mix(in srgb, #50e3c2 12%, #090d14)", border: "color-mix(in srgb, #50e3c2 34%, #242b38)", color: "#f4f7fb" },
+  { background: "color-mix(in srgb, #f4f7fb 8%, #090d14)", border: "color-mix(in srgb, #f4f7fb 24%, #242b38)", color: "#f4f7fb" },
+  { background: "color-mix(in srgb, #9ba3af 14%, #090d14)", border: "color-mix(in srgb, #9ba3af 36%, #242b38)", color: "#f4f7fb" },
 ];
 
 function normalizeCategory(category: string) {
@@ -525,7 +525,7 @@ export default function UrunlerPage() {
                     window.localStorage.removeItem("buneka-auto-usd-rate-updated-at");
                   }
                 }}
-                className="accent-[#b8fff0]"
+                className="accent-[#f4f7fb]"
               />
               Otomatik USD
             </label>
@@ -548,8 +548,8 @@ export default function UrunlerPage() {
       />
 
       <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
-        <div className="data-card border-[#b8fff0]/25 p-4">
-          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#b8fff0]">
+        <div className="data-card border-[#f4f7fb]/25 p-4">
+          <div className="mb-2 flex items-center gap-2 text-xs font-black uppercase tracking-wide text-[#f4f7fb]">
             <PackagePlus size={15} /> Katalog Merkezi
           </div>
           <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -557,12 +557,12 @@ export default function UrunlerPage() {
           </p>
         </div>
         <div className="stat-card">
-          <div className="stat-card-icon bg-[#b8fff0]/10 text-[#b8fff0]">
+          <div className="stat-card-icon bg-[#f4f7fb]/10 text-[#f4f7fb]">
             <Layers size={22} />
           </div>
           <div>
             <p className="text-sm font-bold text-slate-500 dark:text-slate-400">Kayıtlı Ürün</p>
-            <p className="text-2xl font-black text-[#b8fff0]">{products.length}</p>
+            <p className="text-2xl font-black text-[#f4f7fb]">{products.length}</p>
           </div>
         </div>
         <div className="stat-card">
@@ -591,14 +591,14 @@ export default function UrunlerPage() {
               placeholder="Ürün adı veya barkod ile ara..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-xl border border-slate-700 bg-[#00040d] py-2 pl-10 pr-4 text-slate-50 placeholder-slate-400 focus:border-[#b8fff0] focus:outline-none"
+              className="w-full rounded-xl border border-slate-700 bg-[#05070d] py-2 pl-10 pr-4 text-slate-50 placeholder-slate-400 focus:border-[#f4f7fb] focus:outline-none"
             />
           </div>
           {categories.length > 0 && (
             <select
               value={categoryFilter}
               onChange={(event) => setCategoryFilter(event.target.value)}
-              className="rounded-xl border border-slate-700 bg-[#00040d] px-3 py-2 text-sm text-slate-50 focus:border-[#b8fff0] focus:outline-none"
+              className="rounded-xl border border-slate-700 bg-[#05070d] px-3 py-2 text-sm text-slate-50 focus:border-[#f4f7fb] focus:outline-none"
             >
               <option value="">Tüm kategoriler</option>
               {categories.map((category) => (
@@ -626,7 +626,7 @@ export default function UrunlerPage() {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center">
-                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[#b8fff0]" />
+                    <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-[#f4f7fb]" />
                   </td>
                 </tr>
               ) : sortedProducts.length === 0 ? (
@@ -679,7 +679,7 @@ export default function UrunlerPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Pencil size={16} className="inline text-slate-500 group-hover:text-[#b8fff0]" />
+                      <Pencil size={16} className="inline text-slate-500 group-hover:text-[#f4f7fb]" />
                     </td>
                   </tr>
                 ))
@@ -704,7 +704,7 @@ export default function UrunlerPage() {
                 {categories.length > 0 && (
                   <button
                     type="button"
-                    className="text-xs font-bold text-[#b8fff0]"
+                    className="text-xs font-bold text-[#f4f7fb]"
                     onClick={() => setNewCategory((current) => !current)}
                   >
                     {newCategory ? "Listeden seç" : "+ Yeni kategori"}
@@ -740,14 +740,14 @@ export default function UrunlerPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
-                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "TRY" ? "border-[#b8fff0]/70 bg-[#b8fff0]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#00040d] text-slate-200"}`}
+                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "TRY" ? "border-[#f4f7fb]/70 bg-[#f4f7fb]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#05070d] text-slate-200"}`}
                   onClick={() => handleCurrencyChange("TRY")}
                 >
                   TL
                 </button>
                 <button
                   type="button"
-                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "USD" ? "border-[#b8fff0]/70 bg-[#b8fff0]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#00040d] text-slate-200"}`}
+                  className={`rounded-xl border px-4 py-2.5 font-bold transition-all active:scale-[0.98] ${productForm.purchase_currency === "USD" ? "border-[#f4f7fb]/70 bg-[#f4f7fb]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#05070d] text-slate-200"}`}
                   onClick={() => handleCurrencyChange("USD")}
                 >
                   USD ($)
@@ -792,15 +792,15 @@ export default function UrunlerPage() {
               <FormInput label="Stok" type="number" value={productForm.stock_quantity} onChange={(value) => setProductForm({ ...productForm, stock_quantity: value })} />
               <FormInput label="Minimum stok" type="number" value={productForm.min_stock} onChange={(value) => setProductForm({ ...productForm, min_stock: value })} />
             </div>
-            <div className="rounded-2xl border border-slate-700/70 bg-[#00040d] p-4 text-sm text-slate-200">
+            <div className="rounded-2xl border border-slate-700/70 bg-[#05070d] p-4 text-sm text-slate-200">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#b8fff0]">Otomatik kârlı fiyat</p>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f4f7fb]">Otomatik kârlı fiyat</p>
                   <p className="mt-1 text-slate-300">
                     USD bazlı ürünlerde maliyet güncel TCMB kuru ile TL’ye çevrilir; satış fiyatı kâr oranıyla en yakın üst TL’ye yuvarlanır.
                   </p>
                 </div>
-                <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#00040d] px-3 py-2 text-xs font-black text-slate-100">
+                <label className="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-slate-700 bg-[#05070d] px-3 py-2 text-xs font-black text-slate-100">
                   <input
                     type="checkbox"
                     checked={autoProfitEnabled}
@@ -810,21 +810,21 @@ export default function UrunlerPage() {
                         updateProductForm(productForm, { auto: true });
                       }
                     }}
-                    className="accent-[#b8fff0]"
+                    className="accent-[#f4f7fb]"
                   />
                   Otomatik uygula
                 </label>
               </div>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-700 bg-[#00040d] p-3">
+                <div className="rounded-xl border border-slate-700 bg-[#05070d] p-3">
                   <p className="text-xs font-bold text-slate-400">TL maliyet</p>
-                  <p className="mt-1 text-xl font-black text-[#b8fff0]">
+                  <p className="mt-1 text-xl font-black text-[#f4f7fb]">
                     {purchasePriceTryPreview !== null ? formatMoney(purchasePriceTryPreview) : "-"}
                   </p>
                 </div>
-                <div className="rounded-xl border border-[#b8fff0]/45 bg-[#b8fff0]/10 p-3">
+                <div className="rounded-xl border border-[#f4f7fb]/45 bg-[#f4f7fb]/10 p-3">
                   <p className="text-xs font-bold text-slate-300">Önerilen satış</p>
-                  <p className="mt-1 text-xl font-black text-[#b8fff0]">
+                  <p className="mt-1 text-xl font-black text-[#f4f7fb]">
                     {suggestedSalePrice !== null ? formatMoney(suggestedSalePrice) : "-"}
                   </p>
                 </div>
@@ -876,14 +876,14 @@ export default function UrunlerPage() {
             </p>
             <div className="grid grid-cols-2 gap-3">
               <button
-                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-[#b8fff0]/70 bg-[#b8fff0]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#00040d] text-slate-200"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "percent" ? "border-[#f4f7fb]/70 bg-[#f4f7fb]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#05070d] text-slate-200"}`}
                 type="button"
                 onClick={() => setBulkMode("percent")}
               >
                 Yüzde
               </button>
               <button
-                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-[#b8fff0]/70 bg-[#b8fff0]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#00040d] text-slate-200"}`}
+                className={`rounded-xl border px-4 py-3 font-bold transition-all active:scale-[0.98] ${bulkMode === "amount" ? "border-[#f4f7fb]/70 bg-[#f4f7fb]/12 text-slate-50 shadow-sm" : "border-slate-700 bg-[#05070d] text-slate-200"}`}
                 type="button"
                 onClick={() => setBulkMode("amount")}
               >

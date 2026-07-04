@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { sectors } from "@/lib/content/sectors";
 
-const SECTOR_ACCENT = "#b8fff0";
+const SECTOR_ACCENT = "#f4f7fb";
 
 export function SectorPlayground({ excludeSlugs = [] }: { excludeSlugs?: string[] }) {
   const [hovered, setHovered] = useState<string | null>(null);

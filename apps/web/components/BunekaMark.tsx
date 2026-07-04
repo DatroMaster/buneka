@@ -17,13 +17,13 @@ export function BunekaMark({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      style={glow ? { filter: "drop-shadow(0 0 8px var(--home-glow, #b8fff0))" } : undefined}
+      style={glow ? { filter: "drop-shadow(0 0 8px var(--home-glow, #f4f7fb))" } : undefined}
       aria-hidden="true"
     >
       <defs>
         <linearGradient id={GRADIENT_ID} x1="4" y1="4" x2="96" y2="96" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="var(--mark-from, #b8fff0)" />
-          <stop offset="100%" stopColor="var(--mark-to, #b8fff0)" />
+          <stop offset="0%" stopColor="var(--mark-from, #f4f7fb)" />
+          <stop offset="100%" stopColor="var(--mark-to, #f4f7fb)" />
         </linearGradient>
       </defs>
       {/* Outer diamond */}

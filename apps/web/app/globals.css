@@ -5,67 +5,72 @@
 
 /* ── Home (public landing) tokens — flip between :root and .dark ──── */
 /* ── Supabase design system — neutral surfaces + single green accent ──
-   Light (default) tokens. Green brand: #b8fff0. */
+   Night-blue dark tokens with crisp white action language. */
 :root {
-  --buneka-base: #00040d;
-  --buneka-panel: #002b28;
-  --buneka-accent: #b8fff0;
+  --buneka-base: #05070d;
+  --buneka-panel: #090d14;
+  --buneka-elevated: #0f1623;
+  --buneka-accent: #f4f7fb;
+  --buneka-muted: #9ba3af;
+  --buneka-border: #242b38;
+  --buneka-link: #3291ff;
+  --buneka-status: #50e3c2;
   --home-bg-1: var(--buneka-base);
   --home-bg-2: var(--buneka-base);
   --home-surface: var(--buneka-panel);
-  --home-surface-soft: color-mix(in srgb, var(--buneka-panel) 70%, var(--buneka-base));
+  --home-surface-soft: var(--buneka-elevated);
   --home-ink: var(--buneka-accent);
-  --home-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
-  --home-glow: var(--buneka-accent);
-  --home-border: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel));
+  --home-muted: var(--buneka-muted);
+  --home-glow: var(--buneka-status);
+  --home-border: var(--buneka-border);
   --home-star-opacity: 0;
 
   --color-bg: var(--buneka-base);
   --color-bg-secondary: var(--buneka-base);
   --color-card: var(--buneka-panel);
-  --color-surface: var(--buneka-panel);
+  --color-surface: var(--buneka-elevated);
   --color-text: var(--buneka-accent);
-  --color-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
-  --color-border: color-mix(in srgb, var(--buneka-accent) 20%, var(--buneka-panel));
-  --color-border-strong: color-mix(in srgb, var(--buneka-accent) 44%, var(--buneka-panel));
+  --color-muted: var(--buneka-muted);
+  --color-border: var(--buneka-border);
+  --color-border-strong: color-mix(in srgb, var(--buneka-accent) 18%, var(--buneka-border));
   --color-primary: var(--buneka-accent);
-  --color-primary-hover: color-mix(in srgb, var(--buneka-accent) 84%, var(--buneka-panel));
-  --color-primary-deep: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-panel));
+  --color-primary-hover: color-mix(in srgb, var(--buneka-accent) 86%, var(--buneka-muted));
+  --color-primary-deep: var(--buneka-status);
   --color-primary-fg: var(--buneka-base);
 
   /* Logo gradient — deep green → near-black, crisp on the light background */
   --mark-from: var(--buneka-accent);
-  --mark-to: var(--buneka-panel);
+  --mark-to: var(--buneka-link);
 }
 
 .dark {
   --home-bg-1: var(--buneka-base);
   --home-bg-2: var(--buneka-base);
   --home-surface: var(--buneka-panel);
-  --home-surface-soft: color-mix(in srgb, var(--buneka-panel) 70%, var(--buneka-base));
+  --home-surface-soft: var(--buneka-elevated);
   --home-ink: var(--buneka-accent);
-  --home-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
-  --home-glow: var(--buneka-accent);
-  --home-border: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel));
+  --home-muted: var(--buneka-muted);
+  --home-glow: var(--buneka-status);
+  --home-border: var(--buneka-border);
   --home-star-opacity: 0;
 
   /* App surfaces — Supabase neutral dark with green + mustard accents */
   --color-bg: var(--buneka-base);
   --color-bg-secondary: var(--buneka-base);
   --color-card: var(--buneka-panel);
-  --color-surface: var(--buneka-panel);
+  --color-surface: var(--buneka-elevated);
   --color-text: var(--buneka-accent);
-  --color-muted: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-base));
-  --color-border: color-mix(in srgb, var(--buneka-accent) 20%, var(--buneka-panel));
-  --color-border-strong: color-mix(in srgb, var(--buneka-accent) 44%, var(--buneka-panel));
+  --color-muted: var(--buneka-muted);
+  --color-border: var(--buneka-border);
+  --color-border-strong: color-mix(in srgb, var(--buneka-accent) 18%, var(--buneka-border));
   --color-primary: var(--buneka-accent);
-  --color-primary-hover: color-mix(in srgb, var(--buneka-accent) 84%, var(--buneka-panel));
-  --color-primary-deep: color-mix(in srgb, var(--buneka-accent) 68%, var(--buneka-panel));
+  --color-primary-hover: color-mix(in srgb, var(--buneka-accent) 86%, var(--buneka-muted));
+  --color-primary-deep: var(--buneka-status);
   --color-primary-fg: var(--buneka-base);
 
   /* Logo gradient — bright green → platinum on the dark background */
   --mark-from: var(--buneka-accent);
-  --mark-to: var(--buneka-panel);
+  --mark-to: var(--buneka-link);
 }
 
 /* ── Theme tokens ─────────────────────────────────────────────────── */
@@ -79,18 +84,18 @@
     sans-serif;
 
   /* Brand colors — Supabase neutral + green */
-  --color-bg: #00040d;
-  --color-bg-secondary: #00040d;
-  --color-card: #002b28;
-  --color-text: #b8fff0;
-  --color-muted: #b8fff0;
-  --color-green: #b8fff0;
-  --color-green-deep: #b8fff0;
-  --color-amber: #b8fff0;
-  --color-border: #002b28;
-  --color-primary: #b8fff0;
-  --color-primary-deep: #b8fff0;
-  --color-info: #b8fff0;
+  --color-bg: #05070d;
+  --color-bg-secondary: #05070d;
+  --color-card: #090d14;
+  --color-text: #f4f7fb;
+  --color-muted: #9ba3af;
+  --color-green: #50e3c2;
+  --color-green-deep: #50e3c2;
+  --color-amber: #f4f7fb;
+  --color-border: #242b38;
+  --color-primary: #f4f7fb;
+  --color-primary-deep: #50e3c2;
+  --color-info: #3291ff;
 
   /* Animation */
   --animate-fade-in-up: fade-in-up 0.7s ease-out both;
@@ -181,15 +186,15 @@
     color: var(--color-primary-fg);
     font-weight: 600;
     font-size: 0.875rem;
-    border: 1px solid rgba(255, 107, 0, 0.78);
+    border: 1px solid color-mix(in srgb, #f5a623 78%, transparent);
     border-radius: 0.5rem;
     cursor: pointer;
-    box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.18), 0 14px 34px rgba(255, 107, 0, 0.16);
+    box-shadow: 0 0 0 1px color-mix(in srgb, #f5a623 18%, transparent), 0 14px 34px color-mix(in srgb, #f5a623 16%, transparent);
     transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .premium-button-primary:hover {
     background: var(--color-primary);
-    box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.26), 0 18px 46px rgba(255, 107, 0, 0.22);
+    box-shadow: 0 0 0 1px color-mix(in srgb, #f5a623 26%, transparent), 0 18px 46px color-mix(in srgb, #f5a623 22%, transparent);
   }
   .premium-button-primary:active {
     transform: scale(0.99);
@@ -251,8 +256,8 @@
     background: var(--buneka-accent);
     color: var(--buneka-accent);
     font-weight: 700;
-    border: 1px solid rgba(16, 185, 129, 0.72);
-    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.14), 0 12px 32px rgba(16, 185, 129, 0.14);
+    border: 1px solid color-mix(in srgb, var(--buneka-status) 72%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--buneka-status) 14%, transparent), 0 12px 32px color-mix(in srgb, var(--buneka-status) 14%, transparent);
     transition: background 0.15s ease, transform 0.12s ease;
   }
   .action-sale:hover {
@@ -318,7 +323,7 @@
   /* Sidebar surface — flat Supabase neutral */
   .sidebar-surface,
   .sidebar-supabase {
-    background: #00040d;
+    background: #05070d;
   }
 
   .sidebar-supabase {
@@ -338,50 +343,49 @@
     --home-bg-1: var(--buneka-base);
     --home-bg-2: var(--buneka-base);
     --home-surface: var(--buneka-panel);
-    --home-surface-soft: var(--buneka-panel);
+    --home-surface-soft: var(--buneka-elevated);
     --home-ink: var(--buneka-accent);
-    --home-muted: color-mix(in srgb, var(--buneka-accent) 66%, var(--buneka-panel));
-    --home-glow: var(--buneka-accent);
-    --home-border: color-mix(in srgb, var(--buneka-accent) 28%, var(--buneka-panel));
+    --home-muted: var(--buneka-muted);
+    --home-glow: var(--buneka-status);
+    --home-border: var(--buneka-border);
     background:
-      radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--buneka-accent) 14%, transparent), transparent 34%),
-      radial-gradient(circle at 90% 18%, color-mix(in srgb, var(--buneka-accent) 8%, transparent), transparent 30%),
+      radial-gradient(circle at 12% 5%, color-mix(in srgb, var(--buneka-link) 10%, transparent), transparent 34%),
+      radial-gradient(circle at 90% 18%, color-mix(in srgb, var(--buneka-status) 7%, transparent), transparent 30%),
       linear-gradient(180deg, var(--buneka-base), var(--buneka-base));
   }
 
   .price-focus-bg {
     background:
-      radial-gradient(circle at 18% 10%, rgba(62, 207, 142, 0.18), transparent 32%),
-      radial-gradient(circle at 86% 14%, rgba(245, 158, 11, 0.10), transparent 28%),
-      radial-gradient(circle at 50% 105%, rgba(62, 207, 142, 0.10), transparent 34%),
+      radial-gradient(circle at 18% 10%, color-mix(in srgb, var(--buneka-link) 12%, transparent), transparent 32%),
+      radial-gradient(circle at 86% 14%, color-mix(in srgb, var(--buneka-status) 8%, transparent), transparent 28%),
+      radial-gradient(circle at 50% 105%, color-mix(in srgb, var(--buneka-accent) 5%, transparent), transparent 34%),
       linear-gradient(180deg, var(--buneka-base), var(--buneka-base));
   }
 
   .package-page-shell {
     --home-bg-1: var(--buneka-base);
     --home-bg-2: var(--buneka-base);
-    --home-surface: #00040d;
-    --home-surface-soft: rgba(255, 255, 255, 0.045);
-    --home-ink: #b8fff0;
-    --home-muted: #b8fff0;
-    --home-glow: #b8fff0;
-    --home-border: rgba(255, 255, 255, 0.12);
+    --home-surface: var(--buneka-panel);
+    --home-surface-soft: var(--buneka-elevated);
+    --home-ink: var(--buneka-accent);
+    --home-muted: var(--buneka-muted);
+    --home-glow: var(--buneka-status);
+    --home-border: var(--buneka-border);
     background:
-      radial-gradient(circle at 12% 6%, rgba(62, 207, 142, 0.15), transparent 28%),
-      radial-gradient(circle at 86% 12%, rgba(242, 184, 75, 0.10), transparent 24%),
-      radial-gradient(circle at 50% 100%, rgba(62, 207, 142, 0.09), transparent 34%),
-      linear-gradient(180deg, #00040d 0%, #00040d 42%, #00040d 100%);
+      radial-gradient(circle at 12% 6%, color-mix(in srgb, var(--buneka-link) 10%, transparent), transparent 28%),
+      radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--buneka-status) 7%, transparent), transparent 24%),
+      linear-gradient(180deg, var(--buneka-base) 0%, var(--buneka-base) 100%);
   }
 
   .dark .data-card thead,
   .dark .glass-card thead {
-    background: linear-gradient(90deg, rgba(62, 207, 142, 0.12), rgba(245, 158, 11, 0.08)) !important;
-    color: #b8fff0 !important;
+    background: var(--buneka-elevated) !important;
+    color: #f4f7fb !important;
   }
 
   .dark .data-card th,
   .dark .glass-card th {
-    color: #b8fff0 !important;
+    color: #f4f7fb !important;
   }
 
   .dark .data-card input,
@@ -391,7 +395,7 @@
   .dark .glass-card select,
   .dark .glass-card textarea {
     background: rgba(16, 16, 16, 0.72) !important;
-    border-color: rgba(62, 207, 142, 0.28) !important;
+    border-color: color-mix(in srgb, var(--buneka-status) 28%, transparent) !important;
     color: var(--color-text) !important;
   }
 
@@ -402,17 +406,17 @@
   .dark .glass-card select:focus,
   .dark .glass-card textarea:focus {
     border-color: var(--color-primary) !important;
-    box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.14) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--buneka-status) 14%, transparent) !important;
   }
 
   .dark .data-card tbody,
   .dark .glass-card tbody {
-    border-color: rgba(62, 207, 142, 0.12) !important;
+    border-color: color-mix(in srgb, var(--buneka-status) 12%, transparent) !important;
   }
 
   .dark .data-card tbody tr:hover,
   .dark .glass-card tbody tr:hover {
-    background: rgba(62, 207, 142, 0.06) !important;
+    background: color-mix(in srgb, var(--buneka-status) 6%, transparent) !important;
   }
 
   .home-viewport,
@@ -438,7 +442,7 @@
     }
   }
 
-  /* Flat 1px neutral border (Supabase card edge) */
+  /* Flat 1px neutral border (Vercel card edge) */
   .glow-border {
     border: 1px solid var(--home-border);
     transition: border-color 0.15s ease;
@@ -455,11 +459,11 @@
   /* Colorful capillary-thin border variants — used to bring life to module/plan
      cards without any blurred bleed, still just a crisp 1px hairline */
   .glow-border-amber {
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    border: 1px solid color-mix(in srgb, #f5a623 35%, transparent);
     transition: border-color 0.2s ease, transform 0.15s ease;
   }
   .glow-border-amber:hover {
-    border-color: rgba(245, 158, 11, 0.9);
+    border-color: color-mix(in srgb, #f5a623 90%, transparent);
   }
   .glow-border-turquoise {
     border: 1px solid rgba(6, 182, 212, 0.35);
@@ -469,11 +473,11 @@
     border-color: rgba(6, 182, 212, 0.9);
   }
   .glow-border-green {
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    border: 1px solid color-mix(in srgb, var(--buneka-status) 35%, transparent);
     transition: border-color 0.2s ease, transform 0.15s ease;
   }
   .glow-border-green:hover {
-    border-color: rgba(16, 185, 129, 0.9);
+    border-color: color-mix(in srgb, var(--buneka-status) 90%, transparent);
   }
   .glow-border-violet {
     border: 1px solid rgba(167, 139, 250, 0.35);
@@ -571,7 +575,7 @@
   gap: 0.65rem;
   overflow: hidden;
   border-radius: 0.85rem;
-  border: 1px solid rgba(255, 107, 0, 0.44);
+  border: 1px solid color-mix(in srgb, #f5a623 44%, transparent);
   background: var(--buneka-base);
   padding: 1rem 1.25rem 1rem 4.1rem;
   color: var(--buneka-accent);
@@ -610,7 +614,7 @@
   position: absolute;
   inset: -40%;
   background:
-    radial-gradient(circle at 22% 18%, rgba(242, 184, 75, 0.22), transparent 26%),
+    radial-gradient(circle at 22% 18%, color-mix(in srgb, #f5a623 22%, transparent), transparent 26%),
     linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.22) 46%, transparent 58%);
   opacity: 0.88;
   pointer-events: none;
@@ -898,11 +902,11 @@
 
 .help-center-dark {
   background:
-    radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.16), transparent 32%),
-    radial-gradient(circle at 82% 12%, rgba(245, 158, 11, 0.10), transparent 34%),
-    radial-gradient(circle at 50% 92%, rgba(62, 207, 142, 0.10), transparent 38%),
-    linear-gradient(180deg, #00040d, #00040d),
-    #00040d;
+    radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--buneka-status) 16%, transparent), transparent 32%),
+    radial-gradient(circle at 82% 12%, color-mix(in srgb, #f5a623 10%, transparent), transparent 34%),
+    radial-gradient(circle at 50% 92%, color-mix(in srgb, var(--buneka-status) 10%, transparent), transparent 38%),
+    linear-gradient(180deg, #05070d, #05070d),
+    #05070d;
   background-attachment: fixed;
 }
 
@@ -912,50 +916,50 @@
 }
 
 .help-center-dark .bg-cyan-50 {
-  background-color: rgba(62, 207, 142, 0.12) !important;
+  background-color: color-mix(in srgb, var(--buneka-status) 12%, transparent) !important;
 }
 
 .help-center-dark .bg-emerald-50 {
-  background-color: rgba(62, 207, 142, 0.13) !important;
+  background-color: color-mix(in srgb, var(--buneka-status) 13%, transparent) !important;
 }
 
 .help-center-dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.14) !important;
+  background-color: color-mix(in srgb, #f5a623 14%, transparent) !important;
 }
 
 .help-center-dark .border-slate-200,
 .help-center-dark .border-slate-100 {
-  border-color: rgba(62, 207, 142, 0.16) !important;
+  border-color: color-mix(in srgb, var(--buneka-status) 16%, transparent) !important;
 }
 
 .help-center-dark .border-cyan-200 {
-  border-color: rgba(62, 207, 142, 0.28) !important;
+  border-color: color-mix(in srgb, var(--buneka-status) 28%, transparent) !important;
 }
 
 .help-center-dark .border-emerald-200 {
-  border-color: rgba(62, 207, 142, 0.26) !important;
+  border-color: color-mix(in srgb, var(--buneka-status) 26%, transparent) !important;
 }
 
 .help-center-dark .border-amber-200 {
-  border-color: rgba(245, 158, 11, 0.30) !important;
+  border-color: color-mix(in srgb, #f5a623 30%, transparent) !important;
 }
 
 .help-center-dark input {
   background-color: rgba(16, 16, 16, 0.82) !important;
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark input::placeholder {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .dark .help-center-dark {
   background:
-    radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.16), transparent 32%),
-    radial-gradient(circle at 82% 12%, rgba(245, 158, 11, 0.10), transparent 34%),
-    radial-gradient(circle at 50% 92%, rgba(62, 207, 142, 0.10), transparent 38%),
-    linear-gradient(180deg, #00040d, #00040d),
-    #00040d;
+    radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--buneka-status) 16%, transparent), transparent 32%),
+    radial-gradient(circle at 82% 12%, color-mix(in srgb, #f5a623 10%, transparent), transparent 34%),
+    radial-gradient(circle at 50% 92%, color-mix(in srgb, var(--buneka-status) 10%, transparent), transparent 38%),
+    linear-gradient(180deg, #05070d, #05070d),
+    #05070d;
 }
 
 .dark .help-center-dark .bg-white,
@@ -964,15 +968,15 @@
 }
 
 .dark .help-center-dark .bg-cyan-50 {
-  background-color: rgba(62, 207, 142, 0.12) !important;
+  background-color: color-mix(in srgb, var(--buneka-status) 12%, transparent) !important;
 }
 
 .dark .help-center-dark .bg-emerald-50 {
-  background-color: rgba(16, 185, 129, 0.13) !important;
+  background-color: color-mix(in srgb, var(--buneka-status) 13%, transparent) !important;
 }
 
 .dark .help-center-dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.13) !important;
+  background-color: color-mix(in srgb, #f5a623 13%, transparent) !important;
 }
 
 .dark .help-center-dark .border-slate-200,
@@ -984,22 +988,22 @@
 .dark .help-center-dark .text-slate-900,
 .dark .help-center-dark .text-slate-800,
 .dark .help-center-dark .text-slate-700 {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .dark .help-center-dark .text-slate-600,
 .dark .help-center-dark .text-slate-500,
 .dark .help-center-dark .text-slate-400 {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .dark .help-center-dark input {
   background-color: rgba(16, 17, 15, 0.78) !important;
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .dark .help-center-dark input::placeholder {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark .text-cyan-700,
@@ -1007,12 +1011,12 @@
 .dark .help-center-dark .text-cyan-300,
 .dark .help-center-dark .text-cyan-700,
 .dark .help-center-dark .text-cyan-800 {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark header {
   background: rgba(16, 16, 16, 0.82) !important;
-  border-color: rgba(62, 207, 142, 0.16) !important;
+  border-color: color-mix(in srgb, var(--buneka-status) 16%, transparent) !important;
 }
 
 .help-center-dark .shadow-sm,
@@ -1024,13 +1028,13 @@
 .help-center-dark {
   --guide-panel: rgba(16, 16, 16, 0.92);
   --guide-panel-soft: rgba(24, 24, 24, 0.88);
-  --guide-line: rgba(62, 207, 142, 0.20);
+  --guide-line: color-mix(in srgb, var(--buneka-status) 20%, transparent);
   background:
-    radial-gradient(circle at 14% 10%, rgba(62, 207, 142, 0.15), transparent 30%),
-    radial-gradient(circle at 86% 8%, rgba(245, 158, 11, 0.11), transparent 28%),
-    radial-gradient(circle at 52% 100%, rgba(62, 207, 142, 0.09), transparent 35%),
-    #00040d !important;
-  color: #b8fff0 !important;
+    radial-gradient(circle at 14% 10%, color-mix(in srgb, var(--buneka-status) 15%, transparent), transparent 30%),
+    radial-gradient(circle at 86% 8%, color-mix(in srgb, #f5a623 11%, transparent), transparent 28%),
+    radial-gradient(circle at 52% 100%, color-mix(in srgb, var(--buneka-status) 9%, transparent), transparent 35%),
+    #05070d !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark header {
@@ -1049,12 +1053,12 @@
 .help-center-dark .bg-emerald-50,
 .dark .help-center-dark .bg-cyan-50,
 .dark .help-center-dark .bg-emerald-50 {
-  background-color: rgba(62, 207, 142, 0.12) !important;
+  background-color: color-mix(in srgb, var(--buneka-status) 12%, transparent) !important;
 }
 
 .help-center-dark .bg-amber-50,
 .dark .help-center-dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.14) !important;
+  background-color: color-mix(in srgb, #f5a623 14%, transparent) !important;
 }
 
 .help-center-dark .border-slate-200,
@@ -1066,21 +1070,21 @@
 
 .help-center-dark :where(.text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700),
 .dark .help-center-dark :where(.text-slate-950, .text-slate-900, .text-slate-800, .text-slate-700) {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark :where(.text-slate-600, .text-slate-500, .text-slate-400),
 .dark .help-center-dark :where(.text-slate-600, .text-slate-500, .text-slate-400) {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark :where(.text-cyan-700, .text-cyan-800, .text-cyan-300),
 .dark .help-center-dark :where(.text-cyan-700, .text-cyan-800, .text-cyan-300) {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark svg {
-  color: #b8fff0;
+  color: #f4f7fb;
 }
 
 .help-center-dark .bg-slate-950 svg,
@@ -1091,31 +1095,31 @@
 .help-center-dark input,
 .dark .help-center-dark input {
   background-color: rgba(5, 5, 5, 0.78) !important;
-  border-color: rgba(62, 207, 142, 0.24) !important;
-  color: #b8fff0 !important;
+  border-color: color-mix(in srgb, var(--buneka-status) 24%, transparent) !important;
+  color: #f4f7fb !important;
 }
 
 .help-center-dark input::placeholder,
 .dark .help-center-dark input::placeholder {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
 }
 
-/* Supabase-like help center shell */
+/* Vercel-like help center shell */
 .help-center-dark {
-  --help-bg: #00040d;
-  --help-panel: rgba(15, 15, 15, 0.94);
-  --help-panel-2: rgba(19, 19, 19, 0.96);
-  --help-border: rgba(62, 207, 142, 0.18);
-  --help-border-strong: rgba(62, 207, 142, 0.36);
-  --help-text: #b8fff0;
-  --help-muted: #b8fff0;
-  --help-green: #b8fff0;
-  --help-amber: #b8fff0;
-  --help-red: #b8fff0;
+  --help-bg: var(--buneka-base);
+  --help-panel: color-mix(in srgb, var(--buneka-panel) 96%, transparent);
+  --help-panel-2: color-mix(in srgb, var(--buneka-elevated) 96%, transparent);
+  --help-border: var(--buneka-border);
+  --help-border-strong: color-mix(in srgb, var(--buneka-accent) 18%, var(--buneka-border));
+  --help-text: var(--buneka-accent);
+  --help-muted: var(--buneka-muted);
+  --help-green: var(--buneka-status);
+  --help-amber: var(--buneka-link);
+  --help-red: #ff5c5c;
   background:
-    radial-gradient(circle at 18% 8%, rgba(62, 207, 142, 0.12), transparent 30%),
-    radial-gradient(circle at 80% 4%, rgba(242, 184, 75, 0.10), transparent 28%),
-    linear-gradient(180deg, #00040d 0%, #00040d 100%) !important;
+    radial-gradient(circle at 18% 8%, color-mix(in srgb, var(--buneka-link) 10%, transparent), transparent 30%),
+    radial-gradient(circle at 80% 4%, color-mix(in srgb, var(--buneka-status) 7%, transparent), transparent 28%),
+    linear-gradient(180deg, var(--buneka-base) 0%, var(--buneka-base) 100%) !important;
   color: var(--help-text) !important;
 }
 
@@ -1127,8 +1131,8 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  border-bottom: 1px solid rgba(62, 207, 142, 0.16);
-  background: rgba(5, 5, 5, 0.86);
+  border-bottom: 1px solid var(--buneka-border);
+  background: color-mix(in srgb, var(--buneka-base) 90%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -1140,10 +1144,10 @@
   justify-content: center;
   gap: 8px;
   border-radius: 999px;
-  border: 1px solid rgba(62, 207, 142, 0.20);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 20%, transparent);
   background: rgba(255, 255, 255, 0.035);
   padding: 0 14px;
-  color: #b8fff0;
+  color: #f4f7fb;
   font-size: 12px;
   font-weight: 900;
   transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
@@ -1157,7 +1161,7 @@
 .help-nav-button:hover,
 .help-icon-button:hover {
   border-color: var(--help-green);
-  background: rgba(62, 207, 142, 0.10);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
   color: var(--help-green);
 }
 
@@ -1193,7 +1197,7 @@
   align-items: center;
   gap: 10px;
   border-radius: 10px;
-  color: #b8fff0;
+  color: #f4f7fb;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.35;
@@ -1209,7 +1213,7 @@
 
 .help-sidebar-link:hover,
 .help-on-page a:hover {
-  background: rgba(62, 207, 142, 0.10);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
   color: var(--help-green);
 }
 
@@ -1217,14 +1221,14 @@
   display: grid;
   gap: 10px;
   border-radius: 14px;
-  border: 1px solid rgba(242, 184, 75, 0.28);
-  background: rgba(242, 184, 75, 0.08);
+  border: 1px solid color-mix(in srgb, #f5a623 28%, transparent);
+  background: color-mix(in srgb, #f5a623 8%, transparent);
   padding: 12px;
-  color: #b8fff0;
+  color: #f4f7fb;
 }
 
 .help-mini-callout p {
-  color: #b8fff0;
+  color: #f4f7fb;
   font-size: 12px;
   font-weight: 750;
   line-height: 1.55;
@@ -1247,9 +1251,9 @@
   width: fit-content;
   align-items: center;
   gap: 8px;
-  border: 1px solid rgba(62, 207, 142, 0.28);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 28%, transparent);
   border-radius: 999px;
-  background: rgba(62, 207, 142, 0.10);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
   color: var(--help-green);
   font-size: 10px;
   font-weight: 950;
@@ -1260,14 +1264,14 @@
 }
 
 .help-kicker-amber {
-  border-color: rgba(242, 184, 75, 0.34);
-  background: rgba(242, 184, 75, 0.10);
+  border-color: color-mix(in srgb, #f5a623 34%, transparent);
+  background: color-mix(in srgb, #f5a623 10%, transparent);
   color: var(--help-amber);
 }
 
 .help-kicker-red {
-  border-color: rgba(249, 115, 80, 0.38);
-  background: rgba(249, 115, 80, 0.12);
+  border-color: color-mix(in srgb, #ff5c5c 38%, transparent);
+  background: color-mix(in srgb, #ff5c5c 12%, transparent);
   color: var(--help-red);
 }
 
@@ -1292,7 +1296,7 @@
 
 .help-search-shell {
   margin-top: 28px;
-  border: 1px solid rgba(62, 207, 142, 0.24);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 24%, transparent);
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.035);
   padding: 12px;
@@ -1302,8 +1306,8 @@
   height: 64px;
   width: 100%;
   border-radius: 18px;
-  border: 1px solid rgba(62, 207, 142, 0.20);
-  background: #00040d !important;
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 20%, transparent);
+  background: #05070d !important;
   color: var(--help-text) !important;
   font-size: 16px;
   font-weight: 800;
@@ -1313,7 +1317,7 @@
 
 .help-search-input:focus {
   border-color: var(--help-green);
-  box-shadow: 0 0 0 4px rgba(62, 207, 142, 0.12);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--buneka-status) 12%, transparent);
 }
 
 .help-search-results {
@@ -1324,7 +1328,7 @@
   z-index: 30;
   border: 1px solid var(--help-border-strong);
   border-radius: 18px;
-  background: #00040d;
+  background: #05070d;
   padding: 8px;
   box-shadow: 0 26px 80px rgba(0, 0, 0, 0.48);
 }
@@ -1337,7 +1341,7 @@
 }
 
 .help-search-results a:hover {
-  background: rgba(62, 207, 142, 0.10);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
 }
 
 .help-search-results span {
@@ -1383,24 +1387,24 @@
 .help-vote:hover {
   transform: translateY(-1px);
   border-color: var(--help-green);
-  background: rgba(62, 207, 142, 0.10);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
 }
 
 .help-action-primary {
   background: var(--help-green);
-  color: #00040d;
+  color: #05070d;
 }
 
 .help-action-success {
-  border-color: rgba(62, 207, 142, 0.34);
-  background: rgba(62, 207, 142, 0.12);
-  color: #b8fff0;
+  border-color: color-mix(in srgb, var(--buneka-status) 34%, transparent);
+  background: color-mix(in srgb, var(--buneka-status) 12%, transparent);
+  color: #f4f7fb;
 }
 
 .help-action-warning {
-  border-color: rgba(242, 184, 75, 0.34);
-  background: rgba(242, 184, 75, 0.12);
-  color: #b8fff0;
+  border-color: color-mix(in srgb, #f5a623 34%, transparent);
+  background: color-mix(in srgb, #f5a623 12%, transparent);
+  color: #f4f7fb;
 }
 
 .help-topic-card {
@@ -1474,7 +1478,7 @@
 .help-module-card,
 .help-faq,
 .help-visual-row {
-  border: 1px solid rgba(62, 207, 142, 0.14);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 14%, transparent);
   background: rgba(255, 255, 255, 0.035);
 }
 
@@ -1497,7 +1501,7 @@
   justify-content: center;
   border-radius: 999px;
   background: var(--help-green);
-  color: #00040d;
+  color: #05070d;
   font-size: 12px;
   font-weight: 950;
 }
@@ -1512,8 +1516,8 @@
 .help-start-button {
   width: fit-content;
   margin-top: 18px;
-  background: linear-gradient(135deg, var(--help-amber), #b8fff0);
-  color: #00040d;
+  background: linear-gradient(135deg, var(--help-amber), #f4f7fb);
+  color: #05070d;
 }
 
 .help-flow-card {
@@ -1553,15 +1557,15 @@
 .help-visual-top span {
   height: 8px;
   border-radius: 999px;
-  background: rgba(62, 207, 142, 0.35);
+  background: color-mix(in srgb, var(--buneka-status) 35%, transparent);
 }
 
 .help-visual-top span:nth-child(2) {
-  background: rgba(242, 184, 75, 0.42);
+  background: color-mix(in srgb, #f5a623 42%, transparent);
 }
 
 .help-visual-top span:nth-child(3) {
-  background: rgba(249, 115, 80, 0.32);
+  background: color-mix(in srgb, #ff5c5c 32%, transparent);
 }
 
 .help-visual-row {
@@ -1644,9 +1648,9 @@
 
 .help-module-grid span {
   border-radius: 999px;
-  border: 1px solid rgba(62, 207, 142, 0.22);
-  background: rgba(62, 207, 142, 0.10);
-  color: #b8fff0;
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 22%, transparent);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
+  color: #f4f7fb;
   font-size: 12px;
   font-weight: 800;
   padding: 6px 10px;
@@ -1670,7 +1674,7 @@
 
 .help-alert span {
   display: block;
-  color: #b8fff0;
+  color: #f4f7fb;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.55;
@@ -1678,13 +1682,13 @@
 }
 
 .help-alert-info {
-  border: 1px solid rgba(62, 207, 142, 0.24);
-  background: rgba(62, 207, 142, 0.09);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 24%, transparent);
+  background: color-mix(in srgb, var(--buneka-status) 9%, transparent);
 }
 
 .help-alert-warning {
-  border: 1px solid rgba(242, 184, 75, 0.28);
-  background: rgba(242, 184, 75, 0.10);
+  border: 1px solid color-mix(in srgb, #f5a623 28%, transparent);
+  background: color-mix(in srgb, #f5a623 10%, transparent);
 }
 
 .help-alert-warning svg {
@@ -1692,8 +1696,8 @@
 }
 
 .help-alert-success {
-  border: 1px solid rgba(62, 207, 142, 0.24);
-  background: rgba(62, 207, 142, 0.10);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 24%, transparent);
+  background: color-mix(in srgb, var(--buneka-status) 10%, transparent);
 }
 
 .help-faq {
@@ -1732,17 +1736,17 @@
 }
 
 .help-legal {
-  border-color: rgba(242, 184, 75, 0.28);
+  border-color: color-mix(in srgb, #f5a623 28%, transparent);
   background:
-    linear-gradient(135deg, rgba(242, 184, 75, 0.12), rgba(15, 15, 15, 0.94)),
+    linear-gradient(135deg, color-mix(in srgb, #f5a623 12%, transparent), rgba(15, 15, 15, 0.94)),
     var(--help-panel);
 }
 
 .help-result-pill {
   width: fit-content;
   border-radius: 999px;
-  border: 1px solid rgba(62, 207, 142, 0.28);
-  background: rgba(62, 207, 142, 0.12);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 28%, transparent);
+  background: color-mix(in srgb, var(--buneka-status) 12%, transparent);
   color: var(--help-green);
   font-size: 12px;
   font-weight: 950;
@@ -1750,9 +1754,9 @@
 }
 
 .help-support-section {
-  border-color: rgba(62, 207, 142, 0.30);
+  border-color: color-mix(in srgb, var(--buneka-status) 30%, transparent);
   background:
-    radial-gradient(circle at 10% 0%, rgba(62, 207, 142, 0.14), transparent 30%),
+    radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--buneka-status) 14%, transparent), transparent 30%),
     var(--help-panel);
 }
 
@@ -1767,10 +1771,10 @@
   align-items: center;
   justify-content: center;
   border-radius: 18px;
-  border: 1px solid rgba(62, 207, 142, 0.48);
+  border: 1px solid color-mix(in srgb, var(--buneka-status) 48%, transparent);
   background: var(--help-green);
-  color: #00040d;
-  box-shadow: 0 18px 60px rgba(62, 207, 142, 0.28);
+  color: #05070d;
+  box-shadow: 0 18px 60px color-mix(in srgb, var(--buneka-status) 28%, transparent);
 }
 
 .help-floating-support:hover {
@@ -1797,21 +1801,21 @@
   }
 }
 
-/* Current guide shell: black graphite panels, mustard/amber markers, no green wash. */
+/* Current guide shell: night-blue panels with restrained Vercel accents. */
 .guide-shell {
   --guide-bg: var(--buneka-base);
   --guide-panel: var(--buneka-panel);
-  --guide-panel-soft: #00040d;
-  --guide-line: rgba(148, 163, 184, 0.22);
-  --guide-line-strong: rgba(255, 107, 0, 0.48);
+  --guide-panel-soft: var(--buneka-elevated);
+  --guide-line: var(--buneka-border);
+  --guide-line-strong: color-mix(in srgb, var(--buneka-link) 45%, var(--buneka-border));
   --guide-text: var(--buneka-accent);
-  --guide-muted: var(--buneka-accent);
-  --guide-amber: var(--buneka-accent);
-  --guide-gold: var(--buneka-accent);
-  --guide-red: #b8fff0;
+  --guide-muted: var(--buneka-muted);
+  --guide-amber: var(--buneka-link);
+  --guide-gold: var(--buneka-status);
+  --guide-red: #ff5c5c;
   background:
-    radial-gradient(circle at 18% 0%, rgba(255, 107, 0, 0.12), transparent 26%),
-    radial-gradient(circle at 86% 12%, rgba(16, 185, 129, 0.08), transparent 28%),
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--buneka-link) 10%, transparent), transparent 26%),
+    radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--buneka-status) 7%, transparent), transparent 28%),
     linear-gradient(180deg, var(--buneka-base) 0%, var(--buneka-base) 100%);
   color: var(--guide-text);
 }
@@ -1916,7 +1920,7 @@
 .guide-topic-button-active,
 .guide-topic-button:hover {
   border-color: var(--guide-line-strong);
-  background: rgba(242, 184, 75, 0.10);
+  background: color-mix(in srgb, #f5a623 10%, transparent);
 }
 
 .guide-hero {
@@ -1930,8 +1934,8 @@
   align-items: center;
   gap: 8px;
   border-radius: 999px;
-  border: 1px solid rgba(242, 184, 75, 0.34);
-  background: rgba(242, 184, 75, 0.10);
+  border: 1px solid color-mix(in srgb, #f5a623 34%, transparent);
+  background: color-mix(in srgb, #f5a623 10%, transparent);
   color: var(--guide-amber);
   font-size: 10px;
   font-weight: 950;
@@ -1981,7 +1985,7 @@
   width: 100%;
   border-radius: 14px;
   border: 1px solid var(--guide-line);
-  background: #00040d;
+  background: #05070d;
   color: var(--guide-text);
   font-size: 14px;
   font-weight: 800;
@@ -1991,7 +1995,7 @@
 
 .guide-search-input:focus {
   border-color: var(--guide-line-strong);
-  box-shadow: 0 0 0 3px rgba(242, 184, 75, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, #f5a623 12%, transparent);
 }
 
 .guide-search-results {
@@ -2004,7 +2008,7 @@
   gap: 6px;
   border-radius: 14px;
   border: 1px solid var(--guide-line-strong);
-  background: #00040d;
+  background: #05070d;
   padding: 8px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
@@ -2018,7 +2022,7 @@
 }
 
 .guide-search-results button:hover {
-  background: rgba(242, 184, 75, 0.10);
+  background: color-mix(in srgb, #f5a623 10%, transparent);
 }
 
 .guide-search-results b {
@@ -2062,9 +2066,9 @@
 
 .guide-action-primary,
 .guide-action-support {
-  border-color: rgba(242, 184, 75, 0.42);
+  border-color: color-mix(in srgb, #f5a623 42%, transparent);
   background: var(--guide-amber);
-  color: #00040d;
+  color: #05070d;
 }
 
 .guide-heading-tabs {
@@ -2154,7 +2158,7 @@
   justify-content: center;
   border-radius: 999px;
   background: var(--guide-amber);
-  color: #00040d;
+  color: #05070d;
   font-size: 12px;
   font-weight: 950;
 }
@@ -2195,13 +2199,13 @@
 }
 
 .guide-info-amber {
-  border-color: rgba(242, 184, 75, 0.30);
-  background: rgba(242, 184, 75, 0.08);
+  border-color: color-mix(in srgb, #f5a623 30%, transparent);
+  background: color-mix(in srgb, #f5a623 8%, transparent);
 }
 
 .guide-info-danger {
-  border-color: rgba(249, 115, 80, 0.32);
-  background: rgba(249, 115, 80, 0.08);
+  border-color: color-mix(in srgb, #ff5c5c 32%, transparent);
+  background: color-mix(in srgb, #ff5c5c 8%, transparent);
 }
 
 .guide-info-danger svg {
@@ -2222,8 +2226,8 @@
 
 .guide-screen-demo {
   border-radius: 18px;
-  border: 1px solid rgba(242, 184, 75, 0.24);
-  background: #00040d;
+  border: 1px solid color-mix(in srgb, #f5a623 24%, transparent);
+  background: #05070d;
   padding: 14px;
 }
 
@@ -2236,7 +2240,7 @@
 .guide-demo-header span {
   height: 6px;
   border-radius: 999px;
-  background: rgba(242, 184, 75, 0.32);
+  background: color-mix(in srgb, #f5a623 32%, transparent);
 }
 
 .guide-demo-input,
@@ -2298,7 +2302,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: rgba(242, 184, 75, 0.12);
+  background: color-mix(in srgb, #f5a623 12%, transparent);
   color: var(--guide-text);
   font-size: 12px;
   font-weight: 900;
@@ -2357,30 +2361,30 @@
 
 .sector-directory-panel {
   border: 1px solid rgba(255,255,255,0.10);
-  background: #00040d;
+  background: #05070d;
   box-shadow: 0 18px 70px rgba(0,0,0,0.22);
 }
 
 .sector-page-shell {
   background:
     radial-gradient(circle at 82% 10%, rgba(255,255,255,0.04), transparent 28%),
-    linear-gradient(180deg, #00040d, #00040d);
+    linear-gradient(180deg, #05070d, #05070d);
 }
 
 .sector-page-shell .glow-border {
   border-color: rgba(255,255,255,0.10);
-  background: #00040d;
+  background: #05070d;
   box-shadow: 0 18px 70px rgba(0,0,0,0.22);
 }
 
 .product-table-head {
-  background: #00040d !important;
-  color: #b8fff0 !important;
+  background: #05070d !important;
+  color: #f4f7fb !important;
   box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.22), inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .product-table-head th {
-  color: #b8fff0 !important;
+  color: #f4f7fb !important;
   font-weight: 950 !important;
   text-shadow: none !important;
 }
@@ -2431,8 +2435,8 @@
   border: 1px solid rgba(203, 213, 225, 0.72);
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94)),
-    #b8fff0;
-  color: #00040d;
+    #f4f7fb;
+  color: #05070d;
   box-shadow: 0 18px 50px rgba(2, 44, 34, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
@@ -2441,7 +2445,7 @@
   position: absolute;
   inset: -20%;
   background:
-    repeating-linear-gradient(45deg, rgba(16, 185, 129, 0.08) 0 1px, transparent 1px 16px),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--buneka-status) 8%, transparent) 0 1px, transparent 1px 16px),
     radial-gradient(circle at 88% 22%, rgba(0, 255, 123, 0.14), transparent 24%);
   opacity: 0.75;
   pointer-events: none;
@@ -2462,8 +2466,8 @@
   }
 
   .guide-shell {
-    background: #b8fff0 !important;
-    color: #00040d !important;
+    background: #f4f7fb !important;
+    color: #05070d !important;
   }
 
   .guide-hero,
@@ -2473,8 +2477,8 @@
   }
 }
 
-/* Buneka three-color screen system
-   Base: #00040d, surface: #002b28, accent/text: #b8fff0. */
+/* Buneka Vercel-style color system
+   Base: night-blue black, surfaces: neutral panels, actions: crisp white. */
 @layer utilities {
   html,
   body,
@@ -2495,8 +2499,8 @@
   .sector-page-shell,
   .package-page-shell {
     background:
-      radial-gradient(circle at 12% 4%, color-mix(in srgb, var(--buneka-accent) 10%, transparent), transparent 30%),
-      radial-gradient(circle at 88% 14%, color-mix(in srgb, var(--buneka-panel) 72%, transparent), transparent 32%),
+      radial-gradient(circle at 12% 4%, color-mix(in srgb, var(--buneka-link) 10%, transparent), transparent 30%),
+      radial-gradient(circle at 88% 14%, color-mix(in srgb, var(--buneka-status) 8%, transparent), transparent 32%),
       linear-gradient(180deg, var(--buneka-base), var(--buneka-base)) !important;
   }
 
@@ -2505,7 +2509,7 @@
   header.sidebar-supabase,
   header.sidebar-surface {
     background: var(--buneka-base) !important;
-    border-color: color-mix(in srgb, var(--buneka-accent) 16%, var(--buneka-base)) !important;
+    border-color: var(--buneka-border) !important;
   }
 
   .data-card,
@@ -2537,7 +2541,7 @@
   .stock-movement-entry:hover,
   .stock-movement-exit:hover {
     background: var(--buneka-panel) !important;
-    border-color: color-mix(in srgb, var(--buneka-accent) 22%, var(--buneka-panel)) !important;
+    border-color: var(--buneka-border) !important;
     color: var(--buneka-accent) !important;
     box-shadow: none !important;
   }
@@ -2597,6 +2601,40 @@
     color: var(--buneka-accent) !important;
   }
 
+  [class*="text-slate"],
+  [class*="text-stone"],
+  [class*="text-neutral"],
+  [class*="text-zinc"],
+  [class*="placeholder-slate"]::placeholder,
+  [class*="placeholder-stone"]::placeholder,
+  [class*="placeholder-white"]::placeholder {
+    color: var(--buneka-muted) !important;
+  }
+
+  [class*="text-emerald"],
+  [class*="text-green"],
+  [class*="text-lime"],
+  [class*="text-cyan"] {
+    color: var(--buneka-status) !important;
+  }
+
+  [class*="text-blue"],
+  [class*="text-sky"],
+  [class*="text-indigo"] {
+    color: var(--buneka-link) !important;
+  }
+
+  [class*="text-amber"],
+  [class*="text-orange"],
+  [class*="text-yellow"] {
+    color: #f5a623 !important;
+  }
+
+  [class*="text-red"],
+  [class*="text-rose"] {
+    color: #ff5c5c !important;
+  }
+
   [class*="bg-emerald"],
   [class*="bg-amber"],
   [class*="bg-cyan"],
@@ -2622,6 +2660,30 @@
     background: var(--buneka-panel) !important;
   }
 
+  [class*="bg-emerald"],
+  [class*="bg-green"],
+  [class*="bg-lime"],
+  [class*="bg-cyan"] {
+    background: color-mix(in srgb, var(--buneka-status) 12%, var(--buneka-panel)) !important;
+  }
+
+  [class*="bg-blue"],
+  [class*="bg-sky"],
+  [class*="bg-indigo"] {
+    background: color-mix(in srgb, var(--buneka-link) 13%, var(--buneka-panel)) !important;
+  }
+
+  [class*="bg-amber"],
+  [class*="bg-orange"],
+  [class*="bg-yellow"] {
+    background: color-mix(in srgb, #f5a623 14%, var(--buneka-panel)) !important;
+  }
+
+  [class*="bg-red"],
+  [class*="bg-rose"] {
+    background: color-mix(in srgb, #ff5c5c 11%, var(--buneka-panel)) !important;
+  }
+
   [class*="border-emerald"],
   [class*="border-amber"],
   [class*="border-cyan"],
@@ -2642,7 +2704,31 @@
   [class*="border-zinc"],
   [class*="border-black"],
   [class*="border-white"] {
-    border-color: color-mix(in srgb, var(--buneka-accent) 24%, var(--buneka-panel)) !important;
+    border-color: var(--buneka-border) !important;
+  }
+
+  [class*="border-emerald"],
+  [class*="border-green"],
+  [class*="border-lime"],
+  [class*="border-cyan"] {
+    border-color: color-mix(in srgb, var(--buneka-status) 38%, var(--buneka-border)) !important;
+  }
+
+  [class*="border-blue"],
+  [class*="border-sky"],
+  [class*="border-indigo"] {
+    border-color: color-mix(in srgb, var(--buneka-link) 38%, var(--buneka-border)) !important;
+  }
+
+  [class*="border-amber"],
+  [class*="border-orange"],
+  [class*="border-yellow"] {
+    border-color: color-mix(in srgb, #f5a623 38%, var(--buneka-border)) !important;
+  }
+
+  [class*="border-red"],
+  [class*="border-rose"] {
+    border-color: color-mix(in srgb, #ff5c5c 38%, var(--buneka-border)) !important;
   }
 
   [class*="ring-emerald"],
@@ -2651,7 +2737,7 @@
   [class*="ring-slate"],
   [class*="ring-white"],
   [class*="ring-black"] {
-    --tw-ring-color: color-mix(in srgb, var(--buneka-accent) 26%, var(--buneka-panel)) !important;
+    --tw-ring-color: color-mix(in srgb, var(--buneka-accent) 18%, var(--buneka-border)) !important;
   }
 
   [class*="shadow"],
