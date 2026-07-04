@@ -389,62 +389,6 @@ export default function StokPage() {
         </div>
       )}
 
-      <section className="data-card mb-6 overflow-hidden">
-        <div className="border-b border-[#1E293B] bg-[#0B0F19] px-5 py-4">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#10B981]">Stoktaki ürünler</p>
-              <h2 className="font-display text-xl font-black text-[#F8FAFC]">En eski stok gün sayısı</h2>
-            </div>
-            <p className="max-w-2xl text-sm font-semibold text-[#CBD5E1]">
-              En eski kalan parti baz alınır; satıra tıklayınca ürün tarihçesi açılır.
-            </p>
-          </div>
-        </div>
-
-        {stockAgeRows.length === 0 ? (
-          <EmptyState icon={Boxes} message="Stokta bekleyen ürün bulunamadı." />
-        ) : (
-          <div className="overflow-x-auto">
-            <div>
-              <table className="w-full text-left">
-                <thead className="bg-[#151E2E] text-xs uppercase tracking-wide text-[#CBD5E1]">
-                  <tr>
-                    <th className="px-5 py-3 font-black">Ürün</th>
-                    <th className="px-5 py-3 font-black">En eski stok</th>
-                    <th className="px-5 py-3 font-black">En eski giriş</th>
-                    <th className="px-5 py-3 text-right font-black">Mevcut</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stockAgeRows.map((row) => (
-                      <tr
-                        key={row.product.id}
-                        onClick={() => setSelectedHistoryProductId(row.product.id)}
-                        className="cursor-pointer border-t border-[#1E293B] bg-[#151E2E] transition hover:bg-[#1E293B]"
-                      >
-                        <td className="px-5 py-4">
-                          <p className="font-black text-[#F8FAFC]">{row.product.name}</p>
-                          <p className="font-mono text-xs font-semibold text-[#64748B]">{row.product.barcode}</p>
-                        </td>
-                        <td className="px-5 py-4">
-                          <span className="inline-flex rounded-full border border-[#F59E0B]/35 px-3 py-1 text-xs font-black text-[#F59E0B]">
-                            {row.stockDays} gün
-                          </span>
-                        </td>
-                        <td className="px-5 py-4 text-sm font-semibold text-[#CBD5E1]">{formatDate(row.oldestDate)}</td>
-                        <td className="px-5 py-4 text-right text-lg font-black text-[#00FF7B]">
-                          {row.product.stock_quantity}
-                        </td>
-                      </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </section>
-
       <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
