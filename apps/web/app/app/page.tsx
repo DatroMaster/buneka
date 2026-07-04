@@ -33,6 +33,7 @@ export default function FiyatSorgulaPage() {
   const [error, setError] = useState("");
   const [stats, setStats] = useState({ queries: 0, sales: 0, revenue: 0 });
   const [appUser, setAppUser] = useState<AppUser | null>(null);
+  const [organizationName, setOrganizationName] = useState("Buneka");
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [checkingOut, setCheckingOut] = useState(false);
   const [cartMessage, setCartMessage] = useState("");
@@ -60,7 +61,7 @@ export default function FiyatSorgulaPage() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const [{ count: queryCount }, { data: salesData }] = await Promise.all([
+    const [{ count: queryCount }, { data: salesData }, { data: organizationData }] = await Promise.all([
       supabase
         .from("price_queries")
         .select("*", { count: "exact", head: true })
@@ -71,8 +72,14 @@ export default function FiyatSorgulaPage() {
         .select("total_amount")
         .eq("organization_id", currentUser.organization_id)
         .gte("sale_time", today.toISOString()),
+      supabase
+        .from("organizations")
+        .select("name")
+        .eq("id", currentUser.organization_id)
+        .single(),
     ]);
 
+    if (organizationData?.name) setOrganizationName(organizationData.name);
     setStats({
       queries: queryCount || 0,
       sales: salesData?.length || 0,
@@ -205,6 +212,7 @@ export default function FiyatSorgulaPage() {
     }
 
     const now = new Date();
+    const receiptBusinessName = escapeReceiptText(organizationName || "İşletme");
     const lines = cart
       .map(
         (item) => `
@@ -224,7 +232,7 @@ export default function FiyatSorgulaPage() {
       <html lang="tr">
         <head>
           <meta charset="utf-8" />
-          <title>Buneka Sepet Fişi</title>
+          <title>${receiptBusinessName} Sepet Fişi</title>
           <style>
             @page { size: 80mm auto; margin: 5mm; }
             * { box-sizing: border-box; }
@@ -237,7 +245,7 @@ export default function FiyatSorgulaPage() {
               font-size: 11px;
             }
             header { text-align: center; border-bottom: 1px dashed #111; padding: 0 0 8px; margin-bottom: 8px; }
-            h1 { margin: 0; font-size: 17px; letter-spacing: 0.16em; }
+            h1 { margin: 0; font-size: 17px; letter-spacing: 0.08em; overflow-wrap: anywhere; }
             p { margin: 3px 0; }
             table { width: 100%; border-collapse: collapse; }
             th { border-bottom: 1px dashed #111; padding: 5px 0; text-align: left; }
@@ -253,7 +261,7 @@ export default function FiyatSorgulaPage() {
         </head>
         <body>
           <header>
-            <h1>BUNEKA</h1>
+            <h1>${receiptBusinessName}</h1>
             <p>Sepet Fişi</p>
             <p>${now.toLocaleDateString("tr-TR")} ${now.toLocaleTimeString("tr-TR")}</p>
           </header>
