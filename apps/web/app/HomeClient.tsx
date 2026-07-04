@@ -216,6 +216,27 @@ export default function HomeClient() {
         />
       </header>
 
+      <nav className="relative z-10 grid grid-cols-3 gap-2 px-3 pb-3 sm:hidden" aria-label="Hızlı mobil erişim">
+        <Link
+          href="/kullanici-rehberi"
+          className="glow-border flex min-h-12 items-center justify-center gap-1.5 rounded-xl text-xs font-black text-[color:var(--home-ink)]"
+        >
+          <BookOpenCheck size={15} /> Rehber
+        </Link>
+        <a
+          href="#sektorler"
+          className="glow-border flex min-h-12 items-center justify-center gap-1.5 rounded-xl text-xs font-black text-[color:var(--home-ink)]"
+        >
+          <Store size={15} /> Sektör
+        </a>
+        <Link
+          href={callLink()}
+          className="glow-border flex min-h-12 items-center justify-center gap-1.5 rounded-xl text-xs font-black text-[color:var(--home-ink)]"
+        >
+          <PhoneCall size={15} /> Ara
+        </Link>
+      </nav>
+
       <main className="relative z-10 grid flex-1 grid-cols-1 gap-3 px-3 pb-24 sm:gap-4 sm:px-6 sm:pb-4 md:min-h-0 md:grid-cols-2">
         <section className="glow-border flex min-h-[390px] flex-col rounded-xl bg-[color:var(--home-surface)]/78 p-3 backdrop-blur-xl sm:min-h-[420px] sm:rounded-2xl sm:p-5 md:min-h-0">
           <BunekaStoryCard />

@@ -2391,8 +2391,10 @@
 
 .stock-movement-row {
   position: relative;
-  background: var(--buneka-panel);
-  box-shadow: inset 0 -1px 0 var(--buneka-border);
+  background: var(--stock-row-bg, var(--buneka-panel));
+  box-shadow:
+    inset 3px 0 0 var(--stock-row-accent, var(--buneka-border)),
+    inset 0 -1px 0 var(--buneka-border);
   transition: background 140ms ease, box-shadow 140ms ease;
 }
 
@@ -2401,19 +2403,29 @@
 }
 
 .stock-movement-entry {
-  box-shadow: inset 3px 0 0 var(--buneka-status), inset 0 -1px 0 var(--buneka-border);
+  --movement-tone: var(--buneka-status);
 }
 
 .stock-movement-exit {
-  box-shadow: inset 3px 0 0 #f5a623, inset 0 -1px 0 var(--buneka-border);
+  --movement-tone: #f5a623;
 }
 
-.stock-movement-entry:hover {
-  background: color-mix(in srgb, var(--buneka-status) 7%, var(--buneka-panel));
+.stock-movement-row:hover {
+  background: var(--stock-row-hover, color-mix(in srgb, var(--movement-tone, var(--buneka-accent)) 7%, var(--buneka-panel)));
 }
 
-.stock-movement-exit:hover {
-  background: color-mix(in srgb, #f5a623 7%, var(--buneka-panel));
+.stock-category-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--stock-row-accent, var(--buneka-border));
+  background: color-mix(in srgb, var(--stock-row-accent, var(--buneka-accent)) 12%, var(--buneka-panel));
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--stock-row-text, var(--buneka-accent));
 }
 
 .category-badge {
@@ -2432,12 +2444,13 @@
 .license-authority-card {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(203, 213, 225, 0.72);
+  border: 1px solid color-mix(in srgb, var(--buneka-accent) 18%, var(--buneka-border));
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94)),
-    #f4f7fb;
-  color: #05070d;
-  box-shadow: 0 18px 50px rgba(2, 44, 34, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--buneka-link) 16%, transparent), transparent 30%),
+    radial-gradient(circle at 92% 18%, color-mix(in srgb, var(--buneka-status) 16%, transparent), transparent 30%),
+    var(--buneka-panel);
+  color: var(--buneka-accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .license-authority-card::before {
@@ -2445,15 +2458,23 @@
   position: absolute;
   inset: -20%;
   background:
-    repeating-linear-gradient(45deg, color-mix(in srgb, var(--buneka-status) 8%, transparent) 0 1px, transparent 1px 16px),
-    radial-gradient(circle at 88% 22%, rgba(0, 255, 123, 0.14), transparent 24%);
-  opacity: 0.75;
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--buneka-accent) 5%, transparent) 0 1px, transparent 1px 18px);
+  opacity: 0.35;
   pointer-events: none;
 }
 
 .license-authority-card > * {
   position: relative;
   z-index: 1;
+}
+
+.license-authority-card :where(p, span, div) {
+  color: var(--buneka-accent) !important;
+}
+
+.license-authority-card .license-status-pill {
+  background: var(--buneka-accent) !important;
+  color: var(--buneka-base) !important;
 }
 
 .stock-age-metric,
@@ -2603,7 +2624,6 @@
   .guide-topic-button,
   .guide-topic-button-active,
   .glow-border,
-  .category-badge,
   input,
   select,
   textarea {

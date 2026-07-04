@@ -2,6 +2,7 @@
 
 import {
   CheckCircle2,
+  ChevronDown,
   ExternalLink,
   ListChecks,
   MessageCircle,
@@ -71,6 +72,9 @@ export function SectorPackageBuilder({
   const [activeModule, setActiveModule] = useState<string>(() => moduleTitle(modules[0] || allModules[0]?.label || ""));
   const [customModule, setCustomModule] = useState("");
   const [deliveryOption, setDeliveryOption] = useState<HardwareDeliveryOption>("standard");
+  const [modulesOpen, setModulesOpen] = useState(false);
+  const [deliveryOpen, setDeliveryOpen] = useState(false);
+  const [contentOpen, setContentOpen] = useState(false);
 
   const selectedPlan = plans.find((plan) => plan.name === selectedPlanName) || recommendedPlan;
   const includesAllModules = selectedPlan.name === "Buneka Patron";
@@ -168,11 +172,20 @@ export function SectorPackageBuilder({
           </div>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/55">
           <p className="mb-2 text-[11px] font-black uppercase tracking-[0.16em] text-[color:var(--home-muted)]">
             Ek modüller
           </p>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => setModulesOpen((current) => !current)}
+            className="mb-3 flex w-full items-center justify-between gap-3 rounded-lg border border-[color:var(--home-border)] px-3 py-2 text-left text-xs font-bold text-[color:var(--home-ink)]"
+          >
+            <span>{includesAllModules ? "Tum moduller dahil" : `${selectedModules.length} modul secili`}</span>
+            <ChevronDown size={16} className={`shrink-0 text-[color:var(--home-glow)] transition-transform ${modulesOpen ? "rotate-180" : ""}`} />
+          </button>
+          {modulesOpen && (
+          <div className="grid gap-2 px-3 pb-3 sm:grid-cols-2">
             {visibleModules.map((module) => {
               const isSelected = includesAllModules || selected.includes(module);
               const isActive = activeModuleName === module;
@@ -199,6 +212,7 @@ export function SectorPackageBuilder({
               );
             })}
           </div>
+          )}
         </div>
 
         <div className="mt-4 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/70 p-3">
@@ -211,6 +225,15 @@ export function SectorPackageBuilder({
               </p>
             </div>
           </div>
+          <button
+            type="button"
+            onClick={() => setDeliveryOpen((current) => !current)}
+            className="mt-3 flex w-full items-center justify-between rounded-lg border border-[color:var(--home-border)] px-3 py-2 text-left text-xs font-bold text-[color:var(--home-ink)]"
+          >
+            <span>{deliveryOption === "terminal" ? "Android terminal seçildi" : "Standart barkod okuyucu dahil"}</span>
+            <ChevronDown size={16} className={`text-[color:var(--home-glow)] transition-transform ${deliveryOpen ? "rotate-180" : ""}`} />
+          </button>
+          {deliveryOpen && (
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {[
               {
@@ -242,7 +265,8 @@ export function SectorPackageBuilder({
               );
             })}
           </div>
-          {deliveryOption === "terminal" && (
+          )}
+          {deliveryOpen && deliveryOption === "terminal" && (
             <div className="mt-3 rounded-lg border border-amber-300/35 bg-amber-300/10 p-3">
               <p className="text-[11px] font-black text-amber-200">{hardwareOptions.androidTerminal.livePriceLabel}</p>
               <p className="mt-1 text-[10px] font-semibold leading-4 text-[color:var(--home-muted)]">
@@ -299,7 +323,16 @@ export function SectorPackageBuilder({
             <p className="text-[11px] font-black uppercase tracking-[0.16em] text-[color:var(--home-glow)]">
               Oluşturulan paket içeriği
             </p>
-            <div className="hidden">
+            <button
+              type="button"
+              onClick={() => setContentOpen((current) => !current)}
+              className="mt-3 flex w-full items-center justify-between rounded-lg border border-[color:var(--home-border)] px-3 py-2 text-left text-xs font-bold text-[color:var(--home-ink)]"
+            >
+              <span>{selectedPlan.name} · {selectedModules.length} modül</span>
+              <ChevronDown size={16} className={`text-[color:var(--home-glow)] transition-transform ${contentOpen ? "rotate-180" : ""}`} />
+            </button>
+            {false && (
+              <>
               <div className="rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 p-3">
                 <p className="text-[10px] font-black uppercase tracking-wide text-[color:var(--home-muted)]">Model</p>
                 <p className="mt-1 font-display text-lg font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
@@ -312,7 +345,9 @@ export function SectorPackageBuilder({
                   {includesAllModules ? "Tüm ek modüller aktif" : `${selectedModules.length} ek modül seçildi`}
                 </p>
               </div>
-            </div>
+              </>
+            )}
+            {contentOpen && (
             <div className="mt-4 grid gap-2 sm:grid-cols-2">
               {selectedPlan.features.map((feature) => (
                 <div key={feature} className="flex items-center gap-2 rounded-lg border border-[color:var(--home-border)] bg-[#05070d]/35 px-3 py-2">
@@ -327,6 +362,7 @@ export function SectorPackageBuilder({
                 </div>
               ))}
             </div>
+            )}
           </div>
 
           <div className="rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/72 p-4">

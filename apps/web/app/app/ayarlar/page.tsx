@@ -228,7 +228,7 @@ export default function AyarlarPage() {
             <p className="text-sm font-black text-[color:var(--buneka-accent)]">Aktif lisans kaydı bulunamadı.</p>
           )}
         </div>
-        <span className="rounded-full bg-[#090d14] px-3 py-1 text-xs font-black text-[#f4f7fb]">
+        <span className="license-status-pill rounded-full px-3 py-1 text-xs font-black">
           Görünür
         </span>
       </div>

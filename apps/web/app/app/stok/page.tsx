@@ -14,7 +14,7 @@ import {
   WalletCards,
   X,
 } from "lucide-react";
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState, type CSSProperties } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
 import { EmptyState } from "../_components/EmptyState";
@@ -23,10 +23,10 @@ import { QuickLinks } from "../_components/QuickLinks";
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
 type Product = Pick<
   Tables<"products">,
-  "id" | "name" | "barcode" | "created_at" | "purchase_price" | "stock_quantity" | "supplier"
+  "id" | "name" | "barcode" | "category" | "created_at" | "purchase_price" | "stock_quantity" | "supplier"
 >;
 type StockMovementWithProduct = Tables<"stock_movements"> & {
-  products: Pick<Tables<"products">, "id" | "name" | "barcode" | "created_at" | "purchase_price" | "stock_quantity" | "supplier"> | null;
+  products: Pick<Tables<"products">, "id" | "name" | "barcode" | "category" | "created_at" | "purchase_price" | "stock_quantity" | "supplier"> | null;
 };
 
 type RemainingStockLot = {
@@ -49,6 +49,24 @@ type StockAgeRow = {
 };
 
 const DAY_MS = 1000 * 60 * 60 * 24;
+const STOCK_CATEGORY_COLORS = ["#3291ff", "#50e3c2", "#f5a623", "#f4f7fb", "#9ba3af"];
+
+function normalizeCategory(category: string | null | undefined) {
+  return (category || "").trim().toLocaleLowerCase("tr-TR").normalize("NFD").replace(/\p{Diacritic}/gu, "");
+}
+
+function getStockCategoryStyle(category: string | null | undefined): CSSProperties {
+  const normalized = normalizeCategory(category);
+  if (!normalized) return {};
+  const index = Array.from(normalized).reduce((sum, char) => sum + char.charCodeAt(0), 0) % STOCK_CATEGORY_COLORS.length;
+  const color = STOCK_CATEGORY_COLORS[index];
+  return {
+    "--stock-row-accent": color,
+    "--stock-row-bg": `color-mix(in srgb, ${color} 5%, var(--buneka-panel))`,
+    "--stock-row-hover": `color-mix(in srgb, ${color} 10%, var(--buneka-panel))`,
+    "--stock-row-text": "#f4f7fb",
+  } as CSSProperties;
+}
 
 function daysBetween(dateString: string) {
   const date = new Date(dateString);
@@ -243,13 +261,13 @@ export default function StokPage() {
       const [{ data: movementData }, { data: productData }] = await Promise.all([
         supabase
           .from("stock_movements")
-          .select("*, products (id, name, barcode, created_at, purchase_price, stock_quantity, supplier)")
+          .select("*, products (id, name, barcode, category, created_at, purchase_price, stock_quantity, supplier)")
           .eq("organization_id", currentUser.organization_id)
           .order("created_at", { ascending: false })
           .limit(500),
         supabase
           .from("products")
-          .select("id, name, barcode, created_at, purchase_price, stock_quantity, supplier")
+          .select("id, name, barcode, category, created_at, purchase_price, stock_quantity, supplier")
           .eq("organization_id", currentUser.organization_id)
           .order("name"),
       ]);
@@ -433,6 +451,7 @@ export default function StokPage() {
                       className={`stock-movement-row ${
                         Number(movement.quantity) >= 0 ? "stock-movement-entry" : "stock-movement-exit"
                       }`}
+                      style={getStockCategoryStyle(movement.products?.category)}
                     >
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-[#f4f7fb]">
                         {formatTime(movement.created_at)}
@@ -446,6 +465,11 @@ export default function StokPage() {
                         >
                           <div className="font-medium text-[#f4f7fb]">{movement.products?.name}</div>
                           <div className="font-mono text-xs text-[#f4f7fb]">{movement.products?.barcode}</div>
+                          {movement.products?.category && (
+                            <span className="stock-category-badge mt-2">
+                              {movement.products.category}
+                            </span>
+                          )}
                         </button>
                       </td>
                       <td className="px-6 py-4">
