@@ -21,10 +21,68 @@ import { EmptyState } from "../_components/EmptyState";
 import { QuickLinks } from "../_components/QuickLinks";
 
 type AppUser = Pick<Tables<"app_users">, "organization_id" | "store_id">;
-type Product = Pick<Tables<"products">, "id" | "name" | "barcode" | "stock_quantity">;
+type Product = Pick<
+  Tables<"products">,
+  "id" | "name" | "barcode" | "created_at" | "purchase_price" | "stock_quantity" | "supplier"
+>;
 type StockMovementWithProduct = Tables<"stock_movements"> & {
-  products: Pick<Tables<"products">, "name" | "barcode"> | null;
+  products: Pick<Tables<"products">, "id" | "name" | "barcode" | "created_at" | "purchase_price" | "stock_quantity" | "supplier"> | null;
 };
+
+type RemainingStockLot = {
+  id: string;
+  date: string;
+  invoiceDate: string | null;
+  note: string | null;
+  originalQuantity: number;
+  quantity: number;
+  supplier: string | null;
+  unitPrice: number | null;
+};
+
+type StockAgeRow = {
+  latestEntryDate: string | null;
+  oldestDate: string;
+  product: Product;
+  remainingLots: RemainingStockLot[];
+  stockDays: number;
+};
+
+const DAY_MS = 1000 * 60 * 60 * 24;
+
+function daysBetween(dateString: string) {
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return 0;
+  return Math.max(0, Math.floor((Date.now() - date.getTime()) / DAY_MS));
+}
+
+function parseInvoiceMeta(note: string | null) {
+  if (!note) return { supplier: null, invoiceDate: null };
+  const parts = note.split("·").map((part) => part.trim()).filter(Boolean);
+  if (parts[0]?.toLocaleLowerCase("tr-TR").includes("fatura")) {
+    return {
+      supplier: parts[1] || null,
+      invoiceDate: parts[2] || null,
+    };
+  }
+  return { supplier: null, invoiceDate: null };
+}
+
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+}
+
+function formatMoney(value: number) {
+  return new Intl.NumberFormat("tr-TR", {
+    style: "currency",
+    currency: "TRY",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
 
 export default function StokPage() {
   const [movements, setMovements] = useState<StockMovementWithProduct[]>([]);
@@ -38,6 +96,7 @@ export default function StokPage() {
   const [quantity, setQuantity] = useState("");
   const [unitPrice, setUnitPrice] = useState("");
   const [note, setNote] = useState("");
+  const [selectedAgeProductId, setSelectedAgeProductId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<"date" | "product" | "quantity">("date");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const supabase = useMemo(() => createClient(), []);
@@ -71,6 +130,75 @@ export default function StokPage() {
     .filter((movement) => Number(movement.quantity) < 0)
     .reduce((sum, movement) => sum + Math.abs(Number(movement.quantity)), 0);
 
+  const stockAgeRows = useMemo(() => {
+    const byProduct = new Map<string, StockMovementWithProduct[]>();
+    movements.forEach((movement) => {
+      if (!movement.product_id) return;
+      const list = byProduct.get(movement.product_id) || [];
+      list.push(movement);
+      byProduct.set(movement.product_id, list);
+    });
+
+    return products
+      .filter((product) => Number(product.stock_quantity) > 0)
+      .map((product): StockAgeRow => {
+        const productMovements = byProduct.get(product.id) || [];
+        const entries = productMovements
+          .filter((movement) => Number(movement.quantity) > 0)
+          .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        let outgoing = productMovements
+          .filter((movement) => Number(movement.quantity) < 0)
+          .reduce((sum, movement) => sum + Math.abs(Number(movement.quantity)), 0);
+
+        const remainingLots: RemainingStockLot[] = [];
+        entries.forEach((entry) => {
+          const originalQuantity = Number(entry.quantity) || 0;
+          if (originalQuantity <= 0) return;
+          const consumed = Math.min(outgoing, originalQuantity);
+          outgoing -= consumed;
+          const quantity = originalQuantity - consumed;
+          if (quantity <= 0) return;
+          const meta = parseInvoiceMeta(entry.note);
+          remainingLots.push({
+            id: entry.id,
+            date: entry.created_at,
+            invoiceDate: meta.invoiceDate,
+            note: entry.note,
+            originalQuantity,
+            quantity,
+            supplier: meta.supplier || product.supplier,
+            unitPrice: entry.unit_price,
+          });
+        });
+
+        if (remainingLots.length === 0) {
+          remainingLots.push({
+            id: `${product.id}-initial`,
+            date: product.created_at,
+            invoiceDate: null,
+            note: product.supplier ? `Tedarikçi: ${product.supplier}` : "Ürün kaydı",
+            originalQuantity: Number(product.stock_quantity) || 0,
+            quantity: Number(product.stock_quantity) || 0,
+            supplier: product.supplier,
+            unitPrice: product.purchase_price,
+          });
+        }
+
+        const oldestDate = remainingLots[0]?.date || product.created_at;
+        const latestEntryDate = entries.at(-1)?.created_at || null;
+        return {
+          latestEntryDate,
+          oldestDate,
+          product,
+          remainingLots,
+          stockDays: daysBetween(oldestDate),
+        };
+      })
+      .sort((a, b) => new Date(a.oldestDate).getTime() - new Date(b.oldestDate).getTime());
+  }, [movements, products]);
+
+  const selectedAgeRow = stockAgeRows.find((row) => row.product.id === selectedAgeProductId) || stockAgeRows[0] || null;
+
   const loadData = useCallback(async () => {
     setLoading(true);
     const {
@@ -95,13 +223,13 @@ export default function StokPage() {
       const [{ data: movementData }, { data: productData }] = await Promise.all([
         supabase
           .from("stock_movements")
-          .select("*, products (name, barcode)")
+          .select("*, products (id, name, barcode, created_at, purchase_price, stock_quantity, supplier)")
           .eq("organization_id", currentUser.organization_id)
           .order("created_at", { ascending: false })
-          .limit(50),
+          .limit(500),
         supabase
           .from("products")
-          .select("id, name, barcode, stock_quantity")
+          .select("id, name, barcode, created_at, purchase_price, stock_quantity, supplier")
           .eq("organization_id", currentUser.organization_id)
           .order("name"),
       ]);
@@ -248,6 +376,107 @@ export default function StokPage() {
         </div>
       )}
 
+      <section className="data-card mb-6 overflow-hidden">
+        <div className="border-b border-[#1E293B] bg-[#0B0F19] px-5 py-4">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#00FF7B]">Stok yaşı</p>
+              <h2 className="font-display text-2xl font-black text-[#F8FAFC]">En eski stoklu ürünler</h2>
+            </div>
+            <p className="max-w-2xl text-sm font-semibold text-[#CBD5E1]">
+              Giriş tarihleri FIFO mantığıyla takip edilir; satış/çıkışlar en eski partiden düşülür.
+            </p>
+          </div>
+        </div>
+
+        {stockAgeRows.length === 0 ? (
+          <EmptyState icon={Boxes} message="Stokta bekleyen ürün bulunamadı." />
+        ) : (
+          <div className="grid min-h-[360px] lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
+            <div className="overflow-x-auto border-b border-[#1E293B] lg:border-b-0 lg:border-r">
+              <table className="w-full text-left">
+                <thead className="bg-[#151E2E] text-xs uppercase tracking-wide text-[#CBD5E1]">
+                  <tr>
+                    <th className="px-5 py-3 font-black">Ürün</th>
+                    <th className="px-5 py-3 font-black">Stokta</th>
+                    <th className="px-5 py-3 font-black">En eski giriş</th>
+                    <th className="px-5 py-3 text-right font-black">Mevcut</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stockAgeRows.slice(0, 12).map((row) => {
+                    const active = selectedAgeRow?.product.id === row.product.id;
+                    return (
+                      <tr
+                        key={row.product.id}
+                        onClick={() => setSelectedAgeProductId(row.product.id)}
+                        className={`cursor-pointer border-t border-[#1E293B] transition hover:bg-[#1E293B] ${
+                          active ? "bg-[#1E293B]" : "bg-[#151E2E]"
+                        }`}
+                      >
+                        <td className="px-5 py-4">
+                          <p className="font-black text-[#F8FAFC]">{row.product.name}</p>
+                          <p className="font-mono text-xs font-semibold text-[#64748B]">{row.product.barcode}</p>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span className="inline-flex rounded-full border border-[#F59E0B]/35 px-3 py-1 text-xs font-black text-[#F59E0B]">
+                            {row.stockDays} gün
+                          </span>
+                        </td>
+                        <td className="px-5 py-4 text-sm font-semibold text-[#CBD5E1]">{formatDate(row.oldestDate)}</td>
+                        <td className="px-5 py-4 text-right text-lg font-black text-[#00FF7B]">
+                          {row.product.stock_quantity}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {selectedAgeRow && (
+              <aside className="bg-[#0B0F19] p-5">
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#00FF7B]">Ürün stok detayı</p>
+                <h3 className="mt-1 font-display text-2xl font-black text-[#F8FAFC]">{selectedAgeRow.product.name}</h3>
+                <p className="mt-1 font-mono text-xs font-semibold text-[#64748B]">{selectedAgeRow.product.barcode}</p>
+
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <StockAgeMetric label="Stoktaki gün" value={`${selectedAgeRow.stockDays}`} tone="amber" />
+                  <StockAgeMetric label="Mevcut stok" value={`${selectedAgeRow.product.stock_quantity}`} />
+                  <StockAgeMetric label="En eski giriş" value={formatDate(selectedAgeRow.oldestDate)} />
+                  <StockAgeMetric label="Son giriş" value={selectedAgeRow.latestEntryDate ? formatDate(selectedAgeRow.latestEntryDate) : "-"} />
+                </div>
+
+                <div className="mt-5 space-y-2">
+                  <p className="text-xs font-black uppercase tracking-wide text-[#CBD5E1]">Kalan parti / fatura geçmişi</p>
+                  {selectedAgeRow.remainingLots.map((lot) => (
+                    <div key={lot.id} className="rounded-xl border border-[#1E293B] bg-[#151E2E] p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-black text-[#F8FAFC]">{formatDate(lot.date)}</p>
+                          <p className="mt-1 text-xs font-semibold text-[#CBD5E1]">
+                            {lot.supplier ? `Alınan firma: ${lot.supplier}` : "Firma bilgisi yok"}
+                          </p>
+                        </div>
+                        <span className="rounded-full bg-[#00FF7B]/10 px-3 py-1 text-xs font-black text-[#00FF7B]">
+                          {lot.quantity} adet
+                        </span>
+                      </div>
+                      <div className="mt-3 grid gap-1 text-xs font-semibold text-[#64748B]">
+                        <span>İlk giriş miktarı: {lot.originalQuantity}</span>
+                        <span>Alış fiyatı: {lot.unitPrice != null ? formatMoney(Number(lot.unitPrice)) : "-"}</span>
+                        <span>Fatura tarihi: {lot.invoiceDate || "-"}</span>
+                        <span>Not: {lot.note || "-"}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </aside>
+            )}
+          </div>
+        )}
+      </section>
+
       <div className="data-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -362,6 +591,25 @@ export default function StokPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function StockAgeMetric({
+  label,
+  value,
+  tone = "green",
+}: {
+  label: string;
+  value: string;
+  tone?: "green" | "amber";
+}) {
+  return (
+    <div className="rounded-xl border border-[#1E293B] bg-[#151E2E] p-3">
+      <p className="text-[10px] font-black uppercase tracking-wide text-[#64748B]">{label}</p>
+      <p className={`mt-1 text-lg font-black ${tone === "amber" ? "text-[#F59E0B]" : "text-[#00FF7B]"}`}>
+        {value}
+      </p>
     </div>
   );
 }
