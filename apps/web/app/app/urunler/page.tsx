@@ -9,6 +9,7 @@ import {
   HandCoins,
   Layers,
   Loader2,
+  Menu,
   Pencil,
   PackagePlus,
   Percent,
@@ -545,11 +546,59 @@ export default function UrunlerPage() {
         subtitle="Barkod, fiyat, kategori ve stok bilgilerini yönetin."
         action={
           <>
-            <button className="premium-button-secondary" type="button" onClick={() => setShowBulkUpdate(true)}>
+            <details className="group w-full md:hidden">
+              <summary className="premium-button-primary flex w-full list-none items-center justify-between [&::-webkit-details-marker]:hidden">
+                <span className="inline-flex items-center gap-2">
+                  <Menu size={18} /> İşlemler
+                </span>
+                <span className="text-xs font-black transition-transform group-open:rotate-180">⌄</span>
+              </summary>
+              <div className="mt-2 grid gap-2 rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-card)] p-2">
+                <button className="premium-button-primary w-full" type="button" onClick={openNewProduct}>
+                  <Plus size={18} /> Yeni Ürün
+                </button>
+                <button className="premium-button-secondary w-full" type="button" onClick={() => setShowBulkAdd(true)}>
+                  <Layers size={18} /> Toplu Ekle
+                </button>
+                <button className="premium-button-secondary w-full" type="button" onClick={() => setShowBulkUpdate(true)}>
+                  <Percent size={18} /> Toplu Fiyat Güncelle
+                </button>
+                <button
+                  className="premium-button-secondary w-full"
+                  type="button"
+                  onClick={() => void updateUsdProductsByCurrentRate()}
+                  disabled={updatingUsdPrices}
+                  title="USD bazlı ürünleri güncel TCMB kuru ve kâr oranı ile yeniler."
+                >
+                  {updatingUsdPrices ? <Loader2 size={18} className="animate-spin" /> : <RefreshCw size={18} />}
+                  USD Kur Güncelle
+                </button>
+                <label
+                  className="premium-button-secondary w-full cursor-pointer select-none justify-start"
+                  title="Açık olduğunda ürünler sayfası günde bir kez USD bazlı ürünleri güncel kurla yeniler."
+                >
+                  <input
+                    type="checkbox"
+                    checked={autoUsdRateUpdate}
+                    onChange={(event) => {
+                      const enabled = event.target.checked;
+                      setAutoUsdRateUpdate(enabled);
+                      window.localStorage.setItem("buneka-auto-usd-rate-update", enabled ? "1" : "0");
+                      if (enabled) {
+                        window.localStorage.removeItem("buneka-auto-usd-rate-updated-at");
+                      }
+                    }}
+                    className="accent-[#f4f7fb]"
+                  />
+                  Otomatik USD
+                </label>
+              </div>
+            </details>
+            <button className="premium-button-secondary hidden md:inline-flex" type="button" onClick={() => setShowBulkUpdate(true)}>
               <Percent size={18} /> Toplu Fiyat Güncelle
             </button>
             <button
-              className="premium-button-secondary"
+              className="premium-button-secondary hidden md:inline-flex"
               type="button"
               onClick={() => void updateUsdProductsByCurrentRate()}
               disabled={updatingUsdPrices}
@@ -559,7 +608,7 @@ export default function UrunlerPage() {
               USD Kur Güncelle
             </button>
             <label
-              className="premium-button-secondary cursor-pointer select-none"
+              className="premium-button-secondary hidden cursor-pointer select-none md:inline-flex"
               title="Açık olduğunda ürünler sayfası günde bir kez USD bazlı ürünleri güncel kurla yeniler."
             >
               <input
@@ -577,10 +626,10 @@ export default function UrunlerPage() {
               />
               Otomatik USD
             </label>
-            <button className="premium-button-secondary" type="button" onClick={() => setShowBulkAdd(true)}>
+            <button className="premium-button-secondary hidden md:inline-flex" type="button" onClick={() => setShowBulkAdd(true)}>
               <Layers size={18} /> Toplu Ekle
             </button>
-            <button className="premium-button-primary" type="button" onClick={openNewProduct}>
+            <button className="premium-button-primary hidden md:inline-flex" type="button" onClick={openNewProduct}>
               <Plus size={18} /> Yeni Ürün
             </button>
           </>

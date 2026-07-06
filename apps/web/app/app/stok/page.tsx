@@ -366,7 +366,7 @@ export default function StokPage() {
         title="Stok Hareketleri"
         subtitle="Tüm depo giriş ve çıkışlarını takip edin."
         action={
-          <button className="premium-button-primary" type="button" onClick={() => setShowEntry(true)}>
+          <button className="premium-button-primary w-full md:w-auto" type="button" onClick={() => setShowEntry(true)}>
             <Plus size={18} /> Yeni Stok Girişi
           </button>
         }

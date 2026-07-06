@@ -17,7 +17,7 @@ export function PageHeader({
         </h1>
         {subtitle && <p className="font-semibold text-[color:var(--color-muted)]">{subtitle}</p>}
       </div>
-      {action && <div className="flex w-full gap-2 md:w-auto">{action}</div>}
+      {action && <div className="flex w-full min-w-0 flex-col gap-2 md:w-auto md:flex-row md:flex-wrap md:justify-end">{action}</div>}
     </div>
   );
 }
