@@ -1,6 +1,18 @@
 "use client";
 
-import { ArrowRight, BookOpenCheck, ChevronDown, LayoutGrid, PhoneCall, ShieldCheck, Store } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpenCheck,
+  Boxes,
+  ChevronDown,
+  Crown,
+  LayoutGrid,
+  PhoneCall,
+  ScanLine,
+  ShieldCheck,
+  Store,
+  WalletCards,
+} from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
 import { ClientIpBadge } from "@/components/ClientIpBadge";
@@ -28,6 +40,8 @@ const STARS = [
 const CAPILLARY_COLORS = [
   "glow-border",
 ];
+
+const HOME_PLAN_ICONS = [ScanLine, WalletCards, Boxes, Crown];
 
 type SectionId = "sektorler" | "moduller" | "paketler";
 
@@ -78,7 +92,7 @@ export default function HomeClient() {
       icon: LayoutGrid,
       content: (
         <div className="flex h-full min-h-0 flex-col gap-3">
-          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-y-auto pr-1">
+          <div className="grid min-h-0 flex-1 grid-cols-2 auto-rows-fr gap-2 overflow-hidden pr-1">
             {modules.map((module, index) => (
               <button
                 key={module.label}
@@ -113,14 +127,17 @@ export default function HomeClient() {
       icon: ShieldCheck,
       content: (
         <div className="flex h-full min-h-0 flex-col gap-3">
-          <div className="grid min-h-0 flex-1 grid-cols-2 content-start gap-2 overflow-y-auto pr-1">
-            {plans.map((plan, index) => (
+          <div className="grid min-h-0 flex-1 grid-cols-2 auto-rows-fr gap-2 overflow-hidden pr-1">
+            {plans.map((plan, index) => {
+              const PlanIcon = HOME_PLAN_ICONS[index % HOME_PLAN_ICONS.length];
+              return (
               <button
                 key={plan.name}
                 type="button"
                 onClick={() => setSelectedPlan(selectedPlan === plan.name ? null : plan.name)}
-                className={`rounded-lg px-3 py-2.5 text-left ${selectedPlan === plan.name ? "glow-border glow-border-selected" : CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
+                className={`relative flex min-h-[74px] flex-col justify-between overflow-hidden rounded-lg px-3 py-2.5 text-left ${selectedPlan === plan.name ? "glow-border glow-border-selected" : CAPILLARY_COLORS[index % CAPILLARY_COLORS.length]}`}
               >
+                <PlanIcon size={74} className="pointer-events-none absolute -right-3 -top-3 text-[color:var(--home-glow)] opacity-[0.055]" strokeWidth={1.15} />
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-display text-xs font-bold text-[color:var(--home-ink)] sm:text-sm">
                     {plan.name}
@@ -136,7 +153,8 @@ export default function HomeClient() {
                   <span className="text-[10px] font-medium text-[color:var(--home-muted)]"> /yıl</span>
                 </div>
               </button>
-            ))}
+              );
+            })}
           </div>
           {activePlan && (
             <div className="glow-border glow-border-selected shrink-0 rounded-lg p-3">

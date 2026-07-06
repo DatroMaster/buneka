@@ -71,6 +71,16 @@ const fallbackCategoryPalette = [
   { background: "color-mix(in srgb, #9ba3af 14%, #090d14)", border: "color-mix(in srgb, #9ba3af 36%, #242b38)", color: "#f4f7fb" },
 ];
 
+const smartCategoryRules = [
+  { category: "İçecek", keywords: ["su", "soda", "kola", "gazoz", "meyve suyu", "ice tea", "ayran", "kahve", "çay", "icecek"] },
+  { category: "Atıştırmalık", keywords: ["çikolata", "cikolata", "bisküvi", "biskuvi", "kraker", "cips", "gofret", "şeker", "seker", "sakız", "sakiz"] },
+  { category: "Kırtasiye", keywords: ["defter", "kalem", "silgi", "dosya", "kağıt", "kagit", "ajanda", "makas", "yapıştırıcı", "yapistirici"] },
+  { category: "Çiçek", keywords: ["gül", "gul", "papatya", "orkide", "buket", "aranjman", "çiçek", "cicek"] },
+  { category: "Giyim", keywords: ["tişört", "tisort", "gömlek", "gomlek", "pantolon", "elbise", "beden", "kazak", "mont"] },
+  { category: "Petshop", keywords: ["mama", "kedi", "köpek", "kopek", "tasması", "tasma", "kum", "akvaryum"] },
+  { category: "Hırdavat", keywords: ["vida", "matkap", "çekiç", "cekic", "anahtar", "metre", "kablo", "ampul", "musluk"] },
+];
+
 function normalizeCategory(category: string) {
   return category.trim().toLocaleLowerCase("tr-TR").normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
@@ -84,6 +94,21 @@ function getCategoryStyle(category: string | null): CSSProperties {
 
   const index = Array.from(normalized).reduce((sum, char) => sum + char.charCodeAt(0), 0) % fallbackCategoryPalette.length;
   return fallbackCategoryPalette[index];
+}
+
+function suggestCategory(productName: string, categories: string[]) {
+  const normalizedName = normalizeCategory(productName);
+  if (!normalizedName) return "";
+
+  const existing = categories.find((category) => normalizedName.includes(normalizeCategory(category)));
+  if (existing) return existing;
+
+  const matchedRule = smartCategoryRules.find((rule) =>
+    rule.keywords.some((keyword) => normalizedName.includes(normalizeCategory(keyword)))
+  );
+  if (!matchedRule) return "";
+
+  return categories.find((category) => normalizeCategory(category) === normalizeCategory(matchedRule.category)) || matchedRule.category;
 }
 
 export default function UrunlerPage() {
@@ -100,6 +125,7 @@ export default function UrunlerPage() {
   const [showBulkAdd, setShowBulkAdd] = useState(false);
   const [productForm, setProductForm] = useState<ProductForm>(emptyProductForm);
   const [newCategory, setNewCategory] = useState(false);
+  const [categoryManuallyEdited, setCategoryManuallyEdited] = useState(false);
   const [usdRate, setUsdRate] = useState<number | null>(null);
   const [profitPercent, setProfitPercent] = useState("20");
   const [autoProfitEnabled, setAutoProfitEnabled] = useState(true);
@@ -246,10 +272,31 @@ export default function UrunlerPage() {
     setProductForm(withSuggestedSalePrice(nextForm, options));
   }
 
+  function updateProductName(name: string) {
+    const suggestedCategory = categoryManuallyEdited ? "" : suggestCategory(name, categories);
+    setProductForm((current) => {
+      const nextForm = {
+        ...current,
+        name,
+        category: suggestedCategory || current.category,
+      };
+      return withSuggestedSalePrice(nextForm);
+    });
+    if (suggestedCategory) {
+      setNewCategory(!categories.includes(suggestedCategory));
+    }
+  }
+
+  function updateProductCategory(category: string) {
+    setCategoryManuallyEdited(true);
+    setProductForm((current) => ({ ...current, category }));
+  }
+
   function openNewProduct() {
     setEditingProductId(null);
     setProductForm(emptyProductForm);
     setNewCategory(categories.length === 0);
+    setCategoryManuallyEdited(false);
     setUsdRate(null);
     setAutoProfitEnabled(true);
     setShowProductModal(true);
@@ -274,6 +321,7 @@ export default function UrunlerPage() {
       min_stock: String(product.min_stock),
     });
     setNewCategory(!!product.category && !categories.includes(product.category));
+    setCategoryManuallyEdited(true);
     setUsdRate(null);
     setAutoProfitEnabled(false);
     if (purchaseCurrency === "USD") {
@@ -696,7 +744,7 @@ export default function UrunlerPage() {
         >
           <form className="grid gap-4" onSubmit={saveProduct}>
             <FormInput label="Barkod" value={productForm.barcode} onChange={(value) => setProductForm({ ...productForm, barcode: value })} required />
-            <FormInput label="Ürün adı" value={productForm.name} onChange={(value) => setProductForm({ ...productForm, name: value })} required />
+            <FormInput label="Ürün adı" value={productForm.name} onChange={updateProductName} required />
 
             <div className="grid gap-2">
               <div className="flex items-center justify-between">
@@ -716,14 +764,14 @@ export default function UrunlerPage() {
                   className="premium-input"
                   type="text"
                   value={productForm.category}
-                  onChange={(event) => setProductForm({ ...productForm, category: event.target.value })}
+                  onChange={(event) => updateProductCategory(event.target.value)}
                   placeholder="Kategori adı yazın"
                 />
               ) : (
                 <select
                   className="premium-input"
                   value={productForm.category}
-                  onChange={(event) => setProductForm({ ...productForm, category: event.target.value })}
+                  onChange={(event) => updateProductCategory(event.target.value)}
                 >
                   <option value="">Kategorisiz</option>
                   {categories.map((category) => (
@@ -737,6 +785,11 @@ export default function UrunlerPage() {
                 <span className="category-badge w-fit" style={getCategoryStyle(productForm.category)}>
                   {productForm.category}
                 </span>
+              )}
+              {!categoryManuallyEdited && productForm.category && (
+                <p className="text-xs font-semibold text-[color:var(--buneka-muted)]">
+                  Ürün adına göre otomatik kategori önerildi; isterseniz manuel değiştirebilirsiniz.
+                </p>
               )}
             </div>
 

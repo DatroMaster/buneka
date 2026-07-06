@@ -129,7 +129,7 @@ export function SectorPackageBuilder({
           </p>
         </div>
 
-        <div className="mt-5 grid gap-2 sm:grid-cols-2">
+        <div className="mt-5 grid grid-cols-2 gap-2">
           {plans.map((plan) => {
             const isRecommended = plan.name === recommendedPlan.name;
             const isSelected = plan.name === selectedPlan.name;
@@ -153,7 +153,7 @@ export function SectorPackageBuilder({
                   </span>
                 )}
                 <span className="block font-display text-base font-black">{plan.name}</span>
-                <span className="mt-1 block text-[11px] font-semibold leading-4">{plan.summary}</span>
+                <span className="mt-1 hidden text-[11px] font-semibold leading-4 sm:block">{plan.summary}</span>
               </button>
             );
           })}
@@ -164,13 +164,22 @@ export function SectorPackageBuilder({
             Seçilen model ve tahmini toplam
           </p>
           <div className="mt-1 flex flex-col gap-1">
-            <p className="font-display text-4xl font-black text-[color:var(--home-glow)]">{formatPrice(totalPrice)}</p>
+            <p className="font-display text-3xl font-black text-[color:var(--home-glow)] sm:text-4xl">{formatPrice(totalPrice)}</p>
             <p className="font-display text-xl font-black text-[color:var(--home-ink)]">{selectedPlan.name}</p>
             <p className="text-xs font-bold text-[color:var(--home-muted)]">
               {includesAllModules ? "TÃ¼m ek modÃ¼ller aktif" : `${selectedModules.length} ek modÃ¼l seÃ§ildi`}
             </p>
           </div>
         </div>
+
+        <a
+          href={whatsappLink(message)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="purchase-request-button mt-4"
+        >
+          <MessageCircle size={19} /> Sipariş Talebini Gönder
+        </a>
 
         <div className="mt-4 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface)]/55">
           <p className="mb-2 text-[11px] font-black uppercase tracking-[0.16em] text-[color:var(--home-muted)]">
@@ -294,14 +303,6 @@ export function SectorPackageBuilder({
           />
         </label>
 
-        <a
-          href={whatsappLink(message)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="purchase-request-button mt-4"
-        >
-          <MessageCircle size={19} /> Sipariş Talebini Gönder
-        </a>
       </section>
 
       <section className="package-detail-panel flex flex-col rounded-xl p-4 sm:p-5">

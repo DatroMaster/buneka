@@ -575,14 +575,16 @@
   gap: 0.65rem;
   overflow: hidden;
   border-radius: 0.85rem;
-  border: 1px solid color-mix(in srgb, #f5a623 44%, transparent);
-  background: var(--buneka-base);
+  border: 1px solid color-mix(in srgb, var(--buneka-accent) 20%, var(--buneka-border));
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--buneka-status) 16%, transparent) 0 3.25rem, transparent 3.25rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--buneka-accent) 6%, var(--buneka-panel)), var(--buneka-base));
   padding: 1rem 1.25rem 1rem 4.1rem;
   color: var(--buneka-accent);
   font-size: 1rem;
   font-weight: 950;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 20px 48px rgba(0, 0, 0, 0.32);
-  transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 18px 44px rgba(0, 0, 0, 0.28);
+  transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
 .purchase-request-button::before {
@@ -595,14 +597,17 @@
   transform: translateY(-50%);
   border-radius: 999px;
   background:
-    radial-gradient(circle, rgba(0, 255, 123, 0.92) 0 34%, rgba(0, 255, 123, 0.18) 35% 56%, transparent 57%),
-    var(--buneka-panel);
-  box-shadow: 0 0 30px rgba(0, 255, 123, 0.28);
+    radial-gradient(circle at 50% 50%, var(--buneka-accent) 0 26%, transparent 27%),
+    color-mix(in srgb, var(--buneka-status) 22%, var(--buneka-panel));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--buneka-accent) 18%, transparent), 0 0 26px color-mix(in srgb, var(--buneka-status) 18%, transparent);
 }
 
 .purchase-request-button:hover {
-  border-color: rgba(0, 255, 123, 0.7);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 22px 58px rgba(0, 255, 123, 0.12);
+  border-color: color-mix(in srgb, var(--buneka-status) 50%, var(--buneka-border));
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--buneka-status) 22%, transparent) 0 3.25rem, transparent 3.25rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--buneka-accent) 8%, var(--buneka-panel)), var(--buneka-base));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 22px 58px color-mix(in srgb, var(--buneka-status) 10%, transparent);
 }
 
 .purchase-request-button:active {
