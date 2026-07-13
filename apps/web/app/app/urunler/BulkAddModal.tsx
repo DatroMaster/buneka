@@ -112,6 +112,10 @@ function parseTrDate(value: string): string | null {
   return Number.isNaN(date.getTime()) ? null : date.toISOString();
 }
 
+function upperTr(value: string | null | undefined) {
+  return (value || "").toLocaleUpperCase("tr-TR");
+}
+
 export function BulkAddModal({
   open,
   onClose,
@@ -143,9 +147,10 @@ export function BulkAddModal({
   const validRows = rows.filter((row) => row.barcode.trim() && row.name.trim() && row.sale_price.trim());
 
   function updateCell(rowIndex: number, key: keyof BulkRow, value: string) {
+    const nextValue = key === "name" || key === "category" ? upperTr(value) : value;
     setRows((current) => {
-      const next = current.map((row, index) => (index === rowIndex ? { ...row, [key]: value } : row));
-      if (rowIndex === next.length - 1 && value.trim()) next.push(emptyRow());
+      const next = current.map((row, index) => (index === rowIndex ? { ...row, [key]: nextValue } : row));
+      if (rowIndex === next.length - 1 && nextValue.trim()) next.push(emptyRow());
       return next;
     });
   }
@@ -172,7 +177,10 @@ export function BulkAddModal({
         const row = { ...next[targetRow] };
         line.split("\t").forEach((cell, cellOffset) => {
           const key = COLS[colIndex + cellOffset];
-          if (key) row[key] = cell.trim();
+          if (key) {
+            const value = cell.trim();
+            row[key] = key === "name" || key === "category" ? upperTr(value) : value;
+          }
         });
         next[targetRow] = row;
       });
@@ -210,8 +218,8 @@ export function BulkAddModal({
         .slice(startIndex)
         .map((cells) => ({
           barcode: String(cells[0] ?? "").trim(),
-          name: String(cells[1] ?? "").trim(),
-          category: String(cells[2] ?? "").trim(),
+          name: upperTr(String(cells[1] ?? "").trim()),
+          category: upperTr(String(cells[2] ?? "").trim()),
           purchase_price: cells[3] != null && cells[3] !== "" ? String(cells[3]).trim() : "",
           sale_price: cells[4] != null && cells[4] !== "" ? String(cells[4]).trim() : "",
           stock_quantity: cells[5] != null && cells[5] !== "" ? String(cells[5]).trim() : "",
@@ -269,7 +277,7 @@ export function BulkAddModal({
       setRows([
         ...result.items.map((item) => ({
           barcode: item.barcode,
-          name: item.name,
+          name: upperTr(item.name),
           category: "",
           purchase_price: item.unitPrice ? String(item.unitPrice) : "",
           sale_price: "",
@@ -327,8 +335,8 @@ export function BulkAddModal({
       organization_id: organizationId,
       store_id: storeId,
       barcode: row.barcode.trim(),
-      name: row.name.trim(),
-      category: row.category.trim() || null,
+      name: upperTr(row.name.trim()),
+      category: row.category.trim() ? upperTr(row.category.trim()) : null,
       purchase_price: row.purchase_price.trim() ? Number(row.purchase_price) : null,
       sale_price: Number(row.sale_price),
       stock_quantity: row.stock_quantity.trim() ? Number(row.stock_quantity) : 0,
@@ -612,7 +620,9 @@ export function BulkAddModal({
                         inputMode={col.numeric ? "decimal" : undefined}
                         onChange={(event) => updateCell(rowIndex, col.key, event.target.value)}
                         onPaste={(event) => handlePaste(rowIndex, colIndex, event)}
-                        className="w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-sm text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50"
+                        className={`w-full rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-sm text-slate-950 placeholder-slate-400 focus:border-cyan-400 focus:outline-none dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-50 ${
+                          col.key === "name" || col.key === "category" ? "uppercase" : ""
+                        }`}
                       />
                     </td>
                   ))}

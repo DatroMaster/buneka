@@ -55,6 +55,10 @@ function normalizeCategory(category: string | null | undefined) {
   return (category || "").trim().toLocaleLowerCase("tr-TR").normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
 
+function upperTr(value: string | null | undefined) {
+  return (value || "").toLocaleUpperCase("tr-TR");
+}
+
 function getStockCategoryStyle(category: string | null | undefined): CSSProperties {
   const normalized = normalizeCategory(category);
   if (!normalized) return {};
@@ -463,11 +467,11 @@ export default function StokPage() {
                           onClick={() => movement.product_id && setSelectedHistoryProductId(movement.product_id)}
                           disabled={!movement.product_id}
                         >
-                          <div className="font-medium text-[#f4f7fb]">{movement.products?.name}</div>
+                          <div className="font-medium uppercase text-[#f4f7fb]">{upperTr(movement.products?.name)}</div>
                           <div className="font-mono text-xs text-[#f4f7fb]">{movement.products?.barcode}</div>
                           {movement.products?.category && (
                             <span className="stock-category-badge mt-2">
-                              {movement.products.category}
+                              {upperTr(movement.products.category)}
                             </span>
                           )}
                         </button>
@@ -510,7 +514,7 @@ export default function StokPage() {
             <div className="stock-history-header flex items-start justify-between gap-4 px-5 py-4">
               <div>
                 <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[#f4f7fb]">Ürün tarihçesi</p>
-                <h2 className="mt-1 font-display text-2xl font-black">{selectedHistoryRow.product.name}</h2>
+                <h2 className="mt-1 font-display text-2xl font-black uppercase">{upperTr(selectedHistoryRow.product.name)}</h2>
                 <p className="mt-1 font-mono text-xs font-semibold text-[#f4f7fb]">{selectedHistoryRow.product.barcode}</p>
               </div>
               <button
@@ -627,7 +631,7 @@ export default function StokPage() {
                   <option value="">Ürün seçin</option>
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
-                      {product.name} - {product.barcode}
+                      {upperTr(product.name)} - {product.barcode}
                     </option>
                   ))}
                 </select>

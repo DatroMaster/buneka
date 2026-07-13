@@ -86,6 +86,10 @@ function normalizeCategory(category: string) {
   return category.trim().toLocaleLowerCase("tr-TR").normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
 
+function upperTr(value: string | null | undefined) {
+  return (value || "").toLocaleUpperCase("tr-TR");
+}
+
 function getCategoryStyle(category: string | null): CSSProperties {
   if (!category) return {};
   const exact = category.trim().toLocaleLowerCase("tr-TR");
@@ -274,23 +278,24 @@ export default function UrunlerPage() {
   }
 
   function updateProductName(name: string) {
-    const suggestedCategory = categoryManuallyEdited ? "" : suggestCategory(name, categories);
+    const upperName = upperTr(name);
+    const suggestedCategory = categoryManuallyEdited ? "" : suggestCategory(upperName, categories);
     setProductForm((current) => {
       const nextForm = {
         ...current,
-        name,
-        category: suggestedCategory || current.category,
+        name: upperName,
+        category: suggestedCategory ? upperTr(suggestedCategory) : current.category,
       };
       return withSuggestedSalePrice(nextForm);
     });
     if (suggestedCategory) {
-      setNewCategory(!categories.includes(suggestedCategory));
+      setNewCategory(!categories.some((category) => normalizeCategory(category) === normalizeCategory(suggestedCategory)));
     }
   }
 
   function updateProductCategory(category: string) {
     setCategoryManuallyEdited(true);
-    setProductForm((current) => ({ ...current, category }));
+    setProductForm((current) => ({ ...current, category: upperTr(category) }));
   }
 
   function openNewProduct() {
@@ -308,8 +313,8 @@ export default function UrunlerPage() {
     setEditingProductId(product.id);
     setProductForm({
       barcode: product.barcode,
-      name: product.name,
-      category: product.category || "",
+      name: upperTr(product.name),
+      category: upperTr(product.category),
       purchase_currency: purchaseCurrency,
       purchase_price:
         product.purchase_currency === "USD" && product.purchase_price_original != null
@@ -321,7 +326,9 @@ export default function UrunlerPage() {
       stock_quantity: String(product.stock_quantity),
       min_stock: String(product.min_stock),
     });
-    setNewCategory(!!product.category && !categories.includes(product.category));
+    setNewCategory(
+      !!product.category && !categories.some((category) => normalizeCategory(category) === normalizeCategory(product.category || ""))
+    );
     setCategoryManuallyEdited(true);
     setUsdRate(null);
     setAutoProfitEnabled(false);
@@ -375,8 +382,8 @@ export default function UrunlerPage() {
 
     const payload = {
       barcode: productForm.barcode.trim(),
-      name: productForm.name.trim(),
-      category: productForm.category.trim() || null,
+      name: upperTr(productForm.name.trim()),
+      category: productForm.category.trim() ? upperTr(productForm.category.trim()) : null,
       purchase_currency: productForm.purchase_currency,
       purchase_price: purchasePriceTry,
       purchase_price_original: purchasePriceOriginal,
@@ -700,7 +707,7 @@ export default function UrunlerPage() {
               <option value="">Tüm kategoriler</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
-                  {category}
+                  {upperTr(category)}
                 </option>
               ))}
             </select>
@@ -740,12 +747,12 @@ export default function UrunlerPage() {
                     onClick={() => openEditProduct(product)}
                   >
                     <td className="px-6 py-4">
-                      <div className="font-medium text-slate-950 dark:text-slate-50">{product.name}</div>
+                      <div className="font-medium uppercase text-slate-950 dark:text-slate-50">{upperTr(product.name)}</div>
                       <div className="font-mono text-xs text-slate-500 dark:text-slate-400">{product.barcode}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="category-badge" style={getCategoryStyle(product.category)}>
-                        {product.category || "-"}
+                        {product.category ? upperTr(product.category) : "-"}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right text-sm text-slate-500 dark:text-slate-400">
@@ -825,14 +832,14 @@ export default function UrunlerPage() {
                   <option value="">Kategorisiz</option>
                   {categories.map((category) => (
                     <option key={category} value={category}>
-                      {category}
+                      {upperTr(category)}
                     </option>
                   ))}
                 </select>
               )}
               {productForm.category && (
                 <span className="category-badge w-fit" style={getCategoryStyle(productForm.category)}>
-                  {productForm.category}
+                  {upperTr(productForm.category)}
                 </span>
               )}
               {!categoryManuallyEdited && productForm.category && (
@@ -972,7 +979,7 @@ export default function UrunlerPage() {
                   <option value="">Tüm kategoriler</option>
                   {categories.map((category) => (
                     <option key={category} value={category}>
-                      {category}
+                      {upperTr(category)}
                     </option>
                   ))}
                 </select>
