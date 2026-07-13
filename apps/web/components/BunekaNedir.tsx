@@ -243,7 +243,7 @@ function SceneSolution() {
       </div>
       <SceneTag tone="solution" label="Çözüm" />
       <h3 className="font-display max-w-[18rem] break-words px-1 text-lg font-bold leading-tight text-[color:var(--home-ink)] sm:max-w-sm sm:text-2xl">
-        Barkodu okut. Fiyatı gör. <span className="text-[color:var(--home-glow)]">Satış hareketlerini takip et.</span>
+        Barkodu okut. Fiyatı gör. <span className="text-[color:var(--home-glow)]">Satışlarını gör.</span>
       </h3>
       <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-bold text-[color:var(--home-muted)]">
         <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--home-border)] px-2.5 py-1">
@@ -355,7 +355,7 @@ export function BunekaExplainerCard() {
             {[
               ['1', 'Barkodu okut'],
               ['2', 'Fiyatı gör'],
-              ['3', 'Satış hareketlerini takip et'],
+              ['3', 'Satışlarını gör'],
             ].map(([step, label]) => (
               <div key={step} className="flex items-center gap-2 rounded-xl border border-[color:var(--home-border)] bg-[color:var(--home-surface-soft)] px-3 py-2.5">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[color:var(--home-glow)] text-xs font-black text-slate-950">

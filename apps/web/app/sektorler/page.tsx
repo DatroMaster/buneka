@@ -9,8 +9,12 @@ import { SectorAccordionExplorer } from "@/components/SectorAccordionExplorer";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata = {
-  title: "Sektörler | Buneka",
-  description: "Buneka'nın desteklediği sektör ve firma kategorilerini inceleyin.",
+  title: "Sektörlere Göre Barkodlu Fiyat ve Stok Takibi",
+  description:
+    "Market, kırtasiye, petshop, giyim, hırdavat ve diğer küçük işletmeler için Buneka barkodlu fiyat görme, kasa ve stok takip çözümlerini inceleyin.",
+  alternates: {
+    canonical: "/sektorler",
+  },
 };
 
 export default function SektorlerPage() {

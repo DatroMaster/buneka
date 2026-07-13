@@ -8,8 +8,12 @@ import { PublicPanelLink } from "@/components/PublicPanelLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata = {
-  title: "Ek Modüller | Buneka",
-  description: "Buneka lisansınıza ekleyebileceğiniz tüm ek modüller ve yıllık ücretleri.",
+  title: "Ek Modüller",
+  description:
+    "Buneka lisansınıza ekleyebileceğiniz Excel toplu ürün aktarımı, raf etiketi, veresiye, bulut yedekleme ve özel işletme modüllerini inceleyin.",
+  alternates: {
+    canonical: "/ek-moduller",
+  },
 };
 
 export default function EkModullerPage() {

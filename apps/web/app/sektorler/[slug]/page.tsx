@@ -28,8 +28,11 @@ export async function generateMetadata({ params }: SectorPageProps) {
   }
 
   return {
-    title: `${sector.title} | Buneka Sektör Paketi`,
-    description: sector.short,
+    title: `${sector.title} İçin Fiyat, Kasa ve Stok Takibi`,
+    description: `${sector.title} işletmeleri için barkodlu fiyat görme, satış kayıtlarını görme, günlük kasa ve stok takibi. ${sector.short}`,
+    alternates: {
+      canonical: `/sektorler/${sector.slug}`,
+    },
   };
 }
 

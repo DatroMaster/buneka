@@ -103,7 +103,7 @@ export const sectors: Sector[] = [
     icon: Scissors,
     title: "Kuaför Yan Satış",
     short: "Şampuan, bakım ürünü ve küçük raf satışları.",
-    headline: "Hizmet yanında ürün satışını görünür yap.",
+    headline: "Hizmet yanında ürün satışlarını görünür yap.",
     description:
       "Kuaför ve güzellik işletmeleri küçük raf ürünlerini de takip edebilir. Buneka fiyatı ve satış kaydını basit tutar.",
     features: ["Hızlı ürün ekleme", "Günlük satış özeti", "Stokta kalan", "Basit kategori takibi"],

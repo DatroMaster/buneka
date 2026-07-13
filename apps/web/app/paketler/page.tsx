@@ -24,8 +24,12 @@ import { hardwareOptions } from "@/lib/content/hardware";
 import { plans } from "@/lib/content/plans";
 
 export const metadata = {
-  title: "Paketler | Buneka",
-  description: "Buneka lisans paketlerinin tüm özelliklerini karşılaştırın.",
+  title: "Paketler ve Fiyatlar",
+  description:
+    "Buneka barkodlu fiyat görme, kasa, stok ve patron paketlerini karşılaştırın. Küçük işletmeniz için uygun lisans ve ek modülleri seçin.",
+  alternates: {
+    canonical: "/paketler",
+  },
 };
 
 const PLAN_CODES: Record<string, "PRICE" | "CASH" | "STOCK" | "PATRON"> = {

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { HelpCenterClient } from "@/components/HelpCenterClient";
 
 export const metadata: Metadata = {
-  title: "Buneka Kullanıcı Rehberi, Barkod Okutma, Fiyat Sorgulama, Stok ve Kasa Takibi",
+  title: "Kullanıcı Rehberi",
   description:
-    "Buneka ile barkod okutma, fiyat sorgulama, ürün ekleme, günlük kasa, stok takibi, veresiye defteri, Excel aktarımı ve lisans ayarlarını adım adım öğrenin.",
+    "Buneka ile barkod okutma, fiyat görme, ürün ekleme, günlük kasa, stok takibi, veresiye defteri, Excel aktarımı ve lisans ayarlarını adım adım öğrenin.",
   alternates: {
     canonical: "/kullanici-rehberi",
   },

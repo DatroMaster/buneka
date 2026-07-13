@@ -1,0 +1,43 @@
+# Buneka
+
+Buneka, küçük işletmeler için barkodlu fiyat görme, günlük kasa, stok takibi, satış kayıtlarını görme, veresiye ve toplu ürün yönetimi sunan web tabanlı işletme takip sistemidir.
+
+## Kısa Tanım
+
+Buneka ile işletme çalışanı barkodu okutur, ürün fiyatını hızlıca görür, satış olduysa kaydeder ve gün sonunda kasa ile stok hareketlerini tek ekrandan izler.
+
+## Kimler İçin?
+
+- Market ve bakkal
+- Kırtasiye
+- Petshop
+- Giyim mağazası
+- Hırdavat
+- Züccaciye ve ev eşyası
+- Oyuncakçı
+- Şarküteri ve manav
+- Kuaför ve yan ürün satışı yapan işletmeler
+
+## Temel Özellikler
+
+- Barkodla fiyat görme
+- Ürün ve kategori yönetimi
+- Satış kayıtlarını görme
+- Günlük kasa özeti
+- Stok hareketleri ve minimum stok uyarısı
+- Veresiye ve cari müşteri takibi
+- Excel ile toplu ürün aktarımı
+- Dolar bazlı ürünlerde güncel kurla fiyat güncelleme
+- Barkod okuyucu ve Android el terminali opsiyonu
+
+## Önemli Sayfalar
+
+- Ana sayfa: https://buneka.com/
+- Paketler: https://buneka.com/paketler
+- Sektörler: https://buneka.com/sektorler
+- Ek modüller: https://buneka.com/ek-moduller
+- Kullanıcı rehberi: https://buneka.com/kullanici-rehberi
+
+## Not
+
+Buneka resmi yazarkasa veya mali belge sistemi değildir. Küçük işletmelerin fiyat, satış, stok ve operasyon hafızasını düzenleyen pratik bir takip sistemidir.

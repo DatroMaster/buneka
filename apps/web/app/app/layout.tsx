@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrencyRates } from "@/lib/currency/tcmb";
 import AppShell from "./AppShell";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Yönetim Platformu",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function AppLayout({
   children,

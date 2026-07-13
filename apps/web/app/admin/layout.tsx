@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AdminShell from "./AdminShell";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Admin Paneli",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const ADMIN_ROLES = ["super_admin", "admin_staff"];
 

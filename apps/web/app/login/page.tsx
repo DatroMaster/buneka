@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Home, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { BunekaMark } from "@/components/BunekaMark";
@@ -5,6 +6,14 @@ import { BunekaNedirButton } from "@/components/BunekaNedir";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { login } from "./actions";
+
+export const metadata: Metadata = {
+  title: "Sisteme Giriş",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function LoginPage({
   searchParams,
