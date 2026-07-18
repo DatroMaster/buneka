@@ -1,7 +1,7 @@
 "use client";
 
 import type { Tables } from "@buneka/database";
-import { Activity, BarChart3, Boxes, HandCoins, Package, ScanBarcode, TrendingUp, WalletCards } from "lucide-react";
+import { Activity, Banknote, BarChart3, Boxes, CreditCard, HandCoins, Package, ScanBarcode, TrendingUp, WalletCards } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { PageHeader } from "../_components/PageHeader";
@@ -23,6 +23,8 @@ export default function KasaPage() {
   const [stats, setStats] = useState({
     totalAmount: 0,
     totalProfit: 0,
+    cashAmount: 0,
+    cardAmount: 0,
     itemCount: 0,
     queryCount: 0,
   });
@@ -69,11 +71,19 @@ export default function KasaPage() {
         const typedSales = salesData as SaleWithItems[];
         let amount = 0;
         let profit = 0;
+        let cashAmount = 0;
+        let cardAmount = 0;
         let items = 0;
 
         typedSales.forEach((sale) => {
-          amount += Number(sale.total_amount);
+          const saleAmount = Number(sale.total_amount);
+          amount += saleAmount;
           profit += Number(sale.total_profit);
+          if (sale.payment_type === "card") {
+            cardAmount += saleAmount;
+          } else {
+            cashAmount += saleAmount;
+          }
           sale.sale_items?.forEach((item) => {
             items += Number(item.quantity);
           });
@@ -83,6 +93,8 @@ export default function KasaPage() {
         setStats({
           totalAmount: amount,
           totalProfit: profit,
+          cashAmount,
+          cardAmount,
           itemCount: items,
           queryCount: queryCount || 0,
         });
@@ -106,6 +118,11 @@ export default function KasaPage() {
     return { day, time };
   };
 
+  const formatPaymentType = (paymentType: string | null) => {
+    if (paymentType === "card") return "Kartlı";
+    return "Nakit";
+  };
+
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -127,8 +144,10 @@ export default function KasaPage() {
         ]}
       />
 
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-6">
         <StatCard icon={WalletCards} label="Toplam Kasa" value={formatMoney(stats.totalAmount)} tone="primary" />
+        <StatCard icon={Banknote} label="Nakit Satış" value={formatMoney(stats.cashAmount)} tone="green" />
+        <StatCard icon={CreditCard} label="Kartlı Satış" value={formatMoney(stats.cardAmount)} tone="primary" />
         <StatCard icon={TrendingUp} label="Tahmini Kâr" value={formatMoney(stats.totalProfit)} tone="green" />
         <StatCard icon={Package} label="Satılan Ürün" value={`${stats.itemCount} Adet`} tone="amber" />
         <StatCard icon={Activity} label="Toplam Sorgu" value={`${stats.queryCount} Kez`} tone="primary" />
@@ -169,7 +188,7 @@ export default function KasaPage() {
                       ))}
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
-                      {sale.payment_type === "cash" ? "Nakit" : sale.payment_type}
+                      {formatPaymentType(sale.payment_type)}
                     </td>
                     <td className="px-6 py-4 text-right font-bold text-emerald-600 dark:text-emerald-400">
                       {formatMoney(Number(sale.total_amount))}

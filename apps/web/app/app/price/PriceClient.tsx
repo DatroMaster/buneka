@@ -2,8 +2,9 @@
 
 import type { Tables } from "@buneka/database";
 import {
+  Banknote,
   Camera,
-  CheckCircle2,
+  CreditCard,
   Loader2,
   PackagePlus,
   RotateCcw,
@@ -57,10 +58,10 @@ export function PriceClient() {
     void lookup(barcode);
   }
 
-  async function handleSale() {
+  async function handleSale(paymentType: "cash" | "card") {
     if (!product) return;
     setLoading(true);
-    const result = await recordSale(product.id, product.sale_price);
+    const result = await recordSale(product.id, product.sale_price, paymentType);
     setLoading(false);
 
     if (result?.error) {
@@ -68,7 +69,7 @@ export function PriceClient() {
       return;
     }
 
-    setMessage("Satış kaydedildi.");
+    setMessage(`${paymentType === "card" ? "Kartlı" : "Nakit"} satış kaydedildi.`);
     resetResult();
   }
 
@@ -163,10 +164,19 @@ export function PriceClient() {
                   Barkod: {product.barcode}
                 </span>
               </div>
-              <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-                <button className="action-sale min-h-16 px-8 text-xl" type="button" onClick={handleSale} disabled={loading}>
-                  {loading ? <Loader2 className="animate-spin" size={24} /> : <CheckCircle2 size={24} />}
-                  <span>Satış Yap</span>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <button className="action-sale min-h-16 px-6 text-lg" type="button" onClick={() => handleSale("cash")} disabled={loading}>
+                  {loading ? <Loader2 className="animate-spin" size={24} /> : <Banknote size={24} />}
+                  <span>Nakit Satış</span>
+                </button>
+                <button
+                  className="inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-6 text-lg font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                  type="button"
+                  onClick={() => handleSale("card")}
+                  disabled={loading}
+                >
+                  {loading ? <Loader2 className="animate-spin" size={24} /> : <CreditCard size={24} />}
+                  <span>Kartlı Satış</span>
                 </button>
                 <button className="action-no-sale min-h-16 px-8 text-xl" type="button" onClick={resetResult}>
                   <RotateCcw size={24} />

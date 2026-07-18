@@ -45,7 +45,7 @@ export async function lookupProduct(barcode: string) {
   return { product: null };
 }
 
-export async function recordSale(productId: string, price: number) {
+export async function recordSale(productId: string, price: number, paymentType: "cash" | "card" = "cash") {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -67,7 +67,7 @@ export async function recordSale(productId: string, price: number) {
       store_id: appUser.store_id,
       user_id: appUser.id,
       total_amount: price,
-      payment_type: "cash",
+      payment_type: paymentType,
     })
     .select("id")
     .single();

@@ -3,7 +3,9 @@
 import type { Tables } from "@buneka/database";
 import {
   AlertCircle,
+  Banknote,
   CheckCircle2,
+  CreditCard,
   Home,
   Loader2,
   Minus,
@@ -25,13 +27,14 @@ import { useCart } from "./CartContext";
 
 type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
 type Product = Tables<"products">;
+type PaymentType = "cash" | "card";
 
 export default function FiyatSorgulaPage() {
   const [barcode, setBarcode] = useState("");
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [stats, setStats] = useState({ queries: 0, sales: 0, revenue: 0 });
+  const [stats, setStats] = useState({ queries: 0, sales: 0, revenue: 0, cashRevenue: 0, cardRevenue: 0 });
   const [appUser, setAppUser] = useState<AppUser | null>(null);
   const [organizationName, setOrganizationName] = useState("Buneka");
   const [isPriceOpen, setIsPriceOpen] = useState(false);
@@ -69,7 +72,7 @@ export default function FiyatSorgulaPage() {
         .gte("queried_at", today.toISOString()),
       supabase
         .from("sales")
-        .select("total_amount")
+        .select("total_amount, payment_type")
         .eq("organization_id", currentUser.organization_id)
         .gte("sale_time", today.toISOString()),
       supabase
@@ -84,6 +87,10 @@ export default function FiyatSorgulaPage() {
       queries: queryCount || 0,
       sales: salesData?.length || 0,
       revenue: salesData?.reduce((acc, sale) => acc + Number(sale.total_amount), 0) || 0,
+      cashRevenue:
+        salesData?.reduce((acc, sale) => acc + (sale.payment_type === "card" ? 0 : Number(sale.total_amount)), 0) || 0,
+      cardRevenue:
+        salesData?.reduce((acc, sale) => acc + (sale.payment_type === "card" ? Number(sale.total_amount) : 0), 0) || 0,
     });
   }, [supabase]);
 
@@ -126,7 +133,7 @@ export default function FiyatSorgulaPage() {
     setLoading(false);
   }
 
-  async function handleSale() {
+  async function handleSale(paymentType: PaymentType) {
     if (!product || !appUser) return;
 
     const profit = product.sale_price - (product.purchase_price || 0);
@@ -139,7 +146,7 @@ export default function FiyatSorgulaPage() {
         user_id: appUser.id,
         total_amount: product.sale_price,
         total_profit: profit,
-        payment_type: "cash",
+        payment_type: paymentType,
       })
       .select()
       .single();
@@ -286,7 +293,7 @@ export default function FiyatSorgulaPage() {
     receiptWindow.document.close();
   }
 
-  async function handleCartCheckout() {
+  async function handleCartCheckout(paymentType: PaymentType) {
     if (!appUser || cart.length === 0 || checkingOut) return;
 
     setCheckingOut(true);
@@ -305,7 +312,7 @@ export default function FiyatSorgulaPage() {
         user_id: appUser.id,
         total_amount: cartTotal,
         total_profit: totalProfit,
-        payment_type: "cash",
+        payment_type: paymentType,
       })
       .select()
       .single();
@@ -350,7 +357,7 @@ export default function FiyatSorgulaPage() {
 
     clearCart();
     setCheckingOut(false);
-    setCartMessage("Sepet satışı tamamlandı.");
+    setCartMessage(`Sepet ${paymentType === "card" ? "kartlı" : "nakit"} satış olarak tamamlandı.`);
     await loadUserAndStats();
     inputRef.current?.focus();
   }
@@ -435,9 +442,11 @@ export default function FiyatSorgulaPage() {
               <p className="text-sm font-semibold text-stone-400">Barkodu okutun veya yazın.</p>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center text-[11px] font-black text-stone-400">
+          <div className="grid grid-cols-2 gap-2 text-center text-[11px] font-black text-stone-400 sm:grid-cols-5">
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{stats.sales}</b>Satış</span>
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{formatMoney(stats.revenue)}</b>Kasa</span>
+            <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-emerald-300">{formatMoney(stats.cashRevenue)}</b>Nakit</span>
+            <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-cyan-200">{formatMoney(stats.cardRevenue)}</b>Kart</span>
             <span className="rounded-xl border border-white/10 px-3 py-2"><b className="block text-[#f4f7fb]">{stats.queries}</b>Sorgu</span>
           </div>
         </div>
@@ -492,18 +501,21 @@ export default function FiyatSorgulaPage() {
                   {product.stock_quantity} Adet
                 </span>
               </div>
-              <div className="grid gap-3 sm:grid-cols-3">
-                <button onClick={handleSale} className="action-sale min-h-14 w-full px-4 py-4 text-lg" type="button">
-                  <CheckCircle2 size={24} /> Satış Yap
+              <div className="grid gap-3 sm:grid-cols-4">
+                <button onClick={() => handleSale("cash")} className="action-sale min-h-14 w-full px-4 py-4 text-base" type="button">
+                  <Banknote size={22} /> Nakit Satış
+                </button>
+                <button onClick={() => handleSale("card")} className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-4 text-base font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95" type="button">
+                  <CreditCard size={22} /> Kartlı Satış
                 </button>
                 <button
                   onClick={addToCart}
-                  className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-emerald-300/35 bg-emerald-300/10 px-4 py-4 text-lg font-black text-emerald-100 transition hover:border-emerald-300 hover:bg-emerald-300/18 active:scale-95"
+                  className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-emerald-300/35 bg-emerald-300/10 px-4 py-4 text-base font-black text-emerald-100 transition hover:border-emerald-300 hover:bg-emerald-300/18 active:scale-95"
                   type="button"
                 >
-                  <ShoppingCart size={24} /> Sepete Ekle
+                  <ShoppingCart size={22} /> Sepete Ekle
                 </button>
-                <button onClick={handleCancel} className="action-no-sale min-h-14 w-full px-4 py-4 text-lg" type="button">
+                <button onClick={handleCancel} className="action-no-sale min-h-14 w-full px-4 py-4 text-base" type="button">
                   Satış Yok
                 </button>
               </div>
@@ -594,12 +606,21 @@ export default function FiyatSorgulaPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={handleCartCheckout}
+                    onClick={() => handleCartCheckout("cash")}
                     disabled={checkingOut}
                     className="action-sale min-h-12 w-full px-4 py-3"
                   >
                     {checkingOut ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={20} />}
-                    Sepeti Satışa Çevir
+                    Sepeti Nakit Satışa Çevir
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCartCheckout("card")}
+                    disabled={checkingOut}
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-3 text-sm font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {checkingOut ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={20} />}
+                    Sepeti Kartlı Satışa Çevir
                   </button>
                   <button
                     type="button"
