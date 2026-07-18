@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { useLicenseAccess } from "../LicenseAccessContext";
 import { lookupProduct, recordSale } from "./actions";
 
 type Product = Tables<"products">;
@@ -30,6 +31,8 @@ export function PriceClient() {
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [message, setMessage] = useState("");
+  const { hasFeature } = useLicenseAccess();
+  const canCreateSale = hasFeature("sale_create");
 
   async function lookup(nextBarcode: string) {
     const cleanBarcode = nextBarcode.trim();
@@ -60,6 +63,10 @@ export function PriceClient() {
 
   async function handleSale(paymentType: "cash" | "card") {
     if (!product) return;
+    if (!canCreateSale) {
+      setMessage("Satış kaydı için Buneka Kasa veya üst paket gerekir.");
+      return;
+    }
     setLoading(true);
     const result = await recordSale(product.id, product.sale_price, paymentType);
     setLoading(false);
@@ -165,7 +172,7 @@ export function PriceClient() {
                 </span>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
-                <button className="action-sale min-h-16 px-6 text-lg" type="button" onClick={() => handleSale("cash")} disabled={loading}>
+                <button className="action-sale min-h-16 px-6 text-lg disabled:cursor-not-allowed disabled:opacity-45" type="button" onClick={() => handleSale("cash")} disabled={loading || !canCreateSale}>
                   {loading ? <Loader2 className="animate-spin" size={24} /> : <Banknote size={24} />}
                   <span>Nakit Satış</span>
                 </button>
@@ -173,7 +180,7 @@ export function PriceClient() {
                   className="inline-flex min-h-16 items-center justify-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-6 text-lg font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                   type="button"
                   onClick={() => handleSale("card")}
-                  disabled={loading}
+                  disabled={loading || !canCreateSale}
                 >
                   {loading ? <Loader2 className="animate-spin" size={24} /> : <CreditCard size={24} />}
                   <span>Kartlı Satış</span>

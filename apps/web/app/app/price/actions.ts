@@ -1,5 +1,6 @@
 "use server";
 
+import { getFeatureCodesForPlan } from "@/lib/licensing/access";
 import { createClient } from "../../../lib/supabase/server";
 
 export async function lookupProduct(barcode: string) {
@@ -58,6 +59,34 @@ export async function recordSale(productId: string, price: number, paymentType: 
     .single();
 
   if (!appUser) return { error: "No user found" };
+
+  const today = new Date().toISOString().slice(0, 10);
+  const [{ data: activeLicense }, { data: saleEntitlement }] = await Promise.all([
+    supabase
+      .from("licenses")
+      .select("plans(code)")
+      .eq("organization_id", appUser.organization_id)
+      .eq("status", "active")
+      .lte("starts_at", today)
+      .gte("expires_at", today)
+      .order("expires_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("entitlements")
+      .select("id")
+      .eq("organization_id", appUser.organization_id)
+      .eq("feature_code", "sale_create")
+      .eq("is_enabled", true)
+      .or(`expires_at.is.null,expires_at.gte.${today}`)
+      .limit(1)
+      .maybeSingle(),
+  ]);
+
+  const planRelation = activeLicense?.plans as { code: string | null } | null | undefined;
+  if (!saleEntitlement && !getFeatureCodesForPlan(planRelation?.code).includes("sale_create")) {
+    return { error: "Satış kaydı için Buneka Kasa veya üst paket gerekir." };
+  }
 
   // Create sale
   const { data: sale, error: saleError } = await supabase

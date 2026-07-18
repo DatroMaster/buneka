@@ -24,6 +24,7 @@ import { BunekaMark } from "@/components/BunekaMark";
 import { BunekaWordmark } from "@/components/BunekaWordmark";
 import { createClient } from "@/lib/supabase/client";
 import { useCart } from "./CartContext";
+import { useLicenseAccess } from "./LicenseAccessContext";
 
 type AppUser = Pick<Tables<"app_users">, "id" | "organization_id" | "store_id">;
 type Product = Tables<"products">;
@@ -43,6 +44,8 @@ export default function FiyatSorgulaPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const supabase = useMemo(() => createClient(), []);
   const { cart, addToCart: addProductToCart, updateCartQuantity, removeFromCart, clearCart } = useCart();
+  const { hasFeature } = useLicenseAccess();
+  const canCreateSale = hasFeature("sale_create");
 
   const loadUserAndStats = useCallback(async () => {
     const {
@@ -135,6 +138,10 @@ export default function FiyatSorgulaPage() {
 
   async function handleSale(paymentType: PaymentType) {
     if (!product || !appUser) return;
+    if (!canCreateSale) {
+      setCartMessage("Satış kaydı için Buneka Kasa veya üst paket gerekir.");
+      return;
+    }
 
     const profit = product.sale_price - (product.purchase_price || 0);
 
@@ -295,6 +302,10 @@ export default function FiyatSorgulaPage() {
 
   async function handleCartCheckout(paymentType: PaymentType) {
     if (!appUser || cart.length === 0 || checkingOut) return;
+    if (!canCreateSale) {
+      setCartMessage("Sepeti satışa çevirmek için Buneka Kasa veya üst paket gerekir.");
+      return;
+    }
 
     setCheckingOut(true);
     setCartMessage("");
@@ -502,10 +513,10 @@ export default function FiyatSorgulaPage() {
                 </span>
               </div>
               <div className="grid gap-3 sm:grid-cols-4">
-                <button onClick={() => handleSale("cash")} className="action-sale min-h-14 w-full px-4 py-4 text-base" type="button">
+                <button onClick={() => handleSale("cash")} disabled={!canCreateSale} className="action-sale min-h-14 w-full px-4 py-4 text-base disabled:cursor-not-allowed disabled:opacity-45" type="button">
                   <Banknote size={22} /> Nakit Satış
                 </button>
-                <button onClick={() => handleSale("card")} className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-4 text-base font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95" type="button">
+                <button onClick={() => handleSale("card")} disabled={!canCreateSale} className="inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-4 text-base font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95 disabled:cursor-not-allowed disabled:opacity-45" type="button">
                   <CreditCard size={22} /> Kartlı Satış
                 </button>
                 <button
@@ -607,7 +618,7 @@ export default function FiyatSorgulaPage() {
                   <button
                     type="button"
                     onClick={() => handleCartCheckout("cash")}
-                    disabled={checkingOut}
+                    disabled={checkingOut || !canCreateSale}
                     className="action-sale min-h-12 w-full px-4 py-3"
                   >
                     {checkingOut ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={20} />}
@@ -616,7 +627,7 @@ export default function FiyatSorgulaPage() {
                   <button
                     type="button"
                     onClick={() => handleCartCheckout("card")}
-                    disabled={checkingOut}
+                    disabled={checkingOut || !canCreateSale}
                     className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-3 text-sm font-black text-cyan-100 transition hover:border-cyan-300 hover:bg-cyan-300/18 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {checkingOut ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={20} />}

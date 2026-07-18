@@ -5,6 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import { Building2, KeyRound, Loader2, Plus, Search, ShieldCheck, UserCheck, UserCog, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { getFeatureCodesForPlan, getFeatureLabels } from "@/lib/licensing/access";
 import { PageHeader } from "@/app/app/_components/PageHeader";
 import { EmptyState } from "@/app/app/_components/EmptyState";
 import { createLoginAccountAction, createOrganizationAction, updateOrganizationStatusAction } from "./actions";
@@ -12,7 +13,7 @@ import { createLoginAccountAction, createOrganizationAction, updateOrganizationS
 type Organization = Tables<"organizations">;
 type AppUser = Tables<"app_users">;
 type Plan = Tables<"plans">;
-type LicenseWithPlan = Tables<"licenses"> & { plans: Pick<Tables<"plans">, "name"> | null };
+type LicenseWithPlan = Tables<"licenses"> & { plans: Pick<Tables<"plans">, "name" | "code"> | null };
 
 const STATUS_LABEL: Record<string, string> = {
   active: "Aktif",
@@ -31,6 +32,7 @@ export default function AdminCustomersPage() {
   const [search, setSearch] = useState("");
   const [message, setMessage] = useState("");
   const [showNew, setShowNew] = useState(false);
+  const [newPlanId, setNewPlanId] = useState("");
   const [accountOrgId, setAccountOrgId] = useState<string | null>(null);
   const [accountEmail, setAccountEmail] = useState("");
   const [accountPassword, setAccountPassword] = useState("");
@@ -48,7 +50,7 @@ export default function AdminCustomersPage() {
     const [{ data: orgs }, { data: appUsers }, { data: licenseRows }, { data: planRows }] = await Promise.all([
       supabase.from("organizations").select("*").order("created_at", { ascending: false }),
       supabase.from("app_users").select("*"),
-      supabase.from("licenses").select("*, plans(name)").order("expires_at", { ascending: false }),
+      supabase.from("licenses").select("*, plans(name, code)").order("expires_at", { ascending: false }),
       supabase.from("plans").select("*").order("annual_price"),
     ]);
 
@@ -76,6 +78,8 @@ export default function AdminCustomersPage() {
   const activeCustomerCount = organizations.filter((org) => org.status === "active").length;
   const activeLicenseCount = organizations.filter((org) => licenseFor(org.id)).length;
   const loginAccountCount = users.filter((user) => user.auth_user_id).length;
+  const selectedNewPlan = plans.find((plan) => plan.id === newPlanId);
+  const selectedAccountPlan = plans.find((plan) => plan.id === accountPlanId);
 
   async function handleCreate(formData: FormData) {
     setSaving(true);
@@ -86,6 +90,7 @@ export default function AdminCustomersPage() {
     } else {
       setMessage("İşletme eklendi.");
       setShowNew(false);
+      setNewPlanId("");
       await loadData();
     }
     setSaving(false);
@@ -216,7 +221,16 @@ export default function AdminCustomersPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
-                        {license ? license.plans?.name : "-"}
+                        {license ? (
+                          <div>
+                            <div className="font-bold text-slate-950 dark:text-slate-50">{license.plans?.name}</div>
+                            <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                              {getFeatureLabels(getFeatureCodesForPlan(license.plans?.code)).slice(0, 3).join(" · ")}
+                            </div>
+                          </div>
+                        ) : (
+                          "-"
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <select
@@ -267,7 +281,12 @@ export default function AdminCustomersPage() {
               <p className="text-sm font-black text-slate-950 dark:text-slate-50">İlk lisans / hesap süresi</p>
               <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
                 Paket
-                <select className="premium-input" name="plan_id">
+                <select
+                  className="premium-input"
+                  name="plan_id"
+                  value={newPlanId}
+                  onChange={(event) => setNewPlanId(event.target.value)}
+                >
                   <option value="">Lisansı sonra ata</option>
                   {plans.map((plan) => (
                     <option key={plan.id} value={plan.id}>
@@ -276,6 +295,7 @@ export default function AdminCustomersPage() {
                   ))}
                 </select>
               </label>
+              {selectedNewPlan && <PlanFeaturePreview plan={selectedNewPlan} />}
               <div className="grid grid-cols-2 gap-3">
                 <DateField name="starts_at" label="Başlangıç" />
                 <DateField name="expires_at" label="Bitiş" plusDays={365} />
@@ -333,6 +353,7 @@ export default function AdminCustomersPage() {
                   ))}
                 </select>
               </label>
+              {selectedAccountPlan && <PlanFeaturePreview plan={selectedAccountPlan} />}
               <div className="grid grid-cols-2 gap-3">
                 <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
                   Başlangıç
@@ -386,6 +407,25 @@ function AdminStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; l
         <p className="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</p>
         <p className="mt-1 font-display text-2xl font-black text-slate-950 dark:text-slate-50">{value}</p>
         <p className="text-xs text-slate-500 dark:text-slate-400">{hint}</p>
+      </div>
+    </div>
+  );
+}
+
+function PlanFeaturePreview({ plan }: { plan: Plan }) {
+  const labels = getFeatureLabels(getFeatureCodesForPlan(plan.code));
+
+  return (
+    <div className="rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.08] p-4">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-300">
+        Bu paketle açılacak özellikler
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {labels.map((label) => (
+          <span key={label} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-bold text-slate-200">
+            {label}
+          </span>
+        ))}
       </div>
     </div>
   );

@@ -4,22 +4,11 @@ import type { Tables } from "@buneka/database";
 import { Check, Loader2, Puzzle } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { FEATURE_DEFINITIONS } from "@/lib/licensing/access";
 import { PageHeader } from "@/app/app/_components/PageHeader";
 
 type Organization = Tables<"organizations">;
 type Entitlement = Tables<"entitlements">;
-
-const FEATURES: { code: string; label: string }[] = [
-  { code: "price_query", label: "Barkodla fiyat sorgulama" },
-  { code: "product_create", label: "Ürün ekleme" },
-  { code: "sale_create", label: "Satış kaydı" },
-  { code: "daily_cash", label: "Günlük kasa raporu" },
-  { code: "stock_tracking", label: "Stok takibi" },
-  { code: "profit_details", label: "Kâr / marj görünürlüğü" },
-  { code: "reports", label: "Raporlar" },
-  { code: "multi_device", label: "Çoklu cihaz" },
-  { code: "campaign_access", label: "Kampanya erişimi" },
-];
 
 export default function AdminModulesPage() {
   const [loading, setLoading] = useState(true);
@@ -125,7 +114,7 @@ export default function AdminModulesPage() {
         </div>
       ) : (
         <div className="data-card divide-y divide-slate-100 dark:divide-slate-800">
-          {FEATURES.map((feature) => {
+          {FEATURE_DEFINITIONS.map((feature) => {
             const enabled = isEnabled(feature.code);
             return (
               <button

@@ -4,16 +4,14 @@ import type { Tables } from "@buneka/database";
 import { KeyRound, Loader2, Plus, X } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { getFeatureCodesForPlan, getFeatureLabels } from "@/lib/licensing/access";
 import { PageHeader } from "@/app/app/_components/PageHeader";
 import { EmptyState } from "@/app/app/_components/EmptyState";
+import { createLicenseAction, updateLicenseStatusAction } from "./actions";
 
 type Organization = Tables<"organizations">;
 type Plan = Tables<"plans">;
-type LicenseWithPlan = Tables<"licenses"> & { plans: Pick<Tables<"plans">, "name"> | null; organizations: Pick<Tables<"organizations">, "name"> | null };
-
-function randomLicenseKey() {
-  return `BNK-${Math.random().toString(36).slice(2, 7).toUpperCase()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
-}
+type LicenseWithPlan = Tables<"licenses"> & { plans: Pick<Tables<"plans">, "name" | "code"> | null; organizations: Pick<Tables<"organizations">, "name"> | null };
 
 export default function AdminLicensesPage() {
   const [loading, setLoading] = useState(true);
@@ -43,7 +41,7 @@ export default function AdminLicensesPage() {
       supabase.from("plans").select("*").order("annual_price"),
       supabase
         .from("licenses")
-        .select("*, plans(name), organizations(name)")
+        .select("*, plans(name, code), organizations(name)")
         .order("created_at", { ascending: false }),
     ]);
 
@@ -64,19 +62,12 @@ export default function AdminLicensesPage() {
     setSaving(true);
     setMessage("");
 
-    const { error } = await supabase.from("licenses").insert({
-      organization_id: form.organization_id,
-      plan_id: form.plan_id,
-      license_key: randomLicenseKey(),
-      starts_at: form.starts_at,
-      expires_at: form.expires_at,
-      status: "active",
-    });
+    const result = await createLicenseAction(form);
 
-    if (error) {
-      setMessage(`Lisans oluşturulamadı: ${error.message}`);
+    if (result?.error) {
+      setMessage(`Lisans oluşturulamadı: ${result.error}`);
     } else {
-      setMessage("Lisans oluşturuldu.");
+      setMessage("Lisans oluşturuldu ve paket yetkileri açıldı.");
       setShowNew(false);
       await loadData();
     }
@@ -86,11 +77,13 @@ export default function AdminLicensesPage() {
 
   async function updateStatus(licenseId: string, status: string) {
     setSaving(true);
-    const { error } = await supabase.from("licenses").update({ status }).eq("id", licenseId);
-    if (error) setMessage(error.message);
+    const result = await updateLicenseStatusAction(licenseId, status);
+    if (result?.error) setMessage(result.error);
     await loadData();
     setSaving(false);
   }
+
+  const selectedPlan = plans.find((plan) => plan.id === form.plan_id);
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -140,7 +133,12 @@ export default function AdminLicensesPage() {
                     <td className="px-6 py-4 font-medium text-slate-950 dark:text-slate-50">
                       {license.organizations?.name || "-"}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{license.plans?.name}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
+                      <div className="font-bold text-slate-950 dark:text-slate-50">{license.plans?.name}</div>
+                      <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        {getFeatureLabelsByPlanCode(license.plans?.code).slice(0, 3).join(" · ")}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">
                       {new Date(license.expires_at).toLocaleDateString("tr-TR")}
                     </td>
@@ -212,6 +210,9 @@ export default function AdminLicensesPage() {
                   ))}
                 </select>
               </label>
+              {selectedPlan && (
+                <PlanPreview plan={selectedPlan} />
+              )}
               <div className="grid grid-cols-2 gap-3">
                 <label className="grid gap-2 text-sm font-bold text-slate-800 dark:text-slate-300">
                   Başlangıç
@@ -242,6 +243,27 @@ export default function AdminLicensesPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function getFeatureLabelsByPlanCode(planCode: string | null | undefined) {
+  return getFeatureLabels(getFeatureCodesForPlan(planCode));
+}
+
+function PlanPreview({ plan }: { plan: Plan }) {
+  const labels = getFeatureLabelsByPlanCode(plan.code);
+
+  return (
+    <div className="rounded-2xl border border-emerald-300/20 bg-emerald-300/[0.08] p-4">
+      <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-300">Bu lisansla açılacak özellikler</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {labels.map((label) => (
+          <span key={label} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-bold text-slate-200">
+            {label}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }

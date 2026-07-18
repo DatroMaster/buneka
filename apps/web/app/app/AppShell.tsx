@@ -7,6 +7,7 @@ import {
   Boxes,
   HandCoins,
   Home,
+  LockKeyhole,
   LogOut,
   Menu,
   Package,
@@ -25,8 +26,10 @@ import { ClientIpBadge } from "@/components/ClientIpBadge";
 import { CurrencyTicker } from "@/components/CurrencyTicker";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import type { CurrencyRates } from "@/lib/currency/tcmb";
+import type { FeatureCode } from "@/lib/licensing/access";
 import { createClient } from "@/lib/supabase/client";
 import { CartProvider } from "./CartContext";
+import { LicenseAccessProvider } from "./LicenseAccessContext";
 
 type AppUserWithRelations = Tables<"app_users"> & {
   organizations?: { name: string | null } | null;
@@ -37,17 +40,32 @@ type NavItem = {
   name: string;
   href: string;
   icon: LucideIcon;
+  feature?: FeatureCode;
 };
 
 const navItems: NavItem[] = [
-  { name: "Fiyat Sorgula", href: "/app", icon: ScanBarcode },
-  { name: "Günlük Kasa", href: "/app/kasa", icon: WalletCards },
-  { name: "Stok Takibi", href: "/app/stok", icon: Boxes },
-  { name: "Ürünler", href: "/app/urunler", icon: Package },
-  { name: "Veresiye", href: "/app/veresiye", icon: HandCoins },
-  { name: "Raporlar", href: "/app/raporlar", icon: BarChart3 },
+  { name: "Fiyat Sorgula", href: "/app", icon: ScanBarcode, feature: "price_query" },
+  { name: "Günlük Kasa", href: "/app/kasa", icon: WalletCards, feature: "daily_cash" },
+  { name: "Stok Takibi", href: "/app/stok", icon: Boxes, feature: "stock_tracking" },
+  { name: "Ürünler", href: "/app/urunler", icon: Package, feature: "product_create" },
+  { name: "Veresiye", href: "/app/veresiye", icon: HandCoins, feature: "campaign_access" },
+  { name: "Raporlar", href: "/app/raporlar", icon: BarChart3, feature: "reports" },
   { name: "Ayarlar", href: "/app/ayarlar", icon: Settings },
 ];
+
+const PATH_FEATURES: Record<string, FeatureCode> = {
+  "/app": "price_query",
+  "/app/price": "price_query",
+  "/app/kasa": "daily_cash",
+  "/app/cash": "daily_cash",
+  "/app/stok": "stock_tracking",
+  "/app/stock": "stock_tracking",
+  "/app/urunler": "product_create",
+  "/app/products": "product_create",
+  "/app/veresiye": "campaign_access",
+  "/app/raporlar": "reports",
+  "/app/reports": "reports",
+};
 
 const APP_VERSION_LABEL = "BUNEKA V01";
 
@@ -56,16 +74,18 @@ function DrawerNav({
   onClose,
   onLogout,
   user,
+  items,
 }: {
   pathname: string;
   onClose: () => void;
   onLogout: () => void;
   user: AppUserWithRelations;
+  items: NavItem[];
 }) {
   return (
     <div className="flex h-full flex-col text-white">
       <nav className="flex-1 space-y-1.5 overflow-y-auto px-4 py-6">
-        {navItems.map((item) => {
+        {items.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
 
@@ -116,10 +136,12 @@ function DesktopSidebar({
   pathname,
   onLogout,
   user,
+  items,
 }: {
   pathname: string;
   onLogout: () => void;
   user: AppUserWithRelations;
+  items: NavItem[];
 }) {
   return (
     <aside className="sidebar-supabase hidden h-full w-56 shrink-0 flex-col overflow-hidden border-r border-white/10 md:flex">
@@ -132,7 +154,7 @@ function DesktopSidebar({
       </div>
 
       <nav className="min-h-0 flex-1 space-y-1 overflow-y-auto overflow-x-hidden px-2 py-3">
-        {navItems.map((item) => {
+        {items.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
@@ -196,10 +218,16 @@ export default function AppShell({
   children,
   user,
   rates,
+  licenseAccess,
 }: {
   children: React.ReactNode;
   user: AppUserWithRelations;
   rates: CurrencyRates | null;
+  licenseAccess: {
+    planName: string | null;
+    expiresAt: string | null;
+    featureCodes: FeatureCode[];
+  };
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -207,6 +235,11 @@ export default function AppShell({
   const supabase = createClient();
   const isAdmin = ["super_admin", "admin_staff"].includes(user.role);
   const isPriceFocusEntry = pathname === "/app";
+  const featureSet = new Set<FeatureCode>(licenseAccess.featureCodes);
+  const canUseFeature = (feature?: FeatureCode) => isAdmin || !feature || featureSet.has(feature);
+  const availableNavItems = navItems.filter((item) => canUseFeature(item.feature));
+  const requiredFeature = PATH_FEATURES[pathname];
+  const canUseCurrentPath = canUseFeature(requiredFeature);
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -219,14 +252,16 @@ export default function AppShell({
   if (isPriceFocusEntry) {
     return (
       <div className="min-h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-emerald-300 selection:text-slate-950">
-        <CartProvider>{children}</CartProvider>
+        <LicenseAccessProvider value={licenseAccess}>
+          <CartProvider>{canUseCurrentPath ? children : <LockedLicensePanel licenseAccess={licenseAccess} />}</CartProvider>
+        </LicenseAccessProvider>
       </div>
     );
   }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[var(--color-bg)] selection:bg-emerald-400 selection:text-slate-950">
-      <DesktopSidebar pathname={pathname} onLogout={handleLogout} user={user} />
+      <DesktopSidebar pathname={pathname} onLogout={handleLogout} user={user} items={availableNavItems} />
 
       {isMenuOpen && (
         <div className="fixed inset-0 z-50 flex">
@@ -245,7 +280,7 @@ export default function AppShell({
                 <X size={22} />
               </button>
             </div>
-            <DrawerNav pathname={pathname} onClose={closeMenu} onLogout={handleLogout} user={user} />
+            <DrawerNav pathname={pathname} onClose={closeMenu} onLogout={handleLogout} user={user} items={availableNavItems} />
           </div>
           <button
             className="flex-1 cursor-default bg-black/50"
@@ -303,12 +338,51 @@ export default function AppShell({
         </header>
 
         <main className="flex-1 overflow-y-auto bg-[var(--color-bg)] p-4 text-[color:var(--color-text)] md:p-5">
-          <CartProvider>{children}</CartProvider>
+          <LicenseAccessProvider value={licenseAccess}>
+            <CartProvider>{canUseCurrentPath ? children : <LockedLicensePanel licenseAccess={licenseAccess} />}</CartProvider>
+          </LicenseAccessProvider>
         </main>
         <div className="pointer-events-none fixed bottom-2 right-3 z-40 hidden rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-[10px] font-semibold text-slate-500 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#05070d]/70 dark:text-slate-400 md:block">
           BUNEKA © 2026 · Ankara, TR · <ClientIpBadge />
         </div>
       </div>
+    </div>
+  );
+}
+
+function LockedLicensePanel({
+  licenseAccess,
+}: {
+  licenseAccess: {
+    planName: string | null;
+    expiresAt: string | null;
+    featureCodes: FeatureCode[];
+  };
+}) {
+  return (
+    <div className="grid min-h-[calc(100vh-2rem)] place-items-center p-4">
+      <section className="w-full max-w-xl rounded-3xl border border-white/10 bg-[#00040d] p-6 text-center shadow-[0_24px_90px_rgba(0,0,0,0.45)]">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-emerald-300/25 bg-emerald-300/10 text-emerald-200">
+          <LockKeyhole size={26} />
+        </div>
+        <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Paket yetkisi gerekli</p>
+        <h1 className="mt-2 font-display text-3xl font-black text-white">Bu ekran mevcut lisansınızda açık değil.</h1>
+        <p className="mx-auto mt-3 max-w-md text-sm font-semibold leading-6 text-slate-400">
+          Aktif paketiniz {licenseAccess.planName ? <b className="text-slate-100">{licenseAccess.planName}</b> : "tanımlı değil"}.
+          Bu özelliği kullanmak için yönetici panelinden uygun Buneka paketi veya ek modül atanmalıdır.
+        </p>
+        {licenseAccess.expiresAt && (
+          <p className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs font-bold text-slate-300">
+            Lisans bitiş tarihi: {new Date(licenseAccess.expiresAt).toLocaleDateString("tr-TR")}
+          </p>
+        )}
+        <Link
+          href="/app/ayarlar"
+          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-300/25 px-5 text-sm font-black text-emerald-200 transition hover:border-emerald-300/50 hover:bg-emerald-300/10"
+        >
+          Lisans Bilgisini Gör
+        </Link>
+      </section>
     </div>
   );
 }

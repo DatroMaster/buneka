@@ -1,11 +1,65 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getFeatureCodesForPlan } from "@/lib/licensing/access";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient, hasServiceRoleKey } from "@/lib/supabase/admin";
 
 function randomLicenseKey() {
   return `BNK-${Math.random().toString(36).slice(2, 7).toUpperCase()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+}
+
+type SupabaseMutationClient = Pick<Awaited<ReturnType<typeof createClient>>, "from">;
+
+async function createLicenseWithPlanEntitlements(
+  client: SupabaseMutationClient,
+  organizationId: string,
+  planId: string,
+  startsAt: string,
+  expiresAt: string,
+) {
+  const { data: plan, error: planError } = await client.from("plans").select("code, name").eq("id", planId).single();
+
+  if (planError || !plan) {
+    return { error: planError?.message || "Paket bulunamadı." };
+  }
+
+  const { data: license, error: licenseError } = await client
+    .from("licenses")
+    .insert({
+      organization_id: organizationId,
+      plan_id: planId,
+      license_key: randomLicenseKey(),
+      starts_at: startsAt,
+      expires_at: expiresAt,
+      status: "active",
+    })
+    .select("id")
+    .single();
+
+  if (licenseError || !license) {
+    return { error: licenseError?.message || "Lisans oluşturulamadı." };
+  }
+
+  const featureCodes = getFeatureCodesForPlan(plan.code || plan.name);
+
+  if (featureCodes.length > 0) {
+    const { error: entitlementError } = await client.from("entitlements").insert(
+      featureCodes.map((featureCode) => ({
+        organization_id: organizationId,
+        license_id: license.id,
+        feature_code: featureCode,
+        is_enabled: true,
+        expires_at: expiresAt,
+      })),
+    );
+
+    if (entitlementError) {
+      return { error: `Lisans oluşturuldu ama paket yetkileri eklenemedi: ${entitlementError.message}` };
+    }
+  }
+
+  return { success: true };
 }
 
 export async function createOrganizationAction(formData: FormData) {
@@ -57,17 +111,10 @@ export async function createOrganizationAction(formData: FormData) {
   }
 
   if (planId && startsAt && expiresAt) {
-    const { error: licenseError } = await supabase.from("licenses").insert({
-      organization_id: org.id,
-      plan_id: planId,
-      license_key: randomLicenseKey(),
-      starts_at: startsAt,
-      expires_at: expiresAt,
-      status: "active",
-    });
+    const licenseResult = await createLicenseWithPlanEntitlements(supabase, org.id, planId, startsAt, expiresAt);
 
-    if (licenseError) {
-      return { error: `Müşteri oluşturuldu ama lisans eklenemedi: ${licenseError.message}` };
+    if (licenseResult.error) {
+      return { error: `Müşteri oluşturuldu ama lisans eklenemedi: ${licenseResult.error}` };
     }
   }
 
@@ -133,17 +180,10 @@ export async function createLoginAccountAction(
   }
 
   if (planId && startsAt && expiresAt) {
-    const { error: licenseError } = await admin.from("licenses").insert({
-      organization_id: appUser.organization_id,
-      plan_id: planId,
-      license_key: randomLicenseKey(),
-      starts_at: startsAt,
-      expires_at: expiresAt,
-      status: "active",
-    });
+    const licenseResult = await createLicenseWithPlanEntitlements(admin, appUser.organization_id, planId, startsAt, expiresAt);
 
-    if (licenseError) {
-      return { error: `Hesap oluşturuldu ama lisans eklenemedi: ${licenseError.message}` };
+    if (licenseResult.error) {
+      return { error: `Hesap oluşturuldu ama lisans eklenemedi: ${licenseResult.error}` };
     }
   }
 
